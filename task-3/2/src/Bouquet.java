@@ -9,14 +9,18 @@ public class Bouquet {
 
     public void addFlower(final Flower flower) {
         if (flowers.length < size) {
-            final Flower[] flowersBuffer = new Flower[this.flowers.length + 1];
-            System.arraycopy(this.flowers, 0, flowersBuffer, 0, flowers.length);
-            flowersBuffer[flowers.length] = flower;
-            flowers = flowersBuffer;
+            expandArray();
+            flowers[flowers.length - 1] = flower;
             System.out.println(String.format("The %s was added to the bouquet.", flower.getName()));
         } else {
             System.out.println("The bouquet is full!");
         }
+    }
+
+    private void expandArray() {
+        final Flower[] flowersBuffer = new Flower[flowers.length + 1];
+        System.arraycopy(flowers, 0, flowersBuffer, 0, flowers.length);
+        flowers = flowersBuffer;
     }
 
     public void cost() {
