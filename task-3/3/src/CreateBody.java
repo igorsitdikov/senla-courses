@@ -5,7 +5,7 @@ public class CreateBody implements ILineStep {
     @Override
     public IProductPart buildProductPart() {
         final Body body = new Body();
-        System.out.println(String.format("%s is building!", body.toString()));
+        System.out.printf("%s is building!%n", body.toString());
         return body;
     }
 }

@@ -5,7 +5,7 @@ public class CreateMonitor implements ILineStep {
     @Override
     public IProductPart buildProductPart() {
         final Monitor monitor = new Monitor();
-        System.out.println(String.format("%s is building!", monitor.toString()));
+        System.out.printf("%s is building!%n", monitor.toString());
         return monitor;
     }
 }

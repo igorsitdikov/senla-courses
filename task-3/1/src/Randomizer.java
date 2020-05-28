@@ -1,29 +1,14 @@
 import java.util.Random;
 
 public class Randomizer {
-    private final Integer THREE_DIGIT = 100;
-    private final Random random = new Random();
+    private static final Integer THREE_DIGIT_MIN = 100;
+    private static final Integer THREE_DIGIT_MAX = 999;
+    private static final Random random = new Random();
 
-    private Integer createRandomNumber() {
-        final int randomThreeDigitNumber = THREE_DIGIT + random.nextInt(999 - THREE_DIGIT);
-        System.out.println(String.format("Number is %d", randomThreeDigitNumber));
+    public static Integer createRandomNumber() {
+        final int randomThreeDigitNumber = THREE_DIGIT_MIN + random.nextInt(THREE_DIGIT_MAX - THREE_DIGIT_MIN);
+        System.out.printf("Number is %d%n", randomThreeDigitNumber);
         return randomThreeDigitNumber;
     }
 
-    private Integer concatNumbers(Integer first, Integer second) {
-        return first * 1000 + second;
-    }
-
-    private Integer calculateDifference(Integer first, Integer second) {
-        return first - second;
-    }
-
-    public void compute() {
-        final Integer first = createRandomNumber();
-        final Integer second = createRandomNumber();
-        final Integer third = createRandomNumber();
-        final Integer sequence = concatNumbers(first, second);
-        final Integer difference = calculateDifference(sequence, third);
-        System.out.println(String.format("Difference : %d", difference));
-    }
 }

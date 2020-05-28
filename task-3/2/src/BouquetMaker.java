@@ -16,6 +16,7 @@ public class BouquetMaker {
         bouquet.addFlower(gladiolus);
         bouquet.addFlower(chamomile);
 
-        bouquet.cost();
+        final Service service = new Service();
+        service.calculateCost(bouquet.getFlowers(), bouquet.getSize());
     }
 }
