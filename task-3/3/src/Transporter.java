@@ -7,7 +7,9 @@ public class Transporter {
         final ILineStep monitorLineStep = new CreateMonitor();
         final ILineStep motherBoardLineStep = new CreateMotherBoard();
         final Laptop laptop = new Laptop();
-        final IAssemblyLine iAssemblyLine = new AssemblyLineImpl((Monitor) monitorLineStep.buildProductPart(), (MotherBoard) motherBoardLineStep.buildProductPart(), (Body) bodyLineStep.buildProductPart());
+        final IAssemblyLine iAssemblyLine =
+            new AssemblyLineImpl(monitorLineStep.buildProductPart(), motherBoardLineStep.buildProductPart(),
+                                 bodyLineStep.buildProductPart());
         iAssemblyLine.assembleProduct(laptop);
         System.out.println("Finish!");
     }
