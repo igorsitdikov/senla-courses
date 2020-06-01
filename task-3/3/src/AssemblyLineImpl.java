@@ -1,15 +1,15 @@
 import interfaces.IAssemblyLine;
+import interfaces.ILineStep;
 import interfaces.IProduct;
-import interfaces.IProductPart;
 
 public class AssemblyLineImpl implements IAssemblyLine {
-    private IProductPart productPartFirst;
-    private IProductPart productPartSecond;
-    private IProductPart productPartThird;
+    private ILineStep productPartFirst;
+    private ILineStep productPartSecond;
+    private ILineStep productPartThird;
 
-    public AssemblyLineImpl(final IProductPart productPartFirst,
-                            final IProductPart productPartSecond,
-                            final IProductPart productPartThird) {
+    public AssemblyLineImpl(final ILineStep productPartFirst,
+                            final ILineStep productPartSecond,
+                            final ILineStep productPartThird) {
         this.productPartFirst = productPartFirst;
         this.productPartSecond = productPartSecond;
         this.productPartThird = productPartThird;
@@ -18,9 +18,9 @@ public class AssemblyLineImpl implements IAssemblyLine {
     @Override
     public IProduct assembleProduct(final IProduct iProduct) {
         System.out.println("Start of the product creating!");
-        iProduct.installFirstPart(productPartFirst);
-        iProduct.installSecondPart(productPartSecond);
-        iProduct.installThirdPart(productPartThird);
+        iProduct.installFirstPart(productPartFirst.buildProductPart());
+        iProduct.installSecondPart(productPartSecond.buildProductPart());
+        iProduct.installThirdPart(productPartThird.buildProductPart());
         System.out.println("The product was created!");
         return iProduct;
     }
