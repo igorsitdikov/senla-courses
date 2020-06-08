@@ -1,10 +1,11 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.ResidentRepository;
 import com.senla.hotel.service.interfaces.IResidentService;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -23,25 +24,30 @@ public class ResidentService implements IResidentService {
     }
 
     @Override
+    public int showTotalNumber() {
+        return residentRepository.showTotalNumber();
+    }
+
+    @Override
     public void showResidents(final Resident[] residents) {
-        for (int i = 0; i < residents.length; i++) {
-            System.out.println(residents[i].toString());
+        for (final Resident resident : residents) {
+            System.out.println(resident.toString());
         }
     }
 
     @Override
-    public BigDecimal calculateBill(final Long id) {
-        return null;
+    public Resident findById(final Long id) throws NoSuchEntityException {
+        final Resident resident = residentRepository.findById(id);
+        if (resident == null) {
+            throw new NoSuchEntityException(String.format("No resident with id %d%n", id));
+        }
+        return resident;
     }
 
     @Override
-    public void showAttendances(final Long id) {
-
-    }
-
-    @Override
-    public void sortResidentAttendancesByDate() {
-
+    public void addHistoryToResident(final Long id, final RoomHistory roomHistory) throws NoSuchEntityException {
+        final Resident resident = findById(id);
+        residentRepository.addHistory(resident, roomHistory);
     }
 
     @Override

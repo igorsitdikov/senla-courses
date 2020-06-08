@@ -80,8 +80,12 @@ public class Resident extends AbstractEntity {
                ", gender=" + gender +
                ", vip=" + vip +
                ", phone='" + phone + '\'' +
-//			   ", history=" + history +
+			   ", history=" + history +
                ", id=" + id +
                '}';
+    }
+
+    public String fullName() {
+        return String.format("%s %s", firstName, lastName);
     }
 }

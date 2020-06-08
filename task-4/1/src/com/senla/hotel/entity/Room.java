@@ -24,6 +24,7 @@ public class Room extends AbstractEntity {
         this.accommodation = accommodation;
         this.price = price;
         this.status = status;
+        histories = new RoomHistory[0];
     }
 
     public Integer getNumber() {
@@ -82,7 +83,6 @@ public class Room extends AbstractEntity {
                ", accommodation=" + accommodation +
                ", price=" + price +
                ", status=" + status +
-//               ", histories=" + Arrays.toString(histories) +
                ", id=" + id +
                '}';
     }

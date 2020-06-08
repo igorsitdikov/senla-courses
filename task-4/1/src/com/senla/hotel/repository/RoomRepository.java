@@ -1,6 +1,7 @@
 package com.senla.hotel.repository;
 
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.entity.type.RoomStatus;
 
 public class RoomRepository extends AbstractRepository<Room> {
@@ -25,7 +26,7 @@ public class RoomRepository extends AbstractRepository<Room> {
         return vacantRooms;
     }
 
-    public int countEmptyRooms() {
+    public int countVacantRooms() {
         return getVacantRooms().length;
     }
 
@@ -34,6 +35,22 @@ public class RoomRepository extends AbstractRepository<Room> {
         room.setId((long) rooms.length);
         rooms[rooms.length - 1] = room;
         return room;
+    }
+
+    public Room findById(final Long id) {
+        for (final Room room : rooms) {
+            if (room.getId().equals(id)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public void addHistory(final Room room, final RoomHistory roomHistory) {
+        RoomHistory[] histories = room.getHistories();
+        histories = arrayUtils.expandArray(RoomHistory.class, histories);
+        histories[histories.length - 1] = roomHistory;
+        room.setHistories(histories);
     }
 
     public int getTotalRooms() {

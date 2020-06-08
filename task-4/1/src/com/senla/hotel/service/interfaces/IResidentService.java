@@ -1,23 +1,24 @@
 package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.exceptions.NoSuchEntityException;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 
 public interface IResidentService {
 
     void add(Resident resident);
 
-    Resident[] sortResidents(final Resident[] residents, final Comparator<Resident> comparator);
+    Resident[] sortResidents(Resident[] residents, Comparator<Resident> comparator);
 
-    void showResidents(final Resident[] residents);
+    int showTotalNumber();
 
-    BigDecimal calculateBill(Long id);
+    void showResidents(Resident[] residents);
 
-    void showAttendances(Long id);
+    Resident findById(Long id) throws NoSuchEntityException;
 
-    void sortResidentAttendancesByDate();
+    void addHistoryToResident(Long id, RoomHistory roomHistory) throws NoSuchEntityException;
 
     Resident[] getResidents();
 }

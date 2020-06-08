@@ -60,4 +60,15 @@ public class RoomHistory extends AbstractEntity {
     public void setCheckOut(final LocalDate checkOut) {
         this.checkOut = checkOut;
     }
+
+    @Override
+    public String toString() {
+        return "RoomHistory{" +
+               "roomId=" + roomId +
+               ", residentId=" + residentId +
+               ", checkIn=" + checkIn +
+               ", checkOut=" + checkOut +
+               ", id=" + id +
+               '}';
+    }
 }

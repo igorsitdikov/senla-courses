@@ -6,12 +6,11 @@ import java.util.Comparator;
 
 public interface IAttendanceService {
 
-    void addAttendance(final Attendance attendance);
+    void addAttendance(Attendance attendance);
 
     Attendance[] getAttendances();
 
     void showAllAttendances();
 
-    Attendance[] sortAttendances(final Attendance[] attendances, final Comparator<Attendance> comparator);
-
+    Attendance[] sortAttendances(Attendance[] attendances, Comparator<Attendance> comparator);
 }

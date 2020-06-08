@@ -1,6 +1,8 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.entity.type.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
@@ -16,10 +18,17 @@ public class RoomService implements IRoomService {
         roomRepository.add(room);
     }
 
+    @Override
     public void showRooms(final Room[] rooms) {
-        for (int i = 0; i < rooms.length; i++) {
-            System.out.println(rooms[i].toString());
+        for (final Room room : rooms) {
+            System.out.println(room.toString());
         }
+    }
+
+    @Override
+    public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
+        final Room room = findRoomById(id);
+        roomRepository.addHistory(room, history);
     }
 
     @Override
@@ -29,43 +38,38 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public int getTotalEmptyRooms() {
-        return roomRepository.countEmptyRooms();
-    }
-
-    @Override
-    public void showEmptyRoomsByDate() {
-
-    }
-
-    @Override
-    public void showLatestResidents(final Long id, final Integer number) {
-
-    }
-
-    @Override
     public void showDetails(final Long id) throws NoSuchEntityException {
-        final Room room = getRoomById(id);
+        final Room room = findRoomById(id);
+        System.out.println(room);
+    }
+
+    @Override
+    public Room findRoomById(final Long id) throws NoSuchEntityException {
+        final Room room = roomRepository.findById(id);
         if (room == null) {
             throw new NoSuchEntityException(String.format("No room with id %d%n", id));
         }
-        System.out.println(room);
-
+        return room;
     }
 
-    public Room getRoomById(final Long id) {
-        for (int i = 0; i < roomRepository.getRooms().length; i++) {
-            if (roomRepository.getRooms()[i].getId().equals(id)) {
-                return roomRepository.getRooms()[i];
-            }
-        }
-        return null;
+    @Override
+    public Room update(final Long id, final RoomStatus roomStatus) {
+        final Room room = roomRepository.findById(id);
+        room.setStatus(roomStatus);
+        return room;
     }
 
+    @Override
+    public int countVacantRooms() {
+        return roomRepository.countVacantRooms();
+    }
+
+    @Override
     public Room[] getAllRooms() {
         return roomRepository.getRooms();
     }
 
+    @Override
     public Room[] getVacantRooms() {
         return roomRepository.getVacantRooms();
     }
