@@ -1,8 +1,9 @@
 package com.senla.hotel.repository;
 
+import com.senla.hotel.entity.AbstractEntity;
 import com.senla.hotel.entity.Attendance;
 
-public class AttendanceRepository extends AbstractRepository<Attendance> {
+public class AttendanceRepository extends AbstractRepository {
 
     private static Attendance[] attendances = new Attendance[0];
 
@@ -10,10 +11,10 @@ public class AttendanceRepository extends AbstractRepository<Attendance> {
     }
 
     @Override
-    public Attendance add(final Attendance entity) {
+    public AbstractEntity add(final AbstractEntity entity) {
         attendances = arrayUtils.expandArray(Attendance.class, attendances);
         entity.setId((long) attendances.length);
-        attendances[attendances.length - 1] = entity;
+        attendances[attendances.length - 1] = (Attendance) entity;
         return entity;
     }
 

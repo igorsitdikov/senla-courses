@@ -1,9 +1,10 @@
 package com.senla.hotel.repository;
 
+import com.senla.hotel.entity.AbstractEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 
-public class ResidentRepository extends AbstractRepository<Resident> {
+public class ResidentRepository extends AbstractRepository {
 
     private static Resident[] residents = new Resident[0];
 
@@ -15,10 +16,10 @@ public class ResidentRepository extends AbstractRepository<Resident> {
     }
 
     @Override
-    public Resident add(final Resident entity) {
+    public AbstractEntity add(final AbstractEntity entity) {
         residents = arrayUtils.expandArray(Resident.class, residents);
         entity.setId((long) residents.length);
-        residents[residents.length - 1] = entity;
+        residents[residents.length - 1] = (Resident) entity;
         return entity;
     }
 

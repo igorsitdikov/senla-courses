@@ -9,7 +9,7 @@ public class RoomHistoryService implements IRoomHistoryService {
 
     @Override
     public RoomHistory create(final RoomHistory history) {
-        return roomHistoryRepository.add(history);
+        return (RoomHistory) roomHistoryRepository.add(history);
     }
 
 }

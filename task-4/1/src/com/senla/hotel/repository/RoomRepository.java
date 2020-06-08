@@ -1,10 +1,11 @@
 package com.senla.hotel.repository;
 
+import com.senla.hotel.entity.AbstractEntity;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.entity.type.RoomStatus;
 
-public class RoomRepository extends AbstractRepository<Room> {
+public class RoomRepository extends AbstractRepository {
 
     private static Room[] rooms = new Room[0];
 
@@ -30,10 +31,10 @@ public class RoomRepository extends AbstractRepository<Room> {
         return getVacantRooms().length;
     }
 
-    public Room add(final Room room) {
+    public AbstractEntity add(final AbstractEntity room) {
         rooms = arrayUtils.expandArray(Room.class, rooms);
         room.setId((long) rooms.length);
-        rooms[rooms.length - 1] = room;
+        rooms[rooms.length - 1] = (Room) room;
         return room;
     }
 
