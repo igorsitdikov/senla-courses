@@ -18,19 +18,15 @@ public class AttendanceRepository extends AbstractRepository {
         return entity;
     }
 
-    public AttendanceRepository(final Attendance[] attendances) {
-        this.attendances = attendances;
-    }
-
-    public int getTotalAttendances() {
-        return attendances.length;
+    public AbstractEntity[] add(Attendance[] attendances, final AbstractEntity entity) {
+        Attendance[] at = attendances.clone();
+        at = arrayUtils.expandArray(Attendance.class, at);
+        entity.setId((long) at.length);
+        at[at.length - 1] = (Attendance) entity;
+        return at;
     }
 
     public Attendance[] getAttendances() {
         return attendances;
-    }
-
-    public void setAttendances(final Attendance[] attendances) {
-        this.attendances = attendances;
     }
 }

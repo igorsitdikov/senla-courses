@@ -13,8 +13,4 @@ public class RoomHistoryRepository extends AbstractRepository {
         histories[histories.length - 1] = (RoomHistory) entity;
         return entity;
     }
-
-    public static RoomHistory[] getHistories() {
-        return histories;
-    }
 }

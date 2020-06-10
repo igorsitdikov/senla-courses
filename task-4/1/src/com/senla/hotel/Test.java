@@ -119,7 +119,7 @@ public class Test {
         System.out.println("Sort by name");
         hotelAdminService.showResidentsSortedByName();
 
-        hotelAdminService.checkIn(1L, 1L, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 4));
+        hotelAdminService.checkIn(1L, 1L, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
         hotelAdminService.checkIn(2L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
         hotelAdminService.checkIn(2L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 10));
         hotelAdminService.checkOut(2L, 2L);
@@ -132,10 +132,15 @@ public class Test {
         hotelAdminService.checkIn(3L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 12));
         hotelAdminService.checkOut(3L, 2L);
 
+        hotelAdminService.addAttendanceToResident(1L, ironing);
+        hotelAdminService.addAttendanceToResident(1L, wakeup);
+
         hotelAdminService.calculateBill(1L);
         hotelAdminService.calculateBill(2L);
         hotelAdminService.showLastResidents(2L, 3);
 
         hotelAdminService.showResidentsSortedByCheckOutDate();
+
+
     }
 }

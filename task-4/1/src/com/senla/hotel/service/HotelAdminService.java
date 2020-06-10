@@ -77,7 +77,14 @@ public class HotelAdminService implements IHotelAdminService {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
                                                       resident.getHistory().getCheckOut());
             final Room room = roomService.findRoomById(resident.getHistory().getRoomId());
-            final BigDecimal total = room.getPrice().multiply(new BigDecimal(days));
+            BigDecimal totalAttendances = BigDecimal.valueOf(0);
+            for (int i = 0; i < resident.getHistory().getAttendances().length; i++) {
+                totalAttendances = totalAttendances.add(resident.getHistory().getAttendances()[i].getPrice());
+            }
+
+            final BigDecimal total = room.getPrice()
+                .multiply(new BigDecimal(days))
+                .add(totalAttendances.multiply(new BigDecimal(days)));
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
                               resident.fullName(),
                               total,
@@ -219,5 +226,10 @@ public class HotelAdminService implements IHotelAdminService {
     @Override
     public void showCountResidents() {
         System.out.println(residentService.showTotalNumber());
+    }
+
+    @Override
+    public void addAttendanceToResident(Long id, Attendance attendance) throws NoSuchEntityException {
+        residentService.addAttendanceToResident(id, attendance);
     }
 }

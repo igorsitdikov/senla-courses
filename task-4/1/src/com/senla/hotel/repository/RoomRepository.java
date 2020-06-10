@@ -54,15 +54,7 @@ public class RoomRepository extends AbstractRepository {
         room.setHistories(histories);
     }
 
-    public int getTotalRooms() {
-        return rooms.length;
-    }
-
     public Room[] getRooms() {
         return rooms;
-    }
-
-    public void setRooms(final Room[] rooms) {
-        this.rooms = rooms;
     }
 }

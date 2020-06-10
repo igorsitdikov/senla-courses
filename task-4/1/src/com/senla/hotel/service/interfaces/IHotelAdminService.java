@@ -59,4 +59,6 @@ public interface IHotelAdminService {
     void showCountVacantRooms();
 
     void showCountResidents();
+
+    void addAttendanceToResident(Long id, Attendance attendance) throws NoSuchEntityException;
 }

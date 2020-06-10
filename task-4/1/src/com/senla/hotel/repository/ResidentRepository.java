@@ -43,8 +43,4 @@ public class ResidentRepository extends AbstractRepository {
     public Resident[] getResidents() {
         return residents;
     }
-
-    public void setResidents(final Resident[] residents) {
-        this.residents = residents;
-    }
 }

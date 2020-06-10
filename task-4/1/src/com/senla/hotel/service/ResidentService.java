@@ -1,8 +1,10 @@
 package com.senla.hotel.service;
 
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.ResidentRepository;
 import com.senla.hotel.service.interfaces.IResidentService;
 
@@ -10,7 +12,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class ResidentService implements IResidentService {
-    private ResidentRepository residentRepository = new ResidentRepository();
+    private final ResidentRepository residentRepository = new ResidentRepository();
+    private final AttendanceRepository attendanceRepository = new AttendanceRepository();
 
     @Override
     public void add(final Resident resident) {
@@ -48,6 +51,13 @@ public class ResidentService implements IResidentService {
     public void addHistoryToResident(final Long id, final RoomHistory roomHistory) throws NoSuchEntityException {
         final Resident resident = findById(id);
         residentRepository.addHistory(resident, roomHistory);
+    }
+
+    public void addAttendanceToResident(final Long id, final Attendance attendance) throws NoSuchEntityException {
+        final Resident resident = findById(id);
+        Attendance[] attendances = resident.getHistory().getAttendances();
+        attendances = (Attendance[]) attendanceRepository.add(attendances, attendance);
+        resident.getHistory().setAttendances(attendances);
     }
 
     @Override
