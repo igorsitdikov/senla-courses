@@ -9,6 +9,7 @@ import com.senla.hotel.entity.type.RoomStatus;
 import com.senla.hotel.entity.type.Stars;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.HotelAdminService;
+import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 
 import java.math.BigDecimal;
@@ -127,10 +128,10 @@ public class Test {
         hotelAdminService.checkIn(3L, 3L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 14));
         hotelAdminService.checkOut(3L, 2L);
         hotelAdminService.checkIn(4L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 13));
-        hotelAdminService.checkOut(4L, 2L);
+//        hotelAdminService.checkOut(4L, 2L);
 
         hotelAdminService.checkIn(3L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 12));
-        hotelAdminService.checkOut(3L, 2L);
+//        hotelAdminService.checkOut(3L, 2L);
 
         hotelAdminService.addAttendanceToResident(1L, ironing);
         hotelAdminService.addAttendanceToResident(1L, wakeup);
@@ -141,6 +142,8 @@ public class Test {
 
         hotelAdminService.showResidentsSortedByCheckOutDate();
 
-
+        System.out.println("vacant on date");
+        final RoomService roomService = new RoomService();
+        roomService.vacantOnDate(LocalDate.of(2020, 8, 13));
     }
 }

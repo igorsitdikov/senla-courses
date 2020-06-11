@@ -26,7 +26,11 @@ public class AttendanceService implements IAttendanceService {
             System.out.println(attendanceRepository.getAttendances()[i].toString());
         }
     }
-
+    public void showAttendances(final Attendance[] attendances) {
+        for (int i = 0; i < attendances.length; i++) {
+            System.out.println(attendances[i].toString());
+        }
+    }
     @Override
     public Attendance[] sortAttendances(final Attendance[] attendances, final Comparator<Attendance> comparator) {
         Arrays.sort(attendances, comparator);

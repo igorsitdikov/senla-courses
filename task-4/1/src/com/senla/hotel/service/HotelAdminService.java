@@ -122,14 +122,18 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void showAttendancesSortedByName() {
-        attendanceService.sortAttendances(attendanceService.getAttendances(), new AttendanceNameComparator());
-        showAttendances();
+        final Attendance[] attendances = attendanceService.getAttendances();
+        final Attendance[] sortedAttendances =
+            attendanceService.sortAttendances(attendances, new AttendanceNameComparator());
+        attendanceService.showAttendances(sortedAttendances);
     }
 
     @Override
     public void showAttendancesSortedByPrice() {
-        attendanceService.sortAttendances(attendanceService.getAttendances(), new AttendancePriceComparator());
-        showAttendances();
+        final Attendance[] attendances = attendanceService.getAttendances();
+        final Attendance[] sortedAttendances =
+            attendanceService.sortAttendances(attendances, new AttendancePriceComparator());
+        attendanceService.showAttendances(sortedAttendances);
     }
 
     @Override
@@ -146,22 +150,22 @@ public class HotelAdminService implements IHotelAdminService {
     @Override
     public void showAllRoomsSortedByPrice() {
         final Room[] rooms = roomService.getAllRooms();
-        roomService.sortRooms(rooms, new RoomPriceComparator());
-        roomService.showRooms(rooms);
+        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomPriceComparator());
+        roomService.showRooms(sortedRooms);
     }
 
     @Override
     public void showAllRoomsSortedByAccommodation() {
         final Room[] rooms = roomService.getAllRooms();
-        roomService.sortRooms(rooms, new RoomAccommodationComparator());
-        roomService.showRooms(rooms);
+        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomAccommodationComparator());
+        roomService.showRooms(sortedRooms);
     }
 
     @Override
     public void showAllRoomsSortedByStars() {
         final Room[] rooms = roomService.getAllRooms();
-        roomService.sortRooms(rooms, new RoomStarsComparator());
-        roomService.showRooms(rooms);
+        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomStarsComparator());
+        roomService.showRooms(sortedRooms);
     }
 
     @Override
@@ -173,15 +177,15 @@ public class HotelAdminService implements IHotelAdminService {
     @Override
     public void showVacantRoomsSortedByPrice() {
         final Room[] rooms = roomService.getVacantRooms();
-        roomService.sortRooms(rooms, new RoomPriceComparator());
-        roomService.showRooms(rooms);
+        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomPriceComparator());
+        roomService.showRooms(sortedRooms);
     }
 
     @Override
     public void showVacantRoomsSortedByAccommodation() {
         final Room[] rooms = roomService.getVacantRooms();
-        roomService.sortRooms(rooms, new RoomAccommodationComparator());
-        roomService.showRooms(rooms);
+        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomAccommodationComparator());
+        roomService.showRooms(sortedRooms);
     }
 
     @Override
@@ -203,19 +207,22 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void showResidents() {
-        residentService.showResidents(residentService.getResidents());
+        final Resident[] residents = residentService.getResidents();
+        residentService.showResidents(residents);
     }
 
     @Override
     public void showResidentsSortedByName() {
         final Resident[] residents = residentService.getResidents();
-        residentService.showResidents(residentService.sortResidents(residents, new ResidentFullNameComparator()));
+        final Resident[] sortedResidents = residentService.sortResidents(residents, new ResidentFullNameComparator());
+        residentService.showResidents(sortedResidents);
     }
 
     @Override
     public void showResidentsSortedByCheckOutDate() {
         final Resident[] residents = residentService.getResidents();
-        residentService.showResidents(residentService.sortResidents(residents, new ResidentCheckOutComparator()));
+        final Resident[] sortedResidents = residentService.sortResidents(residents, new ResidentCheckOutComparator());
+        residentService.showResidents(sortedResidents);
     }
 
     @Override

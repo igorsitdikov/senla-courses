@@ -22,8 +22,9 @@ public class ResidentService implements IResidentService {
 
     @Override
     public Resident[] sortResidents(final Resident[] residents, final Comparator<Resident> comparator) {
-        Arrays.sort(residents, comparator);
-        return residents;
+        final Resident[] result = residents.clone();
+        Arrays.sort(result, comparator);
+        return result;
     }
 
     @Override
