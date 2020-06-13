@@ -37,7 +37,7 @@ public class HotelAdminService implements IHotelAdminService {
             roomService.update(roomId, RoomStatus.OCCUPIED);
             final Resident resident = residentService.findById(residentId);
             System.out.printf("%s was checked-in in room №%d%n",
-                              resident.fullName(),
+                              resident.toString(),
                               room.getNumber());
         } else if (room.getStatus() == RoomStatus.OCCUPIED) {
             System.out.printf("Room №%d is already in used.%n", room.getNumber());
@@ -97,12 +97,12 @@ public class HotelAdminService implements IHotelAdminService {
                 .multiply(new BigDecimal(days))
                 .add(totalAttendances.multiply(new BigDecimal(days)));
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
-                              resident.fullName(),
+                              resident.toString(),
                               total,
                               room.getNumber());
         } else {
             System.out.printf("%s is not checked-in.%n",
-                              resident.fullName());
+                              resident.toString());
         }
     }
 

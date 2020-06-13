@@ -29,10 +29,7 @@ public class Attendance extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Attendance{" +
-               "id=" + id +
-               ", price=" + price +
-               ", name='" + name + '\'' +
-               '}';
+        return String.format("Attendance \"%s\" with price %.2f per day.", name, price);
+
     }
 }

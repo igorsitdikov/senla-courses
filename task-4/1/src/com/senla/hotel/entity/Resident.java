@@ -74,18 +74,6 @@ public class Resident extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Resident{" +
-               "firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", gender=" + gender +
-               ", vip=" + vip +
-               ", phone='" + phone + '\'' +
-			   ", history=" + history +
-               ", id=" + id +
-               '}';
-    }
-
-    public String fullName() {
-        return String.format("%s %s", firstName, lastName);
+        return String.format("Resident %s %s", firstName, lastName);
     }
 }

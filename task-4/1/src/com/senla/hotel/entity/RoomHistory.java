@@ -89,12 +89,10 @@ public class RoomHistory extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "RoomHistory{" +
-               "roomId=" + roomId +
-               ", residentId=" + residentId +
-               ", checkIn=" + checkIn +
-               ", checkOut=" + checkOut +
-               ", id=" + id +
-               '}';
+        return String.format("Room history №%d %n" +
+                             "Room: № %d %n" +
+                             "\t%s. %n" +
+                             "\tCheck-in: %s. %n" +
+                             "\tCheck-out: %s", id, roomId, residentId.toString(), checkIn, checkOut);
     }
 }
