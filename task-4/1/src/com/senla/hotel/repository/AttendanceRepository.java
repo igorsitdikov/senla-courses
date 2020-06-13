@@ -18,12 +18,21 @@ public class AttendanceRepository extends AbstractRepository {
         return entity;
     }
 
-    public AbstractEntity[] add(Attendance[] attendances, final AbstractEntity entity) {
-        Attendance[] at = attendances.clone();
-        at = arrayUtils.expandArray(Attendance.class, at);
-        entity.setId((long) at.length);
-        at[at.length - 1] = (Attendance) entity;
-        return at;
+    public AbstractEntity[] add(final Attendance[] attendances, final AbstractEntity entity) {
+        Attendance[] result = attendances.clone();
+        result = arrayUtils.expandArray(Attendance.class, result);
+        entity.setId((long) result.length);
+        result[result.length - 1] = (Attendance) entity;
+        return result;
+    }
+
+    public AbstractEntity findById(final Long id) {
+        for (final Attendance attendance : attendances) {
+            if (attendance.getId().equals(id)) {
+                return attendance;
+            }
+        }
+        return null;
     }
 
     public Attendance[] getAttendances() {

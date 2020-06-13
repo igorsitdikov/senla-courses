@@ -47,13 +47,16 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void checkOut(final Long residentId, final Long roomId) throws NoSuchEntityException {
+    public void checkOut(final Long residentId, final Long roomId, final LocalDate date)
+        throws NoSuchEntityException {
         final Room room = roomService.findRoomById(roomId);
         if (room.getStatus() != RoomStatus.OCCUPIED) {
             System.out.printf("The room №%d has no resident.", room.getNumber());
         } else {
             roomService.update(roomId, RoomStatus.VACANT);
             final Resident resident = residentService.findById(residentId);
+            final RoomHistory history = resident.getHistory();
+            roomService.updateCheckOutHistory(roomId, history, date);
             resident.setHistory(null);
         }
     }
@@ -68,6 +71,14 @@ public class HotelAdminService implements IHotelAdminService {
         } else {
             room.setStatus(status);
         }
+    }
+
+    public void updateAttendancePrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
+        attendanceService.updatePrice(id, price);
+    }
+
+    public void updateRoomPrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
+        roomService.updatePrice(id, price);
     }
 
     @Override
@@ -99,7 +110,6 @@ public class HotelAdminService implements IHotelAdminService {
     public void showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
         final RoomHistory[] histories = roomService.findRoomById(id).getHistories();
         if (histories.length > number) {
-            System.out.println("больше");
             for (int i = histories.length - number; i < histories.length; i++) {
                 System.out.println(roomService.findRoomById(id).getHistories()[i].toString());
             }
@@ -236,7 +246,7 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void addAttendanceToResident(Long id, Attendance attendance) throws NoSuchEntityException {
+    public void addAttendanceToResident(final Long id, final Attendance attendance) throws NoSuchEntityException {
         residentService.addAttendanceToResident(id, attendance);
     }
 }

@@ -12,7 +12,7 @@ public interface IHotelAdminService {
     void checkIn(Long residentId, Long roomId, LocalDate checkIn, LocalDate checkOut)
         throws NoSuchEntityException;
 
-    void checkOut(Long residentId, Long roomId) throws NoSuchEntityException;
+    void checkOut(Long residentId, Long roomId, LocalDate date) throws NoSuchEntityException;
 
     void changeRoomStatus(Long id, RoomStatus status) throws NoSuchEntityException;
 

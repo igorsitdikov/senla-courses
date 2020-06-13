@@ -1,9 +1,11 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -22,15 +24,29 @@ public class AttendanceService implements IAttendanceService {
 
     @Override
     public void showAllAttendances() {
-        for (int i = 0; i < attendanceRepository.getAttendances().length; i++) {
-            System.out.println(attendanceRepository.getAttendances()[i].toString());
-        }
+        final Attendance[] attendances = attendanceRepository.getAttendances();
+        showAttendances(attendances);
     }
+
     public void showAttendances(final Attendance[] attendances) {
-        for (int i = 0; i < attendances.length; i++) {
-            System.out.println(attendances[i].toString());
+        for (final Attendance attendance : attendances) {
+            System.out.println(attendance.toString());
         }
     }
+
+    public Attendance findAttendanceById(final Long id) throws NoSuchEntityException {
+        final Attendance attendance = (Attendance) attendanceRepository.findById(id);
+        if (attendance == null) {
+            throw new NoSuchEntityException(String.format("No attendance with id %d%n", id));
+        }
+        return attendance;
+    }
+
+    public void updatePrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
+        final Attendance attendance = findAttendanceById(id);
+        attendance.setPrice(price);
+    }
+
     @Override
     public Attendance[] sortAttendances(final Attendance[] attendances, final Comparator<Attendance> comparator) {
         Arrays.sort(attendances, comparator);

@@ -61,6 +61,32 @@ public class RoomHistory extends AbstractEntity {
         this.checkOut = checkOut;
     }
 
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RoomHistory other = (RoomHistory) obj;
+        if (!roomId.equals(other.getRoomId())) {
+            return false;
+        }
+        if (!residentId.equals(other.getResidentId())) {
+            return false;
+        }
+        if (attendances.length != other.getAttendances().length) {
+            return false;
+        }
+        if (!checkIn.equals(other.getCheckIn())) {
+            return false;
+        }
+        return checkOut.equals(other.getCheckOut());
+    }
+
     @Override
     public String toString() {
         return "RoomHistory{" +

@@ -123,14 +123,14 @@ public class Test {
         hotelAdminService.checkIn(1L, 1L, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
         hotelAdminService.checkIn(2L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
         hotelAdminService.checkIn(2L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 10));
-        hotelAdminService.checkOut(2L, 2L);
+        hotelAdminService.checkOut(2L, 2L, LocalDate.of(2020, 8, 9));
 
         hotelAdminService.checkIn(3L, 3L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 14));
-        hotelAdminService.checkOut(3L, 2L);
+        hotelAdminService.checkOut(3L, 2L, LocalDate.of(2020, 12, 2));
         hotelAdminService.checkIn(4L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 13));
 //        hotelAdminService.checkOut(4L, 2L);
 
-        hotelAdminService.checkIn(3L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 12));
+        hotelAdminService.checkIn(3L, 2L, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 15));
 //        hotelAdminService.checkOut(3L, 2L);
 
         hotelAdminService.addAttendanceToResident(1L, ironing);
