@@ -1,5 +1,6 @@
 package com.senla.hotel.service;
 
+import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -90,7 +91,8 @@ public class RoomService implements IRoomService {
             final RoomHistory[] histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
                 (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
-                result = arrayUtils.expandArray(Room.class, result);
+                final AEntity[] entities = arrayUtils.expandArray(result);
+                result = roomRepository.castArray(entities);
                 result[result.length - 1] = room;
             }
         }

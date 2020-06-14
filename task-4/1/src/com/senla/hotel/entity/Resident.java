@@ -104,6 +104,6 @@ public class Resident extends AEntity {
 
     @Override
     public String toString() {
-        return String.format("Resident %d %s %s",id , firstName, lastName);
+        return String.format("Resident %s %s", firstName, lastName);
     }
 }

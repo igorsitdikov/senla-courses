@@ -1,10 +1,10 @@
 package com.senla.hotel.utils;
 
-import java.lang.reflect.Array;
+import com.senla.hotel.entity.AEntity;
 
 public class ArrayUtils {
-    public <T> T[] expandArray(final Class<T> tClass, final T[] array) {
-        @SuppressWarnings("unchecked") final T[] buffer = (T[]) Array.newInstance(tClass, array.length + 1);
+    public AEntity[] expandArray(final AEntity[] array) {
+        final AEntity[] buffer = new AEntity[array.length + 1];
         System.arraycopy(array, 0, buffer, 0, array.length);
         return buffer;
     }
