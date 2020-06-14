@@ -1,12 +1,12 @@
 package com.senla.hotel.entity;
 
-import com.senla.hotel.entity.type.Accommodation;
-import com.senla.hotel.entity.type.RoomStatus;
-import com.senla.hotel.entity.type.Stars;
+import com.senla.hotel.enumerated.Accommodation;
+import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.Stars;
 
 import java.math.BigDecimal;
 
-public class Room extends AbstractEntity {
+public class Room extends AEntity {
     private Integer number;
     private Stars stars;
     private Accommodation accommodation;
@@ -76,6 +76,37 @@ public class Room extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Room other = (Room) obj;
+        if (!number.equals(other.getNumber())) {
+            return false;
+        }
+        if (!stars.equals(other.getStars())) {
+            return false;
+        }
+        if (accommodation.equals(other.getAccommodation())) {
+            return false;
+        }
+        if (!price.equals(other.getPrice())) {
+            return false;
+        }
+        if (!status.equals(other.getStatus())) {
+            return false;
+        }
+        return histories.length == (other.getHistories().length);
+    }
+
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Room №");
@@ -83,10 +114,10 @@ public class Room extends AbstractEntity {
         sb.append(" can hold up to ");
         switch (accommodation) {
             case SGL_CHD:
-                sb.append("single resident with 1 kid.");
+                sb.append("single resident with 1 child.");
                 break;
             case SGL_2_CHD:
-                sb.append("single resident with 2 kids.");
+                sb.append("single resident with 2 children.");
                 break;
             case DBL:
                 sb.append("double residents.");
@@ -95,19 +126,19 @@ public class Room extends AbstractEntity {
                 sb.append("double residents with extra bad.");
                 break;
             case DBL_CHD:
-                sb.append("double residents with 1 kid.");
+                sb.append("double residents with 1 child.");
                 break;
             case DBL_EXB_CHD:
-                sb.append("double residents with 1 kid and extra bad.");
+                sb.append("double residents with 1 child and extra bad.");
                 break;
             case TRPL:
                 sb.append("triple residents.");
                 break;
             case TRPL_CHD:
-                sb.append("triple residents with 1 kid.");
+                sb.append("triple residents with 1 children.");
                 break;
             case TRPL_2_CHLD:
-                sb.append("triple residents with 2 kids.");
+                sb.append("triple residents with 2 children.");
                 break;
             default:
                 sb.append("single resident.");

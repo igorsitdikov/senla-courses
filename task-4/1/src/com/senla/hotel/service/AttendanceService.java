@@ -42,9 +42,12 @@ public class AttendanceService implements IAttendanceService {
         return attendance;
     }
 
-    public void updatePrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
-        final Attendance attendance = findAttendanceById(id);
-        attendance.setPrice(price);
+    public void updatePrice(final Long id, final BigDecimal price) {
+        attendanceRepository.updatePrice(id, price);
+    }
+
+    public void updatePrice(final String name, final BigDecimal price) {
+        attendanceRepository.updatePrice(name, price);
     }
 
     @Override

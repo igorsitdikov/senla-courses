@@ -1,8 +1,8 @@
 package com.senla.hotel.entity;
 
-import com.senla.hotel.entity.type.Gender;
+import com.senla.hotel.enumerated.Gender;
 
-public class Resident extends AbstractEntity {
+public class Resident extends AEntity {
     private String firstName;
     private String lastName;
     private Gender gender;
@@ -73,7 +73,37 @@ public class Resident extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Resident other = (Resident) obj;
+        if (!firstName.equals(other.getFirstName())) {
+            return false;
+        }
+        if (!lastName.equals(other.getLastName())) {
+            return false;
+        }
+        if (gender.equals(other.getGender())) {
+            return false;
+        }
+        if (!vip.equals(other.getVip())) {
+            return false;
+        }
+        if (!phone.equals(other.getPhone())) {
+            return false;
+        }
+        return history.equals(other.getHistory());
+    }
+
+    @Override
     public String toString() {
-        return String.format("Resident %s %s", firstName, lastName);
+        return String.format("Resident %d %s %s",id , firstName, lastName);
     }
 }

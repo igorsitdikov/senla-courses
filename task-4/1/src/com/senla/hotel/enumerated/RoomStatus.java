@@ -1,4 +1,4 @@
-package com.senla.hotel.entity.type;
+package com.senla.hotel.enumerated;
 
 public enum RoomStatus {
 	VACANT,

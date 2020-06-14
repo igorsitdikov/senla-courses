@@ -54,8 +54,26 @@ public class ResidentService implements IResidentService {
         residentRepository.addHistory(resident, roomHistory);
     }
 
+    @Override
     public void addAttendanceToResident(final Long id, final Attendance attendance) throws NoSuchEntityException {
         final Resident resident = findById(id);
+        Attendance[] attendances = resident.getHistory().getAttendances();
+        attendances = (Attendance[]) attendanceRepository.add(attendances, attendance);
+        resident.getHistory().setAttendances(attendances);
+    }
+
+    @Override
+    public void addAttendanceToResident(final Resident resident, final Attendance attendance)
+        throws NoSuchEntityException {
+        final Long residentId = resident.getId();
+        final Long attendanceId = attendance.getId();
+        addAttendanceToResident(residentId, attendanceId);
+    }
+
+    @Override
+    public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws NoSuchEntityException {
+        final Resident resident = findById(residentId);
+        final Attendance attendance = (Attendance) attendanceRepository.findById(attendanceId);
         Attendance[] attendances = resident.getHistory().getAttendances();
         attendances = (Attendance[]) attendanceRepository.add(attendances, attendance);
         resident.getHistory().setAttendances(attendances);

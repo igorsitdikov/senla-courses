@@ -2,7 +2,7 @@ package com.senla.hotel.service;
 
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.entity.type.RoomStatus;
+import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
@@ -35,20 +35,26 @@ public class RoomService implements IRoomService {
         roomRepository.addHistory(room, history);
     }
 
+    @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
         throws NoSuchEntityException {
         final Room room = findRoomById(id);
         final RoomHistory[] histories = room.getHistories();
-        for (int i = 0; i < histories.length; i++) {
-            if (histories[i].equals(history)) {
-                histories[i].setCheckOut(checkOut);
+        for (final RoomHistory roomHistory : histories) {
+            if (roomHistory.equals(history)) {
+                roomHistory.setCheckOut(checkOut);
             }
         }
     }
 
-    public void updatePrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
-        final Room room = findRoomById(id);
-        room.setPrice(price);
+    @Override
+    public void updatePrice(final Long id, final BigDecimal price) {
+        roomRepository.updatePrice(id, price);
+    }
+
+    @Override
+    public void updatePrice(final Integer number, final BigDecimal price) {
+        roomRepository.updatePrice(number, price);
     }
 
     @Override
@@ -59,20 +65,24 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void showDetails(final Long id) throws NoSuchEntityException {
-        final Room room = findRoomById(id);
-        System.out.println(room);
-    }
-
-    @Override
     public Room findRoomById(final Long id) throws NoSuchEntityException {
-        final Room room = roomRepository.findById(id);
+        final Room room = (Room) roomRepository.findById(id);
         if (room == null) {
             throw new NoSuchEntityException(String.format("No room with id %d%n", id));
         }
         return room;
     }
 
+    @Override
+    public Room findRoomByRoomNumber(final Integer number) throws NoSuchEntityException {
+        final Room room = (Room) roomRepository.findByRoomNumber(number);
+        if (room == null) {
+            throw new NoSuchEntityException(String.format("No room with № %d%n", number));
+        }
+        return room;
+    }
+
+    @Override
     public Room[] vacantOnDate(final LocalDate date) {
         final Room[] rooms = roomRepository.getRooms();
         Room[] result = new Room[0];
@@ -82,22 +92,22 @@ public class RoomService implements IRoomService {
                 (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
                 result = arrayUtils.expandArray(Room.class, result);
                 result[result.length - 1] = room;
-                if (histories.length > 0) {
-                    System.out.println(histories[histories.length - 1]);
-                }
             }
-        }
-        for (final Room room : result) {
-            System.out.println(room);
         }
         return result;
     }
 
     @Override
     public Room update(final Long id, final RoomStatus roomStatus) {
-        final Room room = roomRepository.findById(id);
+        final Room room = (Room) roomRepository.findById(id);
         room.setStatus(roomStatus);
         return room;
+    }
+
+    @Override
+    public Room update(final Integer number, final RoomStatus roomStatus) {
+        final Room room = (Room) roomRepository.findByRoomNumber(number);
+        return update(room.getId(), roomStatus);
     }
 
     @Override

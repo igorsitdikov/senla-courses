@@ -4,7 +4,7 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.entity.type.RoomStatus;
+import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
@@ -29,13 +29,13 @@ public class HotelAdminService implements IHotelAdminService {
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
         throws NoSuchEntityException {
         final Room room = roomService.findRoomById(roomId);
+        final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
-            final RoomHistory history = new RoomHistory(roomId, residentId, checkIn, checkOut);
+            final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut);
             final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
             residentService.addHistoryToResident(residentId, roomHistoryEntity);
             roomService.addHistoryToRoom(roomId, roomHistoryEntity);
             roomService.update(roomId, RoomStatus.OCCUPIED);
-            final Resident resident = residentService.findById(residentId);
             System.out.printf("%s was checked-in in room №%d%n",
                               resident.toString(),
                               room.getNumber());
@@ -47,18 +47,30 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void checkOut(final Long residentId, final Long roomId, final LocalDate date)
+    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
         throws NoSuchEntityException {
-        final Room room = roomService.findRoomById(roomId);
+        checkIn(resident.getId(), room.getId(), checkIn, checkOut);
+    }
+
+    @Override
+    public void checkOut(final Long residentId, final LocalDate date)
+        throws NoSuchEntityException {
+        final Resident resident = residentService.findById(residentId);
+        final RoomHistory history = resident.getHistory();
+        final Room room = history.getRoom();
         if (room.getStatus() != RoomStatus.OCCUPIED) {
             System.out.printf("The room №%d has no resident.", room.getNumber());
         } else {
-            roomService.update(roomId, RoomStatus.VACANT);
-            final Resident resident = residentService.findById(residentId);
-            final RoomHistory history = resident.getHistory();
-            roomService.updateCheckOutHistory(roomId, history, date);
+            roomService.update(room.getId(), RoomStatus.VACANT);
+            roomService.updateCheckOutHistory(room.getId(), history, date);
             resident.setHistory(null);
         }
+    }
+
+    @Override
+    public void checkOut(final Resident resident, final LocalDate date)
+        throws NoSuchEntityException {
+        checkOut(resident.getId(), date);
     }
 
     @Override
@@ -73,12 +85,30 @@ public class HotelAdminService implements IHotelAdminService {
         }
     }
 
-    public void updateAttendancePrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
+    @Override
+    public void changeRoomStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
+        final Room room = roomService.findRoomByRoomNumber(number);
+        changeRoomStatus(room.getId(), status);
+    }
+
+    @Override
+    public void changeAttendancePrice(final Long id, final BigDecimal price) {
         attendanceService.updatePrice(id, price);
     }
 
-    public void updateRoomPrice(final Long id, final BigDecimal price) throws NoSuchEntityException {
+    @Override
+    public void changeAttendancePrice(final String name, final BigDecimal price) {
+        attendanceService.updatePrice(name, price);
+    }
+
+    @Override
+    public void changeRoomPrice(final Long id, final BigDecimal price) {
         roomService.updatePrice(id, price);
+    }
+
+    @Override
+    public void changeRoomPrice(final Integer number, final BigDecimal price) {
+        roomService.updatePrice(number, price);
     }
 
     @Override
@@ -87,7 +117,7 @@ public class HotelAdminService implements IHotelAdminService {
         if (resident.getHistory() != null) {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
                                                       resident.getHistory().getCheckOut());
-            final Room room = roomService.findRoomById(resident.getHistory().getRoomId());
+            final Room room = resident.getHistory().getRoom();
             BigDecimal totalAttendances = BigDecimal.valueOf(0);
             for (int i = 0; i < resident.getHistory().getAttendances().length; i++) {
                 totalAttendances = totalAttendances.add(resident.getHistory().getAttendances()[i].getPrice());
@@ -107,6 +137,18 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
+    public void calculateBill(final Resident resident) throws NoSuchEntityException {
+        final Long id = resident.getId();
+        calculateBill(id);
+    }
+
+    @Override
+    public void showVacantRoomsOnDate(final LocalDate date) {
+        final Room[] vacantRooms = roomService.vacantOnDate(date);
+        roomService.showRooms(vacantRooms);
+    }
+
+    @Override
     public void showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
         final RoomHistory[] histories = roomService.findRoomById(id).getHistories();
         if (histories.length > number) {
@@ -118,6 +160,12 @@ public class HotelAdminService implements IHotelAdminService {
                 System.out.println(roomService.findRoomById(id).getHistories()[i].toString());
             }
         }
+    }
+
+    @Override
+    public void showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+        final Long id = room.getId();
+        showLastResidents(id, number);
     }
 
     @Override
@@ -207,7 +255,14 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void showRoomDetails(final Long id) throws NoSuchEntityException {
-        roomService.showDetails(id);
+        final Room room = roomService.findRoomById(id);
+        System.out.println(room.toString());
+    }
+
+    @Override
+    public void showRoomDetails(final Integer number) throws NoSuchEntityException {
+        final Room room = roomService.findRoomByRoomNumber(number);
+        System.out.println(room.toString());
     }
 
     @Override
@@ -237,16 +292,24 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void showCountVacantRooms() {
-        System.out.println(roomService.countVacantRooms());
+        final int countVacantRooms = roomService.countVacantRooms();
+        System.out.println(String.format("Total vacant rooms: %d", countVacantRooms));
     }
 
     @Override
     public void showCountResidents() {
-        System.out.println(residentService.showTotalNumber());
+        final int count = residentService.showTotalNumber();
+        System.out.println(String.format("Total residents: %d", count));
     }
 
     @Override
-    public void addAttendanceToResident(final Long id, final Attendance attendance) throws NoSuchEntityException {
-        residentService.addAttendanceToResident(id, attendance);
+    public void addAttendanceToResident(final Long id, final Long attendanceId) throws NoSuchEntityException {
+        residentService.addAttendanceToResident(id, attendanceId);
+    }
+
+    @Override
+    public void addAttendanceToResident(final Resident resident, final Attendance attendance)
+        throws NoSuchEntityException {
+        residentService.addAttendanceToResident(resident, attendance);
     }
 }

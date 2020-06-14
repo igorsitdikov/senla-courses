@@ -1,6 +1,6 @@
 package com.senla.hotel.entity;
 
-public abstract class AbstractEntity {
+public abstract class AEntity {
     protected Long id;
 
     public Long getId() {

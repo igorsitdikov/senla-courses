@@ -2,9 +2,9 @@ package com.senla.hotel.entity;
 
 import java.time.LocalDate;
 
-public class RoomHistory extends AbstractEntity {
-    private Long roomId;
-    private Long residentId;
+public class RoomHistory extends AEntity {
+    private Room room;
+    private Resident resident;
     private Attendance[] attendances;
     private LocalDate checkIn;
     private LocalDate checkOut;
@@ -13,28 +13,28 @@ public class RoomHistory extends AbstractEntity {
         attendances = new Attendance[0];
     }
 
-    public RoomHistory(final Long roomId, final Long residentId, final LocalDate checkIn, final LocalDate checkOut) {
-        this.roomId = roomId;
-        this.residentId = residentId;
+    public RoomHistory(final Room room, final Resident resident, final LocalDate checkIn, final LocalDate checkOut) {
+        this.room = room;
+        this.resident = resident;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         attendances = new Attendance[0];
     }
 
-    public Long getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomId(final Long roomId) {
-        this.roomId = roomId;
+    public void setRoom(final Room room) {
+        this.room = room;
     }
 
-    public Long getResidentId() {
-        return residentId;
+    public Resident getResident() {
+        return resident;
     }
 
-    public void setResidentId(final Long residentId) {
-        this.residentId = residentId;
+    public void setResident(final Resident resident) {
+        this.resident = resident;
     }
 
     public Attendance[] getAttendances() {
@@ -72,10 +72,10 @@ public class RoomHistory extends AbstractEntity {
             return false;
         }
         final RoomHistory other = (RoomHistory) obj;
-        if (!roomId.equals(other.getRoomId())) {
+        if (!room.equals(other.getRoom())) {
             return false;
         }
-        if (!residentId.equals(other.getResidentId())) {
+        if (!resident.equals(other.getResident())) {
             return false;
         }
         if (attendances.length != other.getAttendances().length) {
@@ -89,10 +89,15 @@ public class RoomHistory extends AbstractEntity {
 
     @Override
     public String toString() {
-        return String.format("Room history №%d %n" +
-                             "Room: № %d %n" +
+        return String.format("Room's history №%d: %n" +
+                             "\tRoom № %d.%n" +
                              "\t%s. %n" +
-                             "\tCheck-in: %s. %n" +
-                             "\tCheck-out: %s", id, roomId, residentId.toString(), checkIn, checkOut);
+                             "\tCheck-in %s. %n" +
+                             "\tCheck-out %s.",
+                             id,
+                             room.getNumber(),
+                             resident.toString(),
+                             checkIn,
+                             checkOut);
     }
 }

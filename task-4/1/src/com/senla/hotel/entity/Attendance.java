@@ -2,7 +2,7 @@ package com.senla.hotel.entity;
 
 import java.math.BigDecimal;
 
-public class Attendance extends AbstractEntity {
+public class Attendance extends AEntity {
     private BigDecimal price;
     private String name;
 
