@@ -3,6 +3,7 @@ package com.senla.hotel.ui.menu;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.action.room.AddAction;
 import com.senla.hotel.ui.action.room.ChangePriceAction;
+import com.senla.hotel.ui.action.room.CountVacantAction;
 import com.senla.hotel.ui.action.room.ShowAllAction;
 import com.senla.hotel.ui.action.room.ShowAllSortedByAccommodationAction;
 import com.senla.hotel.ui.action.room.ShowAllSortedByPriceAction;
@@ -59,6 +60,9 @@ public class Builder {
         roomMenu.addMenuItem(new MenuItem("Change price",
                                           roomMenu,
                                           new ChangePriceAction()));
+        roomMenu.addMenuItem(new MenuItem("Total vacant rooms",
+                                          roomMenu,
+                                          new CountVacantAction()));
 
         rootMenu.addMenuItem(new MenuItem("Room menu", roomMenu));
         rootMenu.addMenuItem(new MenuItem("Exit"));
