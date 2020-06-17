@@ -70,4 +70,8 @@ public final class RoomController {
     public void changePrice(final Integer roomNumber, final BigDecimal price) {
         roomService.changeRoomPrice(roomNumber, price);
     }
+
+    public int countVacantRooms() {
+        return roomService.countVacantRooms();
+    }
 }
