@@ -10,21 +10,12 @@ import java.time.LocalDate;
 import java.util.Comparator;
 
 public interface IRoomService {
-
-    void add(Room room);
-
-    void showRooms(Room[] rooms);
-
-    String getRoomsAsString(Room[] rooms);
-
     void addHistoryToRoom(Long id, RoomHistory history) throws NoSuchEntityException;
 
     void updateCheckOutHistory(Long id, RoomHistory history, LocalDate checkOut)
         throws NoSuchEntityException;
 
-    void updatePrice(Long id, BigDecimal price);
-
-    void updatePrice(Integer number, BigDecimal price);
+    Room[] showVacantRoomsOnDate(LocalDate date);
 
     Room[] sortRooms(Room[] rooms, Comparator<Room> comparator);
 
@@ -34,13 +25,33 @@ public interface IRoomService {
 
     Room[] vacantOnDate(LocalDate date);
 
-    Room update(Long id, RoomStatus roomStatus);
-
-    Room update(Integer number, RoomStatus roomStatus);
-
     int countVacantRooms();
 
-    Room[] getAllRooms();
+    void changeRoomPrice(Long id, BigDecimal price);
 
-    Room[] getVacantRooms();
+    void changeRoomPrice(Integer number, BigDecimal price);
+
+    void changeRoomStatus(Long id, RoomStatus status) throws NoSuchEntityException;
+
+    void changeRoomStatus(Integer number, RoomStatus status) throws NoSuchEntityException;
+
+    void addRoom(Room room);
+
+    Room[] showAllRooms();
+
+    Room[] showAllRoomsSortedByPrice();
+
+    Room[] showAllRoomsSortedByAccommodation();
+
+    Room[] showAllRoomsSortedByStars();
+
+    Room[] showVacantRooms();
+
+    Room[] showVacantRoomsSortedByPrice();
+
+    Room[] showVacantRoomsSortedByAccommodation();
+
+    Room[] showVacantRoomsSortedByStars();
+
+    Room showRoomDetails(Integer number) throws NoSuchEntityException;
 }

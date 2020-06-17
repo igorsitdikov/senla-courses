@@ -66,12 +66,12 @@ public class RoomRepository extends ARepository {
         return null;
     }
 
-    public void updatePrice(final Long id, final BigDecimal price) {
+    public void changePrice(final Long id, final BigDecimal price) {
         final Room room = (Room) findById(id);
         room.setPrice(price);
     }
 
-    public void updatePrice(final Integer number, final BigDecimal price) {
+    public void changePrice(final Integer number, final BigDecimal price) {
         final Room room = (Room) findByRoomNumber(number);
         room.setPrice(price);
     }

@@ -38,7 +38,6 @@ public class MenuController {
             navigator.setCurrentMenu(navigator.getCurrentMenu().getMenuItems().get(choice).getNextMenu());
             navigator.printMenu();
         }
-        HotelController.getInstance();
         scanner.close();
         System.out.println("Goodbye! Your changes have been saved!");
     }

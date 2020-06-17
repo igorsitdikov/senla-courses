@@ -21,23 +21,13 @@ public interface IHotelAdminService {
     void checkOut(Resident resident, LocalDate date)
         throws NoSuchEntityException;
 
-    void changeRoomStatus(Long id, RoomStatus status) throws NoSuchEntityException;
-
-    void changeRoomStatus(Integer number, RoomStatus status) throws NoSuchEntityException;
-
     void changeAttendancePrice(Long id, BigDecimal price);
 
     void changeAttendancePrice(String name, BigDecimal price);
 
-    void changeRoomPrice(Long id, BigDecimal price);
-
-    void changeRoomPrice(Integer number, BigDecimal price);
-
     void calculateBill(Long id) throws NoSuchEntityException;
 
     void calculateBill(Resident resident) throws NoSuchEntityException;
-
-    void showVacantRoomsOnDate(LocalDate date);
 
     void showLastResidents(Long id, Integer number) throws NoSuchEntityException;
 
@@ -50,28 +40,6 @@ public interface IHotelAdminService {
     void showAttendancesSortedByName();
 
     void showAttendancesSortedByPrice();
-
-    void addRoom(Room room);
-
-    Room[] showAllRooms();
-
-    Room[] showAllRoomsSortedByPrice();
-
-    Room[] showAllRoomsSortedByAccommodation();
-
-    Room[] showAllRoomsSortedByStars();
-
-    Room[] showVacantRooms();
-
-    Room[] showVacantRoomsSortedByPrice();
-
-    Room[] showVacantRoomsSortedByAccommodation();
-
-    Room[] showVacantRoomsSortedByStars();
-
-    void showRoomDetails(Long id) throws NoSuchEntityException;
-
-    Room showRoomDetails(Integer number) throws NoSuchEntityException;
 
     void addResident(Resident resident);
 
