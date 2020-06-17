@@ -31,6 +31,15 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    public String getRoomsAsString(final Room[] rooms) {
+        StringBuilder sb = new StringBuilder();
+        for (final Room room : rooms) {
+            sb.append(room.toString());
+        }
+        return sb.toString();
+    }
+
+    @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
         final Room room = findRoomById(id);
         roomRepository.addHistory(room, history);
@@ -38,7 +47,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         final Room room = findRoomById(id);
         final RoomHistory[] histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
@@ -90,7 +99,7 @@ public class RoomService implements IRoomService {
         for (final Room room : rooms) {
             final RoomHistory[] histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
+                    (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
                 final AEntity[] entities = arrayUtils.expandArray(result);
                 result = roomRepository.castArray(entities);
                 result[result.length - 1] = room;

@@ -27,7 +27,7 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         final Room room = roomService.findRoomById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
@@ -37,8 +37,8 @@ public class HotelAdminService implements IHotelAdminService {
             roomService.addHistoryToRoom(roomId, roomHistoryEntity);
             roomService.update(roomId, RoomStatus.OCCUPIED);
             System.out.printf("%s was checked-in in room №%d%n",
-                              resident.toString(),
-                              room.getNumber());
+                    resident.toString(),
+                    room.getNumber());
         } else if (room.getStatus() == RoomStatus.OCCUPIED) {
             System.out.printf("Room №%d is already in used.%n", room.getNumber());
         } else {
@@ -48,13 +48,13 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 
     @Override
     public void checkOut(final Long residentId, final LocalDate date)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         final Resident resident = residentService.findById(residentId);
         final RoomHistory history = resident.getHistory();
         final Room room = history.getRoom();
@@ -69,7 +69,7 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkOut(final Resident resident, final LocalDate date)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         checkOut(resident.getId(), date);
     }
 
@@ -116,7 +116,7 @@ public class HotelAdminService implements IHotelAdminService {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
-                                                      resident.getHistory().getCheckOut());
+                    resident.getHistory().getCheckOut());
             final Room room = resident.getHistory().getRoom();
             BigDecimal totalAttendances = BigDecimal.valueOf(0);
             for (int i = 0; i < resident.getHistory().getAttendances().length; i++) {
@@ -124,15 +124,15 @@ public class HotelAdminService implements IHotelAdminService {
             }
 
             final BigDecimal total = room.getPrice()
-                .multiply(new BigDecimal(days))
-                .add(totalAttendances.multiply(new BigDecimal(days)));
+                    .multiply(new BigDecimal(days))
+                    .add(totalAttendances.multiply(new BigDecimal(days)));
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
-                              resident.toString(),
-                              total,
-                              room.getNumber());
+                    resident.toString(),
+                    total,
+                    room.getNumber());
         } else {
             System.out.printf("%s is not checked-in.%n",
-                              resident.toString());
+                    resident.toString());
         }
     }
 
@@ -182,7 +182,7 @@ public class HotelAdminService implements IHotelAdminService {
     public void showAttendancesSortedByName() {
         final Attendance[] attendances = attendanceService.getAttendances();
         final Attendance[] sortedAttendances =
-            attendanceService.sortAttendances(attendances, new AttendanceNameComparator());
+                attendanceService.sortAttendances(attendances, new AttendanceNameComparator());
         attendanceService.showAttendances(sortedAttendances);
     }
 
@@ -190,7 +190,7 @@ public class HotelAdminService implements IHotelAdminService {
     public void showAttendancesSortedByPrice() {
         final Attendance[] attendances = attendanceService.getAttendances();
         final Attendance[] sortedAttendances =
-            attendanceService.sortAttendances(attendances, new AttendancePriceComparator());
+                attendanceService.sortAttendances(attendances, new AttendancePriceComparator());
         attendanceService.showAttendances(sortedAttendances);
     }
 
@@ -200,57 +200,49 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void showAllRooms() {
+    public Room[] showAllRooms() {
+        return roomService.getAllRooms();
+    }
+
+    @Override
+    public Room[] showAllRoomsSortedByPrice() {
         final Room[] rooms = roomService.getAllRooms();
-        roomService.showRooms(rooms);
+        return roomService.sortRooms(rooms, new RoomPriceComparator());
     }
 
     @Override
-    public void showAllRoomsSortedByPrice() {
+    public Room[] showAllRoomsSortedByAccommodation() {
         final Room[] rooms = roomService.getAllRooms();
-        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomPriceComparator());
-        roomService.showRooms(sortedRooms);
+        return roomService.sortRooms(rooms, new RoomAccommodationComparator());
     }
 
     @Override
-    public void showAllRoomsSortedByAccommodation() {
+    public Room[] showAllRoomsSortedByStars() {
         final Room[] rooms = roomService.getAllRooms();
-        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomAccommodationComparator());
-        roomService.showRooms(sortedRooms);
+        return roomService.sortRooms(rooms, new RoomStarsComparator());
     }
 
     @Override
-    public void showAllRoomsSortedByStars() {
-        final Room[] rooms = roomService.getAllRooms();
-        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomStarsComparator());
-        roomService.showRooms(sortedRooms);
+    public Room[] showVacantRooms() {
+        return roomService.getVacantRooms();
     }
 
     @Override
-    public void showVacantRooms() {
+    public Room[] showVacantRoomsSortedByPrice() {
         final Room[] rooms = roomService.getVacantRooms();
-        roomService.showRooms(rooms);
+        return roomService.sortRooms(rooms, new RoomPriceComparator());
     }
 
     @Override
-    public void showVacantRoomsSortedByPrice() {
+    public Room[] showVacantRoomsSortedByAccommodation() {
         final Room[] rooms = roomService.getVacantRooms();
-        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomPriceComparator());
-        roomService.showRooms(sortedRooms);
+        return roomService.sortRooms(rooms, new RoomAccommodationComparator());
     }
 
     @Override
-    public void showVacantRoomsSortedByAccommodation() {
+    public Room[] showVacantRoomsSortedByStars() {
         final Room[] rooms = roomService.getVacantRooms();
-        final Room[] sortedRooms = roomService.sortRooms(rooms, new RoomAccommodationComparator());
-        roomService.showRooms(sortedRooms);
-    }
-
-    @Override
-    public void showVacantRoomsSortedByStars() {
-        final Room[] rooms = roomService.getVacantRooms();
-        roomService.sortRooms(rooms, new RoomStarsComparator());
-        roomService.showRooms(rooms);
+        return roomService.sortRooms(rooms, new RoomStarsComparator());
     }
 
     @Override
@@ -260,9 +252,8 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void showRoomDetails(final Integer number) throws NoSuchEntityException {
-        final Room room = roomService.findRoomByRoomNumber(number);
-        System.out.println(room.toString());
+    public Room showRoomDetails(final Integer number) throws NoSuchEntityException {
+        return roomService.findRoomByRoomNumber(number);
     }
 
     @Override
@@ -309,7 +300,7 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         residentService.addAttendanceToResident(resident, attendance);
     }
 }
