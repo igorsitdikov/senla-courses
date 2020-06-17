@@ -25,6 +25,10 @@ public interface IRoomService {
 
     Room[] vacantOnDate(LocalDate date);
 
+    void showLastResidents(Long id, Integer number) throws NoSuchEntityException;
+
+    void showLastResidents(Room room, Integer number) throws NoSuchEntityException;
+
     int countVacantRooms();
 
     void changeRoomPrice(Long id, BigDecimal price);

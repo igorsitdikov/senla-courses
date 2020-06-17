@@ -9,13 +9,7 @@ import java.util.Comparator;
 
 public interface IResidentService {
 
-    void add(Resident resident);
-
     Resident[] sortResidents(Resident[] residents, Comparator<Resident> comparator);
-
-    int showTotalNumber();
-
-    void showResidents(Resident[] residents);
 
     Resident findById(Long id) throws NoSuchEntityException;
 
@@ -29,4 +23,14 @@ public interface IResidentService {
     void addAttendanceToResident(Long residentId, Long attendanceId) throws NoSuchEntityException;
 
     Resident[] getResidents();
+
+    void addResident(Resident resident);
+
+    Resident[] showResidents();
+
+    Resident[] showResidentsSortedByName();
+
+    Resident[] showResidentsSortedByCheckOutDate();
+
+    int showCountResidents();
 }

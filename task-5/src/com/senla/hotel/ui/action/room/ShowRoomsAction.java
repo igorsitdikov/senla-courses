@@ -8,10 +8,11 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowAllSortedByStarsAction implements IAction {
+public class ShowRoomsAction implements IAction {
+
     @Override
     public void execute() {
-        Room[] rooms = RoomController.getInstance().showAllRoomsSortedByStars();
+        Room[] rooms = RoomController.getInstance().showAllRooms();
         List<Room> entities = Arrays.asList(rooms);
         Printer.show(entities);
     }

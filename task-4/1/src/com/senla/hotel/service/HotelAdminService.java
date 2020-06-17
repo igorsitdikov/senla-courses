@@ -7,10 +7,6 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
-import com.senla.hotel.utils.comparator.AttendanceNameComparator;
-import com.senla.hotel.utils.comparator.AttendancePriceComparator;
-import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
-import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,16 +67,6 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public void changeAttendancePrice(final Long id, final BigDecimal price) {
-        attendanceService.updatePrice(id, price);
-    }
-
-    @Override
-    public void changeAttendancePrice(final String name, final BigDecimal price) {
-        attendanceService.updatePrice(name, price);
-    }
-
-    @Override
     public void calculateBill(final Long id) throws NoSuchEntityException {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
@@ -109,89 +95,6 @@ public class HotelAdminService implements IHotelAdminService {
     public void calculateBill(final Resident resident) throws NoSuchEntityException {
         final Long id = resident.getId();
         calculateBill(id);
-    }
-
-    @Override
-    public void showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
-        final RoomHistory[] histories = roomService.findRoomById(id).getHistories();
-        if (histories.length > number) {
-            for (int i = histories.length - number; i < histories.length; i++) {
-                System.out.println(roomService.findRoomById(id).getHistories()[i].toString());
-            }
-        } else {
-            for (int i = 0; i < histories.length; i++) {
-                System.out.println(roomService.findRoomById(id).getHistories()[i].toString());
-            }
-        }
-    }
-
-    @Override
-    public void showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
-        final Long id = room.getId();
-        showLastResidents(id, number);
-    }
-
-    @Override
-    public void createAttendance(final Attendance attendance) {
-        attendanceService.addAttendance(attendance);
-    }
-
-    @Override
-    public void showAttendances() {
-        attendanceService.showAllAttendances();
-    }
-
-    @Override
-    public void showAttendancesSortedByName() {
-        final Attendance[] attendances = attendanceService.getAttendances();
-        final Attendance[] sortedAttendances =
-            attendanceService.sortAttendances(attendances, new AttendanceNameComparator());
-        attendanceService.showAttendances(sortedAttendances);
-    }
-
-    @Override
-    public void showAttendancesSortedByPrice() {
-        final Attendance[] attendances = attendanceService.getAttendances();
-        final Attendance[] sortedAttendances =
-            attendanceService.sortAttendances(attendances, new AttendancePriceComparator());
-        attendanceService.showAttendances(sortedAttendances);
-    }
-
-    @Override
-    public void addResident(final Resident resident) {
-        residentService.add(resident);
-    }
-
-    @Override
-    public void showResidents() {
-        final Resident[] residents = residentService.getResidents();
-        residentService.showResidents(residents);
-    }
-
-    @Override
-    public void showResidentsSortedByName() {
-        final Resident[] residents = residentService.getResidents();
-        final Resident[] sortedResidents = residentService.sortResidents(residents, new ResidentFullNameComparator());
-        residentService.showResidents(sortedResidents);
-    }
-
-    @Override
-    public void showResidentsSortedByCheckOutDate() {
-        final Resident[] residents = residentService.getResidents();
-        final Resident[] sortedResidents = residentService.sortResidents(residents, new ResidentCheckOutComparator());
-        residentService.showResidents(sortedResidents);
-    }
-
-    @Override
-    public void showCountVacantRooms() {
-        final int countVacantRooms = roomService.countVacantRooms();
-        System.out.println(String.format("Total vacant rooms: %d", countVacantRooms));
-    }
-
-    @Override
-    public void showCountResidents() {
-        final int count = residentService.showTotalNumber();
-        System.out.println(String.format("Total residents: %d", count));
     }
 
     @Override
