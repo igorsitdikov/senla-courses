@@ -8,6 +8,9 @@ import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
 import com.senla.hotel.utils.ArrayUtils;
+import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
+import com.senla.hotel.utils.comparator.RoomPriceComparator;
+import com.senla.hotel.utils.comparator.RoomStarsComparator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,27 +22,6 @@ public class RoomService implements IRoomService {
     private ArrayUtils arrayUtils = new ArrayUtils();
 
     @Override
-    public void add(final Room room) {
-        roomRepository.add(room);
-    }
-
-    @Override
-    public void showRooms(final Room[] rooms) {
-        for (final Room room : rooms) {
-            System.out.println(room.toString());
-        }
-    }
-
-    @Override
-    public String getRoomsAsString(final Room[] rooms) {
-        StringBuilder sb = new StringBuilder();
-        for (final Room room : rooms) {
-            sb.append(room.toString());
-        }
-        return sb.toString();
-    }
-
-    @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
         final Room room = findRoomById(id);
         roomRepository.addHistory(room, history);
@@ -47,7 +29,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-            throws NoSuchEntityException {
+        throws NoSuchEntityException {
         final Room room = findRoomById(id);
         final RoomHistory[] histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
@@ -58,13 +40,8 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void updatePrice(final Long id, final BigDecimal price) {
-        roomRepository.updatePrice(id, price);
-    }
-
-    @Override
-    public void updatePrice(final Integer number, final BigDecimal price) {
-        roomRepository.updatePrice(number, price);
+    public Room[] showVacantRoomsOnDate(final LocalDate date) {
+        return vacantOnDate(date);
     }
 
     @Override
@@ -99,7 +76,7 @@ public class RoomService implements IRoomService {
         for (final Room room : rooms) {
             final RoomHistory[] histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
+                (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
                 final AEntity[] entities = arrayUtils.expandArray(result);
                 result = roomRepository.castArray(entities);
                 result[result.length - 1] = room;
@@ -109,30 +86,99 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room update(final Long id, final RoomStatus roomStatus) {
-        final Room room = (Room) roomRepository.findById(id);
-        room.setStatus(roomStatus);
-        return room;
-    }
-
-    @Override
-    public Room update(final Integer number, final RoomStatus roomStatus) {
-        final Room room = (Room) roomRepository.findByRoomNumber(number);
-        return update(room.getId(), roomStatus);
-    }
-
-    @Override
     public int countVacantRooms() {
         return roomRepository.countVacantRooms();
     }
 
     @Override
-    public Room[] getAllRooms() {
+    public void changeRoomPrice(final Long id, final BigDecimal price) {
+        changePrice(id, price);
+    }
+
+    @Override
+    public void changeRoomPrice(final Integer number, final BigDecimal price) {
+        changePrice(number, price);
+    }
+
+    private void changePrice(final Long id, final BigDecimal price) {
+        roomRepository.changePrice(id, price);
+    }
+
+    private void changePrice(final Integer number, final BigDecimal price) {
+        roomRepository.changePrice(number, price);
+    }
+
+    @Override
+    public void changeRoomStatus(final Long id, final RoomStatus status) throws NoSuchEntityException {
+        final Room room = findRoomById(id);
+        if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
+            System.out.println("Room is already occupied");
+        } else if (room.getStatus() == RoomStatus.REPAIR && status == RoomStatus.OCCUPIED) {
+            System.out.println("Room is not available now");
+        } else {
+            room.setStatus(status);
+        }
+    }
+
+    @Override
+    public void changeRoomStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
+        final Room room = findRoomByRoomNumber(number);
+        changeRoomStatus(room.getId(), status);
+    }
+
+    @Override
+    public void addRoom(final Room room) {
+        roomRepository.add(room);
+    }
+
+    @Override
+    public Room[] showAllRooms() {
         return roomRepository.getRooms();
     }
 
     @Override
-    public Room[] getVacantRooms() {
+    public Room[] showAllRoomsSortedByPrice() {
+        final Room[] rooms = showAllRooms();
+        return sortRooms(rooms, new RoomPriceComparator());
+    }
+
+    @Override
+    public Room[] showAllRoomsSortedByAccommodation() {
+        final Room[] rooms = showAllRooms();
+        return sortRooms(rooms, new RoomAccommodationComparator());
+    }
+
+    @Override
+    public Room[] showAllRoomsSortedByStars() {
+        final Room[] rooms = showAllRooms();
+        return sortRooms(rooms, new RoomStarsComparator());
+    }
+
+    @Override
+    public Room[] showVacantRooms() {
         return roomRepository.getVacantRooms();
+    }
+
+    @Override
+    public Room[] showVacantRoomsSortedByPrice() {
+        final Room[] rooms = showVacantRooms();
+        return sortRooms(rooms, new RoomPriceComparator());
+    }
+
+    @Override
+    public Room[] showVacantRoomsSortedByAccommodation() {
+        final Room[] rooms = showVacantRooms();
+        return sortRooms(rooms, new RoomAccommodationComparator());
+    }
+
+    @Override
+    public Room[] showVacantRoomsSortedByStars() {
+        final Room[] rooms = showVacantRooms();
+        return sortRooms(rooms, new RoomStarsComparator());
+    }
+
+    @Override
+    public Room showRoomDetails(final Integer number) throws NoSuchEntityException {
+        return findRoomByRoomNumber(number);
     }
 }
