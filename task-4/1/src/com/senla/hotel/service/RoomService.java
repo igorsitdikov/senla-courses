@@ -181,4 +181,28 @@ public class RoomService implements IRoomService {
     public Room showRoomDetails(final Integer number) throws NoSuchEntityException {
         return findRoomByRoomNumber(number);
     }
+
+    /*
+     * TODO:  revision following methods
+     */
+
+    @Override
+    public void showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+        final Long id = room.getId();
+        showLastResidents(id, number);
+    }
+
+    @Override
+    public void showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
+        final RoomHistory[] histories = findRoomById(id).getHistories();
+        if (histories.length > number) {
+            for (int i = histories.length - number; i < histories.length; i++) {
+                System.out.println(findRoomById(id).getHistories()[i].toString());
+            }
+        } else {
+            for (int i = 0; i < histories.length; i++) {
+                System.out.println(findRoomById(id).getHistories()[i].toString());
+            }
+        }
+    }
 }

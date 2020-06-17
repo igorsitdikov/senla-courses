@@ -11,7 +11,7 @@ import com.senla.hotel.ui.utils.InputDataReader;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-public class AddAction implements IAction {
+public class CreateAttendanceAction implements IAction {
 
     Stars integerToStar(Integer input) {
         Stars roomStar = null;
