@@ -3,6 +3,7 @@ package com.senla.hotel.entity;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
+import com.senla.hotel.utils.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -112,52 +113,12 @@ public class Room extends AEntity {
         sb.append("Room №");
         sb.append(number);
         sb.append(" can hold up to ");
-        switch (accommodation) {
-            case SGL_CHD:
-                sb.append("single resident with 1 child.");
-                break;
-            case SGL_2_CHD:
-                sb.append("single resident with 2 children.");
-                break;
-            case DBL:
-                sb.append("double residents.");
-                break;
-            case DBL_EXB:
-                sb.append("double residents with extra bad.");
-                break;
-            case DBL_CHD:
-                sb.append("double residents with 1 child.");
-                break;
-            case DBL_EXB_CHD:
-                sb.append("double residents with 1 child and extra bad.");
-                break;
-            case TRPL:
-                sb.append("triple residents.");
-                break;
-            case TRPL_CHD:
-                sb.append("triple residents with 1 children.");
-                break;
-            case TRPL_2_CHLD:
-                sb.append("triple residents with 2 children.");
-                break;
-            default:
-                sb.append("single resident.");
-        }
-
-        sb.append(" Price per day: ");
+        sb.append(StringUtils.accommodationToString(accommodation));
+        sb.append(". Price per day: ");
         sb.append(String.format("%.2f.", price));
         sb.append(" Room is ");
-        switch (status) {
-            case OCCUPIED:
-                sb.append("occupied.");
-                break;
-            case REPAIR:
-                sb.append("being repaired.");
-                break;
-            default:
-                sb.append("vacant.");
-        }
-
+        sb.append(StringUtils.statusToString(status));
+        sb.append(".");
         return sb.toString();
     }
 }

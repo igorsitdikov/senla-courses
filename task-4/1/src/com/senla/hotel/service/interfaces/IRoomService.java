@@ -15,6 +15,8 @@ public interface IRoomService {
 
     void showRooms(Room[] rooms);
 
+    String getRoomsAsString(Room[] rooms);
+
     void addHistoryToRoom(Long id, RoomHistory history) throws NoSuchEntityException;
 
     void updateCheckOutHistory(Long id, RoomHistory history, LocalDate checkOut)

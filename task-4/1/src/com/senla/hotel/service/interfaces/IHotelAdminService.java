@@ -53,25 +53,25 @@ public interface IHotelAdminService {
 
     void addRoom(Room room);
 
-    void showAllRooms();
+    Room[] showAllRooms();
 
-    void showAllRoomsSortedByPrice();
+    Room[] showAllRoomsSortedByPrice();
 
-    void showAllRoomsSortedByAccommodation();
+    Room[] showAllRoomsSortedByAccommodation();
 
-    void showAllRoomsSortedByStars();
+    Room[] showAllRoomsSortedByStars();
 
-    void showVacantRooms();
+    Room[] showVacantRooms();
 
-    void showVacantRoomsSortedByPrice();
+    Room[] showVacantRoomsSortedByPrice();
 
-    void showVacantRoomsSortedByAccommodation();
+    Room[] showVacantRoomsSortedByAccommodation();
 
-    void showVacantRoomsSortedByStars();
+    Room[] showVacantRoomsSortedByStars();
 
     void showRoomDetails(Long id) throws NoSuchEntityException;
 
-    void showRoomDetails(Integer number) throws NoSuchEntityException;
+    Room showRoomDetails(Integer number) throws NoSuchEntityException;
 
     void addResident(Resident resident);
 
