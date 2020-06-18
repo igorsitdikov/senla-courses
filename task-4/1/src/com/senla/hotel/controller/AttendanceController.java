@@ -5,6 +5,7 @@ import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public final class AttendanceController {
     private static AttendanceController attendanceController;
@@ -25,15 +26,15 @@ public final class AttendanceController {
         attendanceService.createAttendance(attendance);
     }
 
-    public Attendance[] showAttendances() {
+    public List<Attendance> showAttendances() {
         return attendanceService.showAttendances();
     }
 
-    public Attendance[] showAttendancesSortedByName() {
+    public List<Attendance> showAttendancesSortedByName() {
         return attendanceService.showAttendancesSortedByName();
     }
 
-    public Attendance[] showAttendancesSortedByPrice() {
+    public List<Attendance> showAttendancesSortedByPrice() {
         return attendanceService.showAttendancesSortedByPrice();
     }
 

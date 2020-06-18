@@ -1,16 +1,18 @@
 package com.senla.hotel.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomHistory extends AEntity {
     private Room room;
     private Resident resident;
-    private Attendance[] attendances;
+    private List<Attendance> attendances;
     private LocalDate checkIn;
     private LocalDate checkOut;
 
     public RoomHistory() {
-        attendances = new Attendance[0];
+        attendances = new ArrayList<>();
     }
 
     public RoomHistory(final Room room, final Resident resident, final LocalDate checkIn, final LocalDate checkOut) {
@@ -18,7 +20,7 @@ public class RoomHistory extends AEntity {
         this.resident = resident;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        attendances = new Attendance[0];
+        attendances = new ArrayList<>();
     }
 
     public Room getRoom() {
@@ -37,11 +39,11 @@ public class RoomHistory extends AEntity {
         this.resident = resident;
     }
 
-    public Attendance[] getAttendances() {
+    public List<Attendance> getAttendances() {
         return attendances;
     }
 
-    public void setAttendances(final Attendance[] attendances) {
+    public void setAttendances(final List<Attendance> attendances) {
         this.attendances = attendances;
     }
 
@@ -78,7 +80,7 @@ public class RoomHistory extends AEntity {
         if (!resident.equals(other.getResident())) {
             return false;
         }
-        if (attendances.length != other.getAttendances().length) {
+        if (attendances.size() != other.getAttendances().size()) {
             return false;
         }
         if (!checkIn.equals(other.getCheckIn())) {
@@ -90,14 +92,14 @@ public class RoomHistory extends AEntity {
     @Override
     public String toString() {
         return String.format("Room's history №%d: %n" +
-                             "\tRoom № %d.%n" +
-                             "\t%s. %n" +
-                             "\tCheck-in %s. %n" +
-                             "\tCheck-out %s.",
-                             id,
-                             room.getNumber(),
-                             resident.toString(),
-                             checkIn,
-                             checkOut);
+                        "\tRoom № %d.%n" +
+                        "\t%s. %n" +
+                        "\tCheck-in %s. %n" +
+                        "\tCheck-out %s.",
+                id,
+                room.getNumber(),
+                resident.toString(),
+                checkIn,
+                checkOut);
     }
 }

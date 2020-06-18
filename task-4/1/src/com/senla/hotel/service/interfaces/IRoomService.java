@@ -9,26 +9,27 @@ import com.senla.hotel.exceptions.NoSuchEntityException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 
 public interface IRoomService {
     void addHistoryToRoom(Long id, RoomHistory history) throws NoSuchEntityException;
 
     void updateCheckOutHistory(Long id, RoomHistory history, LocalDate checkOut)
-        throws NoSuchEntityException;
+            throws NoSuchEntityException;
 
-    Room[] showVacantRoomsOnDate(LocalDate date);
+    List<Room> showVacantRoomsOnDate(LocalDate date);
 
-    Room[] sortRooms(Room[] rooms, Comparator<Room> comparator);
+    List<Room> sortRooms(List<Room> rooms, Comparator<Room> comparator);
 
     Room findRoomById(Long id) throws NoSuchEntityException;
 
     Room findRoomByRoomNumber(Integer number) throws NoSuchEntityException;
 
-    Room[] vacantOnDate(LocalDate date);
+    List<Room> vacantOnDate(LocalDate date);
 
-    Resident[] showLastResidents(Long id, Integer number) throws NoSuchEntityException;
+    List<Resident> showLastResidents(Long id, Integer number) throws NoSuchEntityException;
 
-    Resident[] showLastResidents(Room room, Integer number) throws NoSuchEntityException;
+    List<Resident> showLastResidents(Room room, Integer number) throws NoSuchEntityException;
 
     int countVacantRooms();
 
@@ -42,21 +43,21 @@ public interface IRoomService {
 
     void addRoom(Room room);
 
-    Room[] showAllRooms();
+    List<Room> showAllRooms();
 
-    Room[] showAllRoomsSortedByPrice();
+    List<Room> showAllRoomsSortedByPrice();
 
-    Room[] showAllRoomsSortedByAccommodation();
+    List<Room> showAllRoomsSortedByAccommodation();
 
-    Room[] showAllRoomsSortedByStars();
+    List<Room> showAllRoomsSortedByStars();
 
-    Room[] showVacantRooms();
+    List<Room> showVacantRooms();
 
-    Room[] showVacantRoomsSortedByPrice();
+    List<Room> showVacantRoomsSortedByPrice();
 
-    Room[] showVacantRoomsSortedByAccommodation();
+    List<Room> showVacantRoomsSortedByAccommodation();
 
-    Room[] showVacantRoomsSortedByStars();
+    List<Room> showVacantRoomsSortedByStars();
 
     Room showRoomDetails(Integer number) throws NoSuchEntityException;
 }
