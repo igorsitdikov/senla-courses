@@ -1,5 +1,6 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.RoomService;
@@ -69,6 +70,10 @@ public final class RoomController {
 
     public void changePrice(final Integer roomNumber, final BigDecimal price) {
         roomService.changeRoomPrice(roomNumber, price);
+    }
+
+    public Resident[] showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+        return roomService.showLastResidents(room, number);
     }
 
     public int countVacantRooms() {

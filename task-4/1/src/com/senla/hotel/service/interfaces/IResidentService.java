@@ -22,9 +22,7 @@ public interface IResidentService {
 
     void addAttendanceToResident(Long residentId, Long attendanceId) throws NoSuchEntityException;
 
-    Resident[] getResidents();
-
-    void addResident(Resident resident);
+    void createResident(Resident resident);
 
     Resident[] showResidents();
 
