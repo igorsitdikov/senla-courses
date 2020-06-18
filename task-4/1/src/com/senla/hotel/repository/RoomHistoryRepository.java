@@ -3,21 +3,16 @@ package com.senla.hotel.repository;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.RoomHistory;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomHistoryRepository extends ARepository {
-    private static RoomHistory[] histories = new RoomHistory[0];
-
-    public RoomHistory[] castArray(final AEntity[] array) {
-        return Arrays.copyOf(array, array.length, RoomHistory[].class);
-    }
+    private static List<RoomHistory> histories = new ArrayList<>();
 
     @Override
     public AEntity add(final AEntity entity) {
-        final AEntity[] entities = arrayUtils.expandArray(histories);
-        histories = castArray(entities);
-        entity.setId((long) histories.length);
-        histories[histories.length - 1] = (RoomHistory) entity;
+        entity.setId((long) histories.size());
+        histories.add((RoomHistory) entity);
         return entity;
     }
 }

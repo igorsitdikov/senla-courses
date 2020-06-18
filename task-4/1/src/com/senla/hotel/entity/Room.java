@@ -6,6 +6,8 @@ import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.utils.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Room extends AEntity {
     private Integer number;
@@ -13,7 +15,7 @@ public class Room extends AEntity {
     private Accommodation accommodation;
     private BigDecimal price;
     private RoomStatus status;
-    private RoomHistory[] histories;
+    private List<RoomHistory> histories;
 
     public Room(final Integer number,
                 final Stars stars,
@@ -25,7 +27,7 @@ public class Room extends AEntity {
         this.accommodation = accommodation;
         this.price = price;
         this.status = status;
-        histories = new RoomHistory[0];
+        histories = new ArrayList<>();
     }
 
     public Integer getNumber() {
@@ -68,11 +70,11 @@ public class Room extends AEntity {
         this.status = status;
     }
 
-    public RoomHistory[] getHistories() {
+    public List<RoomHistory> getHistories() {
         return histories;
     }
 
-    public void setHistories(final RoomHistory[] histories) {
+    public void setHistories(final List<RoomHistory> histories) {
         this.histories = histories;
     }
 
@@ -103,7 +105,7 @@ public class Room extends AEntity {
         if (!status.equals(other.getStatus())) {
             return false;
         }
-        return histories.length == (other.getHistories().length);
+        return histories.size() == (other.getHistories().size());
     }
 
 

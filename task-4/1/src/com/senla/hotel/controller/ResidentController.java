@@ -6,6 +6,8 @@ import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.ResidentService;
 import com.senla.hotel.service.interfaces.IResidentService;
 
+import java.util.List;
+
 public final class ResidentController {
     private static ResidentController residentController;
     private static IResidentService residentService;
@@ -25,15 +27,15 @@ public final class ResidentController {
         residentService.createResident(resident);
     }
 
-    public Resident[] showResidents() {
+    public List<Resident> showResidents() {
         return residentService.showResidents();
     }
 
-    public Resident[] showResidentsSortedByName() {
+    public List<Resident> showResidentsSortedByName() {
         return residentService.showResidentsSortedByName();
     }
 
-    public Resident[] showResidentsSortedByCheckOutDate() {
+    public List<Resident> showResidentsSortedByCheckOutDate() {
         return residentService.showResidentsSortedByCheckOutDate();
     }
 

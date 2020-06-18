@@ -1,6 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -74,8 +73,8 @@ public class HotelAdminService implements IHotelAdminService {
                     resident.getHistory().getCheckOut());
             final Room room = resident.getHistory().getRoom();
             BigDecimal totalAttendances = BigDecimal.valueOf(0);
-            for (int i = 0; i < resident.getHistory().getAttendances().length; i++) {
-                totalAttendances = totalAttendances.add(resident.getHistory().getAttendances()[i].getPrice());
+            for (int i = 0; i < resident.getHistory().getAttendances().size(); i++) {
+                totalAttendances = totalAttendances.add(resident.getHistory().getAttendances().get(i).getPrice());
             }
 
             final BigDecimal total = room.getPrice()

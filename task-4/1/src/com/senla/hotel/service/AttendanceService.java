@@ -8,8 +8,8 @@ import com.senla.hotel.utils.comparator.AttendanceNameComparator;
 import com.senla.hotel.utils.comparator.AttendancePriceComparator;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public class AttendanceService implements IAttendanceService {
     private AttendanceRepository attendanceRepository = new AttendanceRepository();
@@ -23,8 +23,8 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public Attendance[] sortAttendances(final Attendance[] attendances, final Comparator<Attendance> comparator) {
-        Arrays.sort(attendances, comparator);
+    public List<Attendance> sortAttendances(final List<Attendance> attendances, final Comparator<Attendance> comparator) {
+        attendances.sort(comparator);
         return attendances;
     }
 
@@ -34,19 +34,19 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public Attendance[] showAttendances() {
+    public List<Attendance> showAttendances() {
         return attendanceRepository.getAttendances();
     }
 
     @Override
-    public Attendance[] showAttendancesSortedByName() {
-        final Attendance[] attendances = showAttendances();
+    public List<Attendance> showAttendancesSortedByName() {
+        final List<Attendance> attendances = showAttendances();
         return sortAttendances(attendances, new AttendanceNameComparator());
     }
 
     @Override
-    public Attendance[] showAttendancesSortedByPrice() {
-        final Attendance[] attendances = showAttendances();
+    public List<Attendance> showAttendancesSortedByPrice() {
+        final List<Attendance> attendances = showAttendances();
         return sortAttendances(attendances, new AttendancePriceComparator());
     }
 

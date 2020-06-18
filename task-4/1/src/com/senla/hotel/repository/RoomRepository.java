@@ -6,45 +6,38 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomRepository extends ARepository {
 
-    private static Room[] rooms = new Room[0];
+    private static List<Room> rooms = new ArrayList<>();
 
     public RoomRepository() {
     }
 
-    public RoomRepository(final Room[] rooms) {
+    public RoomRepository(final List<Room> rooms) {
         this.rooms = rooms;
     }
 
-    public Room[] castArray(final AEntity[] array) {
-        return Arrays.copyOf(array, array.length, Room[].class);
-    }
-
-    public Room[] getVacantRooms() {
-        Room[] vacantRooms = new Room[0];
+    public List<Room> getVacantRooms() {
+        List<Room> vacantRooms = new ArrayList<>();
         for (final Room room : rooms) {
             if (room.getStatus() == RoomStatus.VACANT) {
-                final AEntity[] entities = arrayUtils.expandArray(vacantRooms);
-                vacantRooms = castArray(entities);
-                vacantRooms[vacantRooms.length - 1] = room;
+                vacantRooms.add(room);
             }
         }
         return vacantRooms;
     }
 
     public int countVacantRooms() {
-        return getVacantRooms().length;
+        return getVacantRooms().size();
     }
 
     @Override
     public AEntity add(final AEntity room) {
-        final AEntity[] entities = arrayUtils.expandArray(rooms);
-        rooms = castArray(entities);
-        room.setId((long) rooms.length);
-        rooms[rooms.length - 1] = (Room) room;
+        room.setId((long) rooms.size());
+        rooms.add((Room) room);
         return room;
     }
 
@@ -77,15 +70,12 @@ public class RoomRepository extends ARepository {
     }
 
     public void addHistory(final Room room, final RoomHistory roomHistory) {
-        RoomHistory[] histories = room.getHistories();
-        final RoomHistoryRepository roomHistoryRepository = new RoomHistoryRepository();
-        final AEntity[] entities = arrayUtils.expandArray(histories);
-        histories = roomHistoryRepository.castArray(entities);
-        histories[histories.length - 1] = roomHistory;
+        List<RoomHistory> histories = room.getHistories();
+        histories.add(roomHistory);
         room.setHistories(histories);
     }
 
-    public Room[] getRooms() {
+    public List<Room> getRooms() {
         return rooms;
     }
 }

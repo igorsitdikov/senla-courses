@@ -8,6 +8,7 @@ import com.senla.hotel.service.interfaces.IRoomService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public final class RoomController {
     private static RoomController roomController;
@@ -28,35 +29,35 @@ public final class RoomController {
         roomService.addRoom(room);
     }
 
-    public Room[] showAllRooms() {
+    public List<Room> showAllRooms() {
         return roomService.showAllRooms();
     }
 
-    public Room[] showVacantRooms() {
+    public List<Room> showVacantRooms() {
         return roomService.showVacantRooms();
     }
 
-    public Room[] showAllRoomsSortedByAccommodation() {
+    public List<Room> showAllRoomsSortedByAccommodation() {
         return roomService.showAllRoomsSortedByAccommodation();
     }
 
-    public Room[] showAllRoomsSortedByPrice() {
+    public List<Room> showAllRoomsSortedByPrice() {
         return roomService.showAllRoomsSortedByPrice();
     }
 
-    public Room[] showAllRoomsSortedByStars() {
+    public List<Room> showAllRoomsSortedByStars() {
         return roomService.showAllRoomsSortedByStars();
     }
 
-    public Room[] showVacantRoomsSortedByAccommodation() {
+    public List<Room> showVacantRoomsSortedByAccommodation() {
         return roomService.showVacantRoomsSortedByAccommodation();
     }
 
-    public Room[] showVacantRoomsSortedByPrice() {
+    public List<Room> showVacantRoomsSortedByPrice() {
         return roomService.showVacantRoomsSortedByPrice();
     }
 
-    public Room[] showVacantRoomsSortedByStars() {
+    public List<Room> showVacantRoomsSortedByStars() {
         return roomService.showVacantRoomsSortedByStars();
     }
 
@@ -64,7 +65,7 @@ public final class RoomController {
         return roomService.showRoomDetails(roomNumber);
     }
 
-    public Room[] showVacantRoomsOnDate(final LocalDate date) {
+    public List<Room> showVacantRoomsOnDate(final LocalDate date) {
         return roomService.showVacantRoomsOnDate(date);
     }
 
@@ -72,7 +73,7 @@ public final class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public Resident[] showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
         return roomService.showLastResidents(room, number);
     }
 

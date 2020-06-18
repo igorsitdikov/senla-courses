@@ -1,6 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -16,8 +15,9 @@ import com.senla.hotel.utils.comparator.RoomStarsComparator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class RoomService implements IRoomService {
     private RoomRepository roomRepository = new RoomRepository();
@@ -34,7 +34,7 @@ public class RoomService implements IRoomService {
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
             throws NoSuchEntityException {
         final Room room = findRoomById(id);
-        final RoomHistory[] histories = room.getHistories();
+        final List<RoomHistory> histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
             if (roomHistory.equals(history)) {
                 roomHistory.setCheckOut(checkOut);
@@ -43,14 +43,14 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room[] showVacantRoomsOnDate(final LocalDate date) {
+    public List<Room> showVacantRoomsOnDate(final LocalDate date) {
         return vacantOnDate(date);
     }
 
     @Override
-    public Room[] sortRooms(final Room[] rooms, final Comparator<Room> comparator) {
-        final Room[] result = rooms.clone();
-        Arrays.sort(result, comparator);
+    public List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
+        final List<Room> result = new ArrayList<>(rooms);
+        result.sort(comparator);
         return result;
     }
 
@@ -73,16 +73,14 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room[] vacantOnDate(final LocalDate date) {
-        final Room[] rooms = roomRepository.getRooms();
-        Room[] result = new Room[0];
+    public List<Room> vacantOnDate(final LocalDate date) {
+        final List<Room> rooms = roomRepository.getRooms();
+        List<Room> result = new ArrayList<>();
         for (final Room room : rooms) {
-            final RoomHistory[] histories = room.getHistories();
+            final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.length == 0 || histories[histories.length - 1].getCheckOut().isBefore(date))) {
-                final AEntity[] entities = arrayUtils.expandArray(result);
-                result = roomRepository.castArray(entities);
-                result[result.length - 1] = room;
+                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                result.add(room);
             }
         }
         return result;
@@ -135,48 +133,48 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room[] showAllRooms() {
+    public List<Room> showAllRooms() {
         return roomRepository.getRooms();
     }
 
     @Override
-    public Room[] showAllRoomsSortedByPrice() {
-        final Room[] rooms = showAllRooms();
+    public List<Room> showAllRoomsSortedByPrice() {
+        final List<Room> rooms = showAllRooms();
         return sortRooms(rooms, new RoomPriceComparator());
     }
 
     @Override
-    public Room[] showAllRoomsSortedByAccommodation() {
-        final Room[] rooms = showAllRooms();
+    public List<Room> showAllRoomsSortedByAccommodation() {
+        final List<Room> rooms = showAllRooms();
         return sortRooms(rooms, new RoomAccommodationComparator());
     }
 
     @Override
-    public Room[] showAllRoomsSortedByStars() {
-        final Room[] rooms = showAllRooms();
+    public List<Room> showAllRoomsSortedByStars() {
+        final List<Room> rooms = showAllRooms();
         return sortRooms(rooms, new RoomStarsComparator());
     }
 
     @Override
-    public Room[] showVacantRooms() {
+    public List<Room> showVacantRooms() {
         return roomRepository.getVacantRooms();
     }
 
     @Override
-    public Room[] showVacantRoomsSortedByPrice() {
-        final Room[] rooms = showVacantRooms();
+    public List<Room> showVacantRoomsSortedByPrice() {
+        final List<Room> rooms = showVacantRooms();
         return sortRooms(rooms, new RoomPriceComparator());
     }
 
     @Override
-    public Room[] showVacantRoomsSortedByAccommodation() {
-        final Room[] rooms = showVacantRooms();
+    public List<Room> showVacantRoomsSortedByAccommodation() {
+        final List<Room> rooms = showVacantRooms();
         return sortRooms(rooms, new RoomAccommodationComparator());
     }
 
     @Override
-    public Room[] showVacantRoomsSortedByStars() {
-        final Room[] rooms = showVacantRooms();
+    public List<Room> showVacantRoomsSortedByStars() {
+        final List<Room> rooms = showVacantRooms();
         return sortRooms(rooms, new RoomStarsComparator());
     }
 
@@ -186,25 +184,21 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Resident[] showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
         final Long id = room.getId();
         return showLastResidents(id, number);
     }
 
-    public Resident[] showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
-        final RoomHistory[] histories = findRoomById(id).getHistories();
-        Resident[] residents = new Resident[0];
-        if (histories.length > number) {
-            for (int i = histories.length - number; i < histories.length; i++) {
-                final AEntity[] entities = arrayUtils.expandArray(residents);
-                residents = residentRepository.castArray(entities);
-                residents[residents.length - 1] = findRoomById(id).getHistories()[i].getResident();
+    public List<Resident> showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
+        final List<RoomHistory> histories = findRoomById(id).getHistories();
+        List<Resident> residents = new ArrayList<>();
+        if (histories.size() > number) {
+            for (int i = histories.size() - number; i < histories.size(); i++) {
+                residents.add(findRoomById(id).getHistories().get(i).getResident());
             }
         } else {
-            for (int i = 0; i < histories.length; i++) {
-                final AEntity[] entities = arrayUtils.expandArray(residents);
-                residents = residentRepository.castArray(entities);
-                residents[residents.length - 1] = findRoomById(id).getHistories()[i].getResident();
+            for (int i = 0; i < histories.size(); i++) {
+                residents.add(findRoomById(id).getHistories().get(i).getResident());
             }
         }
         return residents;

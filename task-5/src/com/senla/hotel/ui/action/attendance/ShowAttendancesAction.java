@@ -5,15 +5,13 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.ui.interfaces.IAction;
 import com.senla.hotel.ui.utils.Printer;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ShowAttendancesAction implements IAction {
 
     @Override
     public void execute() {
-        Attendance[] attendances = AttendanceController.getInstance().showAttendances();
-        List<Attendance> entities = Arrays.asList(attendances);
-        Printer.show(entities);
+        List<Attendance> attendances = AttendanceController.getInstance().showAttendances();
+        Printer.show(attendances);
     }
 }
