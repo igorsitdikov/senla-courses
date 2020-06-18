@@ -84,6 +84,7 @@ public class Builder {
 
         rootMenu.addMenuItem(new MenuItem("Hotel admin menu", hotelAdminMenu));
         rootMenu.addMenuItem(new MenuItem("Room menu", roomMenu));
+        rootMenu.addMenuItem(new MenuItem("Resident menu", residentMenu));
         rootMenu.addMenuItem(new MenuItem("Attendance menu", attendanceMenu));
         rootMenu.addMenuItem(new MenuItem("Exit"));
 
