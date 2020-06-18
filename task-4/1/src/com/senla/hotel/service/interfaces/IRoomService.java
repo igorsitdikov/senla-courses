@@ -1,5 +1,6 @@
 package com.senla.hotel.service.interfaces;
 
+import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -25,9 +26,9 @@ public interface IRoomService {
 
     Room[] vacantOnDate(LocalDate date);
 
-    void showLastResidents(Long id, Integer number) throws NoSuchEntityException;
+    Resident[] showLastResidents(Long id, Integer number) throws NoSuchEntityException;
 
-    void showLastResidents(Room room, Integer number) throws NoSuchEntityException;
+    Resident[] showLastResidents(Room room, Integer number) throws NoSuchEntityException;
 
     int countVacantRooms();
 

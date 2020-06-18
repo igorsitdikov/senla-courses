@@ -65,13 +65,7 @@ public class ResidentService implements IResidentService {
     }
 
     @Override
-    public Resident[] getResidents() {
-        return residentRepository.getResidents();
-    }
-
-
-    @Override
-    public void addResident(final Resident resident) {
+    public void createResident(final Resident resident) {
         residentRepository.add(resident);
     }
 
@@ -88,7 +82,7 @@ public class ResidentService implements IResidentService {
 
     @Override
     public Resident[] showResidentsSortedByCheckOutDate() {
-        final Resident[] residents = getResidents();
+        final Resident[] residents = showResidents();
         return sortResidents(residents, new ResidentCheckOutComparator());
     }
 
