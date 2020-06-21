@@ -2,6 +2,7 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IRoomService;
@@ -79,5 +80,9 @@ public final class RoomController {
 
     public int countVacantRooms() {
         return roomService.countVacantRooms();
+    }
+
+    public void changeStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
+        roomService.changeRoomStatus(number, status);
     }
 }
