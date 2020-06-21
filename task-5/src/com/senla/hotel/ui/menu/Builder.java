@@ -16,6 +16,7 @@ import com.senla.hotel.ui.action.resident.ShowResidentsAction;
 import com.senla.hotel.ui.action.resident.ShowResidentsSortedByCheckOutDateAction;
 import com.senla.hotel.ui.action.resident.ShowResidentsSortedByNameAction;
 import com.senla.hotel.ui.action.room.ChangePriceAction;
+import com.senla.hotel.ui.action.room.ChangeStatusAction;
 import com.senla.hotel.ui.action.room.CountVacantAction;
 import com.senla.hotel.ui.action.room.CreateRoomAction;
 import com.senla.hotel.ui.action.room.ShowDetailsAction;
@@ -121,6 +122,8 @@ public class Builder {
                                       menu, new CreateRoomAction()));
         menu.addMenuItem(new MenuItem("Change price",
                                       menu, new ChangePriceAction()));
+        menu.addMenuItem(new MenuItem("Change status",
+                                      menu, new ChangeStatusAction()));
         menu.addMenuItem(new MenuItem("Total vacant rooms",
                                       menu, new CountVacantAction()));
         menu.addMenuItem(new MenuItem("Show room's details",
