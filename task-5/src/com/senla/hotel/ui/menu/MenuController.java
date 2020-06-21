@@ -1,16 +1,13 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 
 import java.util.Scanner;
 
 public class MenuController {
-
-    private Builder builder = new Builder();
-    private Navigator navigator = new Navigator();
-
     public void run() {
+        final Navigator navigator = Navigator.getInstance();
+        final Builder builder = Builder.getInstance();
 
         Scanner scanner = new Scanner(System.in);
 
