@@ -1,5 +1,9 @@
 package com.senla.hotel;
 
+import com.senla.hotel.controller.AttendanceController;
+import com.senla.hotel.controller.HotelController;
+import com.senla.hotel.controller.ResidentController;
+import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -18,26 +22,29 @@ public class Test {
 
     public static void main(final String[] args) throws NoSuchEntityException {
 
-        final IHotelAdminService hotelAdminService = new HotelAdminService();
+        final AttendanceController attendanceController = AttendanceController.getInstance();
+        final RoomController roomController = RoomController.getInstance();
+        final ResidentController residentController = ResidentController.getInstance();
+        final HotelController hotelController = HotelController.getInstance();
 
         final Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         final Attendance wakeup = new Attendance(BigDecimal.valueOf(1.5).setScale(2), "Wake-up");
         final Attendance laundry = new Attendance(BigDecimal.valueOf(4.5).setScale(2), "Laundry");
         final Attendance dogWalking = new Attendance(BigDecimal.valueOf(3.1).setScale(2), "Dog walking");
 
-        hotelAdminService.createAttendance(ironing);
-        hotelAdminService.createAttendance(wakeup);
-        hotelAdminService.createAttendance(laundry);
-        hotelAdminService.createAttendance(dogWalking);
+        attendanceController.createAttendance(ironing);
+        attendanceController.createAttendance(wakeup);
+        attendanceController.createAttendance(laundry);
+        attendanceController.createAttendance(dogWalking);
 
         System.out.println("Show all attendances");
-        hotelAdminService.showAttendances();
+        attendanceController.showAttendances();
 
         System.out.println("Show attendances sorted by name");
-        hotelAdminService.showAttendancesSortedByName();
+        attendanceController.showAttendancesSortedByName();
 
         System.out.println("Show attendances sorted by price");
-        hotelAdminService.showAttendancesSortedByPrice();
+        attendanceController.showAttendancesSortedByPrice();
 
         System.out.println();
 
@@ -49,7 +56,7 @@ public class Test {
         final Room room201 =
             new Room(201, Stars.DE_LUX, Accommodation.TRPL, BigDecimal.valueOf(400), RoomStatus.OCCUPIED);
         final Room room202 =
-            new Room(202, Stars.FAMILY_ROOM, Accommodation.TRPL_2_CHLD, BigDecimal.valueOf(350), RoomStatus.OCCUPIED);
+            new Room(202, Stars.FAMILY_ROOM, Accommodation.TRPL_2_CHD, BigDecimal.valueOf(350), RoomStatus.OCCUPIED);
         final Room room203 = new Room(203, Stars.STUDIO, Accommodation.SGL, BigDecimal.valueOf(300), RoomStatus.REPAIR);
         final Room room301 = new Room(301, Stars.STUDIO, Accommodation.SGL, BigDecimal.valueOf(300), RoomStatus.VACANT);
         final Room room302 =
@@ -57,45 +64,42 @@ public class Test {
         final Room room303 =
             new Room(303, Stars.HONEYMOON_ROOM, Accommodation.DBL, BigDecimal.valueOf(440), RoomStatus.OCCUPIED);
 
-        hotelAdminService.addRoom(room101);
-        hotelAdminService.addRoom(room102);
-        hotelAdminService.addRoom(room103);
-        hotelAdminService.addRoom(room201);
-        hotelAdminService.addRoom(room202);
-        hotelAdminService.addRoom(room203);
-        hotelAdminService.addRoom(room301);
-        hotelAdminService.addRoom(room302);
-        hotelAdminService.addRoom(room303);
+        roomController.addRoom(room101);
+        roomController.addRoom(room102);
+        roomController.addRoom(room103);
+        roomController.addRoom(room201);
+        roomController.addRoom(room202);
+        roomController.addRoom(room203);
+        roomController.addRoom(room301);
+        roomController.addRoom(room302);
+        roomController.addRoom(room303);
 
         System.out.println("Show all rooms");
-        hotelAdminService.showAllRooms();
+        roomController.showAllRooms();
 
         System.out.println("Sort all rooms by price");
-        hotelAdminService.showAllRoomsSortedByPrice();
+        roomController.showAllRoomsSortedByPrice();
 
         System.out.println("Sort all rooms by accommodation");
-        hotelAdminService.showAllRoomsSortedByAccommodation();
+        roomController.showAllRoomsSortedByAccommodation();
 
         System.out.println("Sort all rooms by stars");
-        hotelAdminService.showAllRoomsSortedByStars();
+        roomController.showAllRoomsSortedByStars();
 
-        hotelAdminService.showVacantRooms();
+        roomController.showVacantRooms();
         System.out.println("Show count vacant rooms");
-        hotelAdminService.showCountVacantRooms();
+        roomController.countVacantRooms();
         System.out.println("Sort vacant rooms by price");
-        hotelAdminService.showVacantRoomsSortedByPrice();
+        roomController.showVacantRoomsSortedByPrice();
 
         System.out.println("Sort vacant rooms by accommodation");
-        hotelAdminService.showVacantRoomsSortedByAccommodation();
+        roomController.showVacantRoomsSortedByAccommodation();
 
         System.out.println("Sort vacant rooms by stars");
-        hotelAdminService.showVacantRoomsSortedByStars();
+        roomController.showVacantRoomsSortedByStars();
 
-        System.out.println("Show details room with id = 5");
-
-        hotelAdminService.showRoomDetails(5L);
         System.out.println("Show details room №202");
-        hotelAdminService.showRoomDetails(202);
+        roomController.showRoomDetails(202);
 
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);
         final Resident alex = new Resident("Alex", "Smith", Gender.MALE, false, "1234569", null);
@@ -103,57 +107,54 @@ public class Test {
         final Resident stephani = new Resident("Stephani", "Brown", Gender.FEMALE, false, "1234560", null);
         final Resident carl = new Resident("Carl", "Patoshek", Gender.MALE, false, "1234561", null);
 
-        hotelAdminService.addResident(mike);
-        hotelAdminService.addResident(alex);
-        hotelAdminService.addResident(juliet);
-        hotelAdminService.addResident(stephani);
-        hotelAdminService.addResident(carl);
+        residentController.createResident(mike);
+        residentController.createResident(alex);
+        residentController.createResident(juliet);
+        residentController.createResident(stephani);
+        residentController.createResident(carl);
 
         System.out.println("Show all residents");
-        hotelAdminService.showResidents();
+        residentController.showResidents();
 
         System.out.println("Show count residents");
-        hotelAdminService.showCountResidents();
+        residentController.showCountResidents();
 
         System.out.println("Sort by name");
-        hotelAdminService.showResidentsSortedByName();
+        residentController.showResidentsSortedByName();
 
-        hotelAdminService.checkIn(mike, room101, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
-        hotelAdminService.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
-        hotelAdminService.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 10));
-        hotelAdminService.checkOut(alex, LocalDate.of(2020, 8, 9));
+        hotelController.checkIn(mike, room101, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
+        hotelController.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
+        hotelController.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 10));
+        hotelController.checkOut(alex, LocalDate.of(2020, 8, 9));
 
-        hotelAdminService.checkIn(juliet, room103, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 14));
-        hotelAdminService.checkOut(juliet, LocalDate.of(2020, 12, 2));
-        hotelAdminService.checkIn(stephani, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 13));
-        hotelAdminService.checkOut(stephani, LocalDate.of(2020, 8, 13));
+        hotelController.checkIn(juliet, room103, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 14));
+        hotelController.checkOut(juliet, LocalDate.of(2020, 12, 2));
+        hotelController.checkIn(stephani, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 13));
+        hotelController.checkOut(stephani, LocalDate.of(2020, 8, 13));
 
-        hotelAdminService.checkIn(juliet, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 15));
+        hotelController.checkIn(juliet, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 15));
 
-        hotelAdminService.addAttendanceToResident(mike, ironing);
-        hotelAdminService.addAttendanceToResident(mike, wakeup);
-        System.out.println("Calculate bill by resident's id");
-        hotelAdminService.calculateBill(1L);
-        hotelAdminService.calculateBill(2L);
+        residentController.addAttendanceToResident(mike, ironing);
+        residentController.addAttendanceToResident(mike, wakeup);
+
         System.out.println("Calculate bill by resident");
-        hotelAdminService.calculateBill(mike);
-        hotelAdminService.calculateBill(alex);
-        System.out.println("Show 3 last residents by room id");
-        hotelAdminService.showLastResidents(2L, 3);
-        System.out.println("Show 3 last residents by room");
-        hotelAdminService.showLastResidents(room102, 3);
+        hotelController.calculateBill(mike);
+        hotelController.calculateBill(alex);
 
-        hotelAdminService.showResidentsSortedByCheckOutDate();
+        System.out.println("Show 3 last residents by room");
+        roomController.showLastResidents(room102, 3);
+
+        residentController.showResidentsSortedByCheckOutDate();
 
         System.out.println("Vacant rooms on date");
-        hotelAdminService.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
-        hotelAdminService.changeRoomStatus(6L, RoomStatus.VACANT);
-        hotelAdminService.changeRoomPrice(203, BigDecimal.valueOf(2.0));
+        roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
+
+        roomController.changePrice(203, BigDecimal.valueOf(2.0));
         System.out.println("Vacant rooms on date after updating status room №203");
-        hotelAdminService.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
-        hotelAdminService.changeRoomStatus(301, RoomStatus.REPAIR);
+        roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
+        roomController.changeStatus(301, RoomStatus.REPAIR);
 
         System.out.println("Vacant rooms on date after updating status room №301");
-        hotelAdminService.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
+        roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13));
     }
 }
