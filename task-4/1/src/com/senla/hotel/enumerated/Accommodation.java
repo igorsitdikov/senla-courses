@@ -10,5 +10,5 @@ public enum Accommodation {
 	DBL_EXB_CHD,
 	TRPL,
 	TRPL_CHD,
-	TRPL_2_CHLD
+	TRPL_2_CHD
 }

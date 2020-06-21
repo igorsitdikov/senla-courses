@@ -22,7 +22,7 @@ public class StringUtils {
                 return "triple residents";
             case TRPL_CHD:
                 return "triple residents with 1 children";
-            case TRPL_2_CHLD:
+            case TRPL_2_CHD:
                 return "triple residents with 2 children";
             default:
                 return "single resident";

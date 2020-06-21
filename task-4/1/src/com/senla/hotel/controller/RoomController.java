@@ -73,8 +73,8 @@ public final class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public List<Resident> showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
-        return roomService.showLastResidents(room, number);
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws NoSuchEntityException {
+        return roomService.showLastResidents(room, amount);
     }
 
     public int countVacantRooms() {

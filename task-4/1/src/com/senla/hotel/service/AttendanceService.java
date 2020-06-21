@@ -52,11 +52,11 @@ public class AttendanceService implements IAttendanceService {
 
     @Override
     public void changeAttendancePrice(final Long id, final BigDecimal price) {
-        attendanceRepository.updatePrice(id, price);
+        attendanceRepository.changePrice(id, price);
     }
 
     @Override
     public void changeAttendancePrice(final String name, final BigDecimal price) {
-        attendanceRepository.updatePrice(name, price);
+        attendanceRepository.changePrice(name, price);
     }
 }

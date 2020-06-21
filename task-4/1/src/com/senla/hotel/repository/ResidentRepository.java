@@ -25,7 +25,7 @@ public class ResidentRepository extends ARepository {
         return entity;
     }
 
-    public Resident findById(final Long id) {
+    public AEntity findById(final Long id) {
         for (final Resident resident : residents) {
             if (resident.getId().equals(id)) {
                 return resident;

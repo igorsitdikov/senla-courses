@@ -184,16 +184,16 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<Resident> showLastResidents(final Room room, final Integer number) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws NoSuchEntityException {
         final Long id = room.getId();
-        return showLastResidents(id, number);
+        return showLastResidents(id, amount);
     }
 
-    public List<Resident> showLastResidents(final Long id, final Integer number) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Long id, final Integer amount) throws NoSuchEntityException {
         final List<RoomHistory> histories = findRoomById(id).getHistories();
         List<Resident> residents = new ArrayList<>();
-        if (histories.size() > number) {
-            for (int i = histories.size() - number; i < histories.size(); i++) {
+        if (histories.size() > amount) {
+            for (int i = histories.size() - amount; i < histories.size(); i++) {
                 residents.add(findRoomById(id).getHistories().get(i).getResident());
             }
         } else {
