@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangePriceAction implements IAction {
-
     @Override
     public void execute() {
         Scanner scanner = new Scanner(System.in);
