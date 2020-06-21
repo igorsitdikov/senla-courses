@@ -21,12 +21,12 @@ public class CheckInAction implements IAction {
         Scanner scanner = new Scanner(System.in);
         try {
             final List<Room> rooms = RoomController.getInstance().showAllRooms();
-            Printer.show(rooms, "Choose room: ");
+            Printer.show(rooms, "room");
             Integer roomId = InputDataReader
                 .getIntegerInput(scanner, "Input Room id...", rooms.size() - 1);
 
             final List<Resident> residents = ResidentController.getInstance().showResidents();
-            Printer.show(residents, "Choose resident: ");
+            Printer.show(residents, "resident");
             Integer residentId = InputDataReader
                 .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
             LocalDate checkInDate = InputDataReader.getLocalDateInput(scanner, "Input check-in date...");
@@ -35,7 +35,7 @@ public class CheckInAction implements IAction {
             HotelController.getInstance()
                 .checkIn(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate);
         } catch (Exception e) {
-            System.out.println(String.format("Failed to check-in! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to check-in! Input valid parameters! %s", e));
         }
     }
 }

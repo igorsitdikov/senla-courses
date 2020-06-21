@@ -25,7 +25,7 @@ public class CreateAttendanceAction implements IAction {
                 BigDecimal.valueOf(InputDataReader.getDoubleInput(scanner, "Input the Attendance daily price..."));
             AttendanceController.getInstance().createAttendance(new Attendance(dailyPrice, name));
         } catch (Exception e) {
-            System.out.println(String.format("Failed to add a Attendance! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to add a Attendance! Input valid parameters! %s", e));
         }
     }
 }

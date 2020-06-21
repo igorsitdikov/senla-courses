@@ -17,7 +17,7 @@ public class ShowLastResidentsAction implements IAction {
         Scanner scanner = new Scanner(System.in);
         try {
             final List<Room> rooms = RoomController.getInstance().showAllRooms();
-            Printer.show(rooms, "Choose room: ");
+            Printer.show(rooms, "room");
 
             Integer roomId = InputDataReader
                 .getIntegerInput(scanner, "Input Room id...", rooms.size() - 1);
@@ -27,7 +27,7 @@ public class ShowLastResidentsAction implements IAction {
             List<Resident> residents = RoomController.getInstance().showLastResidents(rooms.get(roomId - 1), number);
             Printer.show(residents);
         } catch (Exception e) {
-            System.out.println(String.format("Failed to show Resident in Room! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to show Resident in Room! Input valid parameters! %s", e));
         }
     }
 }
