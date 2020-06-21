@@ -98,7 +98,7 @@ public class CreateRoomAction implements IAction {
                 accommodation = Accommodation.TRPL_CHD;
                 break;
             case 10:
-                accommodation = Accommodation.TRPL_2_CHLD;
+                accommodation = Accommodation.TRPL_2_CHD;
                 break;
             default:
                 System.out.println("Wrong input. Please, input a number from 1 to 10.%n");
@@ -155,7 +155,7 @@ public class CreateRoomAction implements IAction {
             RoomController.getInstance().addRoom(new Room(roomNumber, stars, accommodation, dailyPrice, status));
 
         } catch (Exception e) {
-            System.out.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
         }
     }
 }

@@ -40,7 +40,7 @@ public class CreateResidentAction implements IAction {
                     "2 - FEMALE", 2));
             ResidentController.getInstance().createResident(new Resident(firstName, lastName, gender, vip, phone, null));
         } catch (Exception e) {
-            System.out.println(String.format("Failed to add a Resident! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to add a Resident! Input valid parameters! %s", e));
         }
     }
 }

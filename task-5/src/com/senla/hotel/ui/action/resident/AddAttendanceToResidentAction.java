@@ -19,13 +19,13 @@ public class AddAttendanceToResidentAction implements IAction {
         Scanner scanner = new Scanner(System.in);
         try {
             final List<Attendance> attendances = AttendanceController.getInstance().showAttendances();
-            Printer.show(attendances, "Choose attendance: ");
+            Printer.show(attendances, "attendance");
 
             Integer attendanceId = InputDataReader
                 .getIntegerInput(scanner, "Input Attendance id...", attendances.size() - 1);
 
             final List<Resident> residents = ResidentController.getInstance().showResidents();
-            Printer.show(residents, "Choose resident: ");
+            Printer.show(residents, "resident");
 
             Integer residentId = InputDataReader
                 .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
@@ -33,7 +33,7 @@ public class AddAttendanceToResidentAction implements IAction {
             ResidentController.getInstance()
                 .addAttendanceToResident(residents.get(residentId - 1), attendances.get(attendanceId - 1));
         } catch (Exception e) {
-            System.out.println(String.format("Failed to add an Attendance to Resident! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to add an Attendance to Resident! Input valid parameters! %s", e));
         }
     }
 }

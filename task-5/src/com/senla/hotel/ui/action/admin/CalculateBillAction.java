@@ -18,13 +18,13 @@ public class CalculateBillAction implements IAction {
         Scanner scanner = new Scanner(System.in);
         try {
             final List<Resident> residents = ResidentController.getInstance().showResidents();
-            Printer.show(residents, "Choose resident: ");
+            Printer.show(residents, "resident");
             Integer residentId = InputDataReader
                 .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
 
             HotelController.getInstance().calculateBill(residents.get(residentId - 1));
         } catch (Exception e) {
-            System.out.println(String.format("Failed to check-in! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to check-in! Input valid parameters! %s", e));
         }
     }
 }

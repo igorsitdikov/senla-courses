@@ -20,7 +20,7 @@ public class ShowDetailsAction implements IAction {
             Room room = RoomController.getInstance().showRoomDetails(roomNumber);
             Printer.show(room);
         } catch (Exception e) {
-            System.out.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
+            System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
         }
 
     }
