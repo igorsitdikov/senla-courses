@@ -14,7 +14,7 @@ public final class RoomController {
     private static RoomController roomController;
     private static IRoomService roomService;
 
-    public RoomController() {
+    private RoomController() {
         roomService = new RoomService();
     }
 

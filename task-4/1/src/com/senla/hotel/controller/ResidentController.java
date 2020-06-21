@@ -12,7 +12,7 @@ public final class ResidentController {
     private static ResidentController residentController;
     private static IResidentService residentService;
 
-    public ResidentController() {
+    private ResidentController() {
         residentService = new ResidentService();
     }
 

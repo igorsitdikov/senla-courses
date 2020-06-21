@@ -11,7 +11,7 @@ public final class AttendanceController {
     private static AttendanceController attendanceController;
     private static IAttendanceService attendanceService;
 
-    public AttendanceController() {
+    private AttendanceController() {
         attendanceService = new AttendanceService();
     }
 
