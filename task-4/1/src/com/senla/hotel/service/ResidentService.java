@@ -27,7 +27,7 @@ public class ResidentService implements IResidentService {
 
     @Override
     public Resident findById(final Long id) throws NoSuchEntityException {
-        final Resident resident = residentRepository.findById(id);
+        final Resident resident = (Resident) residentRepository.findById(id);
         if (resident == null) {
             throw new NoSuchEntityException(String.format("No resident with id %d%n", id));
         }

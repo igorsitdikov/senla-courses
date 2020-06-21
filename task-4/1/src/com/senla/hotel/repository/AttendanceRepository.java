@@ -21,12 +21,12 @@ public class AttendanceRepository extends ARepository {
         return entity;
     }
 
-    public void updatePrice(final Long id, final BigDecimal price) {
+    public void changePrice(final Long id, final BigDecimal price) {
         final Attendance attendance = (Attendance) findById(id);
         attendance.setPrice(price);
     }
 
-    public void updatePrice(final String name, final BigDecimal price) {
+    public void changePrice(final String name, final BigDecimal price) {
         final Attendance attendance = (Attendance) findByName(name);
         attendance.setPrice(price);
     }
