@@ -64,31 +64,43 @@ public class Builder {
     }
 
     private void addAttendanceSubMenu(final Menu menu) {
+        final Menu showerMenu = new Menu("Show attendance");
+        addPrinterAttendances(showerMenu);
+        menu.addMenuItem(new MenuItem("Show", showerMenu));
         menu.addMenuItem(new MenuItem("Create attendance",
                                       menu, new CreateAttendanceAction()));
+        menu.addMenuItem(new MenuItem("Change attendance price",
+                                      menu, new ChangeAttendancePriceAction()));
+    }
+
+    private void addPrinterAttendances(final Menu menu) {
         menu.addMenuItem(new MenuItem("Show all attendance",
                                       menu, new ShowAttendancesAction()));
         menu.addMenuItem(new MenuItem("Show attendances sorted by name",
                                       menu, new ShowAttendancesSortedByNameAction()));
         menu.addMenuItem(new MenuItem("Show attendances sorted by price",
                                       menu, new ShowAttendancesSortedByPriceAction()));
-        menu.addMenuItem(new MenuItem("Change attendance price",
-                                      menu, new ChangeAttendancePriceAction()));
     }
 
     private void addResidentSubMenu(final Menu menu) {
+        final Menu printerMenu = new Menu("Show attendance");
+        addPrinterResidents(printerMenu);
+        menu.addMenuItem(new MenuItem("Show", printerMenu));
         menu.addMenuItem(new MenuItem("Create resident",
                                       menu, new CreateResidentAction()));
+        menu.addMenuItem(new MenuItem("Total residents",
+                                      menu, new CountResidentsAction()));
+        menu.addMenuItem(new MenuItem("Add attendance to resident",
+                                      menu, new AddAttendanceToResidentAction()));
+    }
+
+    private void addPrinterResidents(final Menu menu) {
         menu.addMenuItem(new MenuItem("Show all residents",
                                       menu, new ShowResidentsAction()));
         menu.addMenuItem(new MenuItem("Show all residents sorted by name",
                                       menu, new ShowResidentsSortedByNameAction()));
         menu.addMenuItem(new MenuItem("Show all residents sorted by check out date",
                                       menu, new ShowResidentsSortedByCheckOutDateAction()));
-        menu.addMenuItem(new MenuItem("Total residents",
-                                      menu, new CountResidentsAction()));
-        menu.addMenuItem(new MenuItem("Add attendance to resident",
-                                      menu, new AddAttendanceToResidentAction()));
     }
 
     private void addHotelAdminSubMenu(final Menu menu) {
@@ -98,35 +110,42 @@ public class Builder {
                                       menu, new CheckOutAction()));
         menu.addMenuItem(new MenuItem("Calculate resident's bill",
                                       menu, new CalculateBillAction()));
+        menu.addMenuItem(new MenuItem("Previous menu", rootMenu));
     }
 
     private void addRoomSubMenu(final Menu menu) {
+        final Menu printerMenu = new Menu("Show rooms");
+        addPrinterRoomsSubMenu(printerMenu);
+        menu.addMenuItem(new MenuItem("Show", printerMenu));
         menu.addMenuItem(new MenuItem("Add a room",
                                       menu, new CreateRoomAction()));
-        menu.addMenuItem(new MenuItem("Print all rooms",
-                                      menu, new ShowRoomsAction()));
-        menu.addMenuItem(new MenuItem("Print all rooms sorted by accommodation",
-                                      menu, new ShowRoomsSortedByAccommodationAction()));
-        menu.addMenuItem(new MenuItem("Print all rooms sorted by price",
-                                      menu, new ShowRoomsSortedByPriceAction()));
-        menu.addMenuItem(new MenuItem("Print all rooms sorted by stars",
-                                      menu, new ShowVacantSortedByStarsAction()));
-        menu.addMenuItem(new MenuItem("Print all vacant",
-                                      menu, new ShowVacantAction()));
-        menu.addMenuItem(new MenuItem("Print all vacant on date",
-                                      menu, new ShowVacantOnDateAction()));
-        menu.addMenuItem(new MenuItem("Print all vacant rooms sorted by accommodation",
-                                      menu, new ShowVacantSortedByAccommodationAction()));
-        menu.addMenuItem(new MenuItem("Print all vacant rooms sorted by price",
-                                      menu, new ShowVacantSortedByPriceAction()));
-        menu.addMenuItem(new MenuItem("Print all vacant rooms sorted by stars",
-                                      menu, new ShowVacantSortedByStarsAction()));
-        menu.addMenuItem(new MenuItem("Print room's details",
-                                      menu, new ShowDetailsAction()));
         menu.addMenuItem(new MenuItem("Change price",
                                       menu, new ChangePriceAction()));
         menu.addMenuItem(new MenuItem("Total vacant rooms",
                                       menu, new CountVacantAction()));
+        menu.addMenuItem(new MenuItem("Show room's details",
+                                      menu, new ShowDetailsAction()));
+    }
+
+    private void addPrinterRoomsSubMenu(final Menu menu) {
+        menu.addMenuItem(new MenuItem("Show all rooms",
+                                      menu, new ShowRoomsAction()));
+        menu.addMenuItem(new MenuItem("Show all rooms sorted by accommodation",
+                                      menu, new ShowRoomsSortedByAccommodationAction()));
+        menu.addMenuItem(new MenuItem("Show all rooms sorted by price",
+                                      menu, new ShowRoomsSortedByPriceAction()));
+        menu.addMenuItem(new MenuItem("Show all rooms sorted by stars",
+                                      menu, new ShowVacantSortedByStarsAction()));
+        menu.addMenuItem(new MenuItem("Show all vacant rooms",
+                                      menu, new ShowVacantAction()));
+        menu.addMenuItem(new MenuItem("Show all vacant rooms on date",
+                                      menu, new ShowVacantOnDateAction()));
+        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by accommodation",
+                                      menu, new ShowVacantSortedByAccommodationAction()));
+        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by price",
+                                      menu, new ShowVacantSortedByPriceAction()));
+        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by stars",
+                                      menu, new ShowVacantSortedByStarsAction()));
     }
 
     public Menu getMenu() {
