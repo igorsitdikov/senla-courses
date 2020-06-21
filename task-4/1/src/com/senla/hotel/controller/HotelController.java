@@ -13,7 +13,7 @@ public final class HotelController {
     private static HotelController hotelController;
     private static IHotelAdminService hotelAdminService;
 
-    public HotelController() {
+    private HotelController() {
         hotelAdminService = new HotelAdminService();
     }
 
