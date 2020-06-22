@@ -36,16 +36,15 @@ public class Test {
         attendanceController.createAttendance(laundry);
         attendanceController.createAttendance(dogWalking);
 
-        System.out.println("Show all attendances");
+        Printer.show("Show all attendances");
         Printer.show(attendanceController.showAttendances());
 
-        System.out.println("Show attendances sorted by name");
+        Printer.show("Show attendances sorted by name");
         Printer.show(attendanceController.showAttendancesSortedByName());
 
-        System.out.println("Show attendances sorted by price");
+        Printer.show("Show attendances sorted by price");
         Printer.show(attendanceController.showAttendancesSortedByPrice());
 
-        System.out.println();
 
         final Room room101 =
                 new Room(101, Stars.STANDARD, Accommodation.SGL, BigDecimal.valueOf(100), RoomStatus.VACANT);
@@ -73,31 +72,31 @@ public class Test {
         roomController.addRoom(room302);
         roomController.addRoom(room303);
 
-        System.out.println("Show all rooms");
+        Printer.show("Show all rooms");
         Printer.show(roomController.showAllRooms());
 
-        System.out.println("Sort all rooms by price");
+        Printer.show("Sort all rooms by price");
         Printer.show(roomController.showAllRoomsSortedByPrice());
 
-        System.out.println("Sort all rooms by accommodation");
+        Printer.show("Sort all rooms by accommodation");
         Printer.show(roomController.showAllRoomsSortedByAccommodation());
 
-        System.out.println("Sort all rooms by stars");
+        Printer.show("Sort all rooms by stars");
         Printer.show(roomController.showAllRoomsSortedByStars());
 
         Printer.show(roomController.showVacantRooms());
-        System.out.println("Show count vacant rooms");
+        Printer.show("Show count vacant rooms");
         Printer.show(roomController.countVacantRooms());
-        System.out.println("Sort vacant rooms by price");
+        Printer.show("Sort vacant rooms by price");
         Printer.show(roomController.showVacantRoomsSortedByPrice());
 
-        System.out.println("Sort vacant rooms by accommodation");
+        Printer.show("Sort vacant rooms by accommodation");
         Printer.show(roomController.showVacantRoomsSortedByAccommodation());
 
-        System.out.println("Sort vacant rooms by stars");
+        Printer.show("Sort vacant rooms by stars");
         Printer.show(roomController.showVacantRoomsSortedByStars());
 
-        System.out.println("Show details room №202");
+        Printer.show("Show details room №202");
         Printer.show(roomController.showRoomDetails(202));
 
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);
@@ -112,13 +111,13 @@ public class Test {
         residentController.createResident(stephani);
         residentController.createResident(carl);
 
-        System.out.println("Show all residents");
+        Printer.show("Show all residents");
         Printer.show(residentController.showResidents());
 
-        System.out.println("Show count residents");
+        Printer.show("Show count residents");
         Printer.show(residentController.showCountResidents());
 
-        System.out.println("Sort by name");
+        Printer.show("Sort by name");
         Printer.show(residentController.showResidentsSortedByName());
 
         hotelController.checkIn(mike, room101, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
@@ -136,24 +135,24 @@ public class Test {
         residentController.addAttendanceToResident(mike, ironing);
         residentController.addAttendanceToResident(mike, wakeup);
 
-        System.out.println("Calculate bill by resident");
+        Printer.show("Calculate bill by resident");
         Printer.show(hotelController.calculateBill(mike));
         Printer.show(hotelController.calculateBill(alex));
 
-        System.out.println("Show 3 last residents by room");
+        Printer.show("Show 3 last residents by room");
         Printer.show(roomController.showLastResidents(room102, 3));
 
         Printer.show(residentController.showResidentsSortedByCheckOutDate());
 
-        System.out.println("Vacant rooms on date");
+        Printer.show("Vacant rooms on date");
         Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
 
         roomController.changePrice(203, BigDecimal.valueOf(2.0));
-        System.out.println("Vacant rooms on date after updating status room №203");
+        Printer.show("Vacant rooms on date after updating status room №203");
         Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
         roomController.changeStatus(301, RoomStatus.REPAIR);
 
-        System.out.println("Vacant rooms on date after updating status room №301");
+        Printer.show("Vacant rooms on date after updating status room №301");
         Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
     }
 }
