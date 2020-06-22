@@ -5,10 +5,8 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
-import com.senla.hotel.repository.ResidentRepository;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
-import com.senla.hotel.utils.ArrayUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
@@ -21,8 +19,6 @@ import java.util.List;
 
 public class RoomService implements IRoomService {
     private RoomRepository roomRepository = new RoomRepository();
-    private ResidentRepository residentRepository = new ResidentRepository();
-    private ArrayUtils arrayUtils = new ArrayUtils();
 
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {

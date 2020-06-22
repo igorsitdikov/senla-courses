@@ -12,7 +12,7 @@ import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.NoSuchEntityException;
-import com.senla.hotel.utils.Printer;
+import com.senla.hotel.utils.PrinterUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,14 +36,14 @@ public class Test {
         attendanceController.createAttendance(laundry);
         attendanceController.createAttendance(dogWalking);
 
-        Printer.show("Show all attendances");
-        Printer.show(attendanceController.showAttendances());
+        PrinterUtils.show("Show all attendances");
+        PrinterUtils.show(attendanceController.showAttendances());
 
-        Printer.show("Show attendances sorted by name");
-        Printer.show(attendanceController.showAttendancesSortedByName());
+        PrinterUtils.show("Show attendances sorted by name");
+        PrinterUtils.show(attendanceController.showAttendancesSortedByName());
 
-        Printer.show("Show attendances sorted by price");
-        Printer.show(attendanceController.showAttendancesSortedByPrice());
+        PrinterUtils.show("Show attendances sorted by price");
+        PrinterUtils.show(attendanceController.showAttendancesSortedByPrice());
 
 
         final Room room101 =
@@ -72,32 +72,32 @@ public class Test {
         roomController.addRoom(room302);
         roomController.addRoom(room303);
 
-        Printer.show("Show all rooms");
-        Printer.show(roomController.showAllRooms());
+        PrinterUtils.show("Show all rooms");
+        PrinterUtils.show(roomController.showAllRooms());
 
-        Printer.show("Sort all rooms by price");
-        Printer.show(roomController.showAllRoomsSortedByPrice());
+        PrinterUtils.show("Sort all rooms by price");
+        PrinterUtils.show(roomController.showAllRoomsSortedByPrice());
 
-        Printer.show("Sort all rooms by accommodation");
-        Printer.show(roomController.showAllRoomsSortedByAccommodation());
+        PrinterUtils.show("Sort all rooms by accommodation");
+        PrinterUtils.show(roomController.showAllRoomsSortedByAccommodation());
 
-        Printer.show("Sort all rooms by stars");
-        Printer.show(roomController.showAllRoomsSortedByStars());
+        PrinterUtils.show("Sort all rooms by stars");
+        PrinterUtils.show(roomController.showAllRoomsSortedByStars());
 
-        Printer.show(roomController.showVacantRooms());
-        Printer.show("Show count vacant rooms");
-        Printer.show(roomController.countVacantRooms());
-        Printer.show("Sort vacant rooms by price");
-        Printer.show(roomController.showVacantRoomsSortedByPrice());
+        PrinterUtils.show(roomController.showVacantRooms());
+        PrinterUtils.show("Show count vacant rooms");
+        PrinterUtils.show(roomController.countVacantRooms());
+        PrinterUtils.show("Sort vacant rooms by price");
+        PrinterUtils.show(roomController.showVacantRoomsSortedByPrice());
 
-        Printer.show("Sort vacant rooms by accommodation");
-        Printer.show(roomController.showVacantRoomsSortedByAccommodation());
+        PrinterUtils.show("Sort vacant rooms by accommodation");
+        PrinterUtils.show(roomController.showVacantRoomsSortedByAccommodation());
 
-        Printer.show("Sort vacant rooms by stars");
-        Printer.show(roomController.showVacantRoomsSortedByStars());
+        PrinterUtils.show("Sort vacant rooms by stars");
+        PrinterUtils.show(roomController.showVacantRoomsSortedByStars());
 
-        Printer.show("Show details room №202");
-        Printer.show(roomController.showRoomDetails(202));
+        PrinterUtils.show("Show details room №202");
+        PrinterUtils.show(roomController.showRoomDetails(202));
 
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);
         final Resident alex = new Resident("Alex", "Smith", Gender.MALE, false, "1234569", null);
@@ -111,14 +111,14 @@ public class Test {
         residentController.createResident(stephani);
         residentController.createResident(carl);
 
-        Printer.show("Show all residents");
-        Printer.show(residentController.showResidents());
+        PrinterUtils.show("Show all residents");
+        PrinterUtils.show(residentController.showResidents());
 
-        Printer.show("Show count residents");
-        Printer.show(residentController.showCountResidents());
+        PrinterUtils.show("Show count residents");
+        PrinterUtils.show(residentController.showCountResidents());
 
-        Printer.show("Sort by name");
-        Printer.show(residentController.showResidentsSortedByName());
+        PrinterUtils.show("Sort by name");
+        PrinterUtils.show(residentController.showResidentsSortedByName());
 
         hotelController.checkIn(mike, room101, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
         hotelController.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
@@ -135,24 +135,24 @@ public class Test {
         residentController.addAttendanceToResident(mike, ironing);
         residentController.addAttendanceToResident(mike, wakeup);
 
-        Printer.show("Calculate bill by resident");
-        Printer.show(hotelController.calculateBill(mike));
-        Printer.show(hotelController.calculateBill(alex));
+        PrinterUtils.show("Calculate bill by resident");
+        PrinterUtils.show(hotelController.calculateBill(mike));
+        PrinterUtils.show(hotelController.calculateBill(alex));
 
-        Printer.show("Show 3 last residents by room");
-        Printer.show(roomController.showLastResidents(room102, 3));
+        PrinterUtils.show("Show 3 last residents by room");
+        PrinterUtils.show(roomController.showLastResidents(room102, 3));
 
-        Printer.show(residentController.showResidentsSortedByCheckOutDate());
+        PrinterUtils.show(residentController.showResidentsSortedByCheckOutDate());
 
-        Printer.show("Vacant rooms on date");
-        Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
+        PrinterUtils.show("Vacant rooms on date");
+        PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
 
         roomController.changePrice(203, BigDecimal.valueOf(2.0));
-        Printer.show("Vacant rooms on date after updating status room №203");
-        Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
+        PrinterUtils.show("Vacant rooms on date after updating status room №203");
+        PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
         roomController.changeStatus(301, RoomStatus.REPAIR);
 
-        Printer.show("Vacant rooms on date after updating status room №301");
-        Printer.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
+        PrinterUtils.show("Vacant rooms on date after updating status room №301");
+        PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
     }
 }
