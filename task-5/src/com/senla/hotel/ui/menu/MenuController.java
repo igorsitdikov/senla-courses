@@ -4,7 +4,19 @@ import com.senla.hotel.ui.utils.InputDataReader;
 
 import java.util.Scanner;
 
-public class MenuController {
+public final class MenuController {
+    private static MenuController menuController;
+
+    private MenuController() {
+    }
+
+    public static MenuController getInstance() {
+        if (menuController == null) {
+            menuController = new MenuController();
+        }
+        return menuController;
+    }
+
     public void run() {
         final Navigator navigator = Navigator.getInstance();
         final Builder builder = Builder.getInstance();
