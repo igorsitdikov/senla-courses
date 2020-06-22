@@ -8,6 +8,21 @@ public class MenuItem {
     private IAction action;
     private Menu nextMenu;
 
+    public MenuItem(String name, Menu nextMenu) {
+        this.name = name;
+        this.nextMenu = nextMenu;
+    }
+
+    public MenuItem(String name, Menu nextMenu, IAction action) {
+        this.name = name;
+        this.nextMenu = nextMenu;
+        this.action = action;
+    }
+
+    public void doAction() {
+        this.action.execute();
+    }
+
     public String getName() {
         return name;
     }
@@ -34,16 +49,5 @@ public class MenuItem {
 
     public MenuItem(String name) {
         this.name = name;
-    }
-
-    public MenuItem(String name, Menu nextMenu) {
-        this.name = name;
-        this.nextMenu = nextMenu;
-    }
-
-    public MenuItem(String name, Menu nextMenu, IAction action) {
-        this.name = name;
-        this.nextMenu = nextMenu;
-        this.action = action;
     }
 }
