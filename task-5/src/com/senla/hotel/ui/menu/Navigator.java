@@ -35,7 +35,7 @@ public class Navigator {
 
     public void navigate(Integer index) {
         if (currentMenu.getMenuItems().get(index).getAction() != null) {
-            currentMenu.getMenuItems().get(index).getAction().execute();
+            currentMenu.getMenuItems().get(index).doAction();
         } else {
             currentMenu.getMenuItems().get(index).getNextMenu();
         }
