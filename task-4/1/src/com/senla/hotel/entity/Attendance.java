@@ -6,6 +6,9 @@ public class Attendance extends AEntity {
     private BigDecimal price;
     private String name;
 
+    public Attendance() {
+    }
+
     public Attendance(final BigDecimal price, final String name) {
         this.price = price;
         this.name = name;
@@ -30,6 +33,5 @@ public class Attendance extends AEntity {
     @Override
     public String toString() {
         return String.format("Attendance \"%s\" with price %.2f per day.", name, price);
-
     }
 }

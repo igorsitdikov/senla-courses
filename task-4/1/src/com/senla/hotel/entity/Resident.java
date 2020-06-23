@@ -10,6 +10,9 @@ public class Resident extends AEntity {
     private String phone;
     private RoomHistory history;
 
+    public Resident() {
+    }
+
     public Resident(final String firstName,
                     final String lastName,
                     final Gender gender,

@@ -17,6 +17,9 @@ public class Room extends AEntity {
     private RoomStatus status;
     private List<RoomHistory> histories;
 
+    public Room() {
+    }
+
     public Room(final Integer number,
                 final Stars stars,
                 final Accommodation accommodation,

@@ -9,6 +9,7 @@ import com.senla.hotel.utils.comparator.AttendanceNameComparator;
 import com.senla.hotel.utils.comparator.AttendancePriceComparator;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -53,13 +54,13 @@ public class AttendanceService implements IAttendanceService {
 
     @Override
     public List<Attendance> showAttendancesSortedByName() {
-        final List<Attendance> attendances = showAttendances();
+        final List<Attendance> attendances = new ArrayList<>(showAttendances());
         return sortAttendances(attendances, new AttendanceNameComparator());
     }
 
     @Override
     public List<Attendance> showAttendancesSortedByPrice() {
-        final List<Attendance> attendances = showAttendances();
+        final List<Attendance> attendances = new ArrayList<>(showAttendances());
         return sortAttendances(attendances, new AttendancePriceComparator());
     }
 

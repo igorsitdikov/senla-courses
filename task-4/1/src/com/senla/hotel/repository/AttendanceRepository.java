@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AttendanceRepository implements IAttendanceRepository {
     private static AttendanceRepository attendanceRepository;
-    private static List<Attendance> attendances = new ArrayList<>();
+    private static final List<Attendance> attendances = new ArrayList<>();
 
     private AttendanceRepository() {
     }
@@ -24,7 +24,7 @@ public class AttendanceRepository implements IAttendanceRepository {
 
     @Override
     public AEntity add(final AEntity entity) {
-        entity.setId((long) attendances.size());
+        entity.setId((long) attendances.size() + 1);
         attendances.add((Attendance) entity);
         return entity;
     }
@@ -43,8 +43,7 @@ public class AttendanceRepository implements IAttendanceRepository {
 
     @Override
     public List<AEntity> add(final List<Attendance> attendances, final AEntity entity) {
-        List<AEntity> result = new ArrayList<>(attendances);
-        entity.setId((long) result.size());
+        final List<AEntity> result = new ArrayList<>(attendances);
         result.add(entity);
         return result;
     }
