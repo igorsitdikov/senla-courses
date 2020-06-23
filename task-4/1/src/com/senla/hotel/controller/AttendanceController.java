@@ -7,12 +7,12 @@ import com.senla.hotel.service.interfaces.IAttendanceService;
 import java.math.BigDecimal;
 import java.util.List;
 
-public final class AttendanceController {
+public class AttendanceController {
     private static AttendanceController attendanceController;
     private static IAttendanceService attendanceService;
 
     private AttendanceController() {
-        attendanceService = new AttendanceService();
+        attendanceService = AttendanceService.getInstance();
     }
 
     public static AttendanceController getInstance() {

@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public final class RoomController {
+public class RoomController {
     private static RoomController roomController;
     private static IRoomService roomService;
 
     private RoomController() {
-        roomService = new RoomService();
+        roomService = RoomService.getInstance();
     }
 
     public static RoomController getInstance() {

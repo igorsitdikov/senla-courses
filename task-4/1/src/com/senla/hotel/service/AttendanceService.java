@@ -3,6 +3,7 @@ package com.senla.hotel.service;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.AttendanceRepository;
+import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
 import com.senla.hotel.utils.comparator.AttendancePriceComparator;
@@ -12,7 +13,18 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AttendanceService implements IAttendanceService {
-    private AttendanceRepository attendanceRepository = new AttendanceRepository();
+    private static AttendanceService attendanceService;
+    private IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
+
+    private AttendanceService() {
+    }
+
+    public static AttendanceService getInstance() {
+        if (attendanceService == null) {
+            attendanceService = new AttendanceService();
+        }
+        return attendanceService;
+    }
 
     public Attendance findAttendanceById(final Long id) throws NoSuchEntityException {
         final Attendance attendance = (Attendance) attendanceRepository.findById(id);
@@ -23,7 +35,8 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public List<Attendance> sortAttendances(final List<Attendance> attendances, final Comparator<Attendance> comparator) {
+    public List<Attendance> sortAttendances(final List<Attendance> attendances,
+                                            final Comparator<Attendance> comparator) {
         attendances.sort(comparator);
         return attendances;
     }

@@ -9,12 +9,12 @@ import com.senla.hotel.service.interfaces.IHotelAdminService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public final class HotelController {
+public class HotelController {
     private static HotelController hotelController;
     private static IHotelAdminService hotelAdminService;
 
     private HotelController() {
-        hotelAdminService = new HotelAdminService();
+        hotelAdminService = HotelAdminService.getInstance();
     }
 
     public static HotelController getInstance() {
@@ -24,7 +24,8 @@ public final class HotelController {
         return hotelController;
     }
 
-    public void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut) throws NoSuchEntityException {
+    public void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
+        throws NoSuchEntityException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 

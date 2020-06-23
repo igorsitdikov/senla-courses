@@ -3,19 +3,23 @@ package com.senla.hotel.repository;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.repository.interfaces.IResidentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResidentRepository extends ARepository {
-
+public class ResidentRepository implements IResidentRepository {
+    private static ResidentRepository residentRepository;
     private static List<Resident> residents = new ArrayList<>();
 
-    public ResidentRepository() {
+    private ResidentRepository() {
     }
 
-    public ResidentRepository(final List<Resident> residents) {
-        this.residents = residents;
+    public static ResidentRepository getInstance() {
+        if (residentRepository == null) {
+            residentRepository = new ResidentRepository();
+        }
+        return residentRepository;
     }
 
     @Override
@@ -25,6 +29,7 @@ public class ResidentRepository extends ARepository {
         return entity;
     }
 
+    @Override
     public AEntity findById(final Long id) {
         for (final Resident resident : residents) {
             if (resident.getId().equals(id)) {
@@ -34,14 +39,17 @@ public class ResidentRepository extends ARepository {
         return null;
     }
 
+    @Override
     public void addHistory(final Resident resident, final RoomHistory history) {
         resident.setHistory(history);
     }
 
+    @Override
     public int showTotalNumber() {
         return residents.size();
     }
 
+    @Override
     public List<Resident> getResidents() {
         return residents;
     }
