@@ -4,33 +4,28 @@ import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResidentRepository extends ARepository {
 
-    private static Resident[] residents = new Resident[0];
+    private static List<Resident> residents = new ArrayList<>();
 
     public ResidentRepository() {
     }
 
-    public ResidentRepository(final Resident[] residents) {
+    public ResidentRepository(final List<Resident> residents) {
         this.residents = residents;
-    }
-
-    public Resident[] castArray(final AEntity[] array) {
-        return Arrays.copyOf(array, array.length, Resident[].class);
     }
 
     @Override
     public AEntity add(final AEntity entity) {
-        final AEntity[] entities = arrayUtils.expandArray(residents);
-        residents = castArray(entities);
-        entity.setId((long) residents.length);
-        residents[residents.length - 1] = (Resident) entity;
+        entity.setId((long) residents.size());
+        residents.add((Resident) entity);
         return entity;
     }
 
-    public Resident findById(final Long id) {
+    public AEntity findById(final Long id) {
         for (final Resident resident : residents) {
             if (resident.getId().equals(id)) {
                 return resident;
@@ -44,10 +39,10 @@ public class ResidentRepository extends ARepository {
     }
 
     public int showTotalNumber() {
-        return residents.length;
+        return residents.size();
     }
 
-    public Resident[] getResidents() {
+    public List<Resident> getResidents() {
         return residents;
     }
 }

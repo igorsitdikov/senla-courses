@@ -6,16 +6,11 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 
 import java.util.Comparator;
+import java.util.List;
 
 public interface IResidentService {
 
-    void add(Resident resident);
-
-    Resident[] sortResidents(Resident[] residents, Comparator<Resident> comparator);
-
-    int showTotalNumber();
-
-    void showResidents(Resident[] residents);
+    List<Resident> sortResidents(List<Resident> residents, Comparator<Resident> comparator);
 
     Resident findById(Long id) throws NoSuchEntityException;
 
@@ -24,9 +19,17 @@ public interface IResidentService {
     void addAttendanceToResident(Long id, Attendance attendance) throws NoSuchEntityException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)
-        throws NoSuchEntityException;
+            throws NoSuchEntityException;
 
     void addAttendanceToResident(Long residentId, Long attendanceId) throws NoSuchEntityException;
 
-    Resident[] getResidents();
+    void createResident(Resident resident);
+
+    List<Resident> showResidents();
+
+    List<Resident> showResidentsSortedByName();
+
+    List<Resident> showResidentsSortedByCheckOutDate();
+
+    int showCountResidents();
 }
