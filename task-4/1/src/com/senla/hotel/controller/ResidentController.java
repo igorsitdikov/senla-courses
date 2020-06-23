@@ -8,7 +8,7 @@ import com.senla.hotel.service.interfaces.IResidentService;
 
 import java.util.List;
 
-public final class ResidentController {
+public class ResidentController {
     private static ResidentController residentController;
     private static IResidentService residentService;
 

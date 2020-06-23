@@ -6,6 +6,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomRepository;
+import com.senla.hotel.repository.interfaces.IRoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
@@ -18,7 +19,18 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RoomService implements IRoomService {
-    private RoomRepository roomRepository = new RoomRepository();
+    private static RoomService roomService;
+    private IRoomRepository roomRepository = RoomRepository.getInstance();
+
+    private RoomService() {
+    }
+
+    public static RoomService getInstance() {
+        if (roomService == null) {
+            roomService = new RoomService();
+        }
+        return roomService;
+    }
 
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
@@ -28,7 +40,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-            throws NoSuchEntityException {
+        throws NoSuchEntityException {
         final Room room = findRoomById(id);
         final List<RoomHistory> histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
@@ -75,7 +87,7 @@ public class RoomService implements IRoomService {
         for (final Room room : rooms) {
             final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
                 result.add(room);
             }
         }

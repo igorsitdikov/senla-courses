@@ -6,6 +6,8 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.ResidentRepository;
+import com.senla.hotel.repository.interfaces.IAttendanceRepository;
+import com.senla.hotel.repository.interfaces.IResidentRepository;
 import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
 import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
@@ -15,8 +17,16 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ResidentService implements IResidentService {
-    private final ResidentRepository residentRepository = new ResidentRepository();
-    private final AttendanceRepository attendanceRepository = new AttendanceRepository();
+    private static ResidentService residentService;
+    private final IResidentRepository residentRepository = ResidentRepository.getInstance();
+    private final IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
+
+    public static ResidentService getInstance() {
+        if (residentService == null) {
+            residentService = new ResidentService();
+        }
+        return residentService;
+    }
 
     @Override
     public List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
@@ -50,7 +60,7 @@ public class ResidentService implements IResidentService {
 
     @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-            throws NoSuchEntityException {
+        throws NoSuchEntityException {
         final Long residentId = resident.getId();
         final Long attendanceId = attendance.getId();
         addAttendanceToResident(residentId, attendanceId);
