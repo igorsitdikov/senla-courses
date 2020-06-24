@@ -6,11 +6,16 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.ResidentRepository;
+import com.senla.hotel.repository.RoomHistoryRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.repository.interfaces.IResidentRepository;
+import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IResidentService;
+import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
 import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
+import com.senla.hotel.utils.csv.reader.CsvReader;
+import com.senla.hotel.utils.csv.writer.CsvWriter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +25,10 @@ public class ResidentService implements IResidentService {
     private static ResidentService residentService;
     private final IResidentRepository residentRepository = ResidentRepository.getInstance();
     private final IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
+    private final IRoomHistoryRepository roomHistoryRepository = RoomHistoryRepository.getInstance();
+
+    private ResidentService() {
+    }
 
     public static ResidentService getInstance() {
         if (residentService == null) {
@@ -53,14 +62,17 @@ public class ResidentService implements IResidentService {
     @Override
     public void addAttendanceToResident(final Long id, final Attendance attendance) throws NoSuchEntityException {
         final Resident resident = findById(id);
+        final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
+                .findById(resident.getHistory().getId());
         final List<Attendance> attendances = resident.getHistory().getAttendances();
         attendanceRepository.add(attendances, attendance);
+        history.setAttendances(attendances);
         resident.getHistory().setAttendances(attendances);
     }
 
     @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-        throws NoSuchEntityException {
+            throws NoSuchEntityException {
         final Long residentId = resident.getId();
         final Long attendanceId = attendance.getId();
         addAttendanceToResident(residentId, attendanceId);
@@ -71,8 +83,11 @@ public class ResidentService implements IResidentService {
         final Resident resident = findById(residentId);
         final Attendance attendance = (Attendance) attendanceRepository.findById(attendanceId);
         final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
+        final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
+                .findById(residentId);
         attendanceRepository.add(attendances, attendance);
         resident.getHistory().setAttendances(attendances);
+        roomHistoryRepository.addAttendance(history.getId(), attendance);
     }
 
     @Override
@@ -95,6 +110,18 @@ public class ResidentService implements IResidentService {
     public List<Resident> showResidentsSortedByCheckOutDate() {
         final List<Resident> residents = showResidents();
         return sortResidents(residents, new ResidentCheckOutComparator());
+    }
+
+    @Override
+    public void importResidents() {
+        final List<Resident>
+                residents = ParseUtils.stringToResidents(CsvReader.getInstance().read("residents"));
+        residentRepository.setResidents(residents);
+    }
+
+    @Override
+    public void exportResidents() {
+        CsvWriter.getInstance().write("residents", ParseUtils.residentsToCsv());
     }
 
     @Override

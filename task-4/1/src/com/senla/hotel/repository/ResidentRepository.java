@@ -50,6 +50,11 @@ public class ResidentRepository implements IResidentRepository {
     }
 
     @Override
+    public void setResidents(final List<Resident> residents) {
+        ResidentRepository.residents = new ArrayList<>(residents);
+    }
+
+    @Override
     public List<Resident> getResidents() {
         return residents;
     }

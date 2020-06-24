@@ -22,4 +22,8 @@ public interface IHotelAdminService {
     BigDecimal calculateBill(Long id) throws NoSuchEntityException;
 
     BigDecimal calculateBill(Resident resident) throws NoSuchEntityException;
+
+    void importHistories();
+
+    void exportHistories();
 }

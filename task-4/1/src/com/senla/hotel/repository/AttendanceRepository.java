@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AttendanceRepository implements IAttendanceRepository {
     private static AttendanceRepository attendanceRepository;
-    private static final List<Attendance> attendances = new ArrayList<>();
+    private static List<Attendance> attendances = new ArrayList<>();
 
     private AttendanceRepository() {
     }
@@ -69,7 +69,13 @@ public class AttendanceRepository implements IAttendanceRepository {
     }
 
     @Override
+    public void setAttendances(final List<Attendance> attendances) {
+        AttendanceRepository.attendances = new ArrayList<>(attendances);
+    }
+    
+    @Override
     public List<Attendance> getAttendances() {
         return attendances;
-    }
+    } 
+
 }

@@ -22,4 +22,7 @@ public interface IAttendanceService {
 
     void changeAttendancePrice(String name, BigDecimal price);
 
+    void importAttendances();
+
+    void exportAttendances();
 }

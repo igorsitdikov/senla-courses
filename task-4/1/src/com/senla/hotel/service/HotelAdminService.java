@@ -9,10 +9,13 @@ import com.senla.hotel.service.interfaces.IHotelAdminService;
 import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
 import com.senla.hotel.service.interfaces.IRoomService;
+import com.senla.hotel.utils.ParseUtils;
+import com.senla.hotel.utils.csv.reader.CsvReader;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 public class HotelAdminService implements IHotelAdminService {
     private static HotelAdminService hotelAdminService;
@@ -33,7 +36,7 @@ public class HotelAdminService implements IHotelAdminService {
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
         throws NoSuchEntityException {
-        final Room room = roomService.findRoomById(roomId);
+        final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
             final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut);
@@ -109,5 +112,19 @@ public class HotelAdminService implements IHotelAdminService {
     public BigDecimal calculateBill(final Resident resident) throws NoSuchEntityException {
         final Long id = resident.getId();
         return calculateBill(id);
+    }
+
+    @Override
+    public void importHistories() {
+        final List<RoomHistory>
+                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read("histories"));
+        roomHistoryService.importHistories(histories);
+    }
+
+    @Override
+    public void exportHistories() {
+        final List<RoomHistory>
+                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read("histories"));
+        roomHistoryService.importHistories(histories);
     }
 }

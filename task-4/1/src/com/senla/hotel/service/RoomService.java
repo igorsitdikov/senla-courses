@@ -8,9 +8,12 @@ import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
+import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
+import com.senla.hotel.utils.csv.reader.CsvReader;
+import com.senla.hotel.utils.csv.writer.CsvWriter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,14 +37,14 @@ public class RoomService implements IRoomService {
 
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
-        final Room room = findRoomById(id);
+        final Room room = findById(id);
         roomRepository.addHistory(room, history);
     }
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-        throws NoSuchEntityException {
-        final Room room = findRoomById(id);
+            throws NoSuchEntityException {
+        final Room room = findById(id);
         final List<RoomHistory> histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
             if (roomHistory.equals(history)) {
@@ -63,7 +66,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room findRoomById(final Long id) throws NoSuchEntityException {
+    public Room findById(final Long id) throws NoSuchEntityException {
         final Room room = (Room) roomRepository.findById(id);
         if (room == null) {
             throw new NoSuchEntityException(String.format("No room with id %d%n", id));
@@ -87,7 +90,7 @@ public class RoomService implements IRoomService {
         for (final Room room : rooms) {
             final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
                 result.add(room);
             }
         }
@@ -119,7 +122,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void changeRoomStatus(final Long id, final RoomStatus status) throws NoSuchEntityException {
-        final Room room = findRoomById(id);
+        final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             System.out.println("Room is already occupied");
         } else if (room.getStatus() == RoomStatus.REPAIR && status == RoomStatus.OCCUPIED) {
@@ -192,21 +195,34 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    public void importRooms() {
+        final List<Room>
+                rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read("rooms"));
+
+        roomRepository.setRooms(rooms);
+    }
+
+    @Override
+    public void exportRooms() {
+        CsvWriter.getInstance().write("rooms", ParseUtils.roomsToCsv());
+    }
+
+    @Override
     public List<Resident> showLastResidents(final Room room, final Integer amount) throws NoSuchEntityException {
         final Long id = room.getId();
         return showLastResidents(id, amount);
     }
 
     public List<Resident> showLastResidents(final Long id, final Integer amount) throws NoSuchEntityException {
-        final List<RoomHistory> histories = findRoomById(id).getHistories();
+        final List<RoomHistory> histories = findById(id).getHistories();
         List<Resident> residents = new ArrayList<>();
         if (histories.size() > amount) {
             for (int i = histories.size() - amount; i < histories.size(); i++) {
-                residents.add(findRoomById(id).getHistories().get(i).getResident());
+                residents.add(findById(id).getHistories().get(i).getResident());
             }
         } else {
             for (int i = 0; i < histories.size(); i++) {
-                residents.add(findRoomById(id).getHistories().get(i).getResident());
+                residents.add(findById(id).getHistories().get(i).getResident());
             }
         }
         return residents;

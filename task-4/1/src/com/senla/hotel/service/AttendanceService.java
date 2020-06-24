@@ -5,8 +5,11 @@ import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
+import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
 import com.senla.hotel.utils.comparator.AttendancePriceComparator;
+import com.senla.hotel.utils.csv.reader.CsvReader;
+import com.senla.hotel.utils.csv.writer.CsvWriter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ public class AttendanceService implements IAttendanceService {
         return attendanceService;
     }
 
-    public Attendance findAttendanceById(final Long id) throws NoSuchEntityException {
+    public Attendance findById(final Long id) throws NoSuchEntityException {
         final Attendance attendance = (Attendance) attendanceRepository.findById(id);
         if (attendance == null) {
             throw new NoSuchEntityException(String.format("No attendance with id %d%n", id));
@@ -72,5 +75,17 @@ public class AttendanceService implements IAttendanceService {
     @Override
     public void changeAttendancePrice(final String name, final BigDecimal price) {
         attendanceRepository.changePrice(name, price);
+    }
+
+    @Override
+    public void importAttendances() {
+        final List<Attendance>
+                attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read("attendances"));
+        attendanceRepository.setAttendances(attendances);
+    }
+
+    @Override
+    public void exportAttendances() {
+        CsvWriter.getInstance().write("attendances", ParseUtils.attendancesToCsv());
     }
 }

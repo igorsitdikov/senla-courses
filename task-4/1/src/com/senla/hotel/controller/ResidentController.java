@@ -13,7 +13,7 @@ public class ResidentController {
     private static IResidentService residentService;
 
     private ResidentController() {
-        residentService = new ResidentService();
+        residentService = ResidentService.getInstance();
     }
 
     public static ResidentController getInstance() {
@@ -45,5 +45,13 @@ public class ResidentController {
 
     public void addAttendanceToResident(final Resident resident, final Attendance attendance) throws NoSuchEntityException {
         residentService.addAttendanceToResident(resident, attendance);
+    }
+
+    public void importResidents() {
+        residentService.importResidents();
+    }
+
+    public void exportResidents() {
+        residentService.exportResidents();
     }
 }

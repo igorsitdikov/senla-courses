@@ -87,6 +87,11 @@ public class RoomRepository implements IRoomRepository {
     }
 
     @Override
+    public void setRooms(final List<Room> rooms) {
+        RoomRepository.rooms = new ArrayList<>(rooms);
+    }
+
+    @Override
     public List<Room> getRooms() {
         return rooms;
     }

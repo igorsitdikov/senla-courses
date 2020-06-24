@@ -10,6 +10,18 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public class CsvReader implements ICsvReader {
+    private static CsvReader csvReader;
+
+    private CsvReader() {
+    }
+
+    public static CsvReader getInstance() {
+        if (csvReader == null) {
+            csvReader = new CsvReader();
+        }
+        return csvReader;
+    }
+
     @Override
     public Stream<String> read(final String property) {
         final String csv = PropertyLoader.getInstance().getProperty(property);
