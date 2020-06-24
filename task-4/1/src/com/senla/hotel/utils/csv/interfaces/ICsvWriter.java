@@ -1,5 +1,7 @@
 package com.senla.hotel.utils.csv.interfaces;
 
+import java.util.List;
+
 public interface ICsvWriter {
-    void write(String filename);
+    void write(final String property, List<String> entities);
 }

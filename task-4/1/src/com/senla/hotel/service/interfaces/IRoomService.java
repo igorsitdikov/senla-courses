@@ -21,13 +21,17 @@ public interface IRoomService {
 
     List<Room> sortRooms(List<Room> rooms, Comparator<Room> comparator);
 
-    Room findRoomById(Long id) throws NoSuchEntityException;
+    Room findById(Long id) throws NoSuchEntityException;
 
     Room findRoomByRoomNumber(Integer number) throws NoSuchEntityException;
 
     List<Room> vacantOnDate(LocalDate date);
 
     List<Resident> showLastResidents(Long id, Integer number) throws NoSuchEntityException;
+
+    void importRooms();
+
+    void exportRooms();
 
     List<Resident> showLastResidents(Room room, Integer number) throws NoSuchEntityException;
 

@@ -41,4 +41,12 @@ public class AttendanceController {
     public void changePrice(final String name, final BigDecimal price) {
         attendanceService.changeAttendancePrice(name, price);
     }
+
+    public void importAttendances() {
+        attendanceService.importAttendances();
+    }
+
+    public void exportAttendances() {
+        attendanceService.exportAttendances();
+    }
 }

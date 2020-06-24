@@ -15,5 +15,7 @@ public interface IResidentRepository {
 
     int showTotalNumber();
 
+    void setResidents(List<Resident> residents);
+
     List<Resident> getResidents();
 }

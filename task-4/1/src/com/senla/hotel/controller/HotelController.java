@@ -37,4 +37,12 @@ public class HotelController {
         return hotelAdminService.calculateBill(resident);
     }
 
+    public void importHistories() {
+        hotelAdminService.importHistories();
+    }
+
+    public void exportHistories() {
+        hotelAdminService.exportHistories();
+    }
+
 }

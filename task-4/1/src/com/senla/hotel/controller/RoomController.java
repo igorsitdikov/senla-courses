@@ -85,4 +85,12 @@ public class RoomController {
     public void changeStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
         roomService.changeRoomStatus(number, status);
     }
+
+    public void importRooms() {
+        roomService.importRooms();
+    }
+
+    public void exportRooms() {
+        roomService.exportRooms();
+    }
 }

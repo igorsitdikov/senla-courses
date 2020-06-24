@@ -31,5 +31,9 @@ public interface IResidentService {
 
     List<Resident> showResidentsSortedByCheckOutDate();
 
+    void importResidents();
+
+    void exportResidents();
+
     int showCountResidents();
 }

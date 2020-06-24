@@ -19,5 +19,7 @@ public interface IAttendanceRepository {
 
     AEntity findByName(String name);
 
+    void setAttendances(List<Attendance> attendances);
+
     List<Attendance> getAttendances();
 }

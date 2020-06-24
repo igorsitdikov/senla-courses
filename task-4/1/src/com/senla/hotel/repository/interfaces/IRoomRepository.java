@@ -24,5 +24,7 @@ public interface IRoomRepository {
 
     void addHistory(Room room, RoomHistory roomHistory);
 
+    void setRooms(List<Room> rooms);
+
     List<Room> getRooms();
 }
