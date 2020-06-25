@@ -2,26 +2,26 @@ package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface IHotelAdminService {
     void checkIn(Long residentId, Long roomId, LocalDate checkIn, LocalDate checkOut)
-            throws NoSuchEntityException;
+            throws EntityNotFoundException;
 
     void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
-            throws NoSuchEntityException;
+            throws EntityNotFoundException;
 
-    void checkOut(Long residentId, LocalDate date) throws NoSuchEntityException;
+    void checkOut(Long residentId, LocalDate date) throws EntityNotFoundException;
 
     void checkOut(Resident resident, LocalDate date)
-            throws NoSuchEntityException;
+            throws EntityNotFoundException;
 
-    BigDecimal calculateBill(Long id) throws NoSuchEntityException;
+    BigDecimal calculateBill(Long id) throws EntityNotFoundException;
 
-    BigDecimal calculateBill(Resident resident) throws NoSuchEntityException;
+    BigDecimal calculateBill(Resident resident) throws EntityNotFoundException;
 
     void importHistories();
 

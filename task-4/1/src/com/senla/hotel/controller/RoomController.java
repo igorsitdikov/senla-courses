@@ -3,7 +3,7 @@ package com.senla.hotel.controller;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IRoomService;
 
@@ -62,7 +62,7 @@ public class RoomController {
         return roomService.showVacantRoomsSortedByStars();
     }
 
-    public Room showRoomDetails(final Integer roomNumber) throws NoSuchEntityException {
+    public Room showRoomDetails(final Integer roomNumber) throws EntityNotFoundException {
         return roomService.showRoomDetails(roomNumber);
     }
 
@@ -74,7 +74,7 @@ public class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException {
         return roomService.showLastResidents(room, amount);
     }
 
@@ -82,7 +82,7 @@ public class RoomController {
         return roomService.countVacantRooms();
     }
 
-    public void changeStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
+    public void changeStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException {
         roomService.changeRoomStatus(number, status);
     }
 

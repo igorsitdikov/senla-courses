@@ -5,7 +5,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.RoomHistoryService;
 
@@ -34,7 +34,7 @@ public class RoomMapper implements IEntityMapper<Room> {
             for (int i = 6; i < elements.length; i++) {
                 try {
                     historyList.add(RoomHistoryService.getInstance().findById(Long.parseLong(elements[i])));
-                } catch (NoSuchEntityException e) {
+                } catch (EntityNotFoundException e) {
                     System.err.println(String.format("No such history with id %s %s", elements[i], e));
                 }
             }

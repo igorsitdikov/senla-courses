@@ -11,7 +11,7 @@ import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.utils.PrinterUtils;
 
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 
 public class Test {
 
-    public static void main(final String[] args) throws NoSuchEntityException {
+    public static void main(final String[] args) throws EntityNotFoundException {
 
         final AttendanceController attendanceController = AttendanceController.getInstance();
         final RoomController roomController = RoomController.getInstance();

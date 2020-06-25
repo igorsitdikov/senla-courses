@@ -3,7 +3,7 @@ package com.senla.hotel.service.interfaces;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,16 +12,16 @@ public interface IResidentService {
 
     List<Resident> sortResidents(List<Resident> residents, Comparator<Resident> comparator);
 
-    Resident findById(Long id) throws NoSuchEntityException;
+    Resident findById(Long id) throws EntityNotFoundException;
 
-    void addHistoryToResident(Long id, RoomHistory roomHistory) throws NoSuchEntityException;
+    void addHistoryToResident(Long id, RoomHistory roomHistory) throws EntityNotFoundException;
 
-    void addAttendanceToResident(Long id, Attendance attendance) throws NoSuchEntityException;
+    void addAttendanceToResident(Long id, Attendance attendance) throws EntityNotFoundException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)
-            throws NoSuchEntityException;
+            throws EntityNotFoundException;
 
-    void addAttendanceToResident(Long residentId, Long attendanceId) throws NoSuchEntityException;
+    void addAttendanceToResident(Long residentId, Long attendanceId) throws EntityNotFoundException;
 
     void createResident(Resident resident);
 

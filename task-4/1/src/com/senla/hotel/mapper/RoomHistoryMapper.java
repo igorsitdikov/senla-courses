@@ -2,7 +2,7 @@ package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.ResidentService;
@@ -29,13 +29,13 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
         history.setCheckOut(LocalDate.parse(elements[2], formatter));
         try {
             history.setRoom(RoomService.getInstance().findById(Long.parseLong(elements[3])));
-        } catch (NoSuchEntityException e) {
+        } catch (EntityNotFoundException e) {
             System.err.println(String.format("No such room with id %s %s", elements[3], e));
             return null;
         }
         try {
             history.setResident(ResidentService.getInstance().findById(Long.parseLong(elements[4])));
-        } catch (NoSuchEntityException e) {
+        } catch (EntityNotFoundException e) {
             System.err.println(String.format("No such resident with id %s %s", elements[4], e));
             return null;
         }
@@ -44,7 +44,7 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
             for (int i = 5; i < elements.length; i++) {
                 try {
                     historyList.add(AttendanceService.getInstance().findById(Long.parseLong(elements[i])));
-                } catch (NoSuchEntityException e) {
+                } catch (EntityNotFoundException e) {
                     System.err.println(String.format("No such attendance with id %s %s", elements[i], e));
                 }
             }

@@ -2,7 +2,7 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.ResidentService;
 import com.senla.hotel.service.interfaces.IResidentService;
 
@@ -43,7 +43,7 @@ public class ResidentController {
         return residentService.showCountResidents();
     }
 
-    public void addAttendanceToResident(final Resident resident, final Attendance attendance) throws NoSuchEntityException {
+    public void addAttendanceToResident(final Resident resident, final Attendance attendance) throws EntityNotFoundException {
         residentService.addAttendanceToResident(resident, attendance);
     }
 

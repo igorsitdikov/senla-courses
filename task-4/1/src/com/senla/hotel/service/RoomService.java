@@ -4,7 +4,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
@@ -37,14 +37,14 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void addHistoryToRoom(final Long id, final RoomHistory history) throws NoSuchEntityException {
+    public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {
         final Room room = findById(id);
         roomRepository.addHistory(room, history);
     }
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-            throws NoSuchEntityException {
+            throws EntityNotFoundException {
         final Room room = findById(id);
         final List<RoomHistory> histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
@@ -67,19 +67,19 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room findById(final Long id) throws NoSuchEntityException {
+    public Room findById(final Long id) throws EntityNotFoundException {
         final Room room = (Room) roomRepository.findById(id);
         if (room == null) {
-            throw new NoSuchEntityException(String.format("No room with id %d%n", id));
+            throw new EntityNotFoundException(String.format("No room with id %d%n", id));
         }
         return room;
     }
 
     @Override
-    public Room findRoomByRoomNumber(final Integer number) throws NoSuchEntityException {
+    public Room findRoomByRoomNumber(final Integer number) throws EntityNotFoundException {
         final Room room = (Room) roomRepository.findByRoomNumber(number);
         if (room == null) {
-            throw new NoSuchEntityException(String.format("No room with № %d%n", number));
+            throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }
         return room;
     }
@@ -104,7 +104,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void changeRoomPrice(final Long id, final BigDecimal price) {
+    public void changeRoomPrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
         changePrice(id, price);
     }
 
@@ -113,7 +113,7 @@ public class RoomService implements IRoomService {
         changePrice(number, price);
     }
 
-    private void changePrice(final Long id, final BigDecimal price) {
+    private void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
         roomRepository.changePrice(id, price);
     }
 
@@ -122,7 +122,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void changeRoomStatus(final Long id, final RoomStatus status) throws NoSuchEntityException {
+    public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException {
         final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             System.out.println("Room is already occupied");
@@ -134,7 +134,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void changeRoomStatus(final Integer number, final RoomStatus status) throws NoSuchEntityException {
+    public void changeRoomStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException {
         final Room room = findRoomByRoomNumber(number);
         changeRoomStatus(room.getId(), status);
     }
@@ -191,7 +191,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public Room showRoomDetails(final Integer number) throws NoSuchEntityException {
+    public Room showRoomDetails(final Integer number) throws EntityNotFoundException {
         return findRoomByRoomNumber(number);
     }
 
@@ -209,12 +209,12 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException {
         final Long id = room.getId();
         return showLastResidents(id, amount);
     }
 
-    public List<Resident> showLastResidents(final Long id, final Integer amount) throws NoSuchEntityException {
+    public List<Resident> showLastResidents(final Long id, final Integer amount) throws EntityNotFoundException {
         final List<RoomHistory> histories = findById(id).getHistories();
         List<Resident> residents = new ArrayList<>();
         if (histories.size() > amount) {
