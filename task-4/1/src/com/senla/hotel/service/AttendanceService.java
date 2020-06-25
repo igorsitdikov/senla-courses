@@ -1,7 +1,7 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.entity.Attendance;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
@@ -31,12 +31,8 @@ public class AttendanceService implements IAttendanceService {
         return attendanceService;
     }
 
-    public Attendance findById(final Long id) throws NoSuchEntityException {
-        final Attendance attendance = (Attendance) attendanceRepository.findById(id);
-        if (attendance == null) {
-            throw new NoSuchEntityException(String.format("No attendance with id %d%n", id));
-        }
-        return attendance;
+    public Attendance findById(final Long id) throws EntityNotFoundException {
+        return (Attendance) attendanceRepository.findById(id);
     }
 
     @Override
@@ -69,7 +65,7 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public void changeAttendancePrice(final Long id, final BigDecimal price) {
+    public void changeAttendancePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
         attendanceRepository.changePrice(id, price);
     }
 

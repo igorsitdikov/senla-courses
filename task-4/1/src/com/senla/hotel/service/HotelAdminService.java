@@ -4,18 +4,15 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
 import com.senla.hotel.service.interfaces.IRoomService;
-import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.csv.reader.CsvReader;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class HotelAdminService implements IHotelAdminService {
     private static final String PROPERTY = "histories";
@@ -36,7 +33,7 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
-        throws NoSuchEntityException {
+        throws EntityNotFoundException {
         final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
@@ -57,13 +54,13 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-        throws NoSuchEntityException {
+        throws EntityNotFoundException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 
     @Override
     public void checkOut(final Long residentId, final LocalDate date)
-        throws NoSuchEntityException {
+        throws EntityNotFoundException {
         final Resident resident = residentService.findById(residentId);
         final RoomHistory history = resident.getHistory();
         final Room room = history.getRoom();
@@ -78,12 +75,12 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void checkOut(final Resident resident, final LocalDate date)
-        throws NoSuchEntityException {
+        throws EntityNotFoundException {
         checkOut(resident.getId(), date);
     }
 
     @Override
-    public BigDecimal calculateBill(final Long id) throws NoSuchEntityException {
+    public BigDecimal calculateBill(final Long id) throws EntityNotFoundException {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
@@ -110,7 +107,7 @@ public class HotelAdminService implements IHotelAdminService {
     }
 
     @Override
-    public BigDecimal calculateBill(final Resident resident) throws NoSuchEntityException {
+    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException {
         final Long id = resident.getId();
         return calculateBill(id);
     }

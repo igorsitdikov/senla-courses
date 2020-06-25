@@ -1,16 +1,8 @@
 package com.senla.hotel.mapper;
 
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Gender;
-import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
-import com.senla.hotel.service.AttendanceService;
-import com.senla.hotel.service.RoomHistoryService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ResidentMapper implements IEntityMapper<Resident> {
     @Override

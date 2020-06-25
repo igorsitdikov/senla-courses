@@ -1,6 +1,7 @@
 package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -18,7 +19,7 @@ public interface IAttendanceService {
 
     List<Attendance> showAttendancesSortedByPrice();
 
-    void changeAttendancePrice(Long id, BigDecimal price);
+    void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException;
 
     void changeAttendancePrice(String name, BigDecimal price);
 

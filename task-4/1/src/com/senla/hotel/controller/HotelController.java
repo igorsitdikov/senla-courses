@@ -2,7 +2,7 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.exceptions.NoSuchEntityException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.HotelAdminService;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 
@@ -25,15 +25,15 @@ public class HotelController {
     }
 
     public void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
-        throws NoSuchEntityException {
+        throws EntityNotFoundException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
-    public void checkOut(Resident resident, LocalDate date) throws NoSuchEntityException {
+    public void checkOut(Resident resident, LocalDate date) throws EntityNotFoundException {
         hotelAdminService.checkOut(resident, date);
     }
 
-    public BigDecimal calculateBill(Resident resident) throws NoSuchEntityException {
+    public BigDecimal calculateBill(Resident resident) throws EntityNotFoundException {
         return hotelAdminService.calculateBill(resident);
     }
 

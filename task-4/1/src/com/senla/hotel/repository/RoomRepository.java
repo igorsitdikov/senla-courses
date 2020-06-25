@@ -4,6 +4,7 @@ import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
 
 import java.math.BigDecimal;
@@ -49,33 +50,33 @@ public class RoomRepository implements IRoomRepository {
     }
 
     @Override
-    public AEntity findById(final Long id) {
+    public AEntity findById(final Long id) throws EntityNotFoundException {
         for (final Room room : rooms) {
             if (room.getId().equals(id)) {
                 return room;
             }
         }
-        return null;
+        throw new EntityNotFoundException(String.format("No room with id %d%n", id));
     }
 
     @Override
-    public AEntity findByRoomNumber(final Integer number) {
+    public AEntity findByRoomNumber(final Integer number) throws EntityNotFoundException {
         for (final Room room : rooms) {
             if (room.getNumber().equals(number)) {
                 return room;
             }
         }
-        return null;
+        throw new EntityNotFoundException(String.format("No room with number %d%n", number));
     }
 
     @Override
-    public void changePrice(final Long id, final BigDecimal price) {
+    public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
         final Room room = (Room) findById(id);
         room.setPrice(price);
     }
 
     @Override
-    public void changePrice(final Integer number, final BigDecimal price) {
+    public void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
         final Room room = (Room) findByRoomNumber(number);
         room.setPrice(price);
     }
