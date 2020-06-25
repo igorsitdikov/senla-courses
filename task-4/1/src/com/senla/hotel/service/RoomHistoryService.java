@@ -1,16 +1,19 @@
 package com.senla.hotel.service;
 
+import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.NoSuchEntityException;
 import com.senla.hotel.repository.RoomHistoryRepository;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
+import com.senla.hotel.utils.csv.reader.CsvReader;
 import com.senla.hotel.utils.csv.writer.CsvWriter;
 
 import java.util.List;
 
 public class RoomHistoryService implements IRoomHistoryService {
+    private static final String PROPERTY = "histories";
     private static RoomHistoryService roomHistoryService;
     private IRoomHistoryRepository roomHistoryRepository = RoomHistoryRepository.getInstance();
 
@@ -39,13 +42,15 @@ public class RoomHistoryService implements IRoomHistoryService {
     }
 
     @Override
-    public void importHistories(List<RoomHistory> histories) {
+    public void importHistories() {
+        final List<RoomHistory>
+                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read(PROPERTY));
         roomHistoryRepository.setHistories(histories);
     }
 
     @Override
     public void exportHistories() {
-        CsvWriter.getInstance().write("histories", ParseUtils.historiesToCsv());
+        CsvWriter.getInstance().write(PROPERTY, ParseUtils.historiesToCsv());
     }
 
     @Override

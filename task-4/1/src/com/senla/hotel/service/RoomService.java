@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RoomService implements IRoomService {
+    private static final String PROPERTY = "rooms";
     private static RoomService roomService;
     private IRoomRepository roomRepository = RoomRepository.getInstance();
 
@@ -197,14 +198,14 @@ public class RoomService implements IRoomService {
     @Override
     public void importRooms() {
         final List<Room>
-                rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read("rooms"));
+                rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read(PROPERTY));
 
         roomRepository.setRooms(rooms);
     }
 
     @Override
     public void exportRooms() {
-        CsvWriter.getInstance().write("rooms", ParseUtils.roomsToCsv());
+        CsvWriter.getInstance().write(PROPERTY, ParseUtils.roomsToCsv());
     }
 
     @Override

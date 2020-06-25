@@ -10,7 +10,7 @@ public interface IRoomHistoryService {
 
     RoomHistory findById(Long id) throws NoSuchEntityException;
 
-    void importHistories(List<RoomHistory> histories);
+    void importHistories();
 
     void exportHistories();
 

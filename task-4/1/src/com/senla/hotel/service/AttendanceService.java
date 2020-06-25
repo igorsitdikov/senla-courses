@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AttendanceService implements IAttendanceService {
+    private static final String PROPERTY = "attendances";
     private static AttendanceService attendanceService;
     private IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
 
@@ -80,12 +81,12 @@ public class AttendanceService implements IAttendanceService {
     @Override
     public void importAttendances() {
         final List<Attendance>
-                attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read("attendances"));
+                attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read(PROPERTY));
         attendanceRepository.setAttendances(attendances);
     }
 
     @Override
     public void exportAttendances() {
-        CsvWriter.getInstance().write("attendances", ParseUtils.attendancesToCsv());
+        CsvWriter.getInstance().write(PROPERTY, ParseUtils.attendancesToCsv());
     }
 }

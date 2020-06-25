@@ -31,7 +31,7 @@ public class RoomMapper implements IEntityMapper<Room> {
 
         List<RoomHistory> historyList = new ArrayList<>();
         if (elements.length > 6) {
-            for (int i = 5; i < elements.length; i++) {
+            for (int i = 6; i < elements.length; i++) {
                 try {
                     historyList.add(RoomHistoryService.getInstance().findById(Long.parseLong(elements[i])));
                 } catch (NoSuchEntityException e) {

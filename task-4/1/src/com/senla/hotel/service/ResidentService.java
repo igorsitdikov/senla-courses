@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ResidentService implements IResidentService {
+    private static final String PROPERTY = "residents";
     private static ResidentService residentService;
     private final IResidentRepository residentRepository = ResidentRepository.getInstance();
     private final IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
@@ -115,13 +116,13 @@ public class ResidentService implements IResidentService {
     @Override
     public void importResidents() {
         final List<Resident>
-                residents = ParseUtils.stringToResidents(CsvReader.getInstance().read("residents"));
+                residents = ParseUtils.stringToResidents(CsvReader.getInstance().read(PROPERTY));
         residentRepository.setResidents(residents);
     }
 
     @Override
     public void exportResidents() {
-        CsvWriter.getInstance().write("residents", ParseUtils.residentsToCsv());
+        CsvWriter.getInstance().write(PROPERTY, ParseUtils.residentsToCsv());
     }
 
     @Override
