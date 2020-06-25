@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class HotelAdminService implements IHotelAdminService {
+    private static final String PROPERTY = "histories";
     private static HotelAdminService hotelAdminService;
     private final IRoomService roomService = RoomService.getInstance();
     private final IResidentService residentService = ResidentService.getInstance();
@@ -116,15 +117,11 @@ public class HotelAdminService implements IHotelAdminService {
 
     @Override
     public void importHistories() {
-        final List<RoomHistory>
-                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read("histories"));
-        roomHistoryService.importHistories(histories);
+        roomHistoryService.importHistories();
     }
 
     @Override
     public void exportHistories() {
-        final List<RoomHistory>
-                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read("histories"));
-        roomHistoryService.importHistories(histories);
+        roomHistoryService.exportHistories();
     }
 }
