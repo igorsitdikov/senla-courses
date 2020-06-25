@@ -11,6 +11,7 @@ import java.util.List;
 public class ResidentRepository implements IResidentRepository {
     private static ResidentRepository residentRepository;
     private static List<Resident> residents = new ArrayList<>();
+    private static Long counter = 0L;
 
     private ResidentRepository() {
     }
@@ -24,7 +25,7 @@ public class ResidentRepository implements IResidentRepository {
 
     @Override
     public AEntity add(final AEntity entity) {
-        entity.setId((long) residents.size());
+        entity.setId(++counter);
         residents.add((Resident) entity);
         return entity;
     }

@@ -13,6 +13,7 @@ import java.util.List;
 public class RoomRepository implements IRoomRepository {
     private static RoomRepository roomRepository;
     private static List<Room> rooms = new ArrayList<>();
+    private static Long counter = 0L;
 
     private RoomRepository() {
     }
@@ -42,7 +43,7 @@ public class RoomRepository implements IRoomRepository {
 
     @Override
     public AEntity add(final AEntity room) {
-        room.setId((long) rooms.size());
+        room.setId(++counter);
         rooms.add((Room) room);
         return room;
     }
