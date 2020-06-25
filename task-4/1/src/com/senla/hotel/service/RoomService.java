@@ -109,7 +109,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void changeRoomPrice(final Integer number, final BigDecimal price) {
+    public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
         changePrice(number, price);
     }
 
@@ -117,7 +117,7 @@ public class RoomService implements IRoomService {
         roomRepository.changePrice(id, price);
     }
 
-    private void changePrice(final Integer number, final BigDecimal price) {
+    private void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
         roomRepository.changePrice(number, price);
     }
 

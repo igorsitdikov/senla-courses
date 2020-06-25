@@ -27,10 +27,8 @@ public class CsvReader implements ICsvReader {
         final String csv = PropertyLoader.getInstance().getProperty(property);
         try {
             return Files.lines(Path.of(csv));
-        } catch (final FileNotFoundException e) {
-            System.err.println(String.format("Failed to read from file %s %s", csv, e));
-        } catch (final IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println(String.format("File not found %s %s%n", csv, e));
         }
         return null;
     }

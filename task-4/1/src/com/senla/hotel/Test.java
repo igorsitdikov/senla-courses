@@ -155,10 +155,10 @@ public class Test {
         PrinterUtils.show("Vacant rooms on date after updating status room №301");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
 
-        roomController.exportRooms();
-        residentController.exportResidents();
-        attendanceController.exportAttendances();
-        hotelController.exportHistories();
+//        roomController.exportRooms();
+//        residentController.exportResidents();
+//        attendanceController.exportAttendances();
+//        hotelController.exportHistories();
 
         roomController.importRooms();
         residentController.importResidents();

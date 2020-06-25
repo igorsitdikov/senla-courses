@@ -70,7 +70,7 @@ public class RoomController {
         return roomService.showVacantRoomsOnDate(date);
     }
 
-    public void changePrice(final Integer roomNumber, final BigDecimal price) {
+    public void changePrice(final Integer roomNumber, final BigDecimal price) throws EntityNotFoundException {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
