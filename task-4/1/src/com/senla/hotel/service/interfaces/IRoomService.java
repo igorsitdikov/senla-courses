@@ -39,7 +39,7 @@ public interface IRoomService {
 
     void changeRoomPrice(Long id, BigDecimal price) throws EntityNotFoundException;
 
-    void changeRoomPrice(Integer number, BigDecimal price);
+    void changeRoomPrice(Integer number, BigDecimal price) throws EntityNotFoundException;
 
     void changeRoomStatus(Long id, RoomStatus status) throws EntityNotFoundException;
 

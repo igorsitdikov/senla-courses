@@ -38,7 +38,7 @@ public class PropertyLoader {
         try (InputStream input = new FileInputStream(this.filename)) {
             properties.load(input);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(String.format("File not found %s %s%n", filename, e));
         }
     }
 
