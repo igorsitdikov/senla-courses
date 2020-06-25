@@ -1,6 +1,7 @@
 package com.senla.hotel.utils.settings;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -8,7 +9,6 @@ import java.util.Properties;
 public class PropertyLoader {
     private static PropertyLoader propertyLoader;
     private Properties properties = new Properties();
-    private InputStream input = null;
     private String filename = "resources/config.properties";
 
     private PropertyLoader() {
@@ -35,19 +35,10 @@ public class PropertyLoader {
     }
 
     private void init() {
-        try {
-            input = new FileInputStream(this.filename);
+        try (InputStream input = new FileInputStream(this.filename)) {
             properties.load(input);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
     }
 
