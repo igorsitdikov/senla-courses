@@ -12,6 +12,7 @@ import java.util.List;
 public class RoomHistoryRepository implements IRoomHistoryRepository {
     private static RoomHistoryRepository roomHistoryRepository;
     private static List<RoomHistory> histories = new ArrayList<>();
+    private static Long counter = 0L;
 
     private RoomHistoryRepository() {
     }
@@ -43,7 +44,7 @@ public class RoomHistoryRepository implements IRoomHistoryRepository {
 
     @Override
     public AEntity add(final AEntity entity) {
-        entity.setId((long) histories.size());
+        entity.setId(++counter);
         histories.add((RoomHistory) entity);
         return entity;
     }

@@ -11,6 +11,7 @@ import java.util.List;
 public class AttendanceRepository implements IAttendanceRepository {
     private static AttendanceRepository attendanceRepository;
     private static List<Attendance> attendances = new ArrayList<>();
+    private static Long counter = 0L;
 
     private AttendanceRepository() {
     }
@@ -24,7 +25,7 @@ public class AttendanceRepository implements IAttendanceRepository {
 
     @Override
     public AEntity add(final AEntity entity) {
-        entity.setId((long) attendances.size() + 1);
+        entity.setId(++counter);
         attendances.add((Attendance) entity);
         return entity;
     }
