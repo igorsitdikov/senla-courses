@@ -21,13 +21,10 @@ public class CsvWriter implements ICsvWriter {
     }
 
     @Override
-    public void write(final String property, List<String> entities) {
+    public void write(final String property, final List<String> entities) {
         final String csv = PropertyLoader.getInstance().getProperty(property);
-
-        try {
-            final PrintWriter pw = new PrintWriter(csv);
+        try (final PrintWriter pw = new PrintWriter(csv)) {
             entities.forEach(pw::println);
-            pw.close();
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }

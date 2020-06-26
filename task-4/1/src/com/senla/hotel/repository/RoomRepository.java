@@ -28,7 +28,7 @@ public class RoomRepository implements IRoomRepository {
 
     @Override
     public List<Room> getVacantRooms() {
-        List<Room> vacantRooms = new ArrayList<>();
+        final List<Room> vacantRooms = new ArrayList<>();
         for (final Room room : rooms) {
             if (room.getStatus() == RoomStatus.VACANT) {
                 vacantRooms.add(room);
@@ -83,7 +83,7 @@ public class RoomRepository implements IRoomRepository {
 
     @Override
     public void addHistory(final Room room, final RoomHistory roomHistory) {
-        List<RoomHistory> histories = room.getHistories();
+        final List<RoomHistory> histories = room.getHistories();
         histories.add(roomHistory);
         room.setHistories(histories);
     }

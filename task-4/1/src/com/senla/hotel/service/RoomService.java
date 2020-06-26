@@ -87,7 +87,7 @@ public class RoomService implements IRoomService {
     @Override
     public List<Room> vacantOnDate(final LocalDate date) {
         final List<Room> rooms = roomRepository.getRooms();
-        List<Room> result = new ArrayList<>();
+        final List<Room> result = new ArrayList<>();
         for (final Room room : rooms) {
             final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
@@ -216,7 +216,7 @@ public class RoomService implements IRoomService {
 
     public List<Resident> showLastResidents(final Long id, final Integer amount) throws EntityNotFoundException {
         final List<RoomHistory> histories = findById(id).getHistories();
-        List<Resident> residents = new ArrayList<>();
+        final List<Resident> residents = new ArrayList<>();
         if (histories.size() > amount) {
             for (int i = histories.size() - amount; i < histories.size(); i++) {
                 residents.add(findById(id).getHistories().get(i).getResident());
