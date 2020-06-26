@@ -24,16 +24,16 @@ public class HotelController {
         return hotelController;
     }
 
-    public void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
+    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
         throws EntityNotFoundException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
-    public void checkOut(Resident resident, LocalDate date) throws EntityNotFoundException {
+    public void checkOut(final Resident resident, final LocalDate date) throws EntityNotFoundException {
         hotelAdminService.checkOut(resident, date);
     }
 
-    public BigDecimal calculateBill(Resident resident) throws EntityNotFoundException {
+    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException {
         return hotelAdminService.calculateBill(resident);
     }
 

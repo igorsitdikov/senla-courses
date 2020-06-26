@@ -15,7 +15,7 @@ public class PropertyLoader {
         init();
     }
 
-    private PropertyLoader(String filename) {
+    private PropertyLoader(final String filename) {
         this.filename = filename;
         init();
     }
@@ -27,7 +27,7 @@ public class PropertyLoader {
         return propertyLoader;
     }
 
-    public static PropertyLoader getInstance(String filename) {
+    public static PropertyLoader getInstance(final String filename) {
         if (propertyLoader == null) {
             propertyLoader = new PropertyLoader(filename);
         }
@@ -35,14 +35,14 @@ public class PropertyLoader {
     }
 
     private void init() {
-        try (InputStream input = new FileInputStream(this.filename)) {
+        try (final InputStream input = new FileInputStream(this.filename)) {
             properties.load(input);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             System.err.println(String.format("File not found %s %s%n", filename, e));
         }
     }
 
-    public String getProperty(String key) {
+    public String getProperty(final String key) {
         return properties.getProperty(key);
     }
 }

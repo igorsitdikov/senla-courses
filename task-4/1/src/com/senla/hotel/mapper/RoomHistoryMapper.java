@@ -17,34 +17,34 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Override
-    public RoomHistory sourceToDestination(String source) {
+    public RoomHistory sourceToDestination(final String source) {
         if (source == null) {
-            return null;
+            throw new NullPointerException();
         }
 
         final String[] elements = source.split(SEPARATOR);
-        RoomHistory history = new RoomHistory();
+        final RoomHistory history = new RoomHistory();
         history.setId(Long.valueOf(elements[0]));
         history.setCheckIn(LocalDate.parse(elements[1], formatter));
         history.setCheckOut(LocalDate.parse(elements[2], formatter));
         try {
             history.setRoom(RoomService.getInstance().findById(Long.parseLong(elements[3])));
-        } catch (EntityNotFoundException e) {
+        } catch (final EntityNotFoundException e) {
             System.err.println(String.format("No such room with id %s %s", elements[3], e));
-            return null;
+            throw new NullPointerException();
         }
         try {
             history.setResident(ResidentService.getInstance().findById(Long.parseLong(elements[4])));
-        } catch (EntityNotFoundException e) {
+        } catch (final EntityNotFoundException e) {
             System.err.println(String.format("No such resident with id %s %s", elements[4], e));
-            return null;
+            throw new NullPointerException();
         }
-        List<Attendance> historyList = new ArrayList<>();
+        final List<Attendance> historyList = new ArrayList<>();
         if (elements.length > 5) {
             for (int i = 5; i < elements.length; i++) {
                 try {
                     historyList.add(AttendanceService.getInstance().findById(Long.parseLong(elements[i])));
-                } catch (EntityNotFoundException e) {
+                } catch (final EntityNotFoundException e) {
                     System.err.println(String.format("No such attendance with id %s %s", elements[i], e));
                 }
             }
@@ -55,9 +55,9 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
     }
 
     @Override
-    public String destinationToSource(RoomHistory destination) {
+    public String destinationToSource(final RoomHistory destination) {
         if (destination == null) {
-            return null;
+            throw new NullPointerException();
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());

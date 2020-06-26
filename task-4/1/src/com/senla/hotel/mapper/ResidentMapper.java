@@ -6,12 +6,12 @@ import com.senla.hotel.mapper.interfaces.IEntityMapper;
 
 public class ResidentMapper implements IEntityMapper<Resident> {
     @Override
-    public Resident sourceToDestination(String source) {
+    public Resident sourceToDestination(final String source) {
         if (source == null) {
-            return null;
+            throw new NullPointerException();
         }
         final String[] elements = source.split(SEPARATOR);
-        Resident resident = new Resident();
+        final Resident resident = new Resident();
         resident.setId(Long.valueOf(elements[0]));
         resident.setFirstName(elements[1]);
         resident.setLastName(elements[2]);
@@ -23,9 +23,9 @@ public class ResidentMapper implements IEntityMapper<Resident> {
     }
 
     @Override
-    public String destinationToSource(Resident destination) {
+    public String destinationToSource(final Resident destination) {
         if (destination == null) {
-            return null;
+            throw new NullPointerException();
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());

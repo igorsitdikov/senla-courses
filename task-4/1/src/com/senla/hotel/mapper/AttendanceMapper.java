@@ -10,7 +10,7 @@ public class AttendanceMapper implements IEntityMapper<Attendance> {
     @Override
     public Attendance sourceToDestination(final String source) {
         if (source == null) {
-            return null;
+            throw new NullPointerException();
         }
         final String[] elements = source.split(SEPARATOR);
 
@@ -25,7 +25,7 @@ public class AttendanceMapper implements IEntityMapper<Attendance> {
     @Override
     public String destinationToSource(final Attendance destination) {
         if (destination == null) {
-            return null;
+            throw new NullPointerException();
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());

@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class HotelAdminService implements IHotelAdminService {
-    private static final String PROPERTY = "histories";
     private static HotelAdminService hotelAdminService;
     private final IRoomService roomService = RoomService.getInstance();
     private final IResidentService residentService = ResidentService.getInstance();

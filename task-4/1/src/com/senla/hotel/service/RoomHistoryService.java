@@ -33,7 +33,7 @@ public class RoomHistoryService implements IRoomHistoryService {
 
     @Override
     public RoomHistory findById(final Long id) throws EntityNotFoundException {
-        RoomHistory history = (RoomHistory) roomHistoryRepository.findById(id);
+        final RoomHistory history = (RoomHistory) roomHistoryRepository.findById(id);
         if (history == null) {
             throw new EntityNotFoundException(String.format("No history with id %d%n", id));
         }
