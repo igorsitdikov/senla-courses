@@ -2,13 +2,14 @@ package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.Gender;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 
 public class ResidentMapper implements IEntityMapper<Resident> {
     @Override
-    public Resident sourceToDestination(final String source) {
-        if (source == null) {
-            throw new NullPointerException();
+    public Resident sourceToDestination(final String source) throws EntityIsEmptyException {
+        if (source.isEmpty()) {
+            throw new EntityIsEmptyException("Resident is empty");
         }
         final String[] elements = source.split(SEPARATOR);
         final Resident resident = new Resident();
@@ -23,9 +24,9 @@ public class ResidentMapper implements IEntityMapper<Resident> {
     }
 
     @Override
-    public String destinationToSource(final Resident destination) {
+    public String destinationToSource(final Resident destination) throws EntityIsEmptyException {
         if (destination == null) {
-            throw new NullPointerException();
+            throw new EntityIsEmptyException("Resident is null");
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());

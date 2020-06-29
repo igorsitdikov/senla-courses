@@ -1,6 +1,7 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 
 import java.math.BigDecimal;
@@ -8,9 +9,9 @@ import java.math.BigDecimal;
 public class AttendanceMapper implements IEntityMapper<Attendance> {
 
     @Override
-    public Attendance sourceToDestination(final String source) {
-        if (source == null) {
-            throw new NullPointerException();
+    public Attendance sourceToDestination(final String source) throws EntityIsEmptyException {
+        if (source.isEmpty()) {
+            throw new EntityIsEmptyException("Attendance is empty");
         }
         final String[] elements = source.split(SEPARATOR);
 
@@ -23,9 +24,9 @@ public class AttendanceMapper implements IEntityMapper<Attendance> {
     }
 
     @Override
-    public String destinationToSource(final Attendance destination) {
+    public String destinationToSource(final Attendance destination) throws EntityIsEmptyException {
         if (destination == null) {
-            throw new NullPointerException();
+            throw new EntityIsEmptyException("Attendance is null");
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());
