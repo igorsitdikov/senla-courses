@@ -5,6 +5,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.RoomHistoryService;
@@ -15,9 +16,9 @@ import java.util.List;
 
 public class RoomMapper implements IEntityMapper<Room> {
     @Override
-    public Room sourceToDestination(String source) {
-        if (source == null) {
-            return null;
+    public Room sourceToDestination(String source) throws EntityIsEmptyException {
+        if (source.isEmpty()) {
+            throw new EntityIsEmptyException("Room string is empty");
         }
 
         final String[] elements = source.split(SEPARATOR);
@@ -45,9 +46,9 @@ public class RoomMapper implements IEntityMapper<Room> {
     }
 
     @Override
-    public String destinationToSource(Room destination) {
+    public String destinationToSource(Room destination) throws EntityIsEmptyException {
         if (destination == null) {
-            return null;
+            throw new EntityIsEmptyException("Room is null");
         }
 
         final StringBuilder sb = new StringBuilder();

@@ -9,7 +9,7 @@ import java.util.Properties;
 public class PropertyLoader {
     private static PropertyLoader propertyLoader;
     private Properties properties = new Properties();
-    private String filename = "resources/config.properties";
+    private String filename = "task-4/1/src/main/resources/config.properties";
 
     private PropertyLoader() {
         init();

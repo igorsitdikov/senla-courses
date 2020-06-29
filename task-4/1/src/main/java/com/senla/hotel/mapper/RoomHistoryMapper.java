@@ -2,6 +2,7 @@ package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.AttendanceService;
@@ -17,9 +18,9 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Override
-    public RoomHistory sourceToDestination(final String source) {
-        if (source == null) {
-            throw new NullPointerException();
+    public RoomHistory sourceToDestination(final String source) throws EntityIsEmptyException {
+        if (source.isEmpty()) {
+            throw new EntityIsEmptyException("RoomHistory is null");
         }
 
         final String[] elements = source.split(SEPARATOR);
@@ -55,9 +56,9 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
     }
 
     @Override
-    public String destinationToSource(final RoomHistory destination) {
+    public String destinationToSource(final RoomHistory destination) throws EntityIsEmptyException {
         if (destination == null) {
-            throw new NullPointerException();
+            throw new EntityIsEmptyException("RoomHistory is empty");
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(destination.getId());
