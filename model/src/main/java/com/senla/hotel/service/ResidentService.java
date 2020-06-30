@@ -10,6 +10,7 @@ import com.senla.hotel.repository.RoomHistoryRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.repository.interfaces.IResidentRepository;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
+import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
@@ -25,8 +26,8 @@ public class ResidentService implements IResidentService {
     private static final String PROPERTY = "residents";
     private static ResidentService residentService;
     private final IResidentRepository residentRepository = ResidentRepository.getInstance();
-    private final IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
     private final IRoomHistoryRepository roomHistoryRepository = RoomHistoryRepository.getInstance();
+    private final IAttendanceService attendanceService = AttendanceService.getInstance();
 
     private ResidentService() {
     }
@@ -66,7 +67,7 @@ public class ResidentService implements IResidentService {
         final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
                 .findById(resident.getHistory().getId());
         final List<Attendance> attendances = resident.getHistory().getAttendances();
-        attendanceRepository.add(attendances, attendance);
+        attendanceService.add(attendances, attendance);
         history.setAttendances(attendances);
         resident.getHistory().setAttendances(attendances);
     }
@@ -82,11 +83,11 @@ public class ResidentService implements IResidentService {
     @Override
     public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException {
         final Resident resident = findById(residentId);
-        final Attendance attendance = (Attendance) attendanceRepository.findById(attendanceId);
+        final Attendance attendance = attendanceService.findById(attendanceId);
         final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
         final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
                 .findById(residentId);
-        attendanceRepository.add(attendances, attendance);
+        attendanceService.add(attendances, attendance);
         resident.getHistory().setAttendances(attendances);
         roomHistoryRepository.addAttendance(history.getId(), attendance);
     }
