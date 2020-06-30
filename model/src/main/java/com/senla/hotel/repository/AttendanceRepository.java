@@ -44,13 +44,6 @@ public class AttendanceRepository implements IAttendanceRepository {
     }
 
     @Override
-    public List<AEntity> add(final List<Attendance> attendances, final AEntity entity) {
-        final List<AEntity> result = new ArrayList<>(attendances);
-        result.add(entity);
-        return result;
-    }
-
-    @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
         for (final Attendance attendance : attendances) {
             if (attendance.getId().equals(id)) {
@@ -74,10 +67,10 @@ public class AttendanceRepository implements IAttendanceRepository {
     public void setAttendances(final List<Attendance> attendances) {
         AttendanceRepository.attendances = new ArrayList<>(attendances);
     }
-    
+
     @Override
     public List<Attendance> getAttendances() {
         return attendances;
-    } 
+    }
 
 }
