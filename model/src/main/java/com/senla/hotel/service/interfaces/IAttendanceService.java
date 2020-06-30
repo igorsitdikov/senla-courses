@@ -1,5 +1,6 @@
 package com.senla.hotel.service.interfaces;
 
+import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 
@@ -11,6 +12,8 @@ public interface IAttendanceService {
 
     List<Attendance> sortAttendances(List<Attendance> attendances, Comparator<Attendance> comparator);
 
+    Attendance findById(Long id) throws EntityNotFoundException;
+
     void createAttendance(Attendance attendance);
 
     List<Attendance> showAttendances();
@@ -18,6 +21,8 @@ public interface IAttendanceService {
     List<Attendance> showAttendancesSortedByName();
 
     List<Attendance> showAttendancesSortedByPrice();
+
+    List<AEntity> add(List<Attendance> attendances, AEntity entity);
 
     void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException;
 

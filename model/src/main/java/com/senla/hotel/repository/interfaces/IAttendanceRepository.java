@@ -14,8 +14,6 @@ public interface IAttendanceRepository {
 
     void changePrice(String name, BigDecimal price);
 
-    List<AEntity> add(List<Attendance> attendances, AEntity entity);
-
     AEntity findById(Long id) throws EntityNotFoundException;
 
     AEntity findByName(String name);
