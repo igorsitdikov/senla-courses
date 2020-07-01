@@ -1,13 +1,13 @@
 package com.senla.hotel.entity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RoomHistory extends AEntity {
     private Room room;
     private Resident resident;
-    private List<Attendance> attendances = new ArrayList<>();
+    private List<Attendance> attendances = new LinkedList<>();
     private LocalDate checkIn;
     private LocalDate checkOut;
 

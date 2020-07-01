@@ -12,6 +12,7 @@ import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.utils.PrinterUtils;
 import com.senla.hotel.utils.SerializationUtils;
 
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 
 public class Test {
 
-    public static void main(final String[] args) throws EntityNotFoundException {
+    public static void main(final String[] args) throws EntityNotFoundException, RoomStatusChangingException {
         final AttendanceController attendanceController = AttendanceController.getInstance();
         final RoomController roomController = RoomController.getInstance();
         final ResidentController residentController = ResidentController.getInstance();
@@ -150,7 +151,11 @@ public class Test {
         roomController.changePrice(203, BigDecimal.valueOf(2.0));
         PrinterUtils.show("Vacant rooms on date after updating status room №203");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
-        roomController.changeStatus(301, RoomStatus.REPAIR);
+        try {
+            roomController.changeStatus(301, RoomStatus.REPAIR);
+        } catch (final RoomStatusChangingException e) {
+            System.err.println(e.getMessage());
+        }
 
         PrinterUtils.show("Vacant rooms on date after updating status room №301");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));

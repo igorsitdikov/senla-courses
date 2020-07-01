@@ -46,20 +46,15 @@ public class SerializationUtils {
             final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(STATE_HOTEL));
             final List<List<? extends AEntity>> entitiesLists =
                 (List<List<? extends AEntity>>) objectInputStream.readObject();
-            System.out.println(entitiesLists.size());
             entitiesLists.forEach(entitiesList -> {
                 if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Attendance) {
                     AttendanceRepository.getInstance().setAttendances((List<Attendance>) entitiesList);
-                    System.out.println("Attendances");
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Room) {
                     RoomRepository.getInstance().setRooms((List<Room>) entitiesList);
-                    System.out.println("Rooms");
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof RoomHistory) {
                     RoomHistoryRepository.getInstance().setHistories((List<RoomHistory>) entitiesList);
-                    System.out.println("RoomHistories");
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Resident) {
                     ResidentRepository.getInstance().setResidents((List<Resident>) entitiesList);
-                    System.out.println("Residents");
                 }
             });
 
