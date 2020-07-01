@@ -13,6 +13,7 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.utils.PrinterUtils;
+import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,20 +47,20 @@ public class Test {
 
 
         final Room room101 =
-                new Room(101, Stars.STANDARD, Accommodation.SGL, BigDecimal.valueOf(100), RoomStatus.VACANT);
+            new Room(101, Stars.STANDARD, Accommodation.SGL, BigDecimal.valueOf(100), RoomStatus.VACANT);
         final Room room102 =
-                new Room(102, Stars.JUNIOR_SUIT, Accommodation.SGL_2_CHD, BigDecimal.valueOf(120), RoomStatus.VACANT);
+            new Room(102, Stars.JUNIOR_SUIT, Accommodation.SGL_2_CHD, BigDecimal.valueOf(120), RoomStatus.VACANT);
         final Room room103 = new Room(103, Stars.SUIT, Accommodation.DBL, BigDecimal.valueOf(150), RoomStatus.VACANT);
         final Room room201 =
-                new Room(201, Stars.DE_LUX, Accommodation.TRPL, BigDecimal.valueOf(400), RoomStatus.OCCUPIED);
+            new Room(201, Stars.DE_LUX, Accommodation.TRPL, BigDecimal.valueOf(400), RoomStatus.OCCUPIED);
         final Room room202 =
-                new Room(202, Stars.FAMILY_ROOM, Accommodation.TRPL_2_CHD, BigDecimal.valueOf(350), RoomStatus.OCCUPIED);
+            new Room(202, Stars.FAMILY_ROOM, Accommodation.TRPL_2_CHD, BigDecimal.valueOf(350), RoomStatus.OCCUPIED);
         final Room room203 = new Room(203, Stars.STUDIO, Accommodation.SGL, BigDecimal.valueOf(300), RoomStatus.REPAIR);
         final Room room301 = new Room(301, Stars.STUDIO, Accommodation.SGL, BigDecimal.valueOf(300), RoomStatus.VACANT);
         final Room room302 =
-                new Room(302, Stars.DUPLEX, Accommodation.DBL_EXB, BigDecimal.valueOf(320), RoomStatus.REPAIR);
+            new Room(302, Stars.DUPLEX, Accommodation.DBL_EXB, BigDecimal.valueOf(320), RoomStatus.REPAIR);
         final Room room303 =
-                new Room(303, Stars.HONEYMOON_ROOM, Accommodation.DBL, BigDecimal.valueOf(440), RoomStatus.OCCUPIED);
+            new Room(303, Stars.HONEYMOON_ROOM, Accommodation.DBL, BigDecimal.valueOf(440), RoomStatus.OCCUPIED);
 
         roomController.addRoom(room101);
         roomController.addRoom(room102);
@@ -163,5 +164,9 @@ public class Test {
         residentController.importResidents();
         attendanceController.importAttendances();
         hotelController.importHistories();
+
+        SerializationUtils.serialize(attendanceController.showAttendances(), roomController.showAllRooms(),
+                                     residentController.showResidents(), hotelController.showHistories());
+        SerializationUtils.deserialize();
     }
 }
