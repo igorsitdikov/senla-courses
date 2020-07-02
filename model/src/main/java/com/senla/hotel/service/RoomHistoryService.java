@@ -43,7 +43,7 @@ public class RoomHistoryService implements IRoomHistoryService {
     @Override
     public void importHistories() {
         final List<RoomHistory>
-                histories = ParseUtils.stringToHistories(CsvReader.getInstance().read(PROPERTY));
+            histories = ParseUtils.stringToHistories(CsvReader.getInstance().read(PROPERTY));
         roomHistoryRepository.setHistories(histories);
     }
 

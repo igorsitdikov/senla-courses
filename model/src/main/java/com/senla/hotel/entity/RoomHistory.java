@@ -3,6 +3,7 @@ package com.senla.hotel.entity;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class RoomHistory extends AEntity {
     private Room room;
@@ -61,30 +62,25 @@ public class RoomHistory extends AEntity {
         this.checkOut = checkOut;
     }
 
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final RoomHistory other = (RoomHistory) obj;
-        if (!room.equals(other.getRoom())) {
-            return false;
-        }
-        if (!resident.equals(other.getResident())) {
-            return false;
-        }
-        if (attendances.size() != other.getAttendances().size()) {
-            return false;
-        }
-        if (!checkIn.equals(other.getCheckIn())) {
-            return false;
-        }
-        return checkOut.equals(other.getCheckOut());
+        final RoomHistory that = (RoomHistory) o;
+        return Objects.equals(room, that.room) &&
+               Objects.equals(resident, that.resident) &&
+               Objects.equals(attendances, that.attendances) &&
+               Objects.equals(checkIn, that.checkIn) &&
+               Objects.equals(checkOut, that.checkOut);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(room, resident, attendances, checkIn, checkOut);
     }
 
     @Override

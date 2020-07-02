@@ -2,6 +2,7 @@ package com.senla.hotel.service;
 
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
@@ -38,6 +39,11 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
+    public Attendance findByName(final String name) {
+        return (Attendance) attendanceRepository.findByName(name);
+    }
+
+    @Override
     public List<Attendance> sortAttendances(final List<Attendance> attendances,
                                             final Comparator<Attendance> comparator) {
         attendances.sort(comparator);
@@ -45,7 +51,7 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
-    public void createAttendance(final Attendance attendance) {
+    public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
         attendanceRepository.add(attendance);
     }
 
@@ -79,6 +85,11 @@ public class AttendanceService implements IAttendanceService {
     }
 
     @Override
+    public void delete(final Long id) throws EntityNotFoundException {
+        attendanceRepository.deleteAttendance(id);
+    }
+
+    @Override
     public void changeAttendancePrice(final String name, final BigDecimal price) {
         attendanceRepository.changePrice(name, price);
     }
@@ -86,7 +97,7 @@ public class AttendanceService implements IAttendanceService {
     @Override
     public void importAttendances() {
         final List<Attendance>
-                attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read(PROPERTY));
+            attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read(PROPERTY));
         attendanceRepository.setAttendances(attendances);
     }
 

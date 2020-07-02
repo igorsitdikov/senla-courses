@@ -16,5 +16,7 @@ public interface IRoomHistoryRepository {
 
     void setHistories(List<RoomHistory> roomHistories);
 
+    void setCounter(Long counter);
+
     List<RoomHistory> getHistories();
 }
