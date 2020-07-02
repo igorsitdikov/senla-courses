@@ -2,16 +2,19 @@ package com.senla.hotel.repository;
 
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class AttendanceRepository implements IAttendanceRepository {
     private static AttendanceRepository attendanceRepository;
-    private static List<Attendance> attendances = new ArrayList<>();
+    private static List<Attendance> attendances = new LinkedList<>();
     private static Long counter = 0L;
 
     private AttendanceRepository() {
@@ -25,11 +28,16 @@ public class AttendanceRepository implements IAttendanceRepository {
     }
 
     @Override
-    public AEntity add(final AEntity entity) {
-        entity.setId(++counter);
-        attendances.add((Attendance) entity);
-        return entity;
+    public AEntity add(final AEntity entity) throws EntityAlreadyExistsException {
+        if (!AttendanceRepository.attendances.contains(entity)) {
+            entity.setId(++counter);
+            attendances.add((Attendance) entity);
+            return entity;
+        }
+        throw new EntityAlreadyExistsException("Attendance already exists");
     }
+
+
 
     @Override
     public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
@@ -65,12 +73,24 @@ public class AttendanceRepository implements IAttendanceRepository {
 
     @Override
     public void setAttendances(final List<Attendance> attendances) {
+        AttendanceRepository.attendances.clear();
         AttendanceRepository.attendances = new ArrayList<>(attendances);
+    }
+
+    @Override
+    public void deleteAttendance(final Long id) throws EntityNotFoundException {
+        final Attendance attendance = (Attendance) findById(id);
+        AttendanceRepository.attendances.remove(attendance);
     }
 
     @Override
     public List<Attendance> getAttendances() {
         return attendances;
+    }
+
+    @Override
+    public void setCounter(final Long counter) {
+        AttendanceRepository.counter = counter;
     }
 
 }

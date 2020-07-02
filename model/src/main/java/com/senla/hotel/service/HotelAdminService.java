@@ -89,7 +89,6 @@ public class HotelAdminService implements IHotelAdminService {
             for (int i = 0; i < resident.getHistory().getAttendances().size(); i++) {
                 totalAttendances = totalAttendances.add(resident.getHistory().getAttendances().get(i).getPrice());
             }
-
             final BigDecimal total = room.getPrice()
                 .multiply(new BigDecimal(days))
                 .add(totalAttendances.multiply(new BigDecimal(days)));

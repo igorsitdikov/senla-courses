@@ -56,6 +56,11 @@ public class RoomHistoryRepository implements IRoomHistoryRepository {
     }
 
     @Override
+    public void setCounter(final Long counter) {
+        RoomHistoryRepository.counter = counter;
+    }
+
+    @Override
     public List<RoomHistory> getHistories() {
         return histories;
     }

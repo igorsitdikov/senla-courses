@@ -3,7 +3,6 @@ package com.senla.hotel.utils.csv.reader;
 import com.senla.hotel.utils.csv.interfaces.ICsvReader;
 import com.senla.hotel.utils.settings.PropertyLoader;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +26,7 @@ public class CsvReader implements ICsvReader {
         final String csv = PropertyLoader.getInstance().getProperty(property);
         try {
             return Files.lines(Path.of(csv));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             System.err.println(String.format("File not found %s %s%n", csv, e));
         }
         return null;

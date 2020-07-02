@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class SerializationUtils {
     private final static String STATE_HOTEL = PropertyLoader.getInstance().getProperty("state-hotel");
@@ -29,7 +30,6 @@ public class SerializationUtils {
         try {
             final List<List<? extends AEntity>> entitiesList = new ArrayList<>(Arrays.asList(entities));
             final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(STATE_HOTEL));
-
             objectOutputStream.writeObject(entitiesList);
             objectOutputStream.close();
 
@@ -41,23 +41,26 @@ public class SerializationUtils {
     }
 
     public static void deserialize() {
-
         try {
             final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(STATE_HOTEL));
             final List<List<? extends AEntity>> entitiesLists =
                 (List<List<? extends AEntity>>) objectInputStream.readObject();
             entitiesLists.forEach(entitiesList -> {
+                final Long id = maxId(entitiesList);
                 if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Attendance) {
                     AttendanceRepository.getInstance().setAttendances((List<Attendance>) entitiesList);
+                    AttendanceRepository.getInstance().setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Room) {
                     RoomRepository.getInstance().setRooms((List<Room>) entitiesList);
+                    RoomRepository.getInstance().setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof RoomHistory) {
                     RoomHistoryRepository.getInstance().setHistories((List<RoomHistory>) entitiesList);
+                    RoomHistoryRepository.getInstance().setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Resident) {
                     ResidentRepository.getInstance().setResidents((List<Resident>) entitiesList);
+                    ResidentRepository.getInstance().setCounter(id);
                 }
             });
-
             objectInputStream.close();
 
         } catch (final FileNotFoundException e) {
@@ -67,5 +70,9 @@ public class SerializationUtils {
         } catch (final ClassNotFoundException e) {
             System.err.println("Class was not found");
         }
+    }
+
+    private static Long maxId(final List<? extends AEntity> list) {
+        return list.stream().mapToLong(AEntity::getId).max().orElseThrow(NoSuchElementException::new);
     }
 }

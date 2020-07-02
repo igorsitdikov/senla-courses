@@ -8,6 +8,7 @@ import com.senla.hotel.utils.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Room extends AEntity {
     private Integer number;
@@ -82,35 +83,26 @@ public class Room extends AEntity {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Room other = (Room) obj;
-        if (!number.equals(other.getNumber())) {
-            return false;
-        }
-        if (!stars.equals(other.getStars())) {
-            return false;
-        }
-        if (accommodation.equals(other.getAccommodation())) {
-            return false;
-        }
-        if (!price.equals(other.getPrice())) {
-            return false;
-        }
-        if (!status.equals(other.getStatus())) {
-            return false;
-        }
-        return histories.size() == (other.getHistories().size());
+        final Room room = (Room) o;
+        return Objects.equals(number, room.number) &&
+               stars == room.stars &&
+               accommodation == room.accommodation &&
+               Objects.equals(price, room.price) &&
+               status == room.status &&
+               Objects.equals(histories, room.histories);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, stars, accommodation, price, status, histories);
+    }
 
     @Override
     public String toString() {
