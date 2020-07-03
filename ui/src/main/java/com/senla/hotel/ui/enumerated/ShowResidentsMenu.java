@@ -8,11 +8,11 @@ public enum ShowResidentsMenu implements IMenuEnum {
     SORT_BY_CHECK_OUT(3, "Show all residents sorted by check out date");
 
     private int id;
-    private String name;
+    private String title;
 
-    ShowResidentsMenu(final int id, final String name) {
+    ShowResidentsMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -21,7 +21,7 @@ public enum ShowResidentsMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }

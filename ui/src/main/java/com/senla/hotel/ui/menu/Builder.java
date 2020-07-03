@@ -109,7 +109,7 @@ public class Builder {
     }
 
     private void addAttendanceSubMenu(final Menu menu, final Menu previous) {
-        final Menu showerMenu = new Menu(SHOW_ATTENDANCES.getName());
+        final Menu showerMenu = new Menu(SHOW_ATTENDANCES.getTitle());
         this.addPrinterAttendances(showerMenu, menu);
         menu.addMenuItem(new MenuItem(SHOW_ATTENDANCES, showerMenu));
         menu.addMenuItem(new MenuItem(ADD_ATTENDANCE, menu, new AddAttendanceAction()));
@@ -126,7 +126,7 @@ public class Builder {
     }
 
     private void addResidentSubMenu(final Menu menu, final Menu previous) {
-        final Menu printerMenu = new Menu(SHOW_RESIDENTS.getName());
+        final Menu printerMenu = new Menu(SHOW_RESIDENTS.getTitle());
         this.addPrinterResidents(printerMenu, menu);
         menu.addMenuItem(new MenuItem(SHOW_RESIDENTS, printerMenu));
         menu.addMenuItem(new MenuItem(ADD_RESIDENT, menu, new AddResidentAction()));
@@ -150,7 +150,7 @@ public class Builder {
     }
 
     private void addRoomSubMenu(final Menu menu, final Menu previous) {
-        final Menu printerMenu = new Menu(SHOW_ROOMS.getName());
+        final Menu printerMenu = new Menu(SHOW_ROOMS.getTitle());
         this.addPrinterRoomsSubMenu(printerMenu, menu);
         menu.addMenuItem(new MenuItem(SHOW_ROOMS, printerMenu));
         menu.addMenuItem(new MenuItem(ADD_ROOM, menu, new AddRoomAction()));

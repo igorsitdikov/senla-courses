@@ -8,11 +8,11 @@ public enum ShowAttendancesMenu implements IMenuEnum {
     SORT_ATTENDANCES_BY_PRICE(3, "Show attendances sorted by price");
 
     private int id;
-    private String name;
+    private String title;
 
-    ShowAttendancesMenu(final int id, final String name) {
+    ShowAttendancesMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -21,7 +21,7 @@ public enum ShowAttendancesMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }

@@ -30,7 +30,7 @@ public class Navigator {
         for (MenuItem item : items) {
             System.out.println(String.format("%d. %s",
                                              item.getMenuEnum().getId(),
-                                             item.getMenuEnum().getName()));
+                                             item.getMenuEnum().getTitle()));
         }
     }
 
