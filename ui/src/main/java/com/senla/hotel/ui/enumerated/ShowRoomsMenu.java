@@ -14,11 +14,11 @@ public enum ShowRoomsMenu implements IMenuEnum {
     VACANT_SORT_BY_STARS(9, "Show all vacant rooms sorted by stars");
 
     private int id;
-    private String name;
+    private String title;
 
-    ShowRoomsMenu(final int id, final String name) {
+    ShowRoomsMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -27,7 +27,7 @@ public enum ShowRoomsMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }

@@ -8,11 +8,11 @@ public enum HotelAdminMenu implements IMenuEnum {
     CALCULATE_BILL(3, "Calculate resident's bill");
 
     private int id;
-    private String name;
+    private String title;
 
-    HotelAdminMenu(final int id, final String name) {
+    HotelAdminMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -21,7 +21,7 @@ public enum HotelAdminMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }

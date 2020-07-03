@@ -11,11 +11,11 @@ public enum RoomMenu implements IMenuEnum {
     SHOW_DETAILS(6, "Show room's details");
 
     private int id;
-    private String name;
+    private String title;
 
-    RoomMenu(final int id, final String name) {
+    RoomMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -24,7 +24,7 @@ public enum RoomMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }

@@ -8,11 +8,11 @@ public enum AttendanceMenu implements IMenuEnum {
     CHANGE_ATTENDANCE_PRICE(3, "Change attendance price");
 
     private int id;
-    private String name;
+    private String title;
 
-    AttendanceMenu(final int id, final String name) {
+    AttendanceMenu(final int id, final String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -21,7 +21,7 @@ public enum AttendanceMenu implements IMenuEnum {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }
