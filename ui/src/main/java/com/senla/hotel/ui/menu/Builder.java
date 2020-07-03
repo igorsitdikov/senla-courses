@@ -4,33 +4,77 @@ import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.action.admin.CalculateBillAction;
 import com.senla.hotel.ui.action.admin.CheckInAction;
 import com.senla.hotel.ui.action.admin.CheckOutAction;
+import com.senla.hotel.ui.action.attendance.AddAttendanceAction;
 import com.senla.hotel.ui.action.attendance.ChangeAttendancePriceAction;
-import com.senla.hotel.ui.action.attendance.CreateAttendanceAction;
 import com.senla.hotel.ui.action.attendance.ShowAttendancesAction;
 import com.senla.hotel.ui.action.attendance.ShowAttendancesSortedByNameAction;
 import com.senla.hotel.ui.action.attendance.ShowAttendancesSortedByPriceAction;
 import com.senla.hotel.ui.action.resident.AddAttendanceToResidentAction;
+import com.senla.hotel.ui.action.resident.AddResidentAction;
 import com.senla.hotel.ui.action.resident.CountResidentsAction;
-import com.senla.hotel.ui.action.resident.CreateResidentAction;
 import com.senla.hotel.ui.action.resident.ShowResidentsAction;
 import com.senla.hotel.ui.action.resident.ShowResidentsSortedByCheckOutDateAction;
 import com.senla.hotel.ui.action.resident.ShowResidentsSortedByNameAction;
+import com.senla.hotel.ui.action.room.AddRoomAction;
 import com.senla.hotel.ui.action.room.ChangePriceAction;
 import com.senla.hotel.ui.action.room.ChangeStatusAction;
 import com.senla.hotel.ui.action.room.CountVacantAction;
-import com.senla.hotel.ui.action.room.CreateRoomAction;
 import com.senla.hotel.ui.action.room.ShowDetailsAction;
 import com.senla.hotel.ui.action.room.ShowRoomsAction;
 import com.senla.hotel.ui.action.room.ShowRoomsSortedByAccommodationAction;
 import com.senla.hotel.ui.action.room.ShowRoomsSortedByPriceAction;
+import com.senla.hotel.ui.action.room.ShowRoomsSortedByStarsAction;
 import com.senla.hotel.ui.action.room.ShowVacantAction;
 import com.senla.hotel.ui.action.room.ShowVacantOnDateAction;
 import com.senla.hotel.ui.action.room.ShowVacantSortedByAccommodationAction;
 import com.senla.hotel.ui.action.room.ShowVacantSortedByPriceAction;
 import com.senla.hotel.ui.action.room.ShowVacantSortedByStarsAction;
 
+import static com.senla.hotel.ui.enumerated.AttendanceMenu.ADD_ATTENDANCE;
+import static com.senla.hotel.ui.enumerated.AttendanceMenu.CHANGE_ATTENDANCE_PRICE;
+import static com.senla.hotel.ui.enumerated.AttendanceMenu.SHOW_ATTENDANCES;
+import static com.senla.hotel.ui.enumerated.HotelAdminMenu.CALCULATE_BILL;
+import static com.senla.hotel.ui.enumerated.HotelAdminMenu.CHECK_IN;
+import static com.senla.hotel.ui.enumerated.HotelAdminMenu.CHECK_OUT;
+import static com.senla.hotel.ui.enumerated.MainMenu.ATTENDANCE;
+import static com.senla.hotel.ui.enumerated.MainMenu.EXIT;
+import static com.senla.hotel.ui.enumerated.MainMenu.HOTEL_ADMIN;
+import static com.senla.hotel.ui.enumerated.MainMenu.RESIDENT;
+import static com.senla.hotel.ui.enumerated.MainMenu.ROOM;
+import static com.senla.hotel.ui.enumerated.MainMenu.TO_PREVIOUS_MENU;
+import static com.senla.hotel.ui.enumerated.ResidentMenu.ADD_RESIDENT;
+import static com.senla.hotel.ui.enumerated.ResidentMenu.ATTENDANCE_TO_RESIDENT;
+import static com.senla.hotel.ui.enumerated.ResidentMenu.SHOW_RESIDENTS;
+import static com.senla.hotel.ui.enumerated.ResidentMenu.TOTAL_RESIDENTS;
+import static com.senla.hotel.ui.enumerated.RoomMenu.ADD_ROOM;
+import static com.senla.hotel.ui.enumerated.RoomMenu.CHANGE_ROOM_PRICE;
+import static com.senla.hotel.ui.enumerated.RoomMenu.CHANGE_ROOM_STATUS;
+import static com.senla.hotel.ui.enumerated.RoomMenu.SHOW_DETAILS;
+import static com.senla.hotel.ui.enumerated.RoomMenu.SHOW_ROOMS;
+import static com.senla.hotel.ui.enumerated.RoomMenu.TOTAL_VACANT_ROOMS;
+import static com.senla.hotel.ui.enumerated.ShowAttendancesMenu.ALL_ATTENDANCES;
+import static com.senla.hotel.ui.enumerated.ShowAttendancesMenu.SORT_ATTENDANCES_BY_NAME;
+import static com.senla.hotel.ui.enumerated.ShowAttendancesMenu.SORT_ATTENDANCES_BY_PRICE;
+import static com.senla.hotel.ui.enumerated.ShowResidentsMenu.ALL_RESIDENTS;
+import static com.senla.hotel.ui.enumerated.ShowResidentsMenu.SORT_BY_CHECK_OUT;
+import static com.senla.hotel.ui.enumerated.ShowResidentsMenu.SORT_BY_NAME;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.ALL_ROOMS;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.SORT_BY_ACCOMMODATION;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.SORT_BY_PRICE;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.SORT_BY_STARS;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.VACANT_ROOMS;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.VACANT_ROOMS_ON_DATE;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.VACANT_SORT_BY_ACCOMMODATION;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.VACANT_SORT_BY_PRICE;
+import static com.senla.hotel.ui.enumerated.ShowRoomsMenu.VACANT_SORT_BY_STARS;
+
 public class Builder {
-    private Menu rootMenu = new Menu("Main menu");
+    private static final String MAIN_MENU = "Main menu";
+    private static final String HOTEL_ADMIN_MENU = "Hotel admin menu";
+    private static final String ROOM_MENU = "Room menu";
+    private static final String RESIDENT_MENU = "Resident menu";
+    private static final String ATTENDANCE_MENU = "Attendance menu";
+    private Menu rootMenu = new Menu(MAIN_MENU);
     private static Builder builder;
 
     private Builder() {
@@ -45,110 +89,89 @@ public class Builder {
     }
 
     public Menu buildMenu() {
-        Menu roomMenu = new Menu("Room menu");
-        Menu attendanceMenu = new Menu("Attendance menu");
-        Menu residentMenu = new Menu("Resident menu");
-        Menu hotelAdminMenu = new Menu("Hotel admin menu");
+        Menu hotelAdminMenu = new Menu(HOTEL_ADMIN_MENU);
+        Menu roomMenu = new Menu(ROOM_MENU);
+        Menu residentMenu = new Menu(RESIDENT_MENU);
+        Menu attendanceMenu = new Menu(ATTENDANCE_MENU);
 
-        addHotelAdminSubMenu(hotelAdminMenu);
-        addRoomSubMenu(roomMenu);
-        addResidentSubMenu(residentMenu);
-        addAttendanceSubMenu(attendanceMenu);
+        this.addHotelAdminSubMenu(hotelAdminMenu, rootMenu);
+        this.addRoomSubMenu(roomMenu, rootMenu);
+        this.addResidentSubMenu(residentMenu, rootMenu);
+        this.addAttendanceSubMenu(attendanceMenu, rootMenu);
 
-        rootMenu.addMenuItem(new MenuItem("Hotel admin menu", hotelAdminMenu));
-        rootMenu.addMenuItem(new MenuItem("Room menu", roomMenu));
-        rootMenu.addMenuItem(new MenuItem("Resident menu", residentMenu));
-        rootMenu.addMenuItem(new MenuItem("Attendance menu", attendanceMenu));
-        rootMenu.addMenuItem(new MenuItem("Exit"));
+        rootMenu.addMenuItem(new MenuItem(HOTEL_ADMIN, hotelAdminMenu));
+        rootMenu.addMenuItem(new MenuItem(ROOM, roomMenu));
+        rootMenu.addMenuItem(new MenuItem(RESIDENT, residentMenu));
+        rootMenu.addMenuItem(new MenuItem(ATTENDANCE, attendanceMenu));
+        rootMenu.addMenuItem(new MenuItem(EXIT));
 
         return rootMenu;
     }
 
-    private void addAttendanceSubMenu(final Menu menu) {
-        final Menu showerMenu = new Menu("Show attendance");
-        addPrinterAttendances(showerMenu);
-        menu.addMenuItem(new MenuItem("Show", showerMenu));
-        menu.addMenuItem(new MenuItem("Create attendance",
-                                      menu, new CreateAttendanceAction()));
-        menu.addMenuItem(new MenuItem("Change attendance price",
-                                      menu, new ChangeAttendancePriceAction()));
+    private void addAttendanceSubMenu(final Menu menu, final Menu previous) {
+        final Menu showerMenu = new Menu(SHOW_ATTENDANCES.getName());
+        this.addPrinterAttendances(showerMenu, menu);
+        menu.addMenuItem(new MenuItem(SHOW_ATTENDANCES, showerMenu));
+        menu.addMenuItem(new MenuItem(ADD_ATTENDANCE, menu, new AddAttendanceAction()));
+        menu.addMenuItem(new MenuItem(CHANGE_ATTENDANCE_PRICE, menu, new ChangeAttendancePriceAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addPrinterAttendances(final Menu menu) {
-        menu.addMenuItem(new MenuItem("Show all attendance",
-                                      menu, new ShowAttendancesAction()));
-        menu.addMenuItem(new MenuItem("Show attendances sorted by name",
-                                      menu, new ShowAttendancesSortedByNameAction()));
-        menu.addMenuItem(new MenuItem("Show attendances sorted by price",
-                                      menu, new ShowAttendancesSortedByPriceAction()));
+
+    private void addPrinterAttendances(final Menu menu, final Menu previous) {
+        menu.addMenuItem(new MenuItem(ALL_ATTENDANCES, menu, new ShowAttendancesAction()));
+        menu.addMenuItem(new MenuItem(SORT_ATTENDANCES_BY_NAME, menu, new ShowAttendancesSortedByNameAction()));
+        menu.addMenuItem(new MenuItem(SORT_ATTENDANCES_BY_PRICE, menu, new ShowAttendancesSortedByPriceAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addResidentSubMenu(final Menu menu) {
-        final Menu printerMenu = new Menu("Show attendance");
-        addPrinterResidents(printerMenu);
-        menu.addMenuItem(new MenuItem("Show", printerMenu));
-        menu.addMenuItem(new MenuItem("Create resident",
-                                      menu, new CreateResidentAction()));
-        menu.addMenuItem(new MenuItem("Total residents",
-                                      menu, new CountResidentsAction()));
-        menu.addMenuItem(new MenuItem("Add attendance to resident",
-                                      menu, new AddAttendanceToResidentAction()));
+    private void addResidentSubMenu(final Menu menu, final Menu previous) {
+        final Menu printerMenu = new Menu(SHOW_RESIDENTS.getName());
+        this.addPrinterResidents(printerMenu, menu);
+        menu.addMenuItem(new MenuItem(SHOW_RESIDENTS, printerMenu));
+        menu.addMenuItem(new MenuItem(ADD_RESIDENT, menu, new AddResidentAction()));
+        menu.addMenuItem(new MenuItem(TOTAL_RESIDENTS, menu, new CountResidentsAction()));
+        menu.addMenuItem(new MenuItem(ATTENDANCE_TO_RESIDENT, menu, new AddAttendanceToResidentAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addPrinterResidents(final Menu menu) {
-        menu.addMenuItem(new MenuItem("Show all residents",
-                                      menu, new ShowResidentsAction()));
-        menu.addMenuItem(new MenuItem("Show all residents sorted by name",
-                                      menu, new ShowResidentsSortedByNameAction()));
-        menu.addMenuItem(new MenuItem("Show all residents sorted by check out date",
-                                      menu, new ShowResidentsSortedByCheckOutDateAction()));
+    private void addPrinterResidents(final Menu menu, final Menu previous) {
+        menu.addMenuItem(new MenuItem(ALL_RESIDENTS, menu, new ShowResidentsAction()));
+        menu.addMenuItem(new MenuItem(SORT_BY_NAME, menu, new ShowResidentsSortedByNameAction()));
+        menu.addMenuItem(new MenuItem(SORT_BY_CHECK_OUT, menu, new ShowResidentsSortedByCheckOutDateAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addHotelAdminSubMenu(final Menu menu) {
-        menu.addMenuItem(new MenuItem("Check in resident",
-                                      menu, new CheckInAction()));
-        menu.addMenuItem(new MenuItem("Check out resident",
-                                      menu, new CheckOutAction()));
-        menu.addMenuItem(new MenuItem("Calculate resident's bill",
-                                      menu, new CalculateBillAction()));
-        menu.addMenuItem(new MenuItem("Previous menu", rootMenu));
+    private void addHotelAdminSubMenu(final Menu menu, final Menu previous) {
+        menu.addMenuItem(new MenuItem(CHECK_IN, menu, new CheckInAction()));
+        menu.addMenuItem(new MenuItem(CHECK_OUT, menu, new CheckOutAction()));
+        menu.addMenuItem(new MenuItem(CALCULATE_BILL, menu, new CalculateBillAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addRoomSubMenu(final Menu menu) {
-        final Menu printerMenu = new Menu("Show rooms");
-        addPrinterRoomsSubMenu(printerMenu);
-        menu.addMenuItem(new MenuItem("Show", printerMenu));
-        menu.addMenuItem(new MenuItem("Add a room",
-                                      menu, new CreateRoomAction()));
-        menu.addMenuItem(new MenuItem("Change price",
-                                      menu, new ChangePriceAction()));
-        menu.addMenuItem(new MenuItem("Change status",
-                                      menu, new ChangeStatusAction()));
-        menu.addMenuItem(new MenuItem("Total vacant rooms",
-                                      menu, new CountVacantAction()));
-        menu.addMenuItem(new MenuItem("Show room's details",
-                                      menu, new ShowDetailsAction()));
+    private void addRoomSubMenu(final Menu menu, final Menu previous) {
+        final Menu printerMenu = new Menu(SHOW_ROOMS.getName());
+        this.addPrinterRoomsSubMenu(printerMenu, menu);
+        menu.addMenuItem(new MenuItem(SHOW_ROOMS, printerMenu));
+        menu.addMenuItem(new MenuItem(ADD_ROOM, menu, new AddRoomAction()));
+        menu.addMenuItem(new MenuItem(CHANGE_ROOM_PRICE, menu, new ChangePriceAction()));
+        menu.addMenuItem(new MenuItem(CHANGE_ROOM_STATUS, menu, new ChangeStatusAction()));
+        menu.addMenuItem(new MenuItem(TOTAL_VACANT_ROOMS, menu, new CountVacantAction()));
+        menu.addMenuItem(new MenuItem(SHOW_DETAILS, menu, new ShowDetailsAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
-    private void addPrinterRoomsSubMenu(final Menu menu) {
-        menu.addMenuItem(new MenuItem("Show all rooms",
-                                      menu, new ShowRoomsAction()));
-        menu.addMenuItem(new MenuItem("Show all rooms sorted by accommodation",
-                                      menu, new ShowRoomsSortedByAccommodationAction()));
-        menu.addMenuItem(new MenuItem("Show all rooms sorted by price",
-                                      menu, new ShowRoomsSortedByPriceAction()));
-        menu.addMenuItem(new MenuItem("Show all rooms sorted by stars",
-                                      menu, new ShowVacantSortedByStarsAction()));
-        menu.addMenuItem(new MenuItem("Show all vacant rooms",
-                                      menu, new ShowVacantAction()));
-        menu.addMenuItem(new MenuItem("Show all vacant rooms on date",
-                                      menu, new ShowVacantOnDateAction()));
-        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by accommodation",
-                                      menu, new ShowVacantSortedByAccommodationAction()));
-        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by price",
-                                      menu, new ShowVacantSortedByPriceAction()));
-        menu.addMenuItem(new MenuItem("Show all vacant rooms sorted by stars",
-                                      menu, new ShowVacantSortedByStarsAction()));
+    private void addPrinterRoomsSubMenu(final Menu menu, final Menu previous) {
+        menu.addMenuItem(new MenuItem(ALL_ROOMS, menu, new ShowRoomsAction()));
+        menu.addMenuItem(new MenuItem(SORT_BY_ACCOMMODATION, menu, new ShowRoomsSortedByAccommodationAction()));
+        menu.addMenuItem(new MenuItem(SORT_BY_PRICE, menu, new ShowRoomsSortedByPriceAction()));
+        menu.addMenuItem(new MenuItem(SORT_BY_STARS, menu, new ShowRoomsSortedByStarsAction()));
+        menu.addMenuItem(new MenuItem(VACANT_ROOMS, menu, new ShowVacantAction()));
+        menu.addMenuItem(new MenuItem(VACANT_ROOMS_ON_DATE, menu, new ShowVacantOnDateAction()));
+        menu.addMenuItem(new MenuItem(VACANT_SORT_BY_ACCOMMODATION, menu, new ShowVacantSortedByAccommodationAction()));
+        menu.addMenuItem(new MenuItem(VACANT_SORT_BY_PRICE, menu, new ShowVacantSortedByPriceAction()));
+        menu.addMenuItem(new MenuItem(VACANT_SORT_BY_STARS, menu, new ShowVacantSortedByStarsAction()));
+        menu.addMenuItem(new MenuItem(TO_PREVIOUS_MENU, previous));
     }
 
     public Menu getMenu() {
