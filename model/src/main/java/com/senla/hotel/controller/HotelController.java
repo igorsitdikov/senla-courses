@@ -1,11 +1,15 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.HotelAdminService;
+import com.senla.hotel.service.ResidentService;
 import com.senla.hotel.service.RoomHistoryService;
+import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 import com.senla.hotel.service.interfaces.IResidentService;
@@ -28,6 +32,9 @@ public class HotelController {
     private HotelController() {
         hotelAdminService = HotelAdminService.getInstance();
         historyService = RoomHistoryService.getInstance();
+        attendanceService = AttendanceService.getInstance();
+        roomService = RoomService.getInstance();
+        residentService = ResidentService.getInstance();
     }
 
     public static HotelController getInstance() {
@@ -67,7 +74,10 @@ public class HotelController {
     }
 
     public void exportData() {
-        SerializationUtils.serialize(attendanceService.showAttendances(), roomService.showAllRooms(),
-                                     residentService.showResidents(), hotelController.showHistories());
+        final List<Attendance> attendances = attendanceService.showAttendances();
+        final List<Room> rooms = roomService.showAllRooms();
+        final List<Resident> residents = residentService.showResidents();
+        final List<RoomHistory> roomHistories = hotelController.showHistories();
+        SerializationUtils.serialize(attendances, rooms, residents, roomHistories);
     }
 }

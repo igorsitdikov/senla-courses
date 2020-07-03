@@ -103,7 +103,7 @@ public class Builder {
         rootMenu.addMenuItem(new MenuItem(ROOM, roomMenu));
         rootMenu.addMenuItem(new MenuItem(RESIDENT, residentMenu));
         rootMenu.addMenuItem(new MenuItem(ATTENDANCE, attendanceMenu));
-        rootMenu.addMenuItem(new MenuItem(EXIT));
+        rootMenu.addMenuItem(new MenuItem(EXIT, null));
 
         return rootMenu;
     }
