@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum ResidentMenu implements IMenuEnum {
     SHOW_RESIDENTS(1, "Show residents"),
     ADD_RESIDENT(2, "Add resident"),

@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum HotelAdminMenu implements IMenuEnum {
     CHECK_IN(1, "Check in resident"),
     CHECK_OUT(2, "Check out resident"),

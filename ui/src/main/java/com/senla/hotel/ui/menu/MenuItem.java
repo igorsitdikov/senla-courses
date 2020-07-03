@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.menu;
 
 
-import com.senla.hotel.ui.enumerated.IMenuEnum;
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
 import com.senla.hotel.ui.interfaces.IAction;
 
 public class MenuItem {

@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum ShowRoomsMenu implements IMenuEnum {
     ALL_ROOMS(1, "Show all rooms"),
     SORT_BY_ACCOMMODATION(2, "Show all rooms sorted by accommodation"),

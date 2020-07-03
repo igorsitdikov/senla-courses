@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum RoomMenu implements IMenuEnum {
     SHOW_ROOMS(1, "Show rooms"),
     ADD_ROOM(2, "Add a room"),

@@ -1,4 +1,4 @@
-package com.senla.hotel.ui.enumerated;
+package com.senla.hotel.ui.enumerated.interfaces;
 
 public interface IMenuEnum {
     int getId();
