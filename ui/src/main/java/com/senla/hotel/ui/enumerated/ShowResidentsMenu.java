@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum ShowResidentsMenu implements IMenuEnum {
     ALL_RESIDENTS(1, "Show all residents"),
     SORT_BY_NAME(2, "Show all residents sorted by name"),

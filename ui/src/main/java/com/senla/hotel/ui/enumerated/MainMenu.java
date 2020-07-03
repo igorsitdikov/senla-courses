@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.enumerated;
 
+import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
+
 public enum MainMenu implements IMenuEnum {
     TO_PREVIOUS_MENU(0, "Previous menu"),
     HOTEL_ADMIN(1, "Hotel admin menu"),
