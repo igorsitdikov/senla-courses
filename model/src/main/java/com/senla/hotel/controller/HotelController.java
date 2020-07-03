@@ -6,8 +6,12 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.HotelAdminService;
 import com.senla.hotel.service.RoomHistoryService;
+import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
+import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
+import com.senla.hotel.service.interfaces.IRoomService;
+import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +20,9 @@ import java.util.List;
 public class HotelController {
     private static HotelController hotelController;
     private static IHotelAdminService hotelAdminService;
+    private static IAttendanceService attendanceService;
+    private static IRoomService roomService;
+    private static IResidentService residentService;
     private static IRoomHistoryService historyService;
 
     private HotelController() {
@@ -55,4 +62,12 @@ public class HotelController {
         return historyService.showHistories();
     }
 
+    public void importData() {
+        SerializationUtils.deserialize();
+    }
+
+    public void exportData() {
+        SerializationUtils.serialize(attendanceService.showAttendances(), roomService.showAllRooms(),
+                                     residentService.showResidents(), hotelController.showHistories());
+    }
 }

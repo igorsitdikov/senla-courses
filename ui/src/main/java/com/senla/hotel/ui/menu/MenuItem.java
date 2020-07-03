@@ -1,20 +1,21 @@
 package com.senla.hotel.ui.menu;
 
 
+import com.senla.hotel.ui.enumerated.IMenuEnum;
 import com.senla.hotel.ui.interfaces.IAction;
 
 public class MenuItem {
-    private String name;
+    private IMenuEnum menuEnum;
     private IAction action;
     private Menu nextMenu;
 
-    public MenuItem(String name, Menu nextMenu) {
-        this.name = name;
+    public MenuItem(IMenuEnum menuEnum, Menu nextMenu) {
+        this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(String name, Menu nextMenu, IAction action) {
-        this.name = name;
+    public MenuItem(IMenuEnum menuEnum, Menu nextMenu, IAction action) {
+        this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
         this.action = action;
     }
@@ -23,12 +24,12 @@ public class MenuItem {
         this.action.execute();
     }
 
-    public String getName() {
-        return name;
+    public IMenuEnum getMenuEnum() {
+        return menuEnum;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMenuEnum(final IMenuEnum menuEnum) {
+        this.menuEnum = menuEnum;
     }
 
     public IAction getAction() {
@@ -47,7 +48,7 @@ public class MenuItem {
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(String name) {
-        this.name = name;
+    public MenuItem(IMenuEnum menuEnum) {
+        this.menuEnum = menuEnum;
     }
 }
