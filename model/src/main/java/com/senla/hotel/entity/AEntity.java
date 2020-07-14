@@ -1,6 +1,8 @@
 package com.senla.hotel.entity;
 
-public abstract class AEntity {
+import java.io.Serializable;
+
+public abstract class AEntity implements Serializable {
     protected Long id;
 
     public Long getId() {

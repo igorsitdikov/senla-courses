@@ -43,7 +43,8 @@ public class ResidentController {
         return residentService.showCountResidents();
     }
 
-    public void addAttendanceToResident(final Resident resident, final Attendance attendance) throws EntityNotFoundException {
+    public void addAttendanceToResident(final Resident resident, final Attendance attendance)
+        throws EntityNotFoundException {
         residentService.addAttendanceToResident(resident, attendance);
     }
 

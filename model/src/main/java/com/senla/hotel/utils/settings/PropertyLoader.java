@@ -9,14 +9,9 @@ import java.util.Properties;
 public class PropertyLoader {
     private static PropertyLoader propertyLoader;
     private Properties properties = new Properties();
-    private String filename = "task-4/1/src/main/resources/config.properties";
+    private static final String PROPERTY_FILE = "model/src/main/resources/config.properties";
 
     private PropertyLoader() {
-        init();
-    }
-
-    private PropertyLoader(final String filename) {
-        this.filename = filename;
         init();
     }
 
@@ -27,18 +22,11 @@ public class PropertyLoader {
         return propertyLoader;
     }
 
-    public static PropertyLoader getInstance(final String filename) {
-        if (propertyLoader == null) {
-            propertyLoader = new PropertyLoader(filename);
-        }
-        return propertyLoader;
-    }
-
     private void init() {
-        try (final InputStream input = new FileInputStream(this.filename)) {
+        try (final InputStream input = new FileInputStream(PROPERTY_FILE)) {
             properties.load(input);
         } catch (final IOException e) {
-            System.err.println(String.format("File not found %s %s%n", filename, e));
+            System.err.println(String.format("File not found %s %s%n", PROPERTY_FILE, e));
         }
     }
 

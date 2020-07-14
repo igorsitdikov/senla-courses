@@ -8,7 +8,7 @@ import com.senla.hotel.ui.utils.InputDataReader;
 
 import java.util.Scanner;
 
-public class CreateResidentAction implements IAction {
+public class AddResidentAction implements IAction {
     private Gender integerToGender(Integer input) {
         Gender gender = null;
         switch (input) {

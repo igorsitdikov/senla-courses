@@ -1,6 +1,7 @@
 package com.senla.hotel.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Attendance extends AEntity {
     private BigDecimal price;
@@ -31,7 +32,25 @@ public class Attendance extends AEntity {
     }
 
     @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Attendance that = (Attendance) o;
+        return Objects.equals(price, that.price) &&
+               Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(price, name);
+    }
+
+    @Override
     public String toString() {
-        return String.format("Attendance \"%s\" with price %.2f per day.", name, price);
+        return String.format("Attendance \"%s\" with price %.2f per day. %d", name, price, id);
     }
 }

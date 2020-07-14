@@ -13,7 +13,7 @@ import com.senla.hotel.ui.utils.InputDataReader;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-public class CreateAttendanceAction implements IAction {
+public class AddAttendanceAction implements IAction {
 
     @Override
     public void execute() {

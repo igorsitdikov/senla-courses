@@ -2,6 +2,8 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.Gender;
 
+import java.util.Objects;
+
 public class Resident extends AEntity {
     private String firstName;
     private String lastName;
@@ -76,33 +78,25 @@ public class Resident extends AEntity {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Resident other = (Resident) obj;
-        if (!firstName.equals(other.getFirstName())) {
-            return false;
-        }
-        if (!lastName.equals(other.getLastName())) {
-            return false;
-        }
-        if (gender.equals(other.getGender())) {
-            return false;
-        }
-        if (!vip.equals(other.getVip())) {
-            return false;
-        }
-        if (!phone.equals(other.getPhone())) {
-            return false;
-        }
-        return history.equals(other.getHistory());
+        final Resident resident = (Resident) o;
+        return Objects.equals(firstName, resident.firstName) &&
+               Objects.equals(lastName, resident.lastName) &&
+               gender == resident.gender &&
+               Objects.equals(vip, resident.vip) &&
+               Objects.equals(phone, resident.phone) &&
+               Objects.equals(history, resident.history);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, gender, vip, phone, history);
     }
 
     @Override
