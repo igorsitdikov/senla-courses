@@ -15,7 +15,7 @@ import static com.senla.hotel.ui.utils.EnumConverter.integerToAccommodation;
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStar;
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
-public class CreateRoomAction implements IAction {
+public class AddRoomAction implements IAction {
 
     @Override
     public void execute() {

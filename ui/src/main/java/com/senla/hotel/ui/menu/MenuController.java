@@ -1,7 +1,9 @@
 package com.senla.hotel.ui.menu;
 
+import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 
+import java.util.List;
 import java.util.Scanner;
 
 public final class MenuController {
@@ -18,6 +20,7 @@ public final class MenuController {
     }
 
     public void run() {
+        HotelController.getInstance().importData();
         final Navigator navigator = Navigator.getInstance();
         final Builder builder = Builder.getInstance();
 
@@ -31,23 +34,29 @@ public final class MenuController {
         while (!exit) {
 
             int choice = InputDataReader.getIntegerInput(scanner) - 1;
+            List<MenuItem> menuItems = navigator.getCurrentMenu().getMenuItems();
 
-            if (choice >= navigator.getCurrentMenu().getMenuItems().size()) {
+            if (choice == -1) {
+                choice = menuItems.size() - 1;
+            }
+
+            if (choice >= menuItems.size() || choice < 0) {
                 System.out.println("Incorrect choice. Try again");
                 continue;
             } else {
                 navigator.navigate(choice);
             }
 
-            if (navigator.getCurrentMenu().getMenuItems().get(choice).getNextMenu() == null) {
+            if (menuItems.get(choice).getNextMenu() == null) {
                 exit = true;
                 continue;
             }
 
-            navigator.setCurrentMenu(navigator.getCurrentMenu().getMenuItems().get(choice).getNextMenu());
+            navigator.setCurrentMenu(menuItems.get(choice).getNextMenu());
             navigator.printMenu();
         }
         scanner.close();
+        HotelController.getInstance().exportData();
         System.out.println("Goodbye! Your changes have been saved!");
     }
 }

@@ -94,6 +94,11 @@ public class RoomRepository implements IRoomRepository {
     }
 
     @Override
+    public void setCounter(final Long counter) {
+        RoomRepository.counter = counter;
+    }
+
+    @Override
     public List<Room> getRooms() {
         return rooms;
     }

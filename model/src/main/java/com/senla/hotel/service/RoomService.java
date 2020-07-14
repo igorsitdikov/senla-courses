@@ -14,17 +14,22 @@ import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
 import com.senla.hotel.utils.csv.reader.CsvReader;
 import com.senla.hotel.utils.csv.writer.CsvWriter;
+import com.senla.hotel.utils.settings.PropertyLoader;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RoomService implements IRoomService {
+    private static final Integer AMOUNT_HISTORIES =
+        Integer.parseInt(PropertyLoader.getInstance().getProperty("amount-histories"));
+
     private static final String PROPERTY = "rooms";
     private static RoomService roomService;
-    private IRoomRepository roomRepository = RoomRepository.getInstance();
+    private final IRoomRepository roomRepository = RoomRepository.getInstance();
 
     private RoomService() {
     }
@@ -39,12 +44,17 @@ public class RoomService implements IRoomService {
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {
         final Room room = findById(id);
+        final LinkedList<RoomHistory> histories = new LinkedList<>(room.getHistories());
+        if (histories.size() == AMOUNT_HISTORIES) {
+            histories.removeFirst();
+        }
+        room.setHistories(histories);
         roomRepository.addHistory(room, history);
     }
 
     @Override
     public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-            throws EntityNotFoundException {
+        throws EntityNotFoundException {
         final Room room = findById(id);
         final List<RoomHistory> histories = room.getHistories();
         for (final RoomHistory roomHistory : histories) {
@@ -91,7 +101,7 @@ public class RoomService implements IRoomService {
         for (final Room room : rooms) {
             final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
                 result.add(room);
             }
         }
@@ -197,9 +207,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public void importRooms() {
-        final List<Room>
-                rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read(PROPERTY));
-
+        final List<Room> rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read(PROPERTY));
         roomRepository.setRooms(rooms);
     }
 

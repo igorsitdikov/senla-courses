@@ -57,6 +57,11 @@ public class ResidentRepository implements IResidentRepository {
     }
 
     @Override
+    public void setCounter(final Long counter) {
+        ResidentRepository.counter = counter;
+    }
+
+    @Override
     public List<Resident> getResidents() {
         return residents;
     }

@@ -4,8 +4,10 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IRoomService;
+import com.senla.hotel.utils.settings.PropertyLoader;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +16,8 @@ import java.util.List;
 public class RoomController {
     private static RoomController roomController;
     private static IRoomService roomService;
+    private static final Boolean STATUS_ALLOW =
+        Boolean.parseBoolean(PropertyLoader.getInstance().getProperty("change-status"));
 
     private RoomController() {
         roomService = RoomService.getInstance();
@@ -82,7 +86,11 @@ public class RoomController {
         return roomService.countVacantRooms();
     }
 
-    public void changeStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException {
+    public void changeStatus(final Integer number, final RoomStatus status)
+        throws EntityNotFoundException, RoomStatusChangingException {
+        if (!STATUS_ALLOW) {
+            throw new RoomStatusChangingException("Changing status is forbidden");
+        }
         roomService.changeRoomStatus(number, status);
     }
 

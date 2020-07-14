@@ -1,6 +1,8 @@
 package com.senla.hotel.controller;
 
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.EntityAlreadyExistsException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 
@@ -22,8 +24,12 @@ public class AttendanceController {
         return attendanceController;
     }
 
-    public void createAttendance(final Attendance attendance) {
+    public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
         attendanceService.createAttendance(attendance);
+    }
+
+    public void deleteAttendance(final Long id) throws EntityNotFoundException {
+        attendanceService.delete(id);
     }
 
     public List<Attendance> showAttendances() {

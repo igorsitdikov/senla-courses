@@ -27,17 +27,19 @@ public class Navigator {
     public void printMenu() {
         System.out.println(currentMenu.getName());
         List<MenuItem> items = currentMenu.getMenuItems();
-        for (int i = 0; i < items.size(); i++) {
-            MenuItem item = items.get(i);
-            System.out.println(String.format("%d. %s", (i + 1), item.getName()));
+        for (MenuItem item : items) {
+            System.out.println(String.format("%d. %s",
+                                             item.getMenuEnum().getId(),
+                                             item.getMenuEnum().getTitle()));
         }
     }
 
     public void navigate(Integer index) {
-        if (currentMenu.getMenuItems().get(index).getAction() != null) {
-            currentMenu.getMenuItems().get(index).doAction();
+        List<MenuItem> items = currentMenu.getMenuItems();
+        if (items.get(index).getAction() != null) {
+            items.get(index).doAction();
         } else {
-            currentMenu.getMenuItems().get(index).getNextMenu();
+            items.get(index).getNextMenu();
         }
     }
 }
