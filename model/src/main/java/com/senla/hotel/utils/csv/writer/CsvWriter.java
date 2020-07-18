@@ -1,32 +1,25 @@
 package com.senla.hotel.utils.csv.writer;
 
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
-import com.senla.hotel.utils.settings.PropertyLoader;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
+@Singleton
 public class CsvWriter implements ICsvWriter {
-    private static CsvWriter csvWriter;
 
-    private CsvWriter() {
-    }
-
-    public static CsvWriter getInstance() {
-        if (csvWriter == null) {
-            csvWriter = new CsvWriter();
-        }
-        return csvWriter;
+    public CsvWriter() {
+        System.out.println("created " + CsvWriter.class);
     }
 
     @Override
-    public void write(final String property, final List<String> entities) {
-        final String csv = PropertyLoader.getInstance().getProperty(property);
-        try (final PrintWriter pw = new PrintWriter(csv)) {
+    public void write(final String path, final List<String> entities) {
+        try (final PrintWriter pw = new PrintWriter(path)) {
             entities.forEach(pw::println);
         } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println(String.format("File not found %s %s%n", path, e));
         }
     }
 }

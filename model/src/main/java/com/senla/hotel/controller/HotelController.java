@@ -1,15 +1,12 @@
 package com.senla.hotel.controller;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.AttendanceService;
-import com.senla.hotel.service.HotelAdminService;
-import com.senla.hotel.service.ResidentService;
-import com.senla.hotel.service.RoomHistoryService;
-import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.service.interfaces.IHotelAdminService;
 import com.senla.hotel.service.interfaces.IResidentService;
@@ -21,28 +18,20 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Singleton
 public class HotelController {
-    private static HotelController hotelController;
+    @Autowired
     private static IHotelAdminService hotelAdminService;
+    @Autowired
     private static IAttendanceService attendanceService;
+    @Autowired
     private static IRoomService roomService;
+    @Autowired
     private static IResidentService residentService;
+    @Autowired
     private static IRoomHistoryService historyService;
-
-    private HotelController() {
-        hotelAdminService = HotelAdminService.getInstance();
-        historyService = RoomHistoryService.getInstance();
-        attendanceService = AttendanceService.getInstance();
-        roomService = RoomService.getInstance();
-        residentService = ResidentService.getInstance();
-    }
-
-    public static HotelController getInstance() {
-        if (hotelController == null) {
-            hotelController = new HotelController();
-        }
-        return hotelController;
-    }
+    @Autowired
+    private SerializationUtils serializationUtils;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
         throws EntityNotFoundException {
@@ -70,14 +59,14 @@ public class HotelController {
     }
 
     public void importData() {
-        SerializationUtils.deserialize();
+        serializationUtils.deserialize();
     }
 
     public void exportData() {
         final List<Attendance> attendances = attendanceService.showAttendances();
         final List<Room> rooms = roomService.showAllRooms();
         final List<Resident> residents = residentService.showResidents();
-        final List<RoomHistory> roomHistories = hotelController.showHistories();
-        SerializationUtils.serialize(attendances, rooms, residents, roomHistories);
+        final List<RoomHistory> roomHistories = showHistories();
+        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
     }
 }

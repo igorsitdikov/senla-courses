@@ -1,5 +1,6 @@
 package com.senla.hotel.repository;
 
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
@@ -9,19 +10,13 @@ import com.senla.hotel.repository.interfaces.IResidentRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class ResidentRepository implements IResidentRepository {
-    private static ResidentRepository residentRepository;
     private static List<Resident> residents = new ArrayList<>();
     private static Long counter = 0L;
 
-    private ResidentRepository() {
-    }
-
-    public static ResidentRepository getInstance() {
-        if (residentRepository == null) {
-            residentRepository = new ResidentRepository();
-        }
-        return residentRepository;
+    public ResidentRepository() {
+        System.out.println("created " + ResidentRepository.class);
     }
 
     @Override

@@ -1,28 +1,19 @@
 package com.senla.hotel.controller;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Singleton
 public class AttendanceController {
-    private static AttendanceController attendanceController;
+    @Autowired
     private static IAttendanceService attendanceService;
-
-    private AttendanceController() {
-        attendanceService = AttendanceService.getInstance();
-    }
-
-    public static AttendanceController getInstance() {
-        if (attendanceController == null) {
-            attendanceController = new AttendanceController();
-        }
-        return attendanceController;
-    }
 
     public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
         attendanceService.createAttendance(attendance);

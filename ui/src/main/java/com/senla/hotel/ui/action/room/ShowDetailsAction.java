@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.action.room;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.ui.interfaces.IAction;
@@ -8,7 +10,10 @@ import com.senla.hotel.ui.utils.Printer;
 
 import java.util.Scanner;
 
+@MenuItem
 public class ShowDetailsAction implements IAction {
+    @Autowired
+    private RoomController roomController;
 
     @Override
     public void execute() {
@@ -17,7 +22,7 @@ public class ShowDetailsAction implements IAction {
         try {
             Integer roomNumber =
                 InputDataReader.getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
-            Room room = RoomController.getInstance().showRoomDetails(roomNumber);
+            Room room = roomController.showRoomDetails(roomNumber);
             Printer.show(room);
         } catch (Exception e) {
             System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));

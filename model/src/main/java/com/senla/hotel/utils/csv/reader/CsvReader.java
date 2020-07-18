@@ -1,33 +1,27 @@
 package com.senla.hotel.utils.csv.reader;
 
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.utils.csv.interfaces.ICsvReader;
-import com.senla.hotel.utils.settings.PropertyLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+@Singleton
 public class CsvReader implements ICsvReader {
-    private static CsvReader csvReader;
 
-    private CsvReader() {
-    }
-
-    public static CsvReader getInstance() {
-        if (csvReader == null) {
-            csvReader = new CsvReader();
-        }
-        return csvReader;
+    public CsvReader() {
+        System.out.println("created " + CsvReader.class);
     }
 
     @Override
-    public Stream<String> read(final String property) {
-        final String csv = PropertyLoader.getInstance().getProperty(property);
+    public Stream<String> read(final String path) {
         try {
-            return Files.lines(Path.of(csv));
+            return Files.lines(Paths.get(path));
         } catch (final IOException e) {
-            System.err.println(String.format("File not found %s %s%n", csv, e));
+            System.err.println(String.format("File not found %s %s%n", path, e));
         }
         return null;
     }

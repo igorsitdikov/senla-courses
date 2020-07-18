@@ -1,13 +1,13 @@
 package com.senla.hotel.service;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.Singleton;
+import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.repository.AttendanceRepository;
-import com.senla.hotel.repository.ResidentRepository;
-import com.senla.hotel.repository.RoomHistoryRepository;
-import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.repository.interfaces.IResidentRepository;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
@@ -15,28 +15,30 @@ import com.senla.hotel.service.interfaces.IResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
 import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
-import com.senla.hotel.utils.csv.reader.CsvReader;
-import com.senla.hotel.utils.csv.writer.CsvWriter;
+import com.senla.hotel.utils.csv.interfaces.ICsvReader;
+import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Singleton
 public class ResidentService implements IResidentService {
-    private static final String PROPERTY = "residents";
-    private static ResidentService residentService;
-    private final IResidentRepository residentRepository = ResidentRepository.getInstance();
-    private final IRoomHistoryRepository roomHistoryRepository = RoomHistoryRepository.getInstance();
-    private final IAttendanceService attendanceService = AttendanceService.getInstance();
+    @Autowired
+    private ICsvReader csvReader;
+    @Autowired
+    private ICsvWriter csvWriter;
+    @CsvPath(Storage.RESIDENTS)
+    private String property;
+    @Autowired
+    private IResidentRepository residentRepository;
+    @Autowired
+    private IRoomHistoryRepository roomHistoryRepository;
+    @Autowired
+    private IAttendanceService attendanceService;
 
-    private ResidentService() {
-    }
-
-    public static ResidentService getInstance() {
-        if (residentService == null) {
-            residentService = new ResidentService();
-        }
-        return residentService;
+    public ResidentService() {
+        System.out.println("created " + ResidentService.class);
     }
 
     @Override
@@ -64,8 +66,8 @@ public class ResidentService implements IResidentService {
     @Override
     public void addAttendanceToResident(final Long id, final Attendance attendance) throws EntityNotFoundException {
         final Resident resident = findById(id);
-        final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
-                .findById(resident.getHistory().getId());
+        final RoomHistory history = (RoomHistory) roomHistoryRepository
+            .findById(resident.getHistory().getId());
         final List<Attendance> attendances = resident.getHistory().getAttendances();
         attendanceService.add(attendances, attendance);
         history.setAttendances(attendances);
@@ -74,7 +76,7 @@ public class ResidentService implements IResidentService {
 
     @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-            throws EntityNotFoundException {
+        throws EntityNotFoundException {
         final Long residentId = resident.getId();
         final Long attendanceId = attendanceService.findByName(attendance.getName()).getId();
         addAttendanceToResident(residentId, attendanceId);
@@ -85,8 +87,8 @@ public class ResidentService implements IResidentService {
         final Resident resident = findById(residentId);
         final Attendance attendance = attendanceService.findById(attendanceId);
         final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
-        final RoomHistory history = (RoomHistory) RoomHistoryRepository.getInstance()
-                .findById(residentId);
+        final RoomHistory history = (RoomHistory) roomHistoryRepository
+            .findById(residentId);
         attendanceService.add(attendances, attendance);
         resident.getHistory().setAttendances(attendances);
         roomHistoryRepository.addAttendance(history.getId(), attendance);
@@ -117,13 +119,13 @@ public class ResidentService implements IResidentService {
     @Override
     public void importResidents() {
         final List<Resident>
-                residents = ParseUtils.stringToResidents(CsvReader.getInstance().read(PROPERTY));
+            residents = ParseUtils.stringToResidents(csvReader.read(property));
         residentRepository.setResidents(residents);
     }
 
     @Override
     public void exportResidents() {
-        CsvWriter.getInstance().write(PROPERTY, ParseUtils.residentsToCsv());
+        csvWriter.write(property, ParseUtils.residentsToCsv());
     }
 
     @Override

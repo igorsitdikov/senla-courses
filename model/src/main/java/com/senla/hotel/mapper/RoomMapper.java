@@ -1,5 +1,6 @@
 package com.senla.hotel.mapper;
 
+import com.senla.anntotaion.Autowired;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Accommodation;
@@ -9,12 +10,15 @@ import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.RoomHistoryService;
+import com.senla.hotel.service.interfaces.IRoomHistoryService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RoomMapper implements IEntityMapper<Room> {
+    @Autowired
+    private IRoomHistoryService roomHistoryService;
     @Override
     public Room sourceToDestination(String source) throws EntityIsEmptyException {
         if (source.isEmpty()) {
@@ -34,7 +38,7 @@ public class RoomMapper implements IEntityMapper<Room> {
         if (elements.length > 6) {
             for (int i = 6; i < elements.length; i++) {
                 try {
-                    historyList.add(RoomHistoryService.getInstance().findById(Long.parseLong(elements[i])));
+                    historyList.add(roomHistoryService.findById(Long.parseLong(elements[i])));
                 } catch (EntityNotFoundException e) {
                     System.err.println(String.format("No such history with id %s %s", elements[i], e));
                 }

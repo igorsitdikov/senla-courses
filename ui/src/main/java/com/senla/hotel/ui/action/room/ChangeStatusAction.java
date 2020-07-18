@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.action.room;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.ui.interfaces.IAction;
@@ -9,7 +11,10 @@ import java.util.Scanner;
 
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
+@MenuItem
 public class ChangeStatusAction implements IAction {
+    @Autowired
+    private RoomController roomController;
 
     @Override
     public void execute() {
@@ -27,7 +32,7 @@ public class ChangeStatusAction implements IAction {
                                      "\t3 = REPAIR...",
                                      RoomStatus.values().length));
 
-            RoomController.getInstance().changeStatus(roomNumber, status);
+            roomController.changeStatus(roomNumber, status);
         } catch (Exception e) {
             System.err.println(String.format("Failed to change Room's status! Input valid parameters! %s", e));
         }

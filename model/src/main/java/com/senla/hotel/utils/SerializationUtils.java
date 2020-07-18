@@ -1,15 +1,17 @@
 package com.senla.hotel.utils;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.PropertyLoad;
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.repository.AttendanceRepository;
-import com.senla.hotel.repository.ResidentRepository;
-import com.senla.hotel.repository.RoomHistoryRepository;
-import com.senla.hotel.repository.RoomRepository;
-import com.senla.hotel.utils.settings.PropertyLoader;
+import com.senla.hotel.repository.interfaces.IAttendanceRepository;
+import com.senla.hotel.repository.interfaces.IResidentRepository;
+import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
+import com.senla.hotel.repository.interfaces.IRoomRepository;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,14 +24,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Singleton
 public class SerializationUtils {
-    private final static String STATE_HOTEL = PropertyLoader.getInstance().getProperty("state-hotel");
+    @PropertyLoad("state-hotel")
+    private String stateHotel;
+    @Autowired
+    private IRoomRepository roomRepository;
+    @Autowired
+    private IAttendanceRepository attendanceRepository;
+    @Autowired
+    private IRoomHistoryRepository historyRepository;
+    @Autowired
+    private IResidentRepository residentRepository;
 
     @SafeVarargs
-    public static void serialize(final List<? extends AEntity>... entities) {
+    public final void serialize(final List<? extends AEntity>... entities) {
         try {
             final List<List<? extends AEntity>> entitiesList = new ArrayList<>(Arrays.asList(entities));
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(STATE_HOTEL));
+            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(stateHotel));
             objectOutputStream.writeObject(entitiesList);
             objectOutputStream.close();
 
@@ -40,33 +52,33 @@ public class SerializationUtils {
         }
     }
 
-    public static void deserialize() {
+    public void deserialize() {
         try {
-            final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(STATE_HOTEL));
+            final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(stateHotel));
             final List<List<? extends AEntity>> entitiesLists =
                 (List<List<? extends AEntity>>) objectInputStream.readObject();
-            entitiesLists.forEach(entitiesList -> {
+            for (List<? extends AEntity> entitiesList : entitiesLists) {
                 final Long id = maxId(entitiesList);
                 if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Attendance) {
-                    AttendanceRepository.getInstance().setAttendances((List<Attendance>) entitiesList);
-                    AttendanceRepository.getInstance().setCounter(id);
+                    attendanceRepository.setAttendances((List<Attendance>) entitiesList);
+                    attendanceRepository.setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Room) {
-                    RoomRepository.getInstance().setRooms((List<Room>) entitiesList);
-                    RoomRepository.getInstance().setCounter(id);
+                    roomRepository.setRooms((List<Room>) entitiesList);
+                    roomRepository.setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof RoomHistory) {
-                    RoomHistoryRepository.getInstance().setHistories((List<RoomHistory>) entitiesList);
-                    RoomHistoryRepository.getInstance().setCounter(id);
+                    historyRepository.setHistories((List<RoomHistory>) entitiesList);
+                    historyRepository.setCounter(id);
                 } else if (!entitiesList.isEmpty() && entitiesList.get(0) instanceof Resident) {
-                    ResidentRepository.getInstance().setResidents((List<Resident>) entitiesList);
-                    ResidentRepository.getInstance().setCounter(id);
+                    residentRepository.setResidents((List<Resident>) entitiesList);
+                    residentRepository.setCounter(id);
                 }
-            });
+            }
             objectInputStream.close();
 
         } catch (final FileNotFoundException e) {
-            System.err.printf("File was not found with name %s%n", STATE_HOTEL);
+            System.err.printf("File was not found with name %s%n", stateHotel);
         } catch (final IOException e) {
-            System.err.printf("Fail to load data from file %s%n", STATE_HOTEL);
+            System.err.printf("Fail to load data from file %s%n", stateHotel);
         } catch (final ClassNotFoundException e) {
             System.err.println("Class was not found");
         }

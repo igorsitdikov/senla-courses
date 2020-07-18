@@ -1,20 +1,12 @@
 package com.senla.hotel.ui.menu;
 
+import com.senla.anntotaion.Singleton;
+
 import java.util.List;
 
+@Singleton
 public class Navigator {
-    private static Navigator navigator;
     private Menu currentMenu;
-
-    private Navigator() {
-    }
-
-    public static Navigator getInstance() {
-        if (navigator == null) {
-            navigator = new Navigator();
-        }
-        return navigator;
-    }
 
     public Menu getCurrentMenu() {
         return currentMenu;
