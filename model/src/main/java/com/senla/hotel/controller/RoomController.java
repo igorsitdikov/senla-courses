@@ -3,6 +3,7 @@ package com.senla.hotel.controller;
 import com.senla.anntotaion.Autowired;
 import com.senla.anntotaion.PropertyLoad;
 import com.senla.anntotaion.Singleton;
+import com.senla.enumerated.Type;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -18,7 +19,7 @@ import java.util.List;
 public class RoomController {
     @Autowired
     private static IRoomService roomService;
-    @PropertyLoad("change-status")
+    @PropertyLoad(propertyName = "change-status", type = Type.BOOLEAN)
     private Boolean statusAllow;
 
     public void addRoom(final Room room) {

@@ -5,17 +5,11 @@ import com.senla.hotel.utils.csv.interfaces.ICsvReader;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @Singleton
 public class CsvReader implements ICsvReader {
-
-    public CsvReader() {
-        System.out.println("created " + CsvReader.class);
-    }
-
     @Override
     public Stream<String> read(final String path) {
         try {

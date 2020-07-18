@@ -1,9 +1,8 @@
 package com.senla.hotel.service;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.PropertyLoad;
 import com.senla.anntotaion.Singleton;
-import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
@@ -30,18 +29,14 @@ public class ResidentService implements IResidentService {
     private ICsvReader csvReader;
     @Autowired
     private ICsvWriter csvWriter;
-    @CsvPath(Storage.RESIDENTS)
-    private String property;
     @Autowired
     private IResidentRepository residentRepository;
     @Autowired
     private IRoomHistoryRepository roomHistoryRepository;
     @Autowired
     private IAttendanceService attendanceService;
-
-    public ResidentService() {
-        System.out.println("created " + ResidentService.class);
-    }
+    @PropertyLoad(propertyName = "residents")
+    private String property;
 
     @Override
     public List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {

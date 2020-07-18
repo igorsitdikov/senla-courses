@@ -1,9 +1,8 @@
 package com.senla.hotel.service;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.PropertyLoad;
 import com.senla.anntotaion.Singleton;
-import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.RoomHistoryMapper;
@@ -22,14 +21,10 @@ public class RoomHistoryService implements IRoomHistoryService {
     private ICsvReader csvReader;
     @Autowired
     private ICsvWriter csvWriter;
-    @CsvPath(Storage.HISTORIES)
+    @PropertyLoad(propertyName = "histories")
     private String property;
     @Autowired
     private IRoomHistoryRepository roomHistoryRepository;
-
-    public RoomHistoryService() {
-        System.out.println("created " + RoomService.class);
-    }
 
     @Override
     public RoomHistory create(final RoomHistory history) {

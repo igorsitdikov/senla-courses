@@ -9,11 +9,6 @@ import java.util.List;
 
 @Singleton
 public class CsvWriter implements ICsvWriter {
-
-    public CsvWriter() {
-        System.out.println("created " + CsvWriter.class);
-    }
-
     @Override
     public void write(final String path, final List<String> entities) {
         try (final PrintWriter pw = new PrintWriter(path)) {
