@@ -45,7 +45,7 @@ import java.util.Map;
 public class Test {
 
     public static void main(final String[] args) throws Exception {
-        Map<Class, Class> classMap = new HashMap<>();
+        Map<Class<?>, Class<?>> classMap = new HashMap<>();
         classMap.put(ICsvReader.class, CsvReader.class);
         classMap.put(ICsvWriter.class, CsvWriter.class);
         classMap.put(IResidentRepository.class, ResidentRepository.class);

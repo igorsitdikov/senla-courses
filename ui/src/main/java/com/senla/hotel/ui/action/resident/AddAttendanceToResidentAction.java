@@ -1,7 +1,6 @@
 package com.senla.hotel.ui.action.resident;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Attendance;
@@ -13,7 +12,6 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 import java.util.Scanner;
 
-@MenuItem
 public class AddAttendanceToResidentAction implements IAction {
     @Autowired
     private AttendanceController attendanceController;

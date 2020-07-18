@@ -1,7 +1,6 @@
 package com.senla.hotel.ui.action.admin;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Resident;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-@MenuItem
 public class CheckOutAction implements IAction {
     @Autowired
     private ResidentController residentController;

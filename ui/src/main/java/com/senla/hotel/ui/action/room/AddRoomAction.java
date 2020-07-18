@@ -1,7 +1,6 @@
 package com.senla.hotel.ui.action.room;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.Accommodation;
@@ -14,7 +13,6 @@ import com.senla.hotel.ui.utils.InputDataReader;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-@MenuItem
 public class AddRoomAction implements IAction {
     @Autowired
     private RoomController roomController;

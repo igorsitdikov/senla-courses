@@ -1,7 +1,6 @@
 package com.senla.hotel.ui.action.room;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.ui.interfaces.IAction;
@@ -11,7 +10,6 @@ import java.util.Scanner;
 
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
-@MenuItem
 public class ChangeStatusAction implements IAction {
     @Autowired
     private RoomController roomController;

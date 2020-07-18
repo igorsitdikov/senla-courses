@@ -62,7 +62,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    private static final Map<Class, Class> CLASS_MAP = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> CLASS_MAP = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         configure();
