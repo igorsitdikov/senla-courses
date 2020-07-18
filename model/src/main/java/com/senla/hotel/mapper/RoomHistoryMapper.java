@@ -1,5 +1,6 @@
 package com.senla.hotel.mapper;
 
+import com.senla.anntotaion.Autowired;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
@@ -8,6 +9,9 @@ import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.service.AttendanceService;
 import com.senla.hotel.service.ResidentService;
 import com.senla.hotel.service.RoomService;
+import com.senla.hotel.service.interfaces.IAttendanceService;
+import com.senla.hotel.service.interfaces.IResidentService;
+import com.senla.hotel.service.interfaces.IRoomService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +20,12 @@ import java.util.List;
 
 public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    @Autowired
+    private IRoomService roomService;
+    @Autowired
+    private IResidentService residentService;
+    @Autowired
+    private IAttendanceService attendanceService;
 
     @Override
     public RoomHistory sourceToDestination(final String source) throws EntityIsEmptyException {
@@ -29,13 +39,13 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
         history.setCheckIn(LocalDate.parse(elements[1], formatter));
         history.setCheckOut(LocalDate.parse(elements[2], formatter));
         try {
-            history.setRoom(RoomService.getInstance().findById(Long.parseLong(elements[3])));
+            history.setRoom(roomService.findById(Long.parseLong(elements[3])));
         } catch (final EntityNotFoundException e) {
             System.err.println(String.format("No such room with id %s %s", elements[3], e));
             throw new NullPointerException();
         }
         try {
-            history.setResident(ResidentService.getInstance().findById(Long.parseLong(elements[4])));
+            history.setResident(residentService.findById(Long.parseLong(elements[4])));
         } catch (final EntityNotFoundException e) {
             System.err.println(String.format("No such resident with id %s %s", elements[4], e));
             throw new NullPointerException();
@@ -44,7 +54,7 @@ public class RoomHistoryMapper implements IEntityMapper<RoomHistory> {
         if (elements.length > 5) {
             for (int i = 5; i < elements.length; i++) {
                 try {
-                    historyList.add(AttendanceService.getInstance().findById(Long.parseLong(elements[i])));
+                    historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
                 } catch (final EntityNotFoundException e) {
                     System.err.println(String.format("No such attendance with id %s %s", elements[i], e));
                 }

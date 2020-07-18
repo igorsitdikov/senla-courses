@@ -1,36 +1,39 @@
 package com.senla.hotel.service;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.Singleton;
+import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.repository.AttendanceRepository;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
 import com.senla.hotel.utils.comparator.AttendancePriceComparator;
-import com.senla.hotel.utils.csv.reader.CsvReader;
-import com.senla.hotel.utils.csv.writer.CsvWriter;
+import com.senla.hotel.utils.csv.interfaces.ICsvReader;
+import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Singleton
 public class AttendanceService implements IAttendanceService {
-    private static final String PROPERTY = "attendances";
-    private static AttendanceService attendanceService;
-    private IAttendanceRepository attendanceRepository = AttendanceRepository.getInstance();
+    @Autowired
+    private ICsvReader csvReader;
+    @Autowired
+    private ICsvWriter csvWriter;
+    @CsvPath(Storage.ATTENDANCES)
+    private String property;
+    @Autowired
+    private IAttendanceRepository attendanceRepository;
 
-    private AttendanceService() {
-    }
-
-    public static AttendanceService getInstance() {
-        if (attendanceService == null) {
-            attendanceService = new AttendanceService();
-        }
-        return attendanceService;
+    public AttendanceService() {
+        System.out.println("created " + AttendanceService.class);
     }
 
     @Override
@@ -96,13 +99,14 @@ public class AttendanceService implements IAttendanceService {
 
     @Override
     public void importAttendances() {
+        System.out.println(property);
         final List<Attendance>
-            attendances = ParseUtils.stringToAttendances(CsvReader.getInstance().read(PROPERTY));
+            attendances = ParseUtils.stringToAttendances(csvReader.read(property));
         attendanceRepository.setAttendances(attendances);
     }
 
     @Override
     public void exportAttendances() {
-        CsvWriter.getInstance().write(PROPERTY, ParseUtils.attendancesToCsv());
+        csvWriter.write(property, ParseUtils.attendancesToCsv());
     }
 }

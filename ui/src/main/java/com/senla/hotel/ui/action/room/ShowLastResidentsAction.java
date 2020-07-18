@@ -1,5 +1,7 @@
 package com.senla.hotel.ui.action.room;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.MenuItem;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -10,13 +12,16 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 import java.util.Scanner;
 
+@MenuItem
 public class ShowLastResidentsAction implements IAction {
+    @Autowired
+    private RoomController roomController;
 
     @Override
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         try {
-            final List<Room> rooms = RoomController.getInstance().showAllRooms();
+            final List<Room> rooms = roomController.showAllRooms();
             Printer.show(rooms, "room");
 
             Integer roomId = InputDataReader
@@ -24,7 +29,7 @@ public class ShowLastResidentsAction implements IAction {
             Integer number = InputDataReader
                 .getIntegerInput(scanner, "Input number of last...", Integer.MAX_VALUE);
 
-            List<Resident> residents = RoomController.getInstance().showLastResidents(rooms.get(roomId - 1), number);
+            List<Resident> residents = roomController.showLastResidents(rooms.get(roomId - 1), number);
             Printer.show(residents);
         } catch (Exception e) {
             System.err.println(String.format("Failed to show Resident in Room! Input valid parameters! %s", e));

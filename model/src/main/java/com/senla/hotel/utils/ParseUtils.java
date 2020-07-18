@@ -1,5 +1,7 @@
 package com.senla.hotel.utils;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -10,21 +12,34 @@ import com.senla.hotel.mapper.ResidentMapper;
 import com.senla.hotel.mapper.RoomHistoryMapper;
 import com.senla.hotel.mapper.RoomMapper;
 import com.senla.hotel.mapper.interfaces.IEntityMapper;
-import com.senla.hotel.service.AttendanceService;
-import com.senla.hotel.service.ResidentService;
-import com.senla.hotel.service.RoomHistoryService;
-import com.senla.hotel.service.RoomService;
+import com.senla.hotel.service.interfaces.IAttendanceService;
+import com.senla.hotel.service.interfaces.IResidentService;
+import com.senla.hotel.service.interfaces.IRoomHistoryService;
+import com.senla.hotel.service.interfaces.IRoomService;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Singleton
 public class ParseUtils {
+    @Autowired
     private static IEntityMapper<Attendance> attendanceMapper = new AttendanceMapper();
+    @Autowired
     private static IEntityMapper<Room> roomMapper = new RoomMapper();
+    @Autowired
     private static IEntityMapper<Resident> residentMapper = new ResidentMapper();
+    @Autowired
     private static IEntityMapper<RoomHistory> historyMapper = new RoomHistoryMapper();
+    @Autowired
+    private static IRoomService roomService;
+    @Autowired
+    private static IAttendanceService attendanceService;
+    @Autowired
+    private static IResidentService residentService;
+    @Autowired
+    private static IRoomHistoryService roomHistoryService;
 
     public static List<Attendance> stringToAttendances(final Stream<String> stream) {
         return stream
@@ -83,7 +98,7 @@ public class ParseUtils {
     }
 
     public static List<String> attendancesToCsv() {
-        final List<Attendance> attendances = AttendanceService.getInstance().showAttendances();
+        final List<Attendance> attendances = attendanceService.showAttendances();
         return attendances.stream()
             .map(attendance -> {
                 try {
@@ -98,7 +113,7 @@ public class ParseUtils {
     }
 
     public static List<String> roomsToCsv() {
-        final List<Room> rooms = RoomService.getInstance().showAllRooms();
+        final List<Room> rooms = roomService.showAllRooms();
         return rooms.stream()
             .map(room -> {
                 try {
@@ -113,7 +128,7 @@ public class ParseUtils {
     }
 
     public static List<String> residentsToCsv() {
-        final List<Resident> residents = ResidentService.getInstance().showResidents();
+        final List<Resident> residents = residentService.showResidents();
         return residents.stream()
             .map(resident -> {
                 try {
@@ -128,7 +143,7 @@ public class ParseUtils {
     }
 
     public static List<String> historiesToCsv() {
-        final List<RoomHistory> histories = RoomHistoryService.getInstance().showHistories();
+        final List<RoomHistory> histories = roomHistoryService.showHistories();
         return histories.stream()
             .map(history -> {
                 try {

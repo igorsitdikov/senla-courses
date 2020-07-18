@@ -1,5 +1,6 @@
 package com.senla.hotel.repository;
 
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
@@ -10,21 +11,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@Singleton
 public class AttendanceRepository implements IAttendanceRepository {
-    private static AttendanceRepository attendanceRepository;
     private static List<Attendance> attendances = new LinkedList<>();
     private static Long counter = 0L;
 
-    private AttendanceRepository() {
-    }
-
-    public static AttendanceRepository getInstance() {
-        if (attendanceRepository == null) {
-            attendanceRepository = new AttendanceRepository();
-        }
-        return attendanceRepository;
+    public AttendanceRepository() {
+        System.out.println("created " + AttendanceRepository.class);
     }
 
     @Override
@@ -36,8 +30,6 @@ public class AttendanceRepository implements IAttendanceRepository {
         }
         throw new EntityAlreadyExistsException("Attendance already exists");
     }
-
-
 
     @Override
     public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {

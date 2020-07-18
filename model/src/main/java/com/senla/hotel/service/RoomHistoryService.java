@@ -1,29 +1,32 @@
 package com.senla.hotel.service;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.Singleton;
+import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.repository.RoomHistoryRepository;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.csv.reader.CsvReader;
-import com.senla.hotel.utils.csv.writer.CsvWriter;
+import com.senla.hotel.utils.csv.interfaces.ICsvReader;
+import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
 
 import java.util.List;
 
+@Singleton
 public class RoomHistoryService implements IRoomHistoryService {
-    private static final String PROPERTY = "histories";
-    private static RoomHistoryService roomHistoryService;
-    private IRoomHistoryRepository roomHistoryRepository = RoomHistoryRepository.getInstance();
+    @Autowired
+    private ICsvReader csvReader;
+    @Autowired
+    private ICsvWriter csvWriter;
+    @CsvPath(Storage.HISTORIES)
+    private String property;
+    @Autowired
+    private IRoomHistoryRepository roomHistoryRepository;
 
-    private RoomHistoryService() {
-    }
-
-    public static RoomHistoryService getInstance() {
-        if (roomHistoryService == null) {
-            roomHistoryService = new RoomHistoryService();
-        }
-        return roomHistoryService;
+    public RoomHistoryService() {
+        System.out.println("created " + RoomService.class);
     }
 
     @Override
@@ -43,13 +46,13 @@ public class RoomHistoryService implements IRoomHistoryService {
     @Override
     public void importHistories() {
         final List<RoomHistory>
-            histories = ParseUtils.stringToHistories(CsvReader.getInstance().read(PROPERTY));
+            histories = ParseUtils.stringToHistories(csvReader.read(property));
         roomHistoryRepository.setHistories(histories);
     }
 
     @Override
     public void exportHistories() {
-        CsvWriter.getInstance().write(PROPERTY, ParseUtils.historiesToCsv());
+        csvWriter.write(property, ParseUtils.historiesToCsv());
     }
 
     @Override

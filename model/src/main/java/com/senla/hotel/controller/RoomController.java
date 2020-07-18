@@ -1,34 +1,25 @@
 package com.senla.hotel.controller;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.PropertyLoad;
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
-import com.senla.hotel.service.RoomService;
 import com.senla.hotel.service.interfaces.IRoomService;
-import com.senla.hotel.utils.settings.PropertyLoader;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Singleton
 public class RoomController {
-    private static RoomController roomController;
+    @Autowired
     private static IRoomService roomService;
-    private static final Boolean STATUS_ALLOW =
-        Boolean.parseBoolean(PropertyLoader.getInstance().getProperty("change-status"));
-
-    private RoomController() {
-        roomService = RoomService.getInstance();
-    }
-
-    public static RoomController getInstance() {
-        if (roomController == null) {
-            roomController = new RoomController();
-        }
-        return roomController;
-    }
+    @PropertyLoad("change-status")
+    private Boolean statusAllow;
 
     public void addRoom(final Room room) {
         roomService.addRoom(room);
@@ -88,7 +79,7 @@ public class RoomController {
 
     public void changeStatus(final Integer number, final RoomStatus status)
         throws EntityNotFoundException, RoomStatusChangingException {
-        if (!STATUS_ALLOW) {
+        if (!statusAllow) {
             throw new RoomStatusChangingException("Changing status is forbidden");
         }
         roomService.changeRoomStatus(number, status);

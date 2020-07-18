@@ -1,5 +1,6 @@
 package com.senla.hotel.service;
 
+import com.senla.anntotaion.Autowired;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -15,19 +16,15 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class HotelAdminService implements IHotelAdminService {
-    private static HotelAdminService hotelAdminService;
-    private final IRoomService roomService = RoomService.getInstance();
-    private final IResidentService residentService = ResidentService.getInstance();
-    private final IRoomHistoryService roomHistoryService = RoomHistoryService.getInstance();
+    @Autowired
+    private IRoomService roomService;
+    @Autowired
+    private IResidentService residentService;
+    @Autowired
+    private IRoomHistoryService roomHistoryService;
 
-    private HotelAdminService() {
-    }
-
-    public static HotelAdminService getInstance() {
-        if (hotelAdminService == null) {
-            hotelAdminService = new HotelAdminService();
-        }
-        return hotelAdminService;
+    public HotelAdminService() {
+        System.out.println("created " + HotelAdminService.class);
     }
 
     @Override

@@ -1,20 +1,23 @@
 package com.senla.hotel.service;
 
+import com.senla.anntotaion.Autowired;
+import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.PropertyLoad;
+import com.senla.anntotaion.Singleton;
+import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.repository.RoomRepository;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
-import com.senla.hotel.utils.csv.reader.CsvReader;
-import com.senla.hotel.utils.csv.writer.CsvWriter;
-import com.senla.hotel.utils.settings.PropertyLoader;
+import com.senla.hotel.utils.csv.interfaces.ICsvReader;
+import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,29 +26,29 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+@Singleton
 public class RoomService implements IRoomService {
-    private static final Integer AMOUNT_HISTORIES =
-        Integer.parseInt(PropertyLoader.getInstance().getProperty("amount-histories"));
+    @Autowired
+    private ICsvReader csvReader;
+    @Autowired
+    private ICsvWriter csvWriter;
+    @Autowired
+    private IRoomRepository roomRepository;
+    @PropertyLoad("amount-histories")
+    private Integer amountHistories;
 
-    private static final String PROPERTY = "rooms";
-    private static RoomService roomService;
-    private final IRoomRepository roomRepository = RoomRepository.getInstance();
+    @CsvPath(Storage.ROOMS)
+    private String property;
 
-    private RoomService() {
-    }
-
-    public static RoomService getInstance() {
-        if (roomService == null) {
-            roomService = new RoomService();
-        }
-        return roomService;
+    public RoomService() {
+        System.out.println("created " + RoomService.class);
     }
 
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {
         final Room room = findById(id);
         final LinkedList<RoomHistory> histories = new LinkedList<>(room.getHistories());
-        if (histories.size() == AMOUNT_HISTORIES) {
+        if (histories.size() == amountHistories) {
             histories.removeFirst();
         }
         room.setHistories(histories);
@@ -207,13 +210,13 @@ public class RoomService implements IRoomService {
 
     @Override
     public void importRooms() {
-        final List<Room> rooms = ParseUtils.stringToRooms(CsvReader.getInstance().read(PROPERTY));
+        final List<Room> rooms = ParseUtils.stringToRooms(csvReader.read(property));
         roomRepository.setRooms(rooms);
     }
 
     @Override
     public void exportRooms() {
-        CsvWriter.getInstance().write(PROPERTY, ParseUtils.roomsToCsv());
+        csvWriter.write(property, ParseUtils.roomsToCsv());
     }
 
     @Override

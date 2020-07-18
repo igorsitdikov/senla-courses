@@ -1,28 +1,22 @@
 package com.senla.hotel.repository;
 
+import com.senla.anntotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
-import com.senla.hotel.service.RoomHistoryService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class RoomHistoryRepository implements IRoomHistoryRepository {
-    private static RoomHistoryRepository roomHistoryRepository;
     private static List<RoomHistory> histories = new ArrayList<>();
     private static Long counter = 0L;
 
-    private RoomHistoryRepository() {
-    }
-
-    public static RoomHistoryRepository getInstance() {
-        if (roomHistoryRepository == null) {
-            roomHistoryRepository = new RoomHistoryRepository();
-        }
-        return roomHistoryRepository;
+    public RoomHistoryRepository() {
+        System.out.println("created " + RoomHistoryRepository.class);
     }
 
     @Override
