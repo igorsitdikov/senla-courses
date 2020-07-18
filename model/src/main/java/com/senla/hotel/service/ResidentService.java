@@ -8,6 +8,8 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.mapper.ResidentMapper;
+import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.repository.interfaces.IResidentRepository;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
@@ -118,14 +120,16 @@ public class ResidentService implements IResidentService {
 
     @Override
     public void importResidents() {
-        final List<Resident>
-            residents = ParseUtils.stringToResidents(csvReader.read(property));
+        IEntityMapper<Resident> residentMapper = new ResidentMapper();
+        final List<Resident> residents =
+            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
         residentRepository.setResidents(residents);
     }
 
     @Override
     public void exportResidents() {
-        csvWriter.write(property, ParseUtils.residentsToCsv());
+        IEntityMapper<Resident> residentMapper = new ResidentMapper();
+        csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents()));
     }
 
     @Override
