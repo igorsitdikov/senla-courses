@@ -1,6 +1,5 @@
 package com.senla.hotel;
 
-import com.senla.anntotaion.MenuItem;
 import com.senla.anntotaion.Singleton;
 import com.senla.hotel.configuration.interfaces.Config;
 
@@ -9,7 +8,7 @@ import java.util.Map;
 
 public class AppContext {
     private ObjectFactory factory;
-    private Map<Class, Object> cache = new HashMap<>();
+    private Map<Class<?>, Object> cache = new HashMap<>();
     private Config config;
 
 
@@ -31,9 +30,6 @@ public class AppContext {
         T t = factory.createObject(implClass);
 
         if (implClass.isAnnotationPresent(Singleton.class)) {
-            cache.put(type, t);
-        }
-        if (implClass.isAnnotationPresent(MenuItem.class)) {
             cache.put(type, t);
         }
 
