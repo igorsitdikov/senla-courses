@@ -66,7 +66,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         configure();
-        System.out.println(CLASS_MAP.size());
         AppContext context = Application.run("com.senla.hotel", CLASS_MAP);
         MenuController menuController = context.getObject(MenuController.class);
         menuController.setContext(context);

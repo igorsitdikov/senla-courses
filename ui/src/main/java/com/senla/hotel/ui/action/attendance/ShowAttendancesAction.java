@@ -14,10 +14,6 @@ public class ShowAttendancesAction implements IAction {
     @Autowired
     private AttendanceController attendanceController;
 
-    public ShowAttendancesAction() {
-        System.out.println("created " + ShowAttendancesAction.class);
-    }
-
     @Override
     public void execute() {
         List<Attendance> attendances = attendanceController.showAttendances();

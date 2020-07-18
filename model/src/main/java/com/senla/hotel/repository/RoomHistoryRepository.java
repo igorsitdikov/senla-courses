@@ -15,10 +15,6 @@ public class RoomHistoryRepository implements IRoomHistoryRepository {
     private static List<RoomHistory> histories = new ArrayList<>();
     private static Long counter = 0L;
 
-    public RoomHistoryRepository() {
-        System.out.println("created " + RoomHistoryRepository.class);
-    }
-
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
         for (final RoomHistory history : histories) {

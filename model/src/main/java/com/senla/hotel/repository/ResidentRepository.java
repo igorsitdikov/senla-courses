@@ -15,10 +15,6 @@ public class ResidentRepository implements IResidentRepository {
     private static List<Resident> residents = new ArrayList<>();
     private static Long counter = 0L;
 
-    public ResidentRepository() {
-        System.out.println("created " + ResidentRepository.class);
-    }
-
     @Override
     public AEntity add(final AEntity entity) {
         entity.setId(++counter);

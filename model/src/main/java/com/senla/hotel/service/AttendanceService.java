@@ -1,9 +1,8 @@
 package com.senla.hotel.service;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.CsvPath;
+import com.senla.anntotaion.PropertyLoad;
 import com.senla.anntotaion.Singleton;
-import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
@@ -29,14 +28,10 @@ public class AttendanceService implements IAttendanceService {
     private ICsvReader csvReader;
     @Autowired
     private ICsvWriter csvWriter;
-    @CsvPath(Storage.ATTENDANCES)
-    private String property;
     @Autowired
     private IAttendanceRepository attendanceRepository;
-
-    public AttendanceService() {
-        System.out.println("created " + AttendanceService.class);
-    }
+    @PropertyLoad(propertyName = "attendances")
+    private String property;
 
     @Override
     public Attendance findById(final Long id) throws EntityNotFoundException {

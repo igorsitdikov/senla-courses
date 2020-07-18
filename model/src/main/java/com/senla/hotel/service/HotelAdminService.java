@@ -23,10 +23,6 @@ public class HotelAdminService implements IHotelAdminService {
     @Autowired
     private IRoomHistoryService roomHistoryService;
 
-    public HotelAdminService() {
-        System.out.println("created " + HotelAdminService.class);
-    }
-
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
         throws EntityNotFoundException {

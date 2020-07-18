@@ -1,10 +1,9 @@
 package com.senla.hotel.service;
 
 import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.CsvPath;
 import com.senla.anntotaion.PropertyLoad;
 import com.senla.anntotaion.Singleton;
-import com.senla.enumerated.Storage;
+import com.senla.enumerated.Type;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -36,14 +35,10 @@ public class RoomService implements IRoomService {
     private ICsvWriter csvWriter;
     @Autowired
     private IRoomRepository roomRepository;
-    @CsvPath(Storage.ROOMS)
+    @PropertyLoad(propertyName = "rooms")
     private String property;
-    @PropertyLoad("amount-histories")
+    @PropertyLoad(propertyName = "amount-histories", type = Type.INTEGER)
     private Integer amountHistories;
-
-    public RoomService() {
-        System.out.println("created " + RoomService.class);
-    }
 
     @Override
     public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {

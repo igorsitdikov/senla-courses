@@ -26,8 +26,6 @@ import java.util.NoSuchElementException;
 
 @Singleton
 public class SerializationUtils {
-    @PropertyLoad("state-hotel")
-    private String stateHotel;
     @Autowired
     private IRoomRepository roomRepository;
     @Autowired
@@ -36,6 +34,8 @@ public class SerializationUtils {
     private IRoomHistoryRepository historyRepository;
     @Autowired
     private IResidentRepository residentRepository;
+    @PropertyLoad(propertyName = "state-hotel")
+    private String stateHotel;
 
     @SafeVarargs
     public final void serialize(final List<? extends AEntity>... entities) {

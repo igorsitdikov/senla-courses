@@ -7,7 +7,6 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
-import com.senla.hotel.service.AttendanceService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,10 +16,6 @@ import java.util.List;
 public class RoomRepository implements IRoomRepository {
     private static List<Room> rooms = new ArrayList<>();
     private static Long counter = 0L;
-
-    public RoomRepository() {
-        System.out.println("created " + AttendanceService.class);
-    }
 
     @Override
     public List<Room> getVacantRooms() {

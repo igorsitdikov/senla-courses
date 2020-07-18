@@ -17,10 +17,6 @@ public class AttendanceRepository implements IAttendanceRepository {
     private static List<Attendance> attendances = new LinkedList<>();
     private static Long counter = 0L;
 
-    public AttendanceRepository() {
-        System.out.println("created " + AttendanceRepository.class);
-    }
-
     @Override
     public AEntity add(final AEntity entity) throws EntityAlreadyExistsException {
         if (!AttendanceRepository.attendances.contains(entity)) {
