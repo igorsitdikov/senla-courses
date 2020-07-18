@@ -8,6 +8,8 @@ import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.mapper.AttendanceMapper;
+import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.repository.interfaces.IAttendanceRepository;
 import com.senla.hotel.service.interfaces.IAttendanceService;
 import com.senla.hotel.utils.ParseUtils;
@@ -99,14 +101,15 @@ public class AttendanceService implements IAttendanceService {
 
     @Override
     public void importAttendances() {
-        System.out.println(property);
-        final List<Attendance>
-            attendances = ParseUtils.stringToAttendances(csvReader.read(property));
+        IEntityMapper<Attendance> attendanceMapper = new AttendanceMapper();
+        final List<Attendance> attendances =
+            ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
         attendanceRepository.setAttendances(attendances);
     }
 
     @Override
     public void exportAttendances() {
-        csvWriter.write(property, ParseUtils.attendancesToCsv());
+        IEntityMapper<Attendance> attendanceMapper = new AttendanceMapper();
+        csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances()));
     }
 }

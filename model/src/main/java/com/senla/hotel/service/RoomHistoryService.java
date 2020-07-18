@@ -6,6 +6,8 @@ import com.senla.anntotaion.Singleton;
 import com.senla.enumerated.Storage;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.mapper.RoomHistoryMapper;
+import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
 import com.senla.hotel.service.interfaces.IRoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
@@ -45,14 +47,16 @@ public class RoomHistoryService implements IRoomHistoryService {
 
     @Override
     public void importHistories() {
-        final List<RoomHistory>
-            histories = ParseUtils.stringToHistories(csvReader.read(property));
+        IEntityMapper<RoomHistory> roomHistoryMapper = new RoomHistoryMapper();
+        final List<RoomHistory> histories =
+            ParseUtils.stringToEntities(csvReader.read(property), roomHistoryMapper, RoomHistory.class);
         roomHistoryRepository.setHistories(histories);
     }
 
     @Override
     public void exportHistories() {
-        csvWriter.write(property, ParseUtils.historiesToCsv());
+        IEntityMapper<RoomHistory> roomHistoryMapper = new RoomHistoryMapper();
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomHistoryMapper, showHistories()));
     }
 
     @Override

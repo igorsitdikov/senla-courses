@@ -10,6 +10,8 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.mapper.RoomMapper;
+import com.senla.hotel.mapper.interfaces.IEntityMapper;
 import com.senla.hotel.repository.interfaces.IRoomRepository;
 import com.senla.hotel.service.interfaces.IRoomService;
 import com.senla.hotel.utils.ParseUtils;
@@ -34,11 +36,10 @@ public class RoomService implements IRoomService {
     private ICsvWriter csvWriter;
     @Autowired
     private IRoomRepository roomRepository;
-    @PropertyLoad("amount-histories")
-    private Integer amountHistories;
-
     @CsvPath(Storage.ROOMS)
     private String property;
+    @PropertyLoad("amount-histories")
+    private Integer amountHistories;
 
     public RoomService() {
         System.out.println("created " + RoomService.class);
@@ -210,13 +211,15 @@ public class RoomService implements IRoomService {
 
     @Override
     public void importRooms() {
-        final List<Room> rooms = ParseUtils.stringToRooms(csvReader.read(property));
+        IEntityMapper<Room> roomMapper = new RoomMapper();
+        final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
         roomRepository.setRooms(rooms);
     }
 
     @Override
     public void exportRooms() {
-        csvWriter.write(property, ParseUtils.roomsToCsv());
+        IEntityMapper<Room> roomMapper = new RoomMapper();
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, showAllRooms()));
     }
 
     @Override
