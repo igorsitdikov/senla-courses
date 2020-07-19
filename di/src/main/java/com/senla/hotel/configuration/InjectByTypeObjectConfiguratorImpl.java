@@ -1,6 +1,6 @@
 package com.senla.hotel.configuration;
 
-import com.senla.anntotaion.Autowired;
+import com.senla.annotaion.Autowired;
 import com.senla.hotel.AppContext;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
 

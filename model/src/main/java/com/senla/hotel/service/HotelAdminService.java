@@ -1,6 +1,6 @@
 package com.senla.hotel.service;
 
-import com.senla.anntotaion.Autowired;
+import com.senla.annotaion.Autowired;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;

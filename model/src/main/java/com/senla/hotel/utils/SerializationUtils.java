@@ -1,8 +1,8 @@
 package com.senla.hotel.utils;
 
-import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.PropertyLoad;
-import com.senla.anntotaion.Singleton;
+import com.senla.annotaion.Autowired;
+import com.senla.annotaion.PropertyLoad;
+import com.senla.annotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;

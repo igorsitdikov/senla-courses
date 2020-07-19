@@ -1,6 +1,6 @@
 package com.senla.hotel.repository;
 
-import com.senla.anntotaion.Singleton;
+import com.senla.annotaion.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;

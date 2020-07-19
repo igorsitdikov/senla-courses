@@ -1,11 +1,11 @@
-package com.senla.anntotaion;
+package com.senla.annotaion;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(value = ElementType.FIELD)
+@Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Autowired {
+public @interface Singleton {
 }

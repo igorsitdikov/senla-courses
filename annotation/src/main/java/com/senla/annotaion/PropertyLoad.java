@@ -1,4 +1,4 @@
-package com.senla.anntotaion;
+package com.senla.annotaion;
 
 import com.senla.enumerated.Type;
 
