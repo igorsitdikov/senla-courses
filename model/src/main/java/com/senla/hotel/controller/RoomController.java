@@ -9,7 +9,7 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
-import com.senla.hotel.service.interfaces.IRoomService;
+import com.senla.hotel.service.interfaces.RoomService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import java.util.List;
 @Singleton
 public class RoomController {
     @Autowired
-    private static IRoomService roomService;
+    private static RoomService roomService;
     @PropertyLoad(type = Type.BOOLEAN)
     private Boolean statusAllow;
 

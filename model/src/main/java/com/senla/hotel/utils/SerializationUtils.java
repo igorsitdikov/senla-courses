@@ -8,10 +8,10 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.repository.interfaces.IAttendanceRepository;
-import com.senla.hotel.repository.interfaces.IResidentRepository;
-import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
-import com.senla.hotel.repository.interfaces.IRoomRepository;
+import com.senla.hotel.repository.interfaces.AttendanceRepository;
+import com.senla.hotel.repository.interfaces.ResidentRepository;
+import com.senla.hotel.repository.interfaces.RoomHistoryRepository;
+import com.senla.hotel.repository.interfaces.RoomRepository;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,13 +27,13 @@ import java.util.NoSuchElementException;
 @Singleton
 public class SerializationUtils {
     @Autowired
-    private IRoomRepository roomRepository;
+    private RoomRepository roomRepository;
     @Autowired
-    private IAttendanceRepository attendanceRepository;
+    private AttendanceRepository attendanceRepository;
     @Autowired
-    private IRoomHistoryRepository historyRepository;
+    private RoomHistoryRepository historyRepository;
     @Autowired
-    private IResidentRepository residentRepository;
+    private ResidentRepository residentRepository;
     @PropertyLoad
     private String hotelState;
 

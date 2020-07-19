@@ -5,7 +5,7 @@ import com.senla.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.interfaces.IAttendanceService;
+import com.senla.hotel.service.interfaces.AttendanceService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 @Singleton
 public class AttendanceController {
     @Autowired
-    private static IAttendanceService attendanceService;
+    private static AttendanceService attendanceService;
 
     public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
         attendanceService.createAttendance(attendance);
