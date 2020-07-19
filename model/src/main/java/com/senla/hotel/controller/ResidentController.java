@@ -5,14 +5,14 @@ import com.senla.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.interfaces.IResidentService;
+import com.senla.hotel.service.interfaces.ResidentService;
 
 import java.util.List;
 
 @Singleton
 public class ResidentController {
     @Autowired
-    private static IResidentService residentService;
+    private static ResidentService residentService;
 
     public void createResident(final Resident resident) {
         residentService.createResident(resident);

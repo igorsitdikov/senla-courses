@@ -13,57 +13,15 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
-import com.senla.hotel.repository.ResidentRepository;
-import com.senla.hotel.repository.RoomHistoryRepository;
-import com.senla.hotel.repository.RoomRepository;
-import com.senla.hotel.repository.interfaces.IResidentRepository;
-import com.senla.hotel.repository.interfaces.IRoomHistoryRepository;
-import com.senla.hotel.repository.interfaces.IRoomRepository;
-import com.senla.hotel.service.AttendanceService;
-import com.senla.hotel.service.HotelAdminService;
-import com.senla.hotel.service.ResidentService;
-import com.senla.hotel.service.RoomHistoryService;
-import com.senla.hotel.service.RoomService;
-import com.senla.hotel.service.interfaces.IAttendanceService;
-import com.senla.hotel.service.interfaces.IHotelAdminService;
-import com.senla.hotel.service.interfaces.IResidentService;
-import com.senla.hotel.service.interfaces.IRoomHistoryService;
-import com.senla.hotel.service.interfaces.IRoomService;
-import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.PrinterUtils;
-import com.senla.hotel.utils.SerializationUtils;
-import com.senla.hotel.utils.csv.interfaces.ICsvReader;
-import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
-import com.senla.hotel.utils.csv.reader.CsvReader;
-import com.senla.hotel.utils.csv.writer.CsvWriter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Test {
 
     public static void main(final String[] args) throws Exception {
-        final Map<Class<?>, Class<?>> classMap = new HashMap<>();
-        classMap.put(ICsvReader.class, CsvReader.class);
-        classMap.put(ICsvWriter.class, CsvWriter.class);
-        classMap.put(IResidentRepository.class, ResidentRepository.class);
-        classMap.put(IRoomHistoryRepository.class, RoomHistoryRepository.class);
-        classMap.put(IRoomRepository.class, RoomRepository.class);
-        classMap.put(ParseUtils.class, ParseUtils.class);
-        classMap.put(SerializationUtils.class, SerializationUtils.class);
-        classMap.put(IAttendanceService.class, AttendanceService.class);
-        classMap.put(IHotelAdminService.class, HotelAdminService.class);
-        classMap.put(IResidentService.class, ResidentService.class);
-        classMap.put(IRoomHistoryService.class, RoomHistoryService.class);
-        classMap.put(IRoomService.class, RoomService.class);
-        classMap.put(AttendanceController.class, AttendanceController.class);
-        classMap.put(HotelController.class, HotelController.class);
-        classMap.put(ResidentController.class, ResidentController.class);
-        classMap.put(RoomController.class, RoomController.class);
-
-        final AppContext context = Application.run("com.senla.hotel", classMap);
+        final AppContext context = Application.run("com.senla.hotel");
         final AttendanceController attendanceController = context.getObject(AttendanceController.class);
         final ResidentController residentController = context.getObject(ResidentController.class);
         final HotelController hotelController = context.getObject(HotelController.class);

@@ -12,14 +12,14 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.ui.enumerated.AttendanceMenu;
-import com.senla.hotel.ui.enumerated.HotelAdminMenu;
-import com.senla.hotel.ui.enumerated.MainMenu;
-import com.senla.hotel.ui.enumerated.ResidentMenu;
-import com.senla.hotel.ui.enumerated.RoomMenu;
-import com.senla.hotel.ui.enumerated.ShowAttendancesMenu;
-import com.senla.hotel.ui.enumerated.ShowResidentsMenu;
-import com.senla.hotel.ui.enumerated.ShowRoomsMenu;
+import com.senla.hotel.ui.enumerated.AttendanceMenuImpl;
+import com.senla.hotel.ui.enumerated.HotelAdminMenuImpl;
+import com.senla.hotel.ui.enumerated.MainMenuImpl;
+import com.senla.hotel.ui.enumerated.ResidentMenuImpl;
+import com.senla.hotel.ui.enumerated.RoomMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowAttendancesMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowResidentsMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowRoomsMenuImpl;
 import com.senla.hotel.ui.exceptions.ListEntitiesIsEmptyException;
 import com.senla.hotel.ui.utils.EnumConverter;
 import com.senla.hotel.ui.utils.InputDataReader;
@@ -61,20 +61,20 @@ public class Builder {
         this.addResidentSubMenu(residentMenu, rootMenu);
         this.addAttendanceSubMenu(attendanceMenu, rootMenu);
 
-        rootMenu.addMenuItem(new MenuItem(MainMenu.HOTEL_ADMIN, hotelAdminMenu));
-        rootMenu.addMenuItem(new MenuItem(MainMenu.ROOM, roomMenu));
-        rootMenu.addMenuItem(new MenuItem(MainMenu.RESIDENT, residentMenu));
-        rootMenu.addMenuItem(new MenuItem(MainMenu.ATTENDANCE, attendanceMenu));
-        rootMenu.addMenuItem(new MenuItem(MainMenu.EXIT, null));
+        rootMenu.addMenuItem(new MenuItem(MainMenuImpl.HOTEL_ADMIN, hotelAdminMenu));
+        rootMenu.addMenuItem(new MenuItem(MainMenuImpl.ROOM, roomMenu));
+        rootMenu.addMenuItem(new MenuItem(MainMenuImpl.RESIDENT, residentMenu));
+        rootMenu.addMenuItem(new MenuItem(MainMenuImpl.ATTENDANCE, attendanceMenu));
+        rootMenu.addMenuItem(new MenuItem(MainMenuImpl.EXIT, null));
 
         return rootMenu;
     }
 
     private void addAttendanceSubMenu(final Menu menu, final Menu previous) {
-        final Menu showerMenu = new Menu(AttendanceMenu.SHOW_ATTENDANCES.getTitle());
+        final Menu showerMenu = new Menu(AttendanceMenuImpl.SHOW_ATTENDANCES.getTitle());
         this.addPrinterAttendances(showerMenu, menu);
-        menu.addMenuItem(new MenuItem(AttendanceMenu.SHOW_ATTENDANCES, showerMenu));
-        menu.addMenuItem(new MenuItem(AttendanceMenu.ADD_ATTENDANCE, menu, () -> {
+        menu.addMenuItem(new MenuItem(AttendanceMenuImpl.SHOW_ATTENDANCES, showerMenu));
+        menu.addMenuItem(new MenuItem(AttendanceMenuImpl.ADD_ATTENDANCE, menu, () -> {
             try {
                 final String name = InputDataReader.getStringInput(scanner);
                 final BigDecimal dailyPrice =
@@ -85,7 +85,7 @@ public class Builder {
                 System.err.println(String.format("Failed to add a Attendance! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(AttendanceMenu.CHANGE_ATTENDANCE_PRICE, menu, () -> {
+        menu.addMenuItem(new MenuItem(AttendanceMenuImpl.CHANGE_ATTENDANCE_PRICE, menu, () -> {
             try {
                 final String name = InputDataReader.getStringInput(scanner);
                 final BigDecimal dailyPrice =
@@ -95,31 +95,31 @@ public class Builder {
                 System.err.println(String.format("Failed to change price a Attendance! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addPrinterAttendances(final Menu menu, final Menu previous) {
-        menu.addMenuItem(new MenuItem(ShowAttendancesMenu.ALL_ATTENDANCES, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowAttendancesMenuImpl.ALL_ATTENDANCES, menu, () -> {
             final List<Attendance> attendances = attendanceController.showAttendances();
             Printer.show(attendances);
         }));
-        menu.addMenuItem(new MenuItem(ShowAttendancesMenu.SORT_ATTENDANCES_BY_NAME, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowAttendancesMenuImpl.SORT_ATTENDANCES_BY_NAME, menu, () -> {
             final List<Attendance> attendances = attendanceController.showAttendancesSortedByName();
             Printer.show(attendances);
         }));
-        menu.addMenuItem(new MenuItem(ShowAttendancesMenu.SORT_ATTENDANCES_BY_PRICE, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowAttendancesMenuImpl.SORT_ATTENDANCES_BY_PRICE, menu, () -> {
             final List<Attendance> attendances =
                 attendanceController.showAttendancesSortedByPrice();
             Printer.show(attendances);
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addResidentSubMenu(final Menu menu, final Menu previous) {
-        final Menu printerMenu = new Menu(ResidentMenu.SHOW_RESIDENTS.getTitle());
+        final Menu printerMenu = new Menu(ResidentMenuImpl.SHOW_RESIDENTS.getTitle());
         this.addPrinterResidents(printerMenu, menu);
-        menu.addMenuItem(new MenuItem(ResidentMenu.SHOW_RESIDENTS, printerMenu));
-        menu.addMenuItem(new MenuItem(ResidentMenu.ADD_RESIDENT, menu, () -> {
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.SHOW_RESIDENTS, printerMenu));
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.ADD_RESIDENT, menu, () -> {
             try {
                 final String firstName = InputDataReader.getStringInput(scanner);
                 final String lastName = InputDataReader.getStringInput(scanner);
@@ -137,11 +137,11 @@ public class Builder {
                 System.err.println(String.format("Failed to add a Resident! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(ResidentMenu.TOTAL_RESIDENTS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.TOTAL_RESIDENTS, menu, () -> {
             final int residents = residentController.showCountResidents();
             System.out.println(String.format("Total residents: %d", residents));
         }));
-        menu.addMenuItem(new MenuItem(ResidentMenu.ATTENDANCE_TO_RESIDENT, menu, () -> {
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.ATTENDANCE_TO_RESIDENT, menu, () -> {
             try {
                 final List<Attendance> attendances = attendanceController.showAttendances();
                 Printer.show(attendances, "attendance");
@@ -162,27 +162,27 @@ public class Builder {
                     .println(String.format("Failed to add an Attendance to Resident! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addPrinterResidents(final Menu menu, final Menu previous) {
-        menu.addMenuItem(new MenuItem(ShowResidentsMenu.ALL_RESIDENTS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowResidentsMenuImpl.ALL_RESIDENTS, menu, () -> {
             final List<Resident> residents = residentController.showResidents();
             Printer.show(residents);
         }));
-        menu.addMenuItem(new MenuItem(ShowResidentsMenu.SORT_BY_NAME, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowResidentsMenuImpl.SORT_BY_NAME, menu, () -> {
             final List<Resident> residents = residentController.showResidentsSortedByName();
             Printer.show(residents);
         }));
-        menu.addMenuItem(new MenuItem(ShowResidentsMenu.SORT_BY_CHECK_OUT, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowResidentsMenuImpl.SORT_BY_CHECK_OUT, menu, () -> {
             final List<Resident> residents = residentController.showResidentsSortedByCheckOutDate();
             Printer.show(residents);
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addHotelAdminSubMenu(final Menu menu, final Menu previous) {
-        menu.addMenuItem(new MenuItem(HotelAdminMenu.CHECK_IN, menu, () -> {
+        menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.CHECK_IN, menu, () -> {
             try {
                 final List<Room> rooms = roomController.showAllRooms();
                 Printer.show(rooms, "room");
@@ -202,7 +202,7 @@ public class Builder {
                 System.err.println(String.format("Failed to check-in! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(HotelAdminMenu.CHECK_OUT, menu, () -> {
+        menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.CHECK_OUT, menu, () -> {
             try {
                 final List<Resident> residents = residentController.showResidents();
                 Printer.show(residents, "resident");
@@ -218,7 +218,7 @@ public class Builder {
                 System.err.println(String.format("Failed to check-out! Input valid parameters! %n%s%n", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(HotelAdminMenu.CALCULATE_BILL, menu, () -> {
+        menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.CALCULATE_BILL, menu, () -> {
             try {
                 final List<Resident> residents = residentController.showResidents();
                 Printer.show(residents, "resident");
@@ -230,14 +230,14 @@ public class Builder {
                 System.err.println(String.format("Failed to check-in! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addRoomSubMenu(final Menu menu, final Menu previous) {
-        final Menu printerMenu = new Menu(RoomMenu.SHOW_ROOMS.getTitle());
+        final Menu printerMenu = new Menu(RoomMenuImpl.SHOW_ROOMS.getTitle());
         this.addPrinterRoomsSubMenu(printerMenu, menu);
-        menu.addMenuItem(new MenuItem(RoomMenu.SHOW_ROOMS, printerMenu));
-        menu.addMenuItem(new MenuItem(RoomMenu.CHANGE_ROOM_PRICE, menu, () -> {
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_ROOMS, printerMenu));
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.CHANGE_ROOM_PRICE, menu, () -> {
             final Integer roomNumber =
                 InputDataReader
                     .getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
@@ -250,7 +250,7 @@ public class Builder {
                 System.err.println("Entity not found! " + e);
             }
         }));
-        menu.addMenuItem(new MenuItem(RoomMenu.CHANGE_ROOM_STATUS, menu, () -> {
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.CHANGE_ROOM_STATUS, menu, () -> {
             try {
                 final Integer roomNumber =
                     InputDataReader
@@ -269,11 +269,11 @@ public class Builder {
                 System.err.println(String.format("Failed to change Room's status! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(RoomMenu.TOTAL_VACANT_ROOMS, menu, () -> {
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.TOTAL_VACANT_ROOMS, menu, () -> {
             final int vacantRooms = roomController.countVacantRooms();
             System.out.println(String.format("Total vacant rooms: %d", vacantRooms));
         }));
-        menu.addMenuItem(new MenuItem(RoomMenu.SHOW_DETAILS, menu, () -> {
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_DETAILS, menu, () -> {
             try {
                 final Integer roomNumber =
                     InputDataReader.getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
@@ -283,49 +283,49 @@ public class Builder {
                 System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
             }
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     private void addPrinterRoomsSubMenu(final Menu menu, final Menu previous) {
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.ALL_ROOMS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.ALL_ROOMS, menu, () -> {
             final List<Room> rooms = roomController.showAllRooms();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.SORT_BY_ACCOMMODATION, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.SORT_BY_ACCOMMODATION, menu, () -> {
             final List<Room> rooms = roomController.showAllRoomsSortedByAccommodation();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.SORT_BY_PRICE, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.SORT_BY_PRICE, menu, () -> {
             final List<Room> rooms = roomController.showAllRoomsSortedByPrice();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.SORT_BY_STARS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.SORT_BY_STARS, menu, () -> {
             final List<Room> rooms = roomController.showAllRoomsSortedByStars();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.VACANT_ROOMS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.VACANT_ROOMS, menu, () -> {
             final List<Room> rooms = roomController.showVacantRooms();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.VACANT_ROOMS_ON_DATE, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.VACANT_ROOMS_ON_DATE, menu, () -> {
             final LocalDate date =
                 InputDataReader.getLocalDateInput(scanner, "Input date with format \"YYYY-MM-DD\"...");
             final List<Room> rooms = roomController.showVacantRoomsOnDate(date);
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.VACANT_SORT_BY_ACCOMMODATION, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.VACANT_SORT_BY_ACCOMMODATION, menu, () -> {
             final List<Room> rooms = roomController.showVacantRoomsSortedByAccommodation();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.VACANT_SORT_BY_PRICE, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.VACANT_SORT_BY_PRICE, menu, () -> {
             final List<Room> rooms = roomController.showVacantRoomsSortedByPrice();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(ShowRoomsMenu.VACANT_SORT_BY_STARS, menu, () -> {
+        menu.addMenuItem(new MenuItem(ShowRoomsMenuImpl.VACANT_SORT_BY_STARS, menu, () -> {
             final List<Room> rooms = roomController.showVacantRoomsSortedByStars();
             Printer.show(rooms);
         }));
-        menu.addMenuItem(new MenuItem(MainMenu.TO_PREVIOUS_MENU, previous));
+        menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
     public Menu getMenu() {

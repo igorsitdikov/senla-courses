@@ -11,11 +11,11 @@ public class AppContext {
     private Map<Class<?>, Object> cache = new HashMap<>();
     private Config config;
 
-
     public AppContext(final Config config) {
         this.config = config;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getObject(final Class<T> type) {
         if (cache.containsKey(type)) {
             return (T) cache.get(type);
