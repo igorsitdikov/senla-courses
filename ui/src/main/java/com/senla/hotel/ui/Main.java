@@ -15,7 +15,6 @@ public class Main {
         configure();
         AppContext context = Application.run("com.senla.hotel", CLASS_MAP);
         MenuController menuController = context.getObject(MenuController.class);
-        menuController.setContext(context);
         menuController.run();
     }
 
@@ -26,7 +25,7 @@ public class Main {
             try {
                 CLASS_MAP.put(Class.forName(name), Class.forName(propertyLoader.getProperty(name)));
             } catch (ClassNotFoundException e) {
-                System.err.println("Class not found" + e.getMessage());
+                System.err.printf("Class not found %s%n", e.getMessage());
             }
         }
     }

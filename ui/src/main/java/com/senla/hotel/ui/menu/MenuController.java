@@ -17,14 +17,12 @@ public final class MenuController {
     private Navigator navigator;
     @Autowired
     private Builder builder;
-    private AppContext context;
 
     public void run() {
         hotelController.importData();
         Scanner scanner = new Scanner(System.in);
 
         boolean exit = false;
-        builder.setContext(context);
         navigator.setCurrentMenu(builder.getMenu());
         navigator.printMenu();
 
@@ -55,9 +53,5 @@ public final class MenuController {
         scanner.close();
         hotelController.exportData();
         System.out.println("Goodbye! Your changes have been saved!");
-    }
-
-    public void setContext(final AppContext context) {
-        this.context = context;
     }
 }
