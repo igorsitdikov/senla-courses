@@ -1,8 +1,8 @@
 package com.senla.hotel.service;
 
-import com.senla.anntotaion.Autowired;
-import com.senla.anntotaion.PropertyLoad;
-import com.senla.anntotaion.Singleton;
+import com.senla.annotaion.Autowired;
+import com.senla.annotaion.PropertyLoad;
+import com.senla.annotaion.Singleton;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.RoomHistoryMapper;

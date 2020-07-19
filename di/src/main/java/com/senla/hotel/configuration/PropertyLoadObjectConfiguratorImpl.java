@@ -1,6 +1,6 @@
 package com.senla.hotel.configuration;
 
-import com.senla.anntotaion.PropertyLoad;
+import com.senla.annotaion.PropertyLoad;
 import com.senla.enumerated.Type;
 import com.senla.hotel.AppContext;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;

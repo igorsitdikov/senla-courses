@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ObjectConverter {
-    private static final Map<String, Method> CONVERTERS = new HashMap<>();
+    private static Map<String, Method> converters = new HashMap<>();
 
     static {
         Method[] methods = ObjectConverter.class.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getParameterTypes().length == 1) {
-                CONVERTERS.put(method.getParameterTypes()[0].getName() + "_"
+                converters.put(method.getParameterTypes()[0].getName() + "_"
                                + method.getReturnType().getName(), method);
             }
         }
@@ -30,7 +30,7 @@ public final class ObjectConverter {
             return to.cast(from);
         }
         String converterId = from.getClass().getName() + "_" + to.getName();
-        Method converter = CONVERTERS.get(converterId);
+        Method converter = converters.get(converterId);
         if (converter == null) {
             throw new ConverterNotExistsException("Cannot convert from "
                                                   + from.getClass().getName() + " to " + to.getName()
