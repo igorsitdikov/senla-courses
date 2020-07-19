@@ -1,9 +1,9 @@
 package com.senla.hotel.configuration.interfaces;
 
-import org.reflections.Reflections;
+import com.senla.hotel.Scanner;
 
 public interface Config {
     <T> Class<? extends T> getImplClass(Class<T> ifc);
 
-    Reflections getScanner();
+    Scanner getScanner();
 }

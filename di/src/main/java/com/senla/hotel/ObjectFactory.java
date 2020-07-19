@@ -14,9 +14,8 @@ public class ObjectFactory {
     public ObjectFactory(final AppContext context)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         this.context = context;
-        for (final Class<? extends ObjectConfigurator> aClass : context.getConfig().getScanner()
-            .getSubTypesOf(ObjectConfigurator.class)) {
-            configurators.add(aClass.getDeclaredConstructor().newInstance());
+        for (final Class<?> aClass : context.getConfig().getScanner().getSubTypesOf(ObjectConfigurator.class)) {
+            configurators.add((ObjectConfigurator) aClass.getDeclaredConstructor().newInstance());
         }
     }
 
