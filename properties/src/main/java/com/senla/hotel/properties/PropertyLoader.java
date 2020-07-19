@@ -24,4 +24,8 @@ public class PropertyLoader {
     public String getProperty(final String key) {
         return properties.getProperty(key);
     }
+
+    public Properties getProperties() {
+        return properties;
+    }
 }
