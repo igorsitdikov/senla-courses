@@ -1,7 +1,7 @@
 package com.senla.hotel;
 
-import com.senla.hotel.exception.ConverterNotExistsException;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
+import com.senla.hotel.exception.ConverterNotExistsException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -25,13 +25,13 @@ public class ObjectFactory {
         try {
             t = create(implClass);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            System.err.println("Instantiation! " + e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            System.err.println("Illegal access! " + e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            System.err.println("Invocation target! " + e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            System.err.println("No such method! " + e);
         }
         configure(t);
         return t;
@@ -41,8 +41,10 @@ public class ObjectFactory {
         configurators.forEach(objectConfigurator -> {
             try {
                 objectConfigurator.configure(t, context);
-            } catch (IllegalAccessException | ConverterNotExistsException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                System.err.println("Illegal access! " + e);
+            } catch (ConverterNotExistsException e) {
+                System.err.println("No converter for this type! " + e);
             }
         });
     }

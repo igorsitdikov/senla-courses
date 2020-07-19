@@ -2,7 +2,6 @@ package com.senla.hotel.ui.menu;
 
 import com.senla.anntotaion.Autowired;
 import com.senla.anntotaion.Singleton;
-import com.senla.hotel.AppContext;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 

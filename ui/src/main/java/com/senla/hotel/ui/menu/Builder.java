@@ -247,7 +247,7 @@ public class Builder {
             try {
                 roomController.changePrice(roomNumber, dailyPrice);
             } catch (EntityNotFoundException e) {
-                e.printStackTrace();
+                System.err.println("Entity not found! " + e);
             }
         }));
         menu.addMenuItem(new MenuItem(RoomMenu.CHANGE_ROOM_STATUS, menu, () -> {
