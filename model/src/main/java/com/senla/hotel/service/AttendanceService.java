@@ -1,8 +1,8 @@
 package com.senla.hotel.service;
 
-import com.senla.annotaion.Autowired;
-import com.senla.annotaion.PropertyLoad;
-import com.senla.annotaion.Singleton;
+import com.senla.annotation.Autowired;
+import com.senla.annotation.PropertyLoad;
+import com.senla.annotation.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;

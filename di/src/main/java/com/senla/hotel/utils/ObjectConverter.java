@@ -10,8 +10,8 @@ public final class ObjectConverter {
     private static Map<String, Method> converters = new HashMap<>();
 
     static {
-        Method[] methods = ObjectConverter.class.getDeclaredMethods();
-        for (Method method : methods) {
+        final Method[] methods = ObjectConverter.class.getDeclaredMethods();
+        for (final Method method : methods) {
             if (method.getParameterTypes().length == 1) {
                 converters.put(method.getParameterTypes()[0].getName() + "_"
                                + method.getReturnType().getName(), method);
@@ -22,15 +22,15 @@ public final class ObjectConverter {
     private ObjectConverter() {
     }
 
-    public static <T> T convert(Object from, Class<T> to) throws ConverterNotExistsException {
+    public static <T> T convert(final Object from, final Class<T> to) throws ConverterNotExistsException {
         if (from == null) {
             return null;
         }
         if (to.isAssignableFrom(from.getClass())) {
             return to.cast(from);
         }
-        String converterId = from.getClass().getName() + "_" + to.getName();
-        Method converter = converters.get(converterId);
+        final String converterId = from.getClass().getName() + "_" + to.getName();
+        final Method converter = converters.get(converterId);
         if (converter == null) {
             throw new ConverterNotExistsException("Cannot convert from "
                                                   + from.getClass().getName() + " to " + to.getName()
@@ -38,22 +38,22 @@ public final class ObjectConverter {
         }
         try {
             return to.cast(converter.invoke(to, from));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Cannot convert from "
                                        + from.getClass().getName() + " to " + to.getName()
                                        + ". Conversion failed with " + e.getMessage(), e);
         }
     }
 
-    public static Double stringToDouble(String value) {
+    public static Double stringToDouble(final String value) {
         return Double.valueOf(value);
     }
 
-    public static Integer stringToInteger(String value) {
+    public static Integer stringToInteger(final String value) {
         return Integer.valueOf(value);
     }
 
-    public static Boolean stringToBoolean(String value) {
+    public static Boolean stringToBoolean(final String value) {
         return Boolean.valueOf(value);
     }
 }

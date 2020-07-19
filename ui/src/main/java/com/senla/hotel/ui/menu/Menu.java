@@ -9,7 +9,7 @@ public class Menu {
 
     private List<MenuItem> menuItems = new ArrayList<>();
 
-    public Menu(String name) {
+    public Menu(final String name) {
         this.name = name;
     }
 
@@ -17,7 +17,7 @@ public class Menu {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -25,11 +25,11 @@ public class Menu {
         return menuItems;
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
+    public void setMenuItems(final List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
 
-    public void addMenuItem(MenuItem menuItem) {
+    public void addMenuItem(final MenuItem menuItem) {
         menuItems.add(menuItem);
     }
 }

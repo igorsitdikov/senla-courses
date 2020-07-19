@@ -45,7 +45,7 @@ import java.util.Map;
 public class Test {
 
     public static void main(final String[] args) throws Exception {
-        Map<Class<?>, Class<?>> classMap = new HashMap<>();
+        final Map<Class<?>, Class<?>> classMap = new HashMap<>();
         classMap.put(ICsvReader.class, CsvReader.class);
         classMap.put(ICsvWriter.class, CsvWriter.class);
         classMap.put(IResidentRepository.class, ResidentRepository.class);
@@ -63,11 +63,11 @@ public class Test {
         classMap.put(ResidentController.class, ResidentController.class);
         classMap.put(RoomController.class, RoomController.class);
 
-        AppContext context = Application.run("com.senla.hotel", classMap);
-        AttendanceController attendanceController = context.getObject(AttendanceController.class);
-        ResidentController residentController = context.getObject(ResidentController.class);
-        HotelController hotelController = context.getObject(HotelController.class);
-        RoomController roomController = context.getObject(RoomController.class);
+        final AppContext context = Application.run("com.senla.hotel", classMap);
+        final AttendanceController attendanceController = context.getObject(AttendanceController.class);
+        final ResidentController residentController = context.getObject(ResidentController.class);
+        final HotelController hotelController = context.getObject(HotelController.class);
+        final RoomController roomController = context.getObject(RoomController.class);
 
         hotelController.importData();
 

@@ -17,7 +17,7 @@ public class ParseUtils {
             .map(entity -> {
                 try {
                     return mapper.sourceToDestination(entity);
-                } catch (EntityIsEmptyException e) {
+                } catch (final EntityIsEmptyException e) {
                     System.err.println(e.getMessage());
                 }
                 return null;
@@ -33,7 +33,7 @@ public class ParseUtils {
             .map(entity -> {
                 try {
                     return mapper.destinationToSource(entity);
-                } catch (EntityIsEmptyException e) {
+                } catch (final EntityIsEmptyException e) {
                     System.err.println(e.getMessage());
                 }
                 return null;

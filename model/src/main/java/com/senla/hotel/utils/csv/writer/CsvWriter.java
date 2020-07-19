@@ -1,6 +1,6 @@
 package com.senla.hotel.utils.csv.writer;
 
-import com.senla.annotaion.Singleton;
+import com.senla.annotation.Singleton;
 import com.senla.hotel.utils.csv.interfaces.ICsvWriter;
 
 import java.io.FileNotFoundException;

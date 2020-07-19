@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class InputDataReader {
-    public static Integer getIntegerInput(Scanner scanner, String message, Integer limit) {
+    public static Integer getIntegerInput(final Scanner scanner, final String message, final Integer limit) {
         System.out.println(message);
 
         boolean isValid = false;
@@ -21,7 +21,7 @@ public class InputDataReader {
         return input;
     }
 
-    public static Integer getIntegerInput(Scanner scanner) {
+    public static Integer getIntegerInput(final Scanner scanner) {
         boolean isValid = false;
         Integer input = null;
 
@@ -37,12 +37,12 @@ public class InputDataReader {
         return input;
     }
 
-    public static Long getLongInput(Scanner scanner, String message) {
+    public static Long getLongInput(final Scanner scanner, final String message) {
         System.out.println(message);
         return getLongInput(scanner);
     }
 
-    public static Long getLongInput(Scanner scanner) {
+    public static Long getLongInput(final Scanner scanner) {
         boolean isValid = false;
         Long input = null;
 
@@ -58,21 +58,21 @@ public class InputDataReader {
         return input;
     }
 
-    public static String getStringInput(Scanner scanner, String message) {
+    public static String getStringInput(final Scanner scanner, final String message) {
         System.out.println(message);
         return getStringInput(scanner);
     }
 
-    public static String getStringInput(Scanner scanner) {
+    public static String getStringInput(final Scanner scanner) {
         return scanner.nextLine();
     }
 
-    public static Double getDoubleInput(Scanner scanner, String message) {
+    public static Double getDoubleInput(final Scanner scanner, final String message) {
         System.out.println(message);
         return getDoubleInput(scanner);
     }
 
-    public static Double getDoubleInput(Scanner scanner) {
+    public static Double getDoubleInput(final Scanner scanner) {
         boolean isValid = false;
         Double input = null;
 
@@ -89,12 +89,12 @@ public class InputDataReader {
         return input;
     }
 
-    public static LocalDate getLocalDateInput(Scanner scanner, String message) {
+    public static LocalDate getLocalDateInput(final Scanner scanner, final String message) {
         System.out.println(message);
         return getLocalDateInput(scanner);
     }
 
-    private static LocalDate getLocalDateInput(Scanner scanner) {
+    private static LocalDate getLocalDateInput(final Scanner scanner) {
         boolean isValid = false;
         String input;
         LocalDate date = null;
