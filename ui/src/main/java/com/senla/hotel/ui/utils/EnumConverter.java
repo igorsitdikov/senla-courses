@@ -1,6 +1,7 @@
 package com.senla.hotel.ui.utils;
 
 import com.senla.hotel.enumerated.Accommodation;
+import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 
@@ -98,4 +99,18 @@ public class EnumConverter {
         return roomStar;
     }
 
+    public static Gender integerToGender(Integer input) {
+        Gender gender = null;
+        switch (input) {
+            case 1:
+                gender = Gender.MALE;
+                break;
+            case 2:
+                gender = Gender.FEMALE;
+                break;
+            default:
+                System.out.println("Wrong input. Please, input a number from 1 to 2. Try again!");
+        }
+        return gender;
+    }
 }
