@@ -1,6 +1,6 @@
 package com.senla.hotel.configuration;
 
-import com.senla.annotaion.PropertyLoad;
+import com.senla.annotation.PropertyLoad;
 import com.senla.enumerated.Type;
 import com.senla.hotel.AppContext;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
@@ -18,16 +18,16 @@ public class PropertyLoadObjectConfiguratorImpl implements ObjectConfigurator {
     }
 
     @Override
-    public void configure(Object t, AppContext context)
+    public void configure(final Object t, final AppContext context)
         throws IllegalAccessException, ConverterNotExistsException {
 
-        for (Field field : t.getClass().getDeclaredFields()) {
-            PropertyLoad annotation = field.getAnnotation(PropertyLoad.class);
+        for (final Field field : t.getClass().getDeclaredFields()) {
+            final PropertyLoad annotation = field.getAnnotation(PropertyLoad.class);
             if (annotation != null) {
                 propertyLoader.init(annotation.configName());
                 field.setAccessible(true);
-                String propertyName = getPropertyName(annotation, getDefaultPropertyName(t, field));
-                String value = propertyLoader.getProperty(propertyName);
+                final String propertyName = getPropertyName(annotation, getDefaultPropertyName(t, field));
+                final String value = propertyLoader.getProperty(propertyName);
                 if (annotation.type() == Type.STRING) {
                     field.set(t, value);
                 } else {

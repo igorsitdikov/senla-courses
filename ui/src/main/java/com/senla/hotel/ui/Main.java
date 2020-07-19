@@ -9,22 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    private static Map<Class<?>, Class<?>> CLASS_MAP = new HashMap<>();
+    private static Map<Class<?>, Class<?>> classMap = new HashMap<>();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         configure();
-        AppContext context = Application.run("com.senla.hotel", CLASS_MAP);
-        MenuController menuController = context.getObject(MenuController.class);
+        final AppContext context = Application.run("com.senla.hotel", classMap);
+        final MenuController menuController = context.getObject(MenuController.class);
         menuController.run();
     }
 
     public static void configure() {
-        PropertyLoader propertyLoader = new PropertyLoader();
+        final PropertyLoader propertyLoader = new PropertyLoader();
         propertyLoader.init("instance.properties");
         for (final String name : propertyLoader.getProperties().stringPropertyNames()) {
             try {
-                CLASS_MAP.put(Class.forName(name), Class.forName(propertyLoader.getProperty(name)));
-            } catch (ClassNotFoundException e) {
+                classMap.put(Class.forName(name), Class.forName(propertyLoader.getProperty(name)));
+            } catch (final ClassNotFoundException e) {
                 System.err.printf("Class not found %s%n", e.getMessage());
             }
         }

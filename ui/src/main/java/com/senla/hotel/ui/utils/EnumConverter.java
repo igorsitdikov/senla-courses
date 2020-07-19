@@ -6,7 +6,7 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 
 public class EnumConverter {
-    public static RoomStatus integerToStatus(Integer input) {
+    public static RoomStatus integerToStatus(final Integer input) {
         RoomStatus roomStatus = null;
         switch (input) {
             case 1:
@@ -24,7 +24,7 @@ public class EnumConverter {
         return roomStatus;
     }
 
-    public static Accommodation integerToAccommodation(Integer input) {
+    public static Accommodation integerToAccommodation(final Integer input) {
         Accommodation accommodation = null;
         switch (input) {
             case 1:
@@ -63,7 +63,7 @@ public class EnumConverter {
         return accommodation;
     }
 
-    public static Stars integerToStar(Integer input) {
+    public static Stars integerToStar(final Integer input) {
         Stars roomStar = null;
         switch (input) {
             case 1:
@@ -99,7 +99,7 @@ public class EnumConverter {
         return roomStar;
     }
 
-    public static Gender integerToGender(Integer input) {
+    public static Gender integerToGender(final Integer input) {
         Gender gender = null;
         switch (input) {
             case 1:

@@ -1,6 +1,6 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.annotaion.Singleton;
+import com.senla.annotation.Singleton;
 
 import java.util.List;
 
@@ -12,22 +12,22 @@ public class Navigator {
         return currentMenu;
     }
 
-    public void setCurrentMenu(Menu currentMenu) {
+    public void setCurrentMenu(final Menu currentMenu) {
         this.currentMenu = currentMenu;
     }
 
     public void printMenu() {
         System.out.println(currentMenu.getName());
-        List<MenuItem> items = currentMenu.getMenuItems();
-        for (MenuItem item : items) {
+        final List<MenuItem> items = currentMenu.getMenuItems();
+        for (final MenuItem item : items) {
             System.out.println(String.format("%d. %s",
                                              item.getMenuEnum().getId(),
                                              item.getMenuEnum().getTitle()));
         }
     }
 
-    public void navigate(Integer index) {
-        List<MenuItem> items = currentMenu.getMenuItems();
+    public void navigate(final Integer index) {
+        final List<MenuItem> items = currentMenu.getMenuItems();
         if (items.get(index).getAction() != null) {
             items.get(index).doAction();
         } else {

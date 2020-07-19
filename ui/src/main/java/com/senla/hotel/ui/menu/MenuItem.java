@@ -9,12 +9,12 @@ public class MenuItem {
     private IAction action;
     private Menu nextMenu;
 
-    public MenuItem(IMenuEnum menuEnum, Menu nextMenu) {
+    public MenuItem(final IMenuEnum menuEnum, final Menu nextMenu) {
         this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(IMenuEnum menuEnum, Menu nextMenu, IAction action) {
+    public MenuItem(final IMenuEnum menuEnum, final Menu nextMenu, final IAction action) {
         this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
         this.action = action;
@@ -36,7 +36,7 @@ public class MenuItem {
         return action;
     }
 
-    public void setAction(IAction action) {
+    public void setAction(final IAction action) {
         this.action = action;
     }
 
@@ -44,11 +44,11 @@ public class MenuItem {
         return nextMenu;
     }
 
-    public void setNextMenu(Menu nextMenu) {
+    public void setNextMenu(final Menu nextMenu) {
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(IMenuEnum menuEnum) {
+    public MenuItem(final IMenuEnum menuEnum) {
         this.menuEnum = menuEnum;
     }
 }

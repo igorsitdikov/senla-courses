@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.annotaion.Autowired;
-import com.senla.annotaion.Singleton;
+import com.senla.annotation.Autowired;
+import com.senla.annotation.Singleton;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 
@@ -19,7 +19,7 @@ public final class MenuController {
 
     public void run() {
         hotelController.importData();
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
 
         boolean exit = false;
         navigator.setCurrentMenu(builder.getMenu());
@@ -28,7 +28,7 @@ public final class MenuController {
         while (!exit) {
 
             int choice = InputDataReader.getIntegerInput(scanner) - 1;
-            List<MenuItem> menuItems = navigator.getCurrentMenu().getMenuItems();
+            final List<MenuItem> menuItems = navigator.getCurrentMenu().getMenuItems();
 
             if (choice == -1) {
                 choice = menuItems.size() - 1;

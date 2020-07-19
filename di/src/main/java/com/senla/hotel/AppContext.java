@@ -1,6 +1,6 @@
 package com.senla.hotel;
 
-import com.senla.annotaion.Singleton;
+import com.senla.annotation.Singleton;
 import com.senla.hotel.configuration.interfaces.Config;
 
 import java.util.HashMap;
@@ -12,11 +12,11 @@ public class AppContext {
     private Config config;
 
 
-    public AppContext(Config config) {
+    public AppContext(final Config config) {
         this.config = config;
     }
 
-    public <T> T getObject(Class<T> type) {
+    public <T> T getObject(final Class<T> type) {
         if (cache.containsKey(type)) {
             return (T) cache.get(type);
         }
@@ -27,7 +27,7 @@ public class AppContext {
             implClass = config.getImplClass(type);
         }
 
-        T t = factory.createObject(implClass);
+        final T t = factory.createObject(implClass);
 
         if (implClass.isAnnotationPresent(Singleton.class)) {
             cache.put(type, t);
