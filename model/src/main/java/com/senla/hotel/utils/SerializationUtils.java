@@ -34,14 +34,14 @@ public class SerializationUtils {
     private IRoomHistoryRepository historyRepository;
     @Autowired
     private IResidentRepository residentRepository;
-    @PropertyLoad(propertyName = "state-hotel")
-    private String stateHotel;
+    @PropertyLoad
+    private String hotelState;
 
     @SafeVarargs
     public final void serialize(final List<? extends AEntity>... entities) {
         try {
             final List<List<? extends AEntity>> entitiesList = new ArrayList<>(Arrays.asList(entities));
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(stateHotel));
+            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(hotelState));
             objectOutputStream.writeObject(entitiesList);
             objectOutputStream.close();
 
@@ -54,7 +54,7 @@ public class SerializationUtils {
 
     public void deserialize() {
         try {
-            final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(stateHotel));
+            final ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(hotelState));
             final List<List<? extends AEntity>> entitiesLists =
                 (List<List<? extends AEntity>>) objectInputStream.readObject();
             for (List<? extends AEntity> entitiesList : entitiesLists) {
@@ -76,9 +76,9 @@ public class SerializationUtils {
             objectInputStream.close();
 
         } catch (final FileNotFoundException e) {
-            System.err.printf("File was not found with name %s%n", stateHotel);
+            System.err.printf("File was not found with name %s%n", hotelState);
         } catch (final IOException e) {
-            System.err.printf("Fail to load data from file %s%n", stateHotel);
+            System.err.printf("Fail to load data from file %s%n", hotelState);
         } catch (final ClassNotFoundException e) {
             System.err.println("Class was not found");
         }

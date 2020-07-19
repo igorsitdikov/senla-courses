@@ -26,14 +26,26 @@ public class PropertyLoadObjectConfiguratorImpl implements ObjectConfigurator {
             if (annotation != null) {
                 propertyLoader.init(annotation.configName());
                 field.setAccessible(true);
-                String value = propertyLoader.getProperty(annotation.propertyName());
+                String propertyName = getPropertyName(annotation, getDefaultPropertyName(t, field));
+                String value = propertyLoader.getProperty(propertyName);
                 if (annotation.type() == Type.STRING) {
                     field.set(t, value);
                 } else {
-                    final Object convertedValue = ObjectConverter.convert(value, annotation.type().getaClass());
+                    final Object convertedValue = ObjectConverter.convert(value, annotation.type().getType());
                     field.set(t, convertedValue);
                 }
             }
         }
+    }
+
+    private String getDefaultPropertyName(final Object object, final Field field) {
+        return String.format("%s.%s", object.getClass().getSimpleName(), field.getName());
+    }
+
+    private String getPropertyName(final PropertyLoad annotation, final String defaultName) {
+        if (annotation.propertyName().isEmpty()) {
+            return defaultName;
+        }
+        return annotation.propertyName();
     }
 }

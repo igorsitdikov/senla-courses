@@ -37,7 +37,7 @@ public class RoomService implements IRoomService {
     private IRoomRepository roomRepository;
     @PropertyLoad(propertyName = "rooms")
     private String property;
-    @PropertyLoad(propertyName = "amount-histories", type = Type.INTEGER)
+    @PropertyLoad(type = Type.INTEGER)
     private Integer amountHistories;
 
     @Override

@@ -19,7 +19,7 @@ import java.util.List;
 public class RoomController {
     @Autowired
     private static IRoomService roomService;
-    @PropertyLoad(propertyName = "change-status", type = Type.BOOLEAN)
+    @PropertyLoad(type = Type.BOOLEAN)
     private Boolean statusAllow;
 
     public void addRoom(final Room room) {

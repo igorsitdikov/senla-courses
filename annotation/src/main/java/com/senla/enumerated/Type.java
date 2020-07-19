@@ -5,13 +5,13 @@ public enum Type {
     BOOLEAN(Boolean.class),
     INTEGER(Integer.class),
     DOUBLE(Double.class);
-    private Class<?> aClass;
+    private Class<?> type;
 
-    Type(final Class<?> aClass) {
-        this.aClass = aClass;
+    Type(final Class<?> type) {
+        this.type = type;
     }
 
-    public Class<?> getaClass() {
-        return aClass;
+    public Class<?> getType() {
+        return type;
     }
 }
