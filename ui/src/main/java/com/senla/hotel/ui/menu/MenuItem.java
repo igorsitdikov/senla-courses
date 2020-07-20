@@ -1,20 +1,20 @@
 package com.senla.hotel.ui.menu;
 
 
-import com.senla.hotel.ui.enumerated.interfaces.IMenuEnum;
-import com.senla.hotel.ui.interfaces.IAction;
+import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
+import com.senla.hotel.ui.interfaces.Action;
 
 public class MenuItem {
-    private IMenuEnum menuEnum;
-    private IAction action;
+    private MenuEnum menuEnum;
+    private Action action;
     private Menu nextMenu;
 
-    public MenuItem(IMenuEnum menuEnum, Menu nextMenu) {
+    public MenuItem(final MenuEnum menuEnum, final Menu nextMenu) {
         this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(IMenuEnum menuEnum, Menu nextMenu, IAction action) {
+    public MenuItem(final MenuEnum menuEnum, final Menu nextMenu, final Action action) {
         this.menuEnum = menuEnum;
         this.nextMenu = nextMenu;
         this.action = action;
@@ -24,19 +24,19 @@ public class MenuItem {
         this.action.execute();
     }
 
-    public IMenuEnum getMenuEnum() {
+    public MenuEnum getMenuEnum() {
         return menuEnum;
     }
 
-    public void setMenuEnum(final IMenuEnum menuEnum) {
+    public void setMenuEnum(final MenuEnum menuEnum) {
         this.menuEnum = menuEnum;
     }
 
-    public IAction getAction() {
+    public Action getAction() {
         return action;
     }
 
-    public void setAction(IAction action) {
+    public void setAction(final Action action) {
         this.action = action;
     }
 
@@ -44,11 +44,11 @@ public class MenuItem {
         return nextMenu;
     }
 
-    public void setNextMenu(Menu nextMenu) {
+    public void setNextMenu(final Menu nextMenu) {
         this.nextMenu = nextMenu;
     }
 
-    public MenuItem(IMenuEnum menuEnum) {
+    public MenuItem(final MenuEnum menuEnum) {
         this.menuEnum = menuEnum;
     }
 }

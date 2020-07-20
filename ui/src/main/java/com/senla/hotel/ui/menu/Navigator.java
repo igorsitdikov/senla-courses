@@ -1,41 +1,33 @@
 package com.senla.hotel.ui.menu;
 
+import com.senla.annotation.Singleton;
+
 import java.util.List;
 
+@Singleton
 public class Navigator {
-    private static Navigator navigator;
     private Menu currentMenu;
-
-    private Navigator() {
-    }
-
-    public static Navigator getInstance() {
-        if (navigator == null) {
-            navigator = new Navigator();
-        }
-        return navigator;
-    }
 
     public Menu getCurrentMenu() {
         return currentMenu;
     }
 
-    public void setCurrentMenu(Menu currentMenu) {
+    public void setCurrentMenu(final Menu currentMenu) {
         this.currentMenu = currentMenu;
     }
 
     public void printMenu() {
         System.out.println(currentMenu.getName());
-        List<MenuItem> items = currentMenu.getMenuItems();
-        for (MenuItem item : items) {
+        final List<MenuItem> items = currentMenu.getMenuItems();
+        for (final MenuItem item : items) {
             System.out.println(String.format("%d. %s",
                                              item.getMenuEnum().getId(),
                                              item.getMenuEnum().getTitle()));
         }
     }
 
-    public void navigate(Integer index) {
-        List<MenuItem> items = currentMenu.getMenuItems();
+    public void navigate(final Integer index) {
+        final List<MenuItem> items = currentMenu.getMenuItems();
         if (items.get(index).getAction() != null) {
             items.get(index).doAction();
         } else {

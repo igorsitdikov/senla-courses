@@ -1,27 +1,18 @@
 package com.senla.hotel.controller;
 
+import com.senla.annotation.Autowired;
+import com.senla.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.ResidentService;
-import com.senla.hotel.service.interfaces.IResidentService;
+import com.senla.hotel.service.interfaces.ResidentService;
 
 import java.util.List;
 
+@Singleton
 public class ResidentController {
-    private static ResidentController residentController;
-    private static IResidentService residentService;
-
-    private ResidentController() {
-        residentService = ResidentService.getInstance();
-    }
-
-    public static ResidentController getInstance() {
-        if (residentController == null) {
-            residentController = new ResidentController();
-        }
-        return residentController;
-    }
+    @Autowired
+    private static ResidentService residentService;
 
     public void createResident(final Resident resident) {
         residentService.createResident(resident);
