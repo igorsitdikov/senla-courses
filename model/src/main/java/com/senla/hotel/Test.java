@@ -12,22 +12,23 @@ import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
-import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.utils.PrinterUtils;
-import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Test {
 
-    public static void main(final String[] args) throws EntityNotFoundException, RoomStatusChangingException {
-        SerializationUtils.deserialize();
-        final AttendanceController attendanceController = AttendanceController.getInstance();
-        final RoomController roomController = RoomController.getInstance();
-        final ResidentController residentController = ResidentController.getInstance();
-        final HotelController hotelController = HotelController.getInstance();
+    public static void main(final String[] args) throws Exception {
+        final AppContext context = Application.run("com.senla.hotel");
+        final AttendanceController attendanceController = context.getObject(AttendanceController.class);
+        final ResidentController residentController = context.getObject(ResidentController.class);
+        final HotelController hotelController = context.getObject(HotelController.class);
+        final RoomController roomController = context.getObject(RoomController.class);
+
+        hotelController.importData();
+
         final Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         final Attendance wakeup = new Attendance(BigDecimal.valueOf(1.5).setScale(2), "Wake-up");
         final Attendance laundry = new Attendance(BigDecimal.valueOf(4.5).setScale(2), "Laundry");
@@ -155,8 +156,8 @@ public class Test {
         residentController.importResidents();
         attendanceController.importAttendances();
         hotelController.importHistories();
-        SerializationUtils.serialize(attendanceController.showAttendances(), roomController.showAllRooms(),
-                                     residentController.showResidents(), hotelController.showHistories());
-
+        hotelController.exportData();
     }
+
 }
+
