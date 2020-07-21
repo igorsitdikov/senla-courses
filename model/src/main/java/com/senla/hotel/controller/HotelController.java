@@ -1,17 +1,13 @@
 package com.senla.hotel.controller;
 
-import com.senla.annotation.Autowired;
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.interfaces.AttendanceService;
-import com.senla.hotel.service.interfaces.HotelAdminService;
-import com.senla.hotel.service.interfaces.ResidentService;
-import com.senla.hotel.service.interfaces.RoomHistoryService;
-import com.senla.hotel.service.interfaces.RoomService;
+import com.senla.hotel.service.interfaces.*;
 import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;

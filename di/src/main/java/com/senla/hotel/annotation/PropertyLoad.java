@@ -1,6 +1,6 @@
-package com.senla.annotation;
+package com.senla.hotel.annotation;
 
-import com.senla.enumerated.Type;
+import com.senla.hotel.enumerated.Type;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

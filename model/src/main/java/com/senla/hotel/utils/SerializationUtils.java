@@ -1,24 +1,15 @@
 package com.senla.hotel.utils;
 
-import com.senla.annotation.Autowired;
-import com.senla.annotation.PropertyLoad;
-import com.senla.annotation.Singleton;
-import com.senla.hotel.entity.AEntity;
-import com.senla.hotel.entity.Attendance;
-import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.PropertyLoad;
+import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.entity.*;
 import com.senla.hotel.repository.interfaces.AttendanceRepository;
 import com.senla.hotel.repository.interfaces.ResidentRepository;
 import com.senla.hotel.repository.interfaces.RoomHistoryRepository;
 import com.senla.hotel.repository.interfaces.RoomRepository;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
