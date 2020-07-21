@@ -1,12 +1,14 @@
 package com.senla.hotel.ui.action.resident;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class CountResidentsAction implements Action {
-    @Autowired
     private ResidentController residentController;
+
+    public CountResidentsAction(ResidentController residentController) {
+        this.residentController = residentController;
+    }
 
     @Override
     public void execute() {

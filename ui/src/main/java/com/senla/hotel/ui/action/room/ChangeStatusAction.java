@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.room;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.ui.interfaces.Action;
@@ -11,24 +10,26 @@ import java.util.Scanner;
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
 public class ChangeStatusAction implements Action {
-    @Autowired
     private RoomController roomController;
+
+    public ChangeStatusAction(RoomController roomController) {
+        this.roomController = roomController;
+    }
 
     @Override
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         try {
-            Integer roomNumber =
-                InputDataReader
+            Integer roomNumber = InputDataReader
                     .getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
             RoomStatus status = integerToStatus(
-                InputDataReader
-                    .getIntegerInput(scanner,
-                                     "Input the Room status, where\n " +
-                                     "\t1 = VACANT, " +
-                                     "\t2 = OCCUPIED, " +
-                                     "\t3 = REPAIR...",
-                                     RoomStatus.values().length));
+                    InputDataReader
+                            .getIntegerInput(scanner,
+                                    "Input the Room status, where\n " +
+                                            "\t1 = VACANT, " +
+                                            "\t2 = OCCUPIED, " +
+                                            "\t3 = REPAIR...",
+                                    RoomStatus.values().length));
 
             roomController.changeStatus(roomNumber, status);
         } catch (Exception e) {

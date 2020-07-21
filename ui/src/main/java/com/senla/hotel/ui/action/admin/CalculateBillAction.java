@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.admin;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Resident;
@@ -12,10 +11,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CalculateBillAction implements Action {
-    @Autowired
     private ResidentController residentController;
-    @Autowired
     private HotelController hotelController;
+
+    public CalculateBillAction(ResidentController residentController, HotelController hotelController) {
+        this.residentController = residentController;
+        this.hotelController = hotelController;
+    }
 
     @Override
     public void execute() {

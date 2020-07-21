@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.room;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.Accommodation;
@@ -14,8 +13,11 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddRoomAction implements Action {
-    @Autowired
     private RoomController roomController;
+
+    public AddRoomAction(RoomController roomController) {
+        this.roomController = roomController;
+    }
 
     @Override
     public void execute() {

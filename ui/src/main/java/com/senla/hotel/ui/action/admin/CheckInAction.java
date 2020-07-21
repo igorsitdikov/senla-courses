@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.admin;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.controller.RoomController;
@@ -15,12 +14,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CheckInAction implements Action {
-    @Autowired
     private ResidentController residentController;
-    @Autowired
     private HotelController hotelController;
-    @Autowired
     private RoomController roomController;
+
+    public CheckInAction(ResidentController residentController, HotelController hotelController, RoomController roomController) {
+        this.residentController = residentController;
+        this.hotelController = hotelController;
+        this.roomController = roomController;
+    }
 
     @Override
     public void execute() {
