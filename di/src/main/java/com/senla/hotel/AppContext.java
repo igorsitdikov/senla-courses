@@ -1,6 +1,6 @@
 package com.senla.hotel;
 
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.configuration.interfaces.Config;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Singleton;
 
 import java.util.List;
 

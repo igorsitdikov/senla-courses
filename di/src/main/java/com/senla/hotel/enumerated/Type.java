@@ -1,4 +1,4 @@
-package com.senla.enumerated;
+package com.senla.hotel.enumerated;
 
 public enum Type {
     STRING(String.class),

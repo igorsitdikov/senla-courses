@@ -1,6 +1,6 @@
 package com.senla.hotel.mapper;
 
-import com.senla.annotation.Autowired;
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityIsEmptyException;

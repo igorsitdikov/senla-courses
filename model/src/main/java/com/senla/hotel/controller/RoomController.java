@@ -1,9 +1,9 @@
 package com.senla.hotel.controller;
 
-import com.senla.annotation.Autowired;
-import com.senla.annotation.PropertyLoad;
-import com.senla.annotation.Singleton;
-import com.senla.enumerated.Type;
+import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.PropertyLoad;
+import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
