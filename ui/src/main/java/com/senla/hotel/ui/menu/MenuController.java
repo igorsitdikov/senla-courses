@@ -19,11 +19,6 @@ public final class MenuController {
     @Autowired
     private Builder builder;
 
-    public static void main(final String[] args) throws Exception {
-        final AppContext context = Application.run("com.senla.hotel");
-        context.getObject(MenuController.class).run();
-    }
-
     public void run() {
         hotelController.importData();
         final Scanner scanner = new Scanner(System.in);
