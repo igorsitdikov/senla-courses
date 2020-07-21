@@ -7,11 +7,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.service.interfaces.AttendanceService;
-import com.senla.hotel.service.interfaces.HotelAdminService;
-import com.senla.hotel.service.interfaces.ResidentService;
-import com.senla.hotel.service.interfaces.RoomHistoryService;
-import com.senla.hotel.service.interfaces.RoomService;
+import com.senla.hotel.service.interfaces.*;
 import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;

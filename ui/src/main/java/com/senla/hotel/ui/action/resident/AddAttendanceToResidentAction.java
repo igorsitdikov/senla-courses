@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.resident;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Attendance;
@@ -13,10 +12,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddAttendanceToResidentAction implements Action {
-    @Autowired
     private AttendanceController attendanceController;
-    @Autowired
     private ResidentController residentController;
+
+    public AddAttendanceToResidentAction(AttendanceController attendanceController, ResidentController residentController) {
+        this.attendanceController = attendanceController;
+        this.residentController = residentController;
+    }
 
     @Override
     public void execute() {

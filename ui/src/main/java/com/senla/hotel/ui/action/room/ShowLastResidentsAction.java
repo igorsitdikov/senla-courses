@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.action.room;
 
-import com.senla.annotation.Autowired;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -12,8 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ShowLastResidentsAction implements Action {
-    @Autowired
     private RoomController roomController;
+
+    public ShowLastResidentsAction(RoomController roomController) {
+        this.roomController = roomController;
+    }
 
     @Override
     public void execute() {
