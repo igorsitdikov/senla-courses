@@ -1,6 +1,6 @@
 package com.senla.hotel.utils.csv.reader;
 
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 
 import java.io.IOException;

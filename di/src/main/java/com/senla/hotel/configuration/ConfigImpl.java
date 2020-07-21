@@ -1,6 +1,6 @@
 package com.senla.hotel.configuration;
 
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.Scanner;
 import com.senla.hotel.configuration.interfaces.Config;
 

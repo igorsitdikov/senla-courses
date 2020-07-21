@@ -1,7 +1,9 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.annotation.Autowired;
-import com.senla.annotation.Singleton;
+import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.AppContext;
+import com.senla.hotel.Application;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 
@@ -16,6 +18,11 @@ public final class MenuController {
     private Navigator navigator;
     @Autowired
     private Builder builder;
+
+    public static void main(final String[] args) throws Exception {
+        final AppContext context = Application.run("com.senla.hotel");
+        context.getObject(MenuController.class).run();
+    }
 
     public void run() {
         hotelController.importData();
