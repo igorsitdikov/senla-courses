@@ -8,6 +8,7 @@ public class Main {
     public static void main(final String[] args) throws Exception {
         final AppContext context = Application.run("com.senla.hotel");
         final MenuController menuController = context.getObject(MenuController.class);
+        menuController.setContext(context);
         menuController.run();
     }
 }

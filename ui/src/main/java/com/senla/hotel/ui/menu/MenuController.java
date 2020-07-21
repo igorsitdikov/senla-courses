@@ -2,6 +2,7 @@ package com.senla.hotel.ui.menu;
 
 import com.senla.annotation.Autowired;
 import com.senla.annotation.Singleton;
+import com.senla.hotel.AppContext;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
 
@@ -16,11 +17,12 @@ public final class MenuController {
     private Navigator navigator;
     @Autowired
     private Builder builder;
+    private AppContext context;
 
     public void run() {
         hotelController.importData();
         final Scanner scanner = new Scanner(System.in);
-
+        builder.setContext(context);
         boolean exit = false;
         navigator.setCurrentMenu(builder.getMenu());
         navigator.printMenu();
@@ -52,5 +54,9 @@ public final class MenuController {
         scanner.close();
         hotelController.exportData();
         System.out.println("Goodbye! Your changes have been saved!");
+    }
+
+    public void setContext(AppContext context) {
+        this.context = context;
     }
 }
