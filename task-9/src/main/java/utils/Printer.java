@@ -12,8 +12,8 @@ public class Printer {
         System.err.printf("%s - %s %n", t.getName(), e.getMessage());
     }
 
-    public static void printState(final String msg, final Thread t) {
-        System.out.printf("%s - %s state: %s%n", msg, t.getName(), t.getState());
+    public static void printState(final Thread t) {
+        System.out.printf("%s state: %s%n", t.getName(), t.getState());
     }
 
     public static void printDateTime() {
