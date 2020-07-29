@@ -15,7 +15,7 @@ public class ThreadStates {
                 Thread.sleep(2000);
                 Printer.printState(basicThread);
                 count++;
-                if (count == 4) {
+                if (count == 3) {
                     synchronized (basicThread) {
                         Thread.sleep(1000);
                         basicThread.notify();
