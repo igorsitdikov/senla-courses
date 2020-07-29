@@ -1,4 +1,4 @@
-package forth;
+package fourth;
 
 import utils.Printer;
 
