@@ -16,7 +16,7 @@ public class DateTimePrinter extends Thread {
             try {
                 Thread.sleep(sec * 1000);
             } catch (final InterruptedException e) {
-                e.printStackTrace();
+                Printer.printException(Thread.currentThread(), e);
             }
         }
     }

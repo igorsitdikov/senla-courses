@@ -24,7 +24,7 @@ public class Producer implements Runnable {
             try {
                 produce();
             } catch (final InterruptedException ex) {
-                System.err.printf("Interrupted : %s %s%n", Producer.class.getName(), ex.getMessage());
+                Printer.printException(Thread.currentThread(), ex);
             }
         }
     }
