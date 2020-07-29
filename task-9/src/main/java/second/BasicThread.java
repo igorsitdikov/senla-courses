@@ -2,11 +2,11 @@ package second;
 
 import utils.Printer;
 
-public class ThreadFirst extends Thread {
-    private Locker locker;
+public class BasicThread extends Thread {
+    private final Locker locker;
     private Boolean id;
 
-    public ThreadFirst(final Locker locker, final Boolean id) {
+    public BasicThread(final Locker locker, final Boolean id) {
         this.locker = locker;
         this.id = id;
     }
