@@ -5,7 +5,7 @@ import utils.Printer;
 import java.util.Vector;
 
 public class Consumer implements Runnable {
-    private Vector<Integer> buffer;
+    private final Vector<Integer> buffer;
     private final int size;
 
     public Consumer(final Vector<Integer> buffer, final int size) {
@@ -19,7 +19,7 @@ public class Consumer implements Runnable {
             try {
                 consume();
             } catch (final InterruptedException ex) {
-                System.err.println();
+                Printer.printException(Thread.currentThread(), ex);
             }
         }
     }
