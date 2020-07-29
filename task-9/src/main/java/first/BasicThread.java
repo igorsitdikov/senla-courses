@@ -5,7 +5,7 @@ public class BasicThread extends Thread {
     public void run() {
         final Thread thread = Thread.currentThread();
         try {
-            sleep(5000);
+            sleep(3000);
             synchronized (thread) {
                 thread.wait();
             }
