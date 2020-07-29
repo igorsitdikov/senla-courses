@@ -4,9 +4,11 @@ import utils.Printer;
 
 public class ThreadFirst extends Thread {
     private Locker locker;
+    private Boolean id;
 
-    public ThreadFirst(final Locker locker) {
+    public ThreadFirst(final Locker locker, final Boolean id) {
         this.locker = locker;
+        this.id = id;
     }
 
     @Override
@@ -14,12 +16,12 @@ public class ThreadFirst extends Thread {
         try {
             synchronized (locker) {
                 for (int i = 0; i < 100; i++) {
-                    while (locker.getFlag() != 1) {
+                    while (locker.getFlag() != id) {
                         locker.wait();
                     }
                     Printer.printName(this);
                     Thread.sleep(1000);
-                    locker.setFlag(2);
+                    locker.setFlag(!id);
                     locker.notifyAll();
                 }
 
