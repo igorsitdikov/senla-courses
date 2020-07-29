@@ -1,13 +1,13 @@
 package second;
 
 public class Locker {
-    private volatile int flag = 1;
+    private volatile Boolean flag = false;
 
-    public int getFlag() {
+    public Boolean getFlag() {
         return flag;
     }
 
-    public void setFlag(final int flag) {
+    public void setFlag(final Boolean flag) {
         this.flag = flag;
     }
 }
