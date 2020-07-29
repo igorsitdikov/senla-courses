@@ -1,4 +1,4 @@
-package forth;
+package fourth;
 
 public class ThreadDaemon {
     public static void main(final String[] args) {
