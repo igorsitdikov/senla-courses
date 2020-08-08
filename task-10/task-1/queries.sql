@@ -169,23 +169,23 @@ SELECT p1.model
             ) AS p2
        ON p1.model = p2.model
  WHERE p2.price = (
-       SELECT max(p.price)
+       SELECT MAX(p.price)
          FROM (
-              SELECT max(p2.price) AS price
+              SELECT MAX(p2.price) AS price
                 FROM product AS p1
                      JOIN pc p2
                      ON p2.model = p1.model
 
               UNION
 
-              SELECT max(p2.price) AS price
+              SELECT MAX(p2.price) AS price
                 FROM product AS p1
                      JOIN laptop p2
                      ON p2.model = p1.model
 
               UNION
 
-              SELECT max(p2.price) AS price
+              SELECT MAX(p2.price) AS price
                 FROM product AS p1
                      JOIN printer p2
                      ON p2.model = p1.model
@@ -203,13 +203,13 @@ SELECT maker
                (SELECT pc.model
                   FROM pc
                  WHERE pc.speed = (
-                       SELECT max(speed)
+                       SELECT MAX(speed)
                          FROM pc
                         WHERE ram = (
-                              SELECT min(ram)
+                              SELECT MIN(ram)
                               FROM pc))
                    AND pc.ram = (
-                       SELECT min(ram)
+                       SELECT MIN(ram)
                          FROM pc)
                  GROUP BY pc.model)
          GROUP BY maker)
