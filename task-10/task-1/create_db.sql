@@ -1,3 +1,5 @@
+DROP DATABASE shop;
+
 CREATE DATABASE IF NOT EXISTS shop DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 USE shop;
@@ -19,7 +21,7 @@ CREATE TABLE IF NOT EXISTS pc (
     price DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (code),
     CONSTRAINT pc_model_fk
-    FOREIGN KEY (model) REFERENCES product(model)
+    FOREIGN KEY (model) REFERENCES product(model) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS laptop (
@@ -32,7 +34,7 @@ CREATE TABLE IF NOT EXISTS laptop (
     screen TINYINT,
     PRIMARY KEY (code),
     CONSTRAINT laptop_model_fk
-    FOREIGN KEY (model) REFERENCES product(model)
+    FOREIGN KEY (model) REFERENCES product(model) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS printer (
@@ -43,5 +45,5 @@ CREATE TABLE IF NOT EXISTS printer (
     price DECIMAL(10, 2),
     PRIMARY KEY (code),
     CONSTRAINT printer_model_fk
-    FOREIGN KEY (model) REFERENCES product(model)
+    FOREIGN KEY (model) REFERENCES product(model) ON DELETE CASCADE
 );
