@@ -17,8 +17,8 @@ SELECT code, model, color, type, price
 -- task 5
 SELECT model, speed, ram
   FROM pc
- WHERE cd IN ('24x', '48x')
-   AND price > 600;
+ WHERE cd IN ('12x', '24x')
+   AND price < 600;
 -- task 6
 SELECT DISTINCT maker, speed
   FROM laptop
