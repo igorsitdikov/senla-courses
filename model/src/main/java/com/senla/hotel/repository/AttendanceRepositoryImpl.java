@@ -9,12 +9,8 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.AttendanceRepository;
-import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,53 +18,73 @@ import java.util.List;
 @Singleton
 public class AttendanceRepositoryImpl implements AttendanceRepository {
     @Autowired
-    private Connector connector;
-    @Autowired
     private AttendanceDao attendanceDao;
     private static List<Attendance> attendances = new LinkedList<>();
     private static Long counter = 0L;
 
     @Override
     public AEntity add(final AEntity entity) throws EntityAlreadyExistsException {
-        if (!AttendanceRepositoryImpl.attendances.contains(entity)) {
-            entity.setId(++counter);
-            attendances.add((Attendance) entity);
-            return entity;
+        try {
+           return attendanceDao.create((Attendance) entity);
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
+//        if (!AttendanceRepositoryImpl.attendances.contains(entity)) {
+//            entity.setId(++counter);
+//            attendances.add((Attendance) entity);
+//            return entity;
+//        }
         throw new EntityAlreadyExistsException("Attendance already exists");
     }
 
     @Override
     public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        final Attendance attendance = (Attendance) findById(id);
+        Attendance attendance = (Attendance) findById(id);
         attendance.setPrice(price);
+        try {
+            attendanceDao.update(attendance);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+//        attendance.setPrice(price);
     }
 
-    @Override
-    public void changePrice(final String name, final BigDecimal price) {
-        final Attendance attendance = (Attendance) findByName(name);
-        attendance.setPrice(price);
-    }
+//    @Override
+//    public void changePrice(final String name, final BigDecimal price) {
+//        Attendance attendance = null;
+//        attendance = (Attendance) findByName(name);
+//        attendance.setPrice(price);
+//        try {
+//            attendanceDao.update(attendance);
+//        } catch (PersistException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
-        for (final Attendance attendance : attendances) {
-            if (attendance.getId().equals(id)) {
-                return attendance;
-            }
+        try {
+            return attendanceDao.getById(id);
+        } catch (PersistException e) {
+            throw new EntityNotFoundException(String.format("No attendance with id %d%n", id));
         }
-        throw new EntityNotFoundException(String.format("No attendance with id %d%n", id));
     }
 
-    @Override
-    public AEntity findByName(final String name) {
-        for (final Attendance attendance : attendances) {
-            if (attendance.getName().equals(name)) {
-                return attendance;
-            }
-        }
-        return null;
-    }
+//    @Override
+//    public AEntity findByName(final String name) {
+//        try {
+//            return attendanceDao.getByName(name);
+//        } catch (PersistException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+////        for (final Attendance attendance : attendances) {
+////            if (attendance.getName().equals(name)) {
+////                return attendance;
+////            }
+////        }
+////        return null;
+//    }
 
     @Override
     public void setAttendances(final List<Attendance> attendances) {
@@ -79,14 +95,18 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
     @Override
     public void deleteAttendance(final Long id) throws EntityNotFoundException {
         final Attendance attendance = (Attendance) findById(id);
-        AttendanceRepositoryImpl.attendances.remove(attendance);
+        try {
+            attendanceDao.delete(attendance);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+//        AttendanceRepositoryImpl.attendances.remove(attendance);
     }
 
     @Override
     public List<Attendance> getAttendances() {
         try {
-            List<Attendance> all = attendanceDao.getAll();
-            return all;
+            return attendanceDao.getAll();
         } catch (PersistException e) {
             e.printStackTrace();
         }
@@ -106,27 +126,4 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
     public void setCounter(final Long counter) {
         AttendanceRepositoryImpl.counter = counter;
     }
-
-    private Attendance parseResultSet(ResultSet resultSet) throws SQLException {
-        Attendance attendance = new Attendance();
-        attendance.setId(resultSet.getLong("id"));
-        attendance.setName(resultSet.getString("name"));
-        attendance.setPrice(resultSet.getBigDecimal("price"));
-        return attendance;
-    }
-
-    private List<Attendance> parseResultSetToList(ResultSet resultSet) throws SQLException {
-        LinkedList<Attendance> result = new LinkedList<>();
-        try {
-            while (resultSet.next()) {
-                Attendance attendance = parseResultSet(resultSet);
-                result.add(attendance);
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        return result;
-    }
-
-
 }

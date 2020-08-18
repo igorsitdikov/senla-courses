@@ -1,10 +1,10 @@
 
-insert into attendance (price, name)
+insert into attendance (name, price)
 values
-       (2.3, 'Ironing'),
-       (1.5, 'Wake-up'),
-       (4.5, 'Laundry'),
-       (3.1, 'Dog walking');
+       ('Ironing', 2.3),
+       ('Wake-up', 1.5),
+       ('Laundry', 4.5),
+       ('Dog walking', 3.1);
 
 insert into room (number, price, status, stars, accommodation)
 values
