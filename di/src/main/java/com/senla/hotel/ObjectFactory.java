@@ -3,6 +3,7 @@ package com.senla.hotel;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
 import com.senla.hotel.exception.ConverterNotExistsException;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,27 @@ public class ObjectFactory {
 
     private <T> T create(final Class<T> implClass)
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Constructor<?>[] constructors = implClass.getConstructors();
+        int lengthConstructors = constructors.length;
+        if (lengthConstructors > 1 || constructors[0].getParameterCount() > 0) {
+            for (Constructor c : constructors) {
+                Class[] parameterTypes = c.getParameterTypes();
+                if (parameterTypes.length > 0) {
+                    Object[] implParameters = new Object[parameterTypes.length];
+                    for (int i = 0; i < implParameters.length; i++) {
+                        final Object object = context.getObject(parameterTypes[i]);
+                        implParameters[i] = object;
+                    }
+                    try {
+                        return (T) c.newInstance(implParameters);
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         return implClass.getDeclaredConstructor().newInstance();
     }
 }
