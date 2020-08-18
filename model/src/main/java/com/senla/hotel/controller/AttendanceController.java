@@ -35,8 +35,8 @@ public class AttendanceController {
         return attendanceService.showAttendancesSortedByPrice();
     }
 
-    public void changePrice(final String name, final BigDecimal price) {
-        attendanceService.changeAttendancePrice(name, price);
+    public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
+        attendanceService.changeAttendancePrice(id, price);
     }
 
     public void importAttendances() {

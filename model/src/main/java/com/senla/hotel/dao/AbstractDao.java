@@ -4,74 +4,40 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.utils.Connector;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
 @Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
-    public AbstractDao() {
-    }
-
     public AbstractDao(Connector connector) {
         this.connector = connector;
     }
 
-    /**
-     * Возвращает sql запрос для получения всех записей.
-     * <p/>
-     * SELECT * FROM [Table]
-     */
     public abstract String getSelectQuery();
 
-    /**
-     * Возвращает sql запрос для вставки новой записи в базу данных.
-     * <p/>
-     * INSERT INTO [Table] ([column, column, ...]) VALUES (?, ?, ...);
-     */
     public abstract String getCreateQuery();
 
-    /**
-     * Возвращает sql запрос для обновления записи.
-     * <p/>
-     * UPDATE [Table] SET [column = ?, column = ?, ...] WHERE id = ?;
-     */
     public abstract String getUpdateQuery();
 
-    /**
-     * Возвращает sql запрос для удаления записи из базы данных.
-     * <p/>
-     * DELETE FROM [Table] WHERE id= ?;
-     */
     public abstract String getDeleteQuery();
 
-    /**
-     * Разбирает ResultSet и возвращает список объектов соответствующих содержимому ResultSet.
-     */
     protected abstract List<T> parseResultSet(ResultSet rs) throws PersistException;
 
-    /**
-     * Устанавливает аргументы insert запроса в соответствии со значением полей объекта object.
-     */
     protected abstract void prepareStatementForInsert(PreparedStatement statement, T object) throws PersistException;
 
-    /**
-     * Устанавливает аргументы update запроса в соответствии со значением полей объекта object.
-     */
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object) throws PersistException;
 
     protected Connector connector;
 
-//    private Set<ManyToOne> relations = new HashSet<ManyToOne>();
-
     @Override
-    public T getById(Long key) throws PersistException {
+    public T getById(Long id) throws PersistException {
         List<T> list;
         String sql = getSelectQuery();
         sql += " WHERE id = ?";
         try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            statement.setLong(1, key);
+            statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
@@ -101,48 +67,37 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     }
 
     @Override
-    public T persist(T object) throws PersistException {
+    public T create(T object) throws PersistException {
         if (object.getId() != null) {
             throw new PersistException("Object is already persist.");
         }
-        // Сохраняем зависимости
-//        saveDependences(object);
-
-        T persistInstance;
-        // Добавляем запись
         String sql = getCreateQuery();
-        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = connector.getConnection()
+                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForInsert(statement, object);
             int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);
             }
-        } catch (Exception e) {
-            throw new PersistException(e);
-        }
-        // Получаем только что вставленную запись
-        sql = getSelectQuery() + " WHERE id = last_insert_id();";
-        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            ResultSet rs = statement.executeQuery();
-            List<T> list = parseResultSet(rs);
-            if ((list == null) || (list.size() != 1)) {
-                throw new PersistException("Exception on findByPK new persist data.");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    object.setId(generatedKeys.getLong(1));
+                } else {
+                    throw new PersistException("Creating user failed, no ID obtained.");
+                }
             }
-            persistInstance = list.iterator().next();
         } catch (Exception e) {
             throw new PersistException(e);
         }
-        return persistInstance;
+
+        return object;
     }
 
     @Override
     public void update(T object) throws PersistException {
-        // Сохраняем зависимости
-//        saveDependences(object);
-
         String sql = getUpdateQuery();
-        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql);) {
-            prepareStatementForUpdate(statement, object); // заполнение аргументов запроса оставим на совесть потомков
+        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+            prepareStatementForUpdate(statement, object);
             int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On update modify more then 1 record: " + count);
@@ -165,7 +120,6 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (count != 1) {
                 throw new PersistException("On delete modify more then 1 record: " + count);
             }
-            statement.close();
         } catch (Exception e) {
             throw new PersistException(e);
         }

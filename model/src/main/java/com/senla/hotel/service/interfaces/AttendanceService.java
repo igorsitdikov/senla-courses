@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface AttendanceService {
 
-    Attendance findByName(String name);
+//    Attendance findByName(String name);
 
     List<Attendance> sortAttendances(List<Attendance> attendances, Comparator<Attendance> comparator);
 
@@ -31,7 +31,7 @@ public interface AttendanceService {
 
     void delete(Long id) throws EntityNotFoundException;
 
-    void changeAttendancePrice(String name, BigDecimal price);
+//    void changeAttendancePrice(String name, BigDecimal price);
 
     void importAttendances();
 

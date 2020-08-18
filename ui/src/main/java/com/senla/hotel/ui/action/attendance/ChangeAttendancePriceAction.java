@@ -19,10 +19,10 @@ public class ChangeAttendancePriceAction implements Action {
 
         Scanner scanner = new Scanner(System.in);
         try {
-            String name = InputDataReader.getStringInput(scanner);
+            Long id = InputDataReader.getLongInput(scanner);
             BigDecimal dailyPrice = BigDecimal.valueOf(InputDataReader
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
-            attendanceController.changePrice(name, dailyPrice);
+            attendanceController.changePrice(id, dailyPrice);
         } catch (Exception e) {
             System.err.println(String.format("Failed to change price a Attendance! Input valid parameters! %s", e));
         }

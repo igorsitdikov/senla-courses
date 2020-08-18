@@ -13,11 +13,7 @@ public interface AttendanceRepository {
 
     void changePrice(Long id, BigDecimal price) throws EntityNotFoundException;
 
-    void changePrice(String name, BigDecimal price);
-
     AEntity findById(Long id) throws EntityNotFoundException;
-
-    AEntity findByName(String name);
 
     void setAttendances(List<Attendance> attendances);
 

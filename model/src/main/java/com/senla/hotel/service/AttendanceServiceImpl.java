@@ -38,10 +38,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         return (Attendance) attendanceRepository.findById(id);
     }
 
-    @Override
-    public Attendance findByName(final String name) {
-        return (Attendance) attendanceRepository.findByName(name);
-    }
+//    @Override
+//    public Attendance findByName(final String name) {
+//        return (Attendance) attendanceRepository.findByName(name);
+//    }
 
     @Override
     public List<Attendance> sortAttendances(final List<Attendance> attendances,
@@ -89,10 +89,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceRepository.deleteAttendance(id);
     }
 
-    @Override
-    public void changeAttendancePrice(final String name, final BigDecimal price) {
-        attendanceRepository.changePrice(name, price);
-    }
+//    @Override
+//    public void changeAttendancePrice(final String name, final BigDecimal price) {
+//        attendanceRepository.changePrice(name, price);
+//    }
 
     @Override
     public void importAttendances() {
