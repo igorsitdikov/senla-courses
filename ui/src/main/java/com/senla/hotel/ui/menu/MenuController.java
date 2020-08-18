@@ -6,7 +6,9 @@ import com.senla.hotel.AppContext;
 import com.senla.hotel.Application;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.ui.utils.InputDataReader;
+import com.senla.hotel.utils.Connector;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,9 +20,11 @@ public final class MenuController {
     private Navigator navigator;
     @Autowired
     private Builder builder;
+    @Autowired
+    private Connector connector;
 
     public void run() {
-        hotelController.importData();
+//        hotelController.importData();
         final Scanner scanner = new Scanner(System.in);
 
         boolean exit = false;
@@ -52,7 +56,12 @@ public final class MenuController {
             navigator.printMenu();
         }
         scanner.close();
-        hotelController.exportData();
+        try {
+            connector.closeConnection();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+//        hotelController.exportData();
         System.out.println("Goodbye! Your changes have been saved!");
     }
 }
