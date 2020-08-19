@@ -2,8 +2,8 @@ package com.senla.hotel.repository;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.dao.AttendanceDao;
-import com.senla.hotel.dao.PersistException;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;

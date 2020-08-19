@@ -1,4 +1,4 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.exceptions;
 
 public class PersistException extends Exception {
 

@@ -1,11 +1,15 @@
 package com.senla.hotel.dao;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -33,11 +37,15 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public T getById(Long id) throws PersistException {
+        return getBy("id", id);
+    }
+
+    protected <E> T getBy(String field, E variable) throws PersistException {
         List<T> list;
         String sql = getSelectQuery();
-        sql += " WHERE id = ?";
+        sql += " WHERE " + field + " = ?";
         try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            statement.setLong(1, id);
+            setVariableToStatement(variable, statement);
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
@@ -52,12 +60,43 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return list.iterator().next();
     }
 
+    private <E> void setVariableToStatement(E variable, PreparedStatement statement) throws SQLException {
+        if (variable instanceof Long) {
+            statement.setLong(1, (Long) variable);
+        } else if (variable instanceof BigDecimal) {
+            statement.setBigDecimal(1, (BigDecimal) variable);
+        } else if (variable instanceof Double) {
+            statement.setDouble(1, (Double) variable);
+        } else if (variable instanceof Integer) {
+            statement.setInt(1, (Integer) variable);
+        } else if (variable instanceof String) {
+            statement.setString(1, (String) variable);
+        } else if (variable instanceof Enum) {
+            statement.setString(1, variable.toString());
+        }
+    }
+
     @Override
     public List<T> getAll() throws PersistException {
         List<T> list;
         String sql = getSelectQuery();
         try {
             PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
+    }
+
+    protected <E> List<T> getAllWhere(String field, E variable) throws PersistException {
+        List<T> list;
+        String sql = getSelectQuery();
+        sql += " WHERE " + field + " = ?";
+        try {
+            PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            setVariableToStatement(variable, statement);
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
@@ -124,40 +163,5 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             throw new PersistException(e);
         }
     }
-
-//    public AbstractJDBCDao(DaoFactory<Connection> parentFactory, Connection connection) {
-//        this.parentFactory = parentFactory;
-//        this.connection = connection;
-//    }
-//
-//    protected Identified getDependence(Class<? extends Identified> dtoClass, Serializable pk) throws PersistException {
-//        return parentFactory.getDao(connection, dtoClass).getByPK(pk);
-//    }
-//
-//    protected boolean addRelation(Class<? extends Identified> ownerClass, String field) {
-//        try {
-//            return relations.add(new ManyToOne(ownerClass, parentFactory, field));
-//        } catch (NoSuchFieldException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private void saveDependences(Identified owner) throws PersistException {
-//        for (ManyToOne m : relations) {
-//            try {
-//                if (m.getDependence(owner) == null) {
-//                    continue;
-//                }
-//                if (m.getDependence(owner).getId() == null) {
-//                    Identified depend = m.persistDependence(owner, connection);
-//                    m.setDependence(owner, depend);
-//                } else {
-//                    m.updateDependence(owner, connection);
-//                }
-//            } catch (Exception e) {
-//                throw new PersistException("Exception on save dependence in relation " + m + ".", e);
-//            }
-//        }
-//    }
 }
 

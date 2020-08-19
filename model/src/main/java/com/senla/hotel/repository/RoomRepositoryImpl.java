@@ -1,10 +1,12 @@
 package com.senla.hotel.repository;
 
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.repository.interfaces.RoomRepository;
 
@@ -14,18 +16,26 @@ import java.util.List;
 
 @Singleton
 public class RoomRepositoryImpl implements RoomRepository {
+    @Autowired
+    private RoomDao roomDao;
     private static List<Room> rooms = new ArrayList<>();
     private static Long counter = 0L;
 
     @Override
     public List<Room> getVacantRooms() {
-        final List<Room> vacantRooms = new ArrayList<>();
-        for (final Room room : rooms) {
-            if (room.getStatus() == RoomStatus.VACANT) {
-                vacantRooms.add(room);
-            }
+        try {
+            return roomDao.getVacantRooms();
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
-        return vacantRooms;
+        return null;
+//        final List<Room> vacantRooms = new ArrayList<>();
+//        for (final Room room : rooms) {
+//            if (room.getStatus() == RoomStatus.VACANT) {
+//                vacantRooms.add(room);
+//            }
+//        }
+//        return vacantRooms;
     }
 
     @Override
@@ -35,28 +45,45 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public AEntity add(final AEntity room) {
-        room.setId(++counter);
-        rooms.add((Room) room);
-        return room;
+        try {
+            return roomDao.create((Room)room);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+        return null;
+//        return null;
+//        room.setId(++counter);
+//        rooms.add((Room) room);
+//        return room;
     }
 
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
-        for (final Room room : rooms) {
-            if (room.getId().equals(id)) {
-                return room;
-            }
+        try {
+            return roomDao.getById(id);
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
+//        for (final Room room : rooms) {
+//            if (room.getId().equals(id)) {
+//                return room;
+//            }
+//        }
         throw new EntityNotFoundException(String.format("No room with id %d%n", id));
     }
 
     @Override
     public AEntity findByRoomNumber(final Integer number) throws EntityNotFoundException {
-        for (final Room room : rooms) {
-            if (room.getNumber().equals(number)) {
-                return room;
-            }
+        try {
+            return roomDao.getRoomByNumber(number);
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
+//        for (final Room room : rooms) {
+//            if (room.getNumber().equals(number)) {
+//                return room;
+//            }
+//        }
         throw new EntityNotFoundException(String.format("No room with number %d%n", number));
     }
 
@@ -91,6 +118,11 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public List<Room> getRooms() {
-        return rooms;
+        try {
+            return roomDao.getAll();
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
