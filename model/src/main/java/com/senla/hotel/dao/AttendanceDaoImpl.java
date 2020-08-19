@@ -1,19 +1,23 @@
 package com.senla.hotel.dao;
 
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.mapper.interfaces.AttendanceResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
+    @Autowired
+    private AttendanceResultSetMapper mapper;
+
     public AttendanceDaoImpl(Connector connector) {
         super(connector);
     }
@@ -43,21 +47,13 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
         LinkedList<Attendance> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Attendance attendance = mapResultSetToAttendance(rs);
+                Attendance attendance = mapper.sourceToDestination(rs);
                 result.add(attendance);
             }
         } catch (Exception e) {
             throw new PersistException(e);
         }
         return result;
-    }
-
-    private Attendance mapResultSetToAttendance(ResultSet resultSet) throws SQLException {
-        Attendance attendance = new Attendance();
-        attendance.setId(resultSet.getLong("id"));
-        attendance.setName(resultSet.getString("name"));
-        attendance.setPrice(resultSet.getBigDecimal("price"));
-        return attendance;
     }
 
     @Override
