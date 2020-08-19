@@ -33,7 +33,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE attendance SET name = ?, price = ?, status = ?, stars =?, accommodation = ? WHERE id = ?;";
+        return "UPDATE room SET name = ?, price = ?, status = ?, stars =?, accommodation = ? WHERE id = ?;";
     }
 
     @Override
@@ -56,8 +56,8 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         LinkedList<Room> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Room attendance = mapResultSetToRoom(rs);
-                result.add(attendance);
+                Room room = mapResultSetToRoom(rs);
+                result.add(room);
             }
         } catch (Exception e) {
             throw new PersistException(e);
