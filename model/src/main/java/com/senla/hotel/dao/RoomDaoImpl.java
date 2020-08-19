@@ -1,22 +1,24 @@
 package com.senla.hotel.dao;
 
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.mapper.interfaces.RoomResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
+    @Autowired
+    private RoomResultSetMapper mapper;
+
     public RoomDaoImpl(Connector connector) {
         super(connector);
     }
@@ -56,24 +58,13 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         LinkedList<Room> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Room room = mapResultSetToRoom(rs);
+                Room room = mapper.sourceToDestination(rs);
                 result.add(room);
             }
         } catch (Exception e) {
             throw new PersistException(e);
         }
         return result;
-    }
-
-    private Room mapResultSetToRoom(ResultSet resultSet) throws SQLException {
-        Room room = new Room();
-        room.setId(resultSet.getLong("id"));
-        room.setNumber(resultSet.getInt("number"));
-        room.setPrice(resultSet.getBigDecimal("price"));
-        room.setStatus(RoomStatus.valueOf(resultSet.getString("status")));
-        room.setStars(Stars.valueOf(resultSet.getString("stars")));
-        room.setAccommodation(Accommodation.valueOf(resultSet.getString("accommodation")));
-        return room;
     }
 
     @Override

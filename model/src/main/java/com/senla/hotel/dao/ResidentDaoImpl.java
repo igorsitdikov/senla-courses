@@ -1,25 +1,23 @@
 package com.senla.hotel.dao;
 
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
-import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
-import com.senla.hotel.enumerated.Accommodation;
-import com.senla.hotel.enumerated.Gender;
-import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.mapper.interfaces.ResidentResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
+    @Autowired
+    private ResidentResultSetMapper mapper;
+
     public ResidentDaoImpl(Connector connector) {
         super(connector);
     }
@@ -44,30 +42,18 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
         return "DELETE FROM resident WHERE id = ?";
     }
 
-
     @Override
     protected List<Resident> parseResultSet(ResultSet rs) throws PersistException {
         LinkedList<Resident> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Resident resident = mapResultSetToRoom(rs);
+                Resident resident = mapper.sourceToDestination(rs);
                 result.add(resident);
             }
         } catch (Exception e) {
             throw new PersistException(e);
         }
         return result;
-    }
-
-    private Resident mapResultSetToRoom(ResultSet resultSet) throws SQLException {
-        Resident resident = new Resident();
-        resident.setId(resultSet.getLong("id"));
-        resident.setFirstName(resultSet.getString("first_name"));
-        resident.setLastName(resultSet.getString("last_name"));
-        resident.setGender(Gender.valueOf(resultSet.getString("gender")));
-        resident.setVip(resultSet.getInt("vip") == 1);
-        resident.setPhone(resultSet.getString("phone"));
-        return resident;
     }
 
     @Override

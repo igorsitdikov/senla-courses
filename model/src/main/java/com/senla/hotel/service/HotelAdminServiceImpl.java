@@ -34,7 +34,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut);
             final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
             residentService.addHistoryToResident(residentId, roomHistoryEntity);
-            roomService.addHistoryToRoom(roomId, roomHistoryEntity);
+//            roomService.addHistoryToRoom(roomId, roomHistoryEntity);
             roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
             System.out.printf("%s was checked-in in room №%d%n",
                               resident.toString(),
