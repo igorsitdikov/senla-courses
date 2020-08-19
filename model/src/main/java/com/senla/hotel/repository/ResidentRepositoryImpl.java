@@ -1,10 +1,13 @@
 package com.senla.hotel.repository;
 
+import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.repository.interfaces.ResidentRepository;
 
 import java.util.ArrayList;
@@ -12,23 +15,37 @@ import java.util.List;
 
 @Singleton
 public class ResidentRepositoryImpl implements ResidentRepository {
+    @Autowired
+    private ResidentDao residentDao;
+
     private static List<Resident> residents = new ArrayList<>();
     private static Long counter = 0L;
 
     @Override
     public AEntity add(final AEntity entity) {
-        entity.setId(++counter);
-        residents.add((Resident) entity);
-        return entity;
+        try {
+            return residentDao.create((Resident) entity);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+        return null;
+//        entity.setId(++counter);
+//        residents.add((Resident) entity);
+//        return entity;
     }
 
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
-        for (final Resident resident : residents) {
-            if (resident.getId().equals(id)) {
-                return resident;
-            }
+        try {
+            return residentDao.getById(id);
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
+//        for (final Resident resident : residents) {
+//            if (resident.getId().equals(id)) {
+//                return resident;
+//            }
+//        }
         throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
     }
 
@@ -54,6 +71,11 @@ public class ResidentRepositoryImpl implements ResidentRepository {
 
     @Override
     public List<Resident> getResidents() {
-        return residents;
+        try {
+            return residentDao.getAll();
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

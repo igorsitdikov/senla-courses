@@ -22,9 +22,9 @@ public class AddResidentAction implements Action {
 
         Scanner scanner = new Scanner(System.in);
         try {
-            String firstName = InputDataReader.getStringInput(scanner);
-            String lastName = InputDataReader.getStringInput(scanner);
-            String phone = InputDataReader.getStringInput(scanner);
+            String firstName = InputDataReader.getStringInput(scanner, "Input first name...");
+            String lastName = InputDataReader.getStringInput(scanner, "Input last name...");
+            String phone = InputDataReader.getStringInput(scanner, "Input phone...");
             Boolean vip = InputDataReader
                     .getIntegerInput(scanner, "Input Resident vip 1 or 2, where" +
                             "1 - FALSE, " +
