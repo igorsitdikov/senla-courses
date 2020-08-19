@@ -1,4 +1,4 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.interfaces;
 
 import com.senla.hotel.entity.Attendance;
 

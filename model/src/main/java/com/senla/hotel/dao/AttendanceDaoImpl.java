@@ -1,7 +1,9 @@
 package com.senla.hotel.dao;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;

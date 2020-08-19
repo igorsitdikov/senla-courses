@@ -1,5 +1,6 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.interfaces;
 
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.entity.AEntity;
 
 import java.io.Serializable;
