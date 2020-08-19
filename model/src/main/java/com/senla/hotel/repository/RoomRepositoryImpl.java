@@ -2,6 +2,7 @@ package com.senla.hotel.repository;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.AEntity;
@@ -85,6 +86,15 @@ public class RoomRepositoryImpl implements RoomRepository {
 //            }
 //        }
         throw new EntityNotFoundException(String.format("No room with number %d%n", number));
+    }
+
+    @Override
+    public void changeRoomStatus(final Room room) {
+        try {
+            roomDao.update(room);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

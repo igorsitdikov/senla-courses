@@ -35,7 +35,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE room SET name = ?, price = ?, status = ?, stars =?, accommodation = ? WHERE id = ?;";
+        return "UPDATE room SET number = ?, price = ?, status = ?, stars =?, accommodation = ? WHERE id = ?;";
     }
 
     @Override

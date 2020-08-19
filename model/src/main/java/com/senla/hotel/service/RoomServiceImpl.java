@@ -139,6 +139,7 @@ public class RoomServiceImpl implements RoomService {
             System.out.println("Room is not available now");
         } else {
             room.setStatus(status);
+            roomRepository.changeRoomStatus(room);
         }
     }
 
