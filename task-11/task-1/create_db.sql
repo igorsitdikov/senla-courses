@@ -1,4 +1,4 @@
-DROP DATABASE hotel;
+# DROP DATABASE hotel;
 
 CREATE DATABASE IF NOT EXISTS hotel DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
@@ -73,17 +73,6 @@ CREATE TABLE IF NOT EXISTS history
         FOREIGN KEY (resident_id) REFERENCES resident (id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
-
--- CREATE TABLE IF NOT EXISTS rooms_histories (
---     id LONG NOT NULL AUTO_INCREMENT,
---     room_id LONG NOT NULL,
---     history_id LONG NOT NULL,
---     CONSTRAINT rh_room_fk
---     FOREIGN KEY (room_id) REFERENCES room(id) ON DELETE CASCADE,
---     CONSTRAINT rh_history_fk
---     FOREIGN KEY (history_id) REFERENCES history(id) ON DELETE CASCADE,
---     PRIMARY KEY (id)
--- );
 
 CREATE TABLE IF NOT EXISTS histories_attendances
 (
