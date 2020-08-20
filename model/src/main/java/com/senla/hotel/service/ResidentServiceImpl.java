@@ -83,11 +83,14 @@ public class ResidentServiceImpl implements ResidentService {
     public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException {
         final Resident resident = findById(residentId);
         final Attendance attendance = attendanceService.findById(attendanceId);
-        final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
+
+
+
+//        final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
         final RoomHistory history = (RoomHistory) roomHistoryRepository
-            .findById(residentId);
-        attendanceService.add(attendances, attendance);
-        resident.getHistory().setAttendances(attendances);
+            .getByResidentAndCheckedInStatus(residentId);
+//        attendanceService.add(attendances, attendance);
+//        resident.getHistory().setAttendances(attendances);
         roomHistoryRepository.addAttendance(history.getId(), attendance);
     }
 

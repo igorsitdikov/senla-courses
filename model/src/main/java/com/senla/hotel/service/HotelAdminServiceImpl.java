@@ -5,6 +5,7 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
@@ -31,7 +32,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
-            final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut);
+            final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
             final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
             residentService.addHistoryToResident(residentId, roomHistoryEntity);
 //            roomService.addHistoryToRoom(roomId, roomHistoryEntity);
@@ -57,6 +58,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         throws EntityNotFoundException {
         final Resident resident = residentService.findById(residentId);
         final RoomHistory history = resident.getHistory();
+        history.setStatus(HistoryStatus.CHECKED_OUT);
         final Room room = history.getRoom();
         if (room.getStatus() != RoomStatus.OCCUPIED) {
             System.out.printf("The room №%d has no resident.", room.getNumber());

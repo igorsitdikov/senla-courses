@@ -42,8 +42,15 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
         return "DELETE FROM attendance WHERE id = ?";
     }
 
+    public String getSelectAttendancesInHistory() {
+        return "SELECT * FROM history\n" +
+                "    JOIN histories_attendances ha on history.id = ha.history_id\n" +
+                "    JOIN attendance on ha.attendance_id = attendance.id\n" +
+                "WHERE history_id = ?;";
+    }
+
     @Override
-    protected List<Attendance> parseResultSet(ResultSet rs) throws PersistException {
+    public List<Attendance> parseResultSet(ResultSet rs) throws PersistException {
         LinkedList<Attendance> result = new LinkedList<>();
         try {
             while (rs.next()) {
@@ -54,6 +61,20 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             throw new PersistException(e);
         }
         return result;
+    }
+    @Override
+    public List<Attendance> getAllAttendancesByHistoryId(final Long id) throws PersistException {
+        List<Attendance> list;
+        String sql = getSelectAttendancesInHistory();
+        try {
+            PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            setVariableToStatement(id, statement);
+            ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     @Override

@@ -10,6 +10,8 @@ import java.util.List;
 public interface RoomHistoryRepository {
     AEntity findById(Long id) throws EntityNotFoundException;
 
+    AEntity getByResidentAndCheckedInStatus(Long id) throws EntityNotFoundException;
+
     void addAttendance(Long id, Attendance attendance) throws EntityNotFoundException;
 
     AEntity add(AEntity entity);

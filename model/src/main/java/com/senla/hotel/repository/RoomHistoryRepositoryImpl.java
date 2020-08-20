@@ -20,6 +20,7 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
 
     @Autowired
     private RoomHistoryDao roomHistoryDao;
+
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
         try {
@@ -37,11 +38,32 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     }
 
     @Override
+    public AEntity getByResidentAndCheckedInStatus(final Long id) throws EntityNotFoundException {
+        try {
+            return roomHistoryDao.getByResidentAndCheckedInStatus(id);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
+//        for (final RoomHistory history : histories) {
+//            if (history.getId().equals(id)) {
+//                return history;
+//            }
+//        }
+        throw new EntityNotFoundException(String.format("No room history with id %d%n", id));
+    }
+
+    @Override
     public void addAttendance(final Long id, final Attendance attendance) throws EntityNotFoundException {
-        final RoomHistory history = (RoomHistory) findById(id);
-        final List<Attendance> attendanceList = new ArrayList<>(history.getAttendances());
-        attendanceList.add(attendance);
-        history.setAttendances(attendanceList);
+        try {
+            roomHistoryDao.addAttendanceToHistory(id, attendance.getId());
+        } catch (PersistException e) {
+            System.err.println(e.getMessage());
+        }
+//        final RoomHistory history = (RoomHistory) findById(id);
+//        final List<Attendance> attendanceList = new ArrayList<>(history.getAttendances());
+//        attendanceList.add(attendance);
+//        history.setAttendances(attendanceList);
     }
 
     @Override
