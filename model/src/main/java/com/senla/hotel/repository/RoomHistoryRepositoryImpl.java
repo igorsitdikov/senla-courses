@@ -54,6 +54,15 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     }
 
     @Override
+    public void update(final RoomHistory history) {
+        try {
+            roomHistoryDao.update(history);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void addAttendance(final Long id, final Attendance attendance) throws EntityNotFoundException {
         try {
             roomHistoryDao.addAttendanceToHistory(id, attendance.getId());

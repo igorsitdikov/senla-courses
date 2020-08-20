@@ -8,6 +8,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.repository.interfaces.RoomHistoryRepository;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
@@ -27,6 +28,8 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     private ResidentService residentService;
     @Autowired
     private RoomHistoryService roomHistoryService;
+    @Autowired
+    private RoomHistoryRepository roomHistoryRepository;
     @Autowired
     private Connector connector;
 
@@ -59,8 +62,8 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 }
             }
             System.out.printf("%s was checked-in in room №%d%n",
-                              resident.toString(),
-                              room.getNumber());
+                    resident.toString(),
+                    room.getNumber());
         } else if (room.getStatus() == RoomStatus.OCCUPIED) {
             System.out.printf("Room №%d is already in used.%n", room.getNumber());
         } else {
@@ -70,29 +73,45 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 
     @Override
     public void checkOut(final Long residentId, final LocalDate date)
-        throws EntityNotFoundException {
-        final Resident resident = residentService.findById(residentId);
-        final RoomHistory history = resident.getHistory();
-        history.setStatus(HistoryStatus.CHECKED_OUT);
-        final Room room = history.getRoom();
-        if (room.getStatus() != RoomStatus.OCCUPIED) {
-            System.out.printf("The room №%d has no resident.", room.getNumber());
-        } else {
-            roomService.changeRoomStatus(room.getId(), RoomStatus.VACANT);
-            roomService.updateCheckOutHistory(room.getId(), history, date);
-            resident.setHistory(null);
+            throws EntityNotFoundException {
+        try {
+            connector.getConnection().setAutoCommit(false);
+            final Resident resident = residentService.findById(residentId);
+            final RoomHistory history = resident.getHistory();
+            history.setStatus(HistoryStatus.CHECKED_OUT);
+            history.setCheckOut(date);
+            roomHistoryRepository.update(history);
+            final Room room = history.getRoom();
+            if (room.getStatus() != RoomStatus.OCCUPIED) {
+                System.out.printf("The room №%d has no resident.", room.getNumber());
+            } else {
+                roomService.changeRoomStatus(room.getId(), RoomStatus.VACANT);
+            }
+        } catch (Exception e) {
+            try {
+                connector.getConnection().rollback();
+                System.err.print("Transaction is being rolled back");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                connector.getConnection().setAutoCommit(true);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
     @Override
     public void checkOut(final Resident resident, final LocalDate date)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException {
         checkOut(resident.getId(), date);
     }
 
@@ -101,23 +120,23 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
-                                                      resident.getHistory().getCheckOut());
+                    resident.getHistory().getCheckOut());
             final Room room = resident.getHistory().getRoom();
             BigDecimal totalAttendances = BigDecimal.ZERO;
             for (int i = 0; i < resident.getHistory().getAttendances().size(); i++) {
                 totalAttendances = totalAttendances.add(resident.getHistory().getAttendances().get(i).getPrice());
             }
             final BigDecimal total = room.getPrice()
-                .multiply(new BigDecimal(days))
-                .add(totalAttendances.multiply(new BigDecimal(days)));
+                    .multiply(new BigDecimal(days))
+                    .add(totalAttendances.multiply(new BigDecimal(days)));
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
-                              resident.toString(),
-                              total,
-                              room.getNumber());
+                    resident.toString(),
+                    total,
+                    room.getNumber());
             return total;
         } else {
             System.out.printf("%s is not checked-in.%n",
-                              resident.toString());
+                    resident.toString());
         }
         return null;
     }

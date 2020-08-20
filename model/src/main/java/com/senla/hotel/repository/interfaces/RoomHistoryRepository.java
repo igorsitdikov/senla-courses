@@ -12,6 +12,8 @@ public interface RoomHistoryRepository {
 
     AEntity getByResidentAndCheckedInStatus(Long id) throws EntityNotFoundException;
 
+    void update(RoomHistory history);
+
     void addAttendance(Long id, Attendance attendance) throws EntityNotFoundException;
 
     AEntity add(AEntity entity);
