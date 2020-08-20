@@ -46,7 +46,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE history SET name = ?, price = ?, status = ?, stars =?, accommodation = ?, status = ? WHERE id = ?;";
+        return "UPDATE history SET room_id = ?, resident_id = ?, check_in = ?, check_out = ?, status = ? WHERE id = ?;";
     }
 
     @Override
