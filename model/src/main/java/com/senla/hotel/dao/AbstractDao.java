@@ -3,6 +3,7 @@ package com.senla.hotel.dao;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
@@ -60,7 +61,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return list.iterator().next();
     }
 
-    private <E> void setVariableToStatement(E variable, PreparedStatement statement) throws SQLException {
+    protected <E> void setVariableToStatement(E variable, PreparedStatement statement) throws SQLException {
         if (variable instanceof Long) {
             statement.setLong(1, (Long) variable);
         } else if (variable instanceof BigDecimal) {
