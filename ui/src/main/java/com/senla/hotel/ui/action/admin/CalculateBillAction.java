@@ -27,7 +27,7 @@ public class CalculateBillAction implements Action {
             final List<Resident> residents = residentController.showResidents();
             Printer.show(residents, "resident");
             Integer residentId = InputDataReader
-                    .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
+                    .getIntegerInput(scanner, "Input Resident id...", residents.size());
 
             hotelController.calculateBill(residents.get(residentId - 1));
         } catch (Exception e) {

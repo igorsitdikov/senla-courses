@@ -30,7 +30,7 @@ public class CheckOutAction implements Action {
             Printer.show(residents, "resident");
 
             Integer residentId = InputDataReader
-                    .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
+                    .getIntegerInput(scanner, "Input Resident id...", residents.size());
             LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
 
             hotelController.checkOut(residents.get(residentId - 1), checkOutDate);

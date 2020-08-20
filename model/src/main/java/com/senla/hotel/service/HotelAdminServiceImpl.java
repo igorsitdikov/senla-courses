@@ -12,8 +12,10 @@ import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.service.interfaces.RoomService;
+import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -25,18 +27,37 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     private ResidentService residentService;
     @Autowired
     private RoomHistoryService roomHistoryService;
+    @Autowired
+    private Connector connector;
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException {
         final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
-            final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
-            final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
-            residentService.addHistoryToResident(residentId, roomHistoryEntity);
+            try {
+                connector.getConnection().setAutoCommit(false);
+                final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
+                final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
+                residentService.addHistoryToResident(residentId, roomHistoryEntity);
 //            roomService.addHistoryToRoom(roomId, roomHistoryEntity);
-            roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
+                roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
+                connector.getConnection().commit();
+            } catch (Exception e) {
+                try {
+                    connector.getConnection().rollback();
+                    System.err.print("Transaction is being rolled back");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            } finally {
+                try {
+                    connector.getConnection().setAutoCommit(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
             System.out.printf("%s was checked-in in room №%d%n",
                               resident.toString(),
                               room.getNumber());

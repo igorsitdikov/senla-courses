@@ -29,13 +29,13 @@ public class AddAttendanceToResidentAction implements Action {
             Printer.show(attendances, "attendance");
 
             Integer attendanceId = InputDataReader
-                .getIntegerInput(scanner, "Input Attendance id...", attendances.size() - 1);
+                .getIntegerInput(scanner, "Input Attendance id...", attendances.size());
 
             final List<Resident> residents = residentController.showResidents();
             Printer.show(residents, "resident");
 
             Integer residentId = InputDataReader
-                .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
+                .getIntegerInput(scanner, "Input Resident id...", residents.size());
 
             residentController
                 .addAttendanceToResident(residents.get(residentId - 1), attendances.get(attendanceId - 1));
