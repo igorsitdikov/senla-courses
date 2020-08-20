@@ -3,7 +3,9 @@ package com.senla.hotel.dao;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
+import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.ResidentResultSetMapper;
 import com.senla.hotel.utils.Connector;
@@ -17,6 +19,8 @@ import java.util.List;
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
     @Autowired
     private ResidentResultSetMapper mapper;
+    @Autowired
+    private RoomHistoryDao roomHistoryDao;
 
     public ResidentDaoImpl(Connector connector) {
         super(connector);
@@ -48,6 +52,8 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
         try {
             while (rs.next()) {
                 Resident resident = mapper.sourceToDestination(rs);
+                RoomHistory history = roomHistoryDao.getByResidentAndCheckedInStatus(resident.getId());
+                resident.setHistory(history);
                 result.add(resident);
             }
         } catch (Exception e) {
