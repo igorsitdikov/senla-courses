@@ -5,11 +5,12 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public interface HotelAdminService {
     void checkIn(Long residentId, Long roomId, LocalDate checkIn, LocalDate checkOut)
-            throws EntityNotFoundException;
+            throws EntityNotFoundException, SQLException;
 
     void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
             throws EntityNotFoundException;

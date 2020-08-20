@@ -32,12 +32,12 @@ public class CheckInAction implements Action {
             final List<Room> rooms = roomController.showAllRooms();
             Printer.show(rooms, "room");
             Integer roomId = InputDataReader
-                    .getIntegerInput(scanner, "Input Room id...", rooms.size() - 1);
+                    .getIntegerInput(scanner, "Input Room id...", rooms.size());
 
             final List<Resident> residents = residentController.showResidents();
             Printer.show(residents, "resident");
             Integer residentId = InputDataReader
-                    .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
+                    .getIntegerInput(scanner, "Input Resident id...", residents.size());
             LocalDate checkInDate = InputDataReader.getLocalDateInput(scanner, "Input check-in date...");
             LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
 
