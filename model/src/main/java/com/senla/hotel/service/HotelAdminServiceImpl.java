@@ -82,7 +82,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
                                                       resident.getHistory().getCheckOut());
             final Room room = resident.getHistory().getRoom();
-            BigDecimal totalAttendances = BigDecimal.valueOf(0);
+            BigDecimal totalAttendances = BigDecimal.ZERO;
             for (int i = 0; i < resident.getHistory().getAttendances().size(); i++) {
                 totalAttendances = totalAttendances.add(resident.getHistory().getAttendances().get(i).getPrice());
             }
