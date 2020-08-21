@@ -9,17 +9,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface AttendanceRepository {
-    AEntity add(AEntity entity) throws EntityAlreadyExistsException;
+    AEntity create(AEntity entity) throws EntityAlreadyExistsException;
 
-    void changePrice(Long id, BigDecimal price) throws EntityNotFoundException;
+//    void update(Long id, BigDecimal price) throws EntityNotFoundException;
+    void update(Attendance attendance) throws EntityNotFoundException;
 
-    AEntity findById(Long id) throws EntityNotFoundException;
+    AEntity getById(Long id) throws EntityNotFoundException;
 
     void setAttendances(List<Attendance> attendances);
 
-    void deleteAttendance(Long id) throws EntityNotFoundException;
+    void delete(Attendance attendance) throws EntityNotFoundException;
 
-    List<Attendance> getAttendances();
-
-    void setCounter(Long counter);
+    List<Attendance> getAll();
 }

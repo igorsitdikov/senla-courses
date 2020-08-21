@@ -61,17 +61,6 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public void addAttendanceToResident(final Long id, final Attendance attendance) throws EntityNotFoundException {
-        final Resident resident = findById(id);
-        final RoomHistory history = (RoomHistory) roomHistoryRepository
-            .findById(resident.getHistory().getId());
-        final List<Attendance> attendances = resident.getHistory().getAttendances();
-        attendanceService.add(attendances, attendance);
-        history.setAttendances(attendances);
-        resident.getHistory().setAttendances(attendances);
-    }
-
-    @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
         throws EntityNotFoundException {
         final Long residentId = resident.getId();
@@ -81,16 +70,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException {
-        final Resident resident = findById(residentId);
         final Attendance attendance = attendanceService.findById(attendanceId);
-
-
-
-//        final List<Attendance> attendances = new ArrayList<>(resident.getHistory().getAttendances());
         final RoomHistory history = (RoomHistory) roomHistoryRepository
             .getByResidentAndCheckedInStatus(residentId);
-//        attendanceService.add(attendances, attendance);
-//        resident.getHistory().setAttendances(attendances);
         roomHistoryRepository.addAttendance(history.getId(), attendance);
     }
 

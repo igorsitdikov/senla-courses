@@ -29,7 +29,5 @@ public interface RoomRepository {
 
     void setRooms(List<Room> rooms);
 
-    void setCounter(Long counter);
-
     List<Room> getRooms();
 }

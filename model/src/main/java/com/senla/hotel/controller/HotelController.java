@@ -2,13 +2,11 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.service.interfaces.*;
-import com.senla.hotel.utils.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,11 +24,9 @@ public class HotelController {
     private static ResidentService residentService;
     @Autowired
     private static RoomHistoryService historyService;
-    @Autowired
-    private SerializationUtils serializationUtils;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
@@ -52,17 +48,5 @@ public class HotelController {
 
     public List<RoomHistory> showHistories() {
         return historyService.showHistories();
-    }
-
-    public void importData() {
-        serializationUtils.deserialize();
-    }
-
-    public void exportData() {
-        final List<Attendance> attendances = attendanceService.showAttendances();
-        final List<Room> rooms = roomService.showAllRooms();
-        final List<Resident> residents = residentService.showResidents();
-        final List<RoomHistory> roomHistories = showHistories();
-        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
     }
 }

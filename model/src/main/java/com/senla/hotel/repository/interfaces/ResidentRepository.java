@@ -18,7 +18,5 @@ public interface ResidentRepository {
 
     void setResidents(List<Resident> residents);
 
-    void setCounter(Long counter);
-
     List<Resident> getResidents();
 }

@@ -20,7 +20,5 @@ public interface RoomHistoryRepository {
 
     void setHistories(List<RoomHistory> roomHistories);
 
-    void setCounter(Long counter);
-
     List<RoomHistory> getHistories();
 }

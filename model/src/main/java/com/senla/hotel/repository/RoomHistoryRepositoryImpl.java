@@ -16,7 +16,6 @@ import java.util.List;
 @Singleton
 public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     private static List<RoomHistory> histories = new ArrayList<>();
-    private static Long counter = 0L;
 
     @Autowired
     private RoomHistoryDao roomHistoryDao;
@@ -91,11 +90,6 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     @Override
     public void setHistories(final List<RoomHistory> roomHistories) {
         RoomHistoryRepositoryImpl.histories = new ArrayList<>(roomHistories);
-    }
-
-    @Override
-    public void setCounter(final Long counter) {
-        RoomHistoryRepositoryImpl.counter = counter;
     }
 
     @Override
