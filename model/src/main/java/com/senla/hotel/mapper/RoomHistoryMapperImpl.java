@@ -45,7 +45,7 @@ public class RoomHistoryMapperImpl implements EntityMapper<RoomHistory> {
         }
         try {
             history.setResident(residentService.findById(Long.parseLong(elements[4])));
-        } catch (final EntityNotFoundException e) {
+        } catch (final EntityNotFoundException | PersistException e) {
             System.err.println(String.format("No such resident with id %s %s", elements[4], e));
         }
         final List<Attendance> historyList = new ArrayList<>();

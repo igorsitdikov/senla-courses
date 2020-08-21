@@ -15,23 +15,23 @@ public class ResidentController {
     @Autowired
     private static ResidentService residentService;
 
-    public void createResident(final Resident resident) {
+    public void createResident(final Resident resident) throws PersistException {
         residentService.createResident(resident);
     }
 
-    public List<Resident> showResidents() {
+    public List<Resident> showResidents() throws PersistException {
         return residentService.showResidents();
     }
 
-    public List<Resident> showResidentsSortedByName() {
+    public List<Resident> showResidentsSortedByName() throws PersistException {
         return residentService.showResidentsSortedByName();
     }
 
-    public List<Resident> showResidentsSortedByCheckOutDate() {
+    public List<Resident> showResidentsSortedByCheckOutDate() throws PersistException {
         return residentService.showResidentsSortedByCheckOutDate();
     }
 
-    public int showCountResidents() {
+    public int showCountResidents() throws PersistException {
         return residentService.showCountResidents();
     }
 
@@ -44,7 +44,7 @@ public class ResidentController {
         residentService.importResidents();
     }
 
-    public void exportResidents() {
+    public void exportResidents() throws PersistException {
         residentService.exportResidents();
     }
 }

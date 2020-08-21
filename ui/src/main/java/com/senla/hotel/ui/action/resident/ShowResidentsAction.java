@@ -16,7 +16,11 @@ public class ShowResidentsAction implements Action {
 
     @Override
     public void execute() {
-        List<Resident> residents = residentController.showResidents();
-        Printer.show(residents);
+        try {
+            List<Resident> residents = residentController.showResidents();
+            Printer.show(residents);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

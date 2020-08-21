@@ -35,7 +35,7 @@ public class HotelController {
         hotelAdminService.checkOut(resident, date);
     }
 
-    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException {
+    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException, PersistException {
         return hotelAdminService.calculateBill(resident);
     }
 

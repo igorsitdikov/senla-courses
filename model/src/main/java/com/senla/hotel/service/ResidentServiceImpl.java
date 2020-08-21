@@ -3,6 +3,7 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
@@ -31,7 +32,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private ResidentRepository residentRepository;
+    private ResidentDao residentRepository;
     @Autowired
     private RoomHistoryRepository roomHistoryRepository;
     @Autowired
@@ -47,8 +48,8 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public Resident findById(final Long id) throws EntityNotFoundException {
-        final Resident resident = (Resident) residentRepository.findById(id);
+    public Resident findById(final Long id) throws EntityNotFoundException, PersistException {
+        final Resident resident = residentRepository.findById(id);
         if (resident == null) {
             throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
         }
@@ -72,44 +73,44 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public void createResident(final Resident resident) {
+    public void createResident(final Resident resident) throws PersistException {
         residentRepository.create(resident);
     }
 
     @Override
-    public List<Resident> showResidents() {
+    public List<Resident> showResidents() throws PersistException {
         return residentRepository.getAll();
     }
 
     @Override
-    public List<Resident> showResidentsSortedByName() {
+    public List<Resident> showResidentsSortedByName() throws PersistException {
         final List<Resident> residents = showResidents();
         return sortResidents(residents, new ResidentFullNameComparator());
     }
 
     @Override
-    public List<Resident> showResidentsSortedByCheckOutDate() {
+    public List<Resident> showResidentsSortedByCheckOutDate() throws PersistException {
         final List<Resident> residents = showResidents();
         return sortResidents(residents, new ResidentCheckOutComparator());
     }
 
     @Override
     public void importResidents() {
-        EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
-        final List<Resident> residents =
-            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
-        residentRepository.setResidents(residents);
+//        EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
+//        final List<Resident> residents =
+//            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
+//        residentRepository.setResidents(residents);
     }
 
     @Override
-    public void exportResidents() {
+    public void exportResidents() throws PersistException {
         EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents()));
     }
 
     @Override
-    public int showCountResidents() {
-        return residentRepository.showTotalNumber();
+    public int showCountResidents() throws PersistException {
+        return residentRepository.getAll().size();
     }
 
 }
