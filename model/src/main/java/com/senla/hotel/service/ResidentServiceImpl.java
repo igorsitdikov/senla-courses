@@ -41,13 +41,6 @@ public class ResidentServiceImpl implements ResidentService {
     private String property;
 
     @Override
-    public List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
-        final List<Resident> result = new ArrayList<>(residents);
-        result.sort(comparator);
-        return result;
-    }
-
-    @Override
     public Resident findById(final Long id) throws EntityNotFoundException, PersistException {
         final Resident resident = residentRepository.findById(id);
         if (resident == null) {
@@ -83,23 +76,18 @@ public class ResidentServiceImpl implements ResidentService {
         switch (sortField) {
             case NAME:
                 return sortResidents(residents, new ResidentFullNameComparator());
-            case DATE:
+            case CHECK_OUT_DATE:
                 return sortResidents(residents, new ResidentCheckOutComparator());
+            default:
+                return residents;
         }
-        return residents;
     }
-//
-//    @Override
-//    public List<Resident> showResidentsSortedByName() throws PersistException {
-//        final List<Resident> residents = showResidents();
-//        return sortResidents(residents, new ResidentFullNameComparator());
-//    }
-//
-//    @Override
-//    public List<Resident> showResidentsSortedByCheckOutDate() throws PersistException {
-//        final List<Resident> residents = showResidents();
-//        return sortResidents(residents, new ResidentCheckOutComparator());
-//    }
+
+    private List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
+        final List<Resident> result = new ArrayList<>(residents);
+        result.sort(comparator);
+        return result;
+    }
 
     @Override
     public void importResidents() {

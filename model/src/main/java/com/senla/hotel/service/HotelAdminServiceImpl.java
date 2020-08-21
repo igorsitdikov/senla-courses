@@ -77,8 +77,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkOut(final Long residentId, final LocalDate date)
-            throws EntityNotFoundException {
+    public void checkOut(final Long residentId, final LocalDate date) {
         try {
             connector.getConnection().setAutoCommit(false);
             final Resident resident = residentService.findById(residentId);
@@ -109,8 +108,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkOut(final Resident resident, final LocalDate date)
-            throws EntityNotFoundException {
+    public void checkOut(final Resident resident, final LocalDate date) {
         checkOut(resident.getId(), date);
     }
 

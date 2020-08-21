@@ -16,8 +16,6 @@ public interface RoomService {
 
     List<Room> showVacantRoomsOnDate(LocalDate date) throws PersistException;
 
-    List<Room> sortRooms(List<Room> rooms, Comparator<Room> comparator);
-
     Room findById(Long id) throws EntityNotFoundException, PersistException;
 
     Room findByNumber(Integer number) throws EntityNotFoundException, PersistException;
