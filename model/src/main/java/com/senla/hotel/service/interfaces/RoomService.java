@@ -2,7 +2,6 @@ package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;

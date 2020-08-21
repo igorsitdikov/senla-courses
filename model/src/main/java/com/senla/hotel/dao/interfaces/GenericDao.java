@@ -1,7 +1,7 @@
 package com.senla.hotel.dao.interfaces;
 
-import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.entity.AEntity;
+import com.senla.hotel.exceptions.PersistException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ public interface GenericDao<T extends AEntity, ID extends Serializable> {
 
     T create(T object) throws PersistException;
 
-    T getById(ID id) throws PersistException;
+    T findById(ID id) throws PersistException;
 
     void update(T object) throws PersistException;
 

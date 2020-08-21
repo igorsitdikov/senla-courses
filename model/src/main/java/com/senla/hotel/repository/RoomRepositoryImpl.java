@@ -2,13 +2,11 @@ package com.senla.hotel.repository;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.repository.interfaces.RoomRepository;
 
 import java.math.BigDecimal;
@@ -60,7 +58,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
         try {
-            return roomDao.getById(id);
+            return roomDao.findById(id);
         } catch (PersistException e) {
             e.printStackTrace();
         }

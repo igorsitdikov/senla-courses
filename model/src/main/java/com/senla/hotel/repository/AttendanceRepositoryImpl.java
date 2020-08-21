@@ -3,14 +3,13 @@ package com.senla.hotel.repository;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
-import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.repository.interfaces.AttendanceRepository;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,9 +39,9 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
     }
 
     @Override
-    public AEntity getById(final Long id) throws EntityNotFoundException {
+    public AEntity findById(final Long id) throws EntityNotFoundException {
         try {
-            return attendanceDao.getById(id);
+            return attendanceDao.findById(id);
         } catch (PersistException e) {
             throw new EntityNotFoundException(String.format("No attendance with id %d%n", id));
         }

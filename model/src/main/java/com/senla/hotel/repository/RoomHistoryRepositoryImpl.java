@@ -23,7 +23,7 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     @Override
     public AEntity findById(final Long id) throws EntityNotFoundException {
         try {
-            return roomHistoryDao.getById(id);
+            return roomHistoryDao.findById(id);
         } catch (PersistException e) {
             e.printStackTrace();
         }
@@ -68,10 +68,6 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
         } catch (PersistException e) {
             System.err.println(e.getMessage());
         }
-//        final RoomHistory history = (RoomHistory) findById(id);
-//        final List<Attendance> attendanceList = new ArrayList<>(history.getAttendances());
-//        attendanceList.add(attendance);
-//        history.setAttendances(attendanceList);
     }
 
     @Override
@@ -82,18 +78,15 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
             e.printStackTrace();
         }
         return null;
-//        entity.setId(++counter);
-//        histories.add((RoomHistory) entity);
-//        return entity;
     }
 
     @Override
     public void setHistories(final List<RoomHistory> roomHistories) {
-        RoomHistoryRepositoryImpl.histories = new ArrayList<>(roomHistories);
+//        RoomHistoryRepositoryImpl.histories = new ArrayList<>(roomHistories);
     }
 
     @Override
-    public List<RoomHistory> getHistories() {
+    public List<RoomHistory> getAll() {
         return histories;
     }
 }

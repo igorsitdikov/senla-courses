@@ -1,9 +1,9 @@
 package com.senla.hotel.configuration;
 
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.AppContext;
+import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
+import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exception.ConverterNotExistsException;
 import com.senla.hotel.properties.PropertyLoader;
 import com.senla.hotel.utils.ObjectConverter;

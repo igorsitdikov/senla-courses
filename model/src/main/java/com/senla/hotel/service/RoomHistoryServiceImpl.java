@@ -56,6 +56,6 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
 
     @Override
     public List<RoomHistory> showHistories() {
-        return roomHistoryRepository.getHistories();
+        return roomHistoryRepository.getAll();
     }
 }
