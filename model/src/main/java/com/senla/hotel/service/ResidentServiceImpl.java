@@ -7,6 +7,7 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.ResidentMapperImpl;
 import com.senla.hotel.mapper.interfaces.EntityMapper;
 import com.senla.hotel.repository.interfaces.ResidentRepository;
@@ -56,14 +57,14 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException, PersistException {
         final Long residentId = resident.getId();
         final Long attendanceId = attendanceService.findById(attendance.getId()).getId();
         addAttendanceToResident(residentId, attendanceId);
     }
 
     @Override
-    public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException {
+    public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException, PersistException {
         final Attendance attendance = attendanceService.findById(attendanceId);
         final RoomHistory history = (RoomHistory) roomHistoryRepository
             .getByResidentAndCheckedInStatus(residentId);

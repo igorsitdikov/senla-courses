@@ -3,12 +3,11 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
-import com.senla.hotel.exceptions.EntityAlreadyExistsException;
-import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.AttendanceMapperImpl;
 import com.senla.hotel.mapper.interfaces.EntityMapper;
-import com.senla.hotel.repository.interfaces.AttendanceRepository;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
@@ -28,13 +27,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    private AttendanceDao attendanceRepository;
     @PropertyLoad(propertyName = "attendances")
     private String property;
 
     @Override
-    public Attendance findById(final Long id) throws EntityNotFoundException {
-        return (Attendance) attendanceRepository.findById(id);
+    public Attendance findById(final Long id) throws PersistException {
+        return attendanceRepository.findById(id);
     }
 
 //    @Override
@@ -50,30 +49,30 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
+    public void createAttendance(final Attendance attendance) throws PersistException {
         attendanceRepository.create(attendance);
     }
 
     @Override
-    public List<Attendance> showAttendances() {
+    public List<Attendance> showAttendances() throws PersistException {
         return attendanceRepository.getAll();
     }
 
     @Override
-    public List<Attendance> showAttendancesSortedByName() {
+    public List<Attendance> showAttendancesSortedByName() throws PersistException {
         final List<Attendance> attendances = new ArrayList<>(showAttendances());
         return sortAttendances(attendances, new AttendanceNameComparator());
     }
 
     @Override
-    public List<Attendance> showAttendancesSortedByPrice() {
+    public List<Attendance> showAttendancesSortedByPrice() throws PersistException {
         final List<Attendance> attendances = new ArrayList<>(showAttendances());
         return sortAttendances(attendances, new AttendancePriceComparator());
     }
 
     @Override
-    public void changeAttendancePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        final Attendance attendance = (Attendance) attendanceRepository.findById(id);
+    public void changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
+        final Attendance attendance = attendanceRepository.findById(id);
         attendance.setPrice(price);
         attendanceRepository.update(attendance);
     }
@@ -86,8 +85,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 //    }
 
     @Override
-    public void delete(final Long id) throws EntityNotFoundException {
-        Attendance attendance = (Attendance) attendanceRepository.findById(id);
+    public void delete(final Long id) throws PersistException {
+        Attendance attendance = attendanceRepository.findById(id);
         attendanceRepository.delete(attendance);
     }
 
@@ -98,14 +97,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void importAttendances() {
-        EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
-        final List<Attendance> attendances =
-            ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
-        attendanceRepository.setAttendances(attendances);
+//        EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
+//        final List<Attendance> attendances =
+//            ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
+//        attendanceRepository.setAttendances(attendances);
     }
 
     @Override
-    public void exportAttendances() {
+    public void exportAttendances() throws PersistException {
         EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances()));
     }

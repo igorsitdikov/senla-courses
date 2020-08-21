@@ -5,6 +5,7 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.EntityMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
@@ -52,7 +53,7 @@ public class RoomHistoryMapperImpl implements EntityMapper<RoomHistory> {
             for (int i = 5; i < elements.length; i++) {
                 try {
                     historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
-                } catch (final EntityNotFoundException e) {
+                } catch (final EntityNotFoundException | PersistException e) {
                     System.err.println(String.format("No such attendance with id %s %s", elements[i], e));
                 }
             }

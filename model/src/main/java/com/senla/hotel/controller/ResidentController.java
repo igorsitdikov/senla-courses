@@ -5,6 +5,7 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.ResidentService;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ResidentController {
     }
 
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
-        throws EntityNotFoundException {
+            throws EntityNotFoundException, PersistException {
         residentService.addAttendanceToResident(resident, attendance);
     }
 
