@@ -63,7 +63,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room findRoomByRoomNumber(final Integer number) throws EntityNotFoundException {
-        final Room room = (Room) roomRepository.findByRoomNumber(number);
+        final Room room = (Room) roomRepository.findByNumber(number);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }

@@ -27,13 +27,6 @@ public class RoomRepositoryImpl implements RoomRepository {
             e.printStackTrace();
         }
         return null;
-//        final List<Room> vacantRooms = new ArrayList<>();
-//        for (final Room room : rooms) {
-//            if (room.getStatus() == RoomStatus.VACANT) {
-//                vacantRooms.add(room);
-//            }
-//        }
-//        return vacantRooms;
     }
 
     @Override
@@ -49,10 +42,6 @@ public class RoomRepositoryImpl implements RoomRepository {
             e.printStackTrace();
         }
         return null;
-//        return null;
-//        room.setId(++counter);
-//        rooms.add((Room) room);
-//        return room;
     }
 
     @Override
@@ -62,26 +51,16 @@ public class RoomRepositoryImpl implements RoomRepository {
         } catch (PersistException e) {
             e.printStackTrace();
         }
-//        for (final Room room : rooms) {
-//            if (room.getId().equals(id)) {
-//                return room;
-//            }
-//        }
         throw new EntityNotFoundException(String.format("No room with id %d%n", id));
     }
 
     @Override
-    public AEntity findByRoomNumber(final Integer number) throws EntityNotFoundException {
+    public AEntity findByNumber(final Integer number) throws EntityNotFoundException {
         try {
-            return roomDao.getRoomByNumber(number);
+            return roomDao.findByNumber(number);
         } catch (PersistException e) {
             e.printStackTrace();
         }
-//        for (final Room room : rooms) {
-//            if (room.getNumber().equals(number)) {
-//                return room;
-//            }
-//        }
         throw new EntityNotFoundException(String.format("No room with number %d%n", number));
     }
 
@@ -102,7 +81,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
-        final Room room = (Room) findByRoomNumber(number);
+        final Room room = (Room) findByNumber(number);
         room.setPrice(price);
     }
 

@@ -27,12 +27,6 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
         } catch (PersistException e) {
             e.printStackTrace();
         }
-
-//        for (final RoomHistory history : histories) {
-//            if (history.getId().equals(id)) {
-//                return history;
-//            }
-//        }
         throw new EntityNotFoundException(String.format("No room history with id %d%n", id));
     }
 
@@ -43,12 +37,6 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
         } catch (PersistException e) {
             e.printStackTrace();
         }
-
-//        for (final RoomHistory history : histories) {
-//            if (history.getId().equals(id)) {
-//                return history;
-//            }
-//        }
         throw new EntityNotFoundException(String.format("No room history with id %d%n", id));
     }
 

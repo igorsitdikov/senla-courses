@@ -49,7 +49,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     }
 
     @Override
-    public Room getRoomByNumber(Integer number) throws PersistException {
+    public Room findByNumber(Integer number) throws PersistException {
         return getBy("number", number);
     }
 

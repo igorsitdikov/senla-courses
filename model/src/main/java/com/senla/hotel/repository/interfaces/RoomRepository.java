@@ -16,7 +16,7 @@ public interface RoomRepository {
 
     AEntity findById(Long id) throws EntityNotFoundException;
 
-    AEntity findByRoomNumber(Integer number) throws EntityNotFoundException;
+    AEntity findByNumber(Integer number) throws EntityNotFoundException;
 
     void update(Room room);
 
