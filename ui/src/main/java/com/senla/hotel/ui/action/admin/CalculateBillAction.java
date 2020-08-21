@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CalculateBillAction implements Action {
-    private final ResidentController residentController;
-    private final HotelController hotelController;
+    private ResidentController residentController;
+    private HotelController hotelController;
 
-    public CalculateBillAction(final ResidentController residentController, final HotelController hotelController) {
+    public CalculateBillAction(ResidentController residentController, HotelController hotelController) {
         this.residentController = residentController;
         this.hotelController = hotelController;
     }
@@ -23,11 +23,11 @@ public class CalculateBillAction implements Action {
     @Override
     public void execute() {
 
-        final Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         try {
-            final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
+            List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents, "resident");
-            final Integer residentId = InputDataReader
+            Integer residentId = InputDataReader
                     .getIntegerInput(scanner, "Input Resident id...", residents.size());
 
             hotelController.calculateBill(residents.get(residentId - 1));

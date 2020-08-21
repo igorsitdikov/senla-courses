@@ -83,6 +83,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             } else {
                 roomService.changeRoomStatus(room.getId(), RoomStatus.VACANT);
             }
+            connector.getConnection().commit();
         } catch (final Exception e) {
             connector.getConnection().rollback();
             throw new PersistException("Transaction is being rolled back");
@@ -100,20 +101,11 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     public BigDecimal calculateBill(final Long id) throws EntityNotFoundException, PersistException {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
-            final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
-                    resident.getHistory().getCheckOut());
-            final Room room = resident.getHistory().getRoom();
-            BigDecimal totalAttendances = BigDecimal.ZERO;
-            for (int i = 0; i < resident.getHistory().getAttendances().size(); i++) {
-                totalAttendances = totalAttendances.add(resident.getHistory().getAttendances().get(i).getPrice());
-            }
-            final BigDecimal total = room.getPrice()
-                    .multiply(new BigDecimal(days))
-                    .add(totalAttendances.multiply(new BigDecimal(days)));
+            final BigDecimal total = roomHistoryRepository.calculateBill(resident.getHistory().getId());
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
                     resident.toString(),
                     total,
-                    room.getNumber());
+                    resident.getHistory().getRoom().getNumber());
             return total;
         } else {
             System.out.printf("%s is not checked-in.%n",

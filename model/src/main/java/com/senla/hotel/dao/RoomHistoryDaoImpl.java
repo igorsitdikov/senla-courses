@@ -11,8 +11,8 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
+import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,6 +51,16 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
         return "UPDATE history SET room_id = ?, resident_id = ?, check_in = ?, check_out = ?, status = ? WHERE id = ?;";
     }
 
+    public String getCalculateBillQuery() {
+        return "\n" +
+                "SELECT (SUM(DATEDIFF(history.check_out, history.check_in) * attendance.price) + DATEDIFF(check_out, check_in) * room.price) AS result FROM history\n" +
+                "                  LEFT JOIN resident ON resident.id = history.resident_id\n" +
+                "                  LEFT JOIN room ON room.id = history.room_id\n" +
+                "                  LEFT JOIN histories_attendances on history.id = histories_attendances.history_id\n" +
+                "                  LEFT JOIN attendance on histories_attendances.attendance_id = attendance.id\n" +
+                "WHERE history.id = ? AND history.status = 'CHECKED_IN';";
+    }
+
     @Override
     public String getDeleteQuery() {
         return "DELETE FROM history WHERE id = ?";
@@ -79,7 +89,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
         sql += " WHERE history.status = 'CHECKED_IN' AND resident.id = ?";
         list = getAllBySqlQuery(sql, id);
         if (list == null || list.size() == 0) {
-            throw new EntityNotFoundException("Room not found");
+            return null;
         }
         if (list.size() > 1) {
             throw new PersistException("Received more than one record.");
@@ -90,6 +100,37 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     @Override
     public RoomHistory findById(final Long id) throws PersistException {
         return getBy("history.id", id);
+    }
+
+    @Override
+    public BigDecimal calculateBill(final Long id) throws PersistException {
+        final List<Double> result = new LinkedList<>();
+        final String sql = getCalculateBillQuery();
+        System.out.println("id " + id);
+        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+            setVariableToStatement(statement, id);
+            final ResultSet rs = statement.executeQuery();
+//            ResultSetMetaData rsmd = rs.getMetaData();
+//            int columnsNumber = rsmd.getColumnCount();
+            while (rs.next()) {
+//                for (int i = 1; i <= columnsNumber; i++) {
+//                    if (i > 1) System.out.print(",  ");
+//                    String columnValue = rs.getString(i);
+//                    System.out.print(columnValue + " " + rsmd.getColumnName(i));
+//                }
+//                System.out.println("");
+                result.add(rs.getDouble("result"));
+            }
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
+        if (result.size() == 0) {
+            throw new PersistException("Received no records.");
+        }
+        if (result.size() > 1) {
+            throw new PersistException("Received more than one record.");
+        }
+        return BigDecimal.valueOf(result.iterator().next());
     }
 
     @Override
