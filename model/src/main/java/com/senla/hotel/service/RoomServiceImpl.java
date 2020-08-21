@@ -3,11 +3,12 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.mapper.RoomMapperImpl;
 import com.senla.hotel.mapper.interfaces.EntityMapper;
@@ -24,7 +25,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
@@ -39,29 +39,6 @@ public class RoomServiceImpl implements RoomService {
     private String property;
     @PropertyLoad(type = Type.INTEGER)
     private Integer amountHistories;
-
-    @Override
-    public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {
-        final Room room = findById(id);
-        final LinkedList<RoomHistory> histories = new LinkedList<>(room.getHistories());
-        if (histories.size() == amountHistories) {
-            histories.removeFirst();
-        }
-        room.setHistories(histories);
-        roomRepository.addHistory(room, history);
-    }
-
-    @Override
-    public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-        throws EntityNotFoundException {
-        final Room room = findById(id);
-        final List<RoomHistory> histories = room.getHistories();
-        for (final RoomHistory roomHistory : histories) {
-            if (roomHistory.equals(history)) {
-                roomHistory.setCheckOut(checkOut);
-            }
-        }
-    }
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) {
@@ -100,7 +77,7 @@ public class RoomServiceImpl implements RoomService {
         for (final Room room : rooms) {
             final List<RoomHistory> histories = room.getHistories();
             if (room.getStatus() != RoomStatus.REPAIR &&
-                (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
                 result.add(room);
             }
         }
@@ -110,11 +87,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public int countVacantRooms() {
         return roomRepository.countVacantRooms();
-    }
-
-    @Override
-    public void changeRoomPrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        changePrice(id, price);
     }
 
     @Override
@@ -139,7 +111,7 @@ public class RoomServiceImpl implements RoomService {
             System.out.println("Room is not available now");
         } else {
             room.setStatus(status);
-            roomRepository.changeRoomStatus(room);
+            roomRepository.update(room);
         }
     }
 
@@ -155,49 +127,28 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> showAllRooms() {
-        return roomRepository.getRooms();
+    public List<Room> showAll(final SortField sortField) {
+        final List<Room> rooms = roomRepository.getRooms();
+        return sortRooms(sortField, rooms);
+    }
+
+    private List<Room> sortRooms(final SortField sortField, final List<Room> rooms) {
+        switch (sortField) {
+            case STARS:
+                return sortRooms(rooms, new RoomStarsComparator());
+            case ACCOMMODATION:
+                return sortRooms(rooms, new RoomAccommodationComparator());
+            case PRICE:
+                return sortRooms(rooms, new RoomPriceComparator());
+            default:
+                return rooms;
+        }
     }
 
     @Override
-    public List<Room> showAllRoomsSortedByPrice() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomPriceComparator());
-    }
-
-    @Override
-    public List<Room> showAllRoomsSortedByAccommodation() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomAccommodationComparator());
-    }
-
-    @Override
-    public List<Room> showAllRoomsSortedByStars() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomStarsComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRooms() {
-        return roomRepository.getVacantRooms();
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByPrice() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomPriceComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByAccommodation() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomAccommodationComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByStars() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomStarsComparator());
+    public List<Room> showVacant(final SortField sortField) {
+        final List<Room> rooms = roomRepository.getVacantRooms();
+        return sortRooms(sortField, rooms);
     }
 
     @Override
@@ -207,15 +158,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void importRooms() {
-        EntityMapper<Room> roomMapper = new RoomMapperImpl();
+        final EntityMapper<Room> roomMapper = new RoomMapperImpl();
         final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
         roomRepository.setRooms(rooms);
     }
 
     @Override
     public void exportRooms() {
-        EntityMapper<Room> roomMapper = new RoomMapperImpl();
-        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, showAllRooms()));
+        final EntityMapper<Room> roomMapper = new RoomMapperImpl();
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, roomRepository.getRooms()));
     }
 
     @Override

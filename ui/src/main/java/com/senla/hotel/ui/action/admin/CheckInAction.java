@@ -5,6 +5,7 @@ import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
@@ -29,7 +30,7 @@ public class CheckInAction implements Action {
 
         Scanner scanner = new Scanner(System.in);
         try {
-            final List<Room> rooms = roomController.showAllRooms();
+            final List<Room> rooms = roomController.showAllRooms(SortField.DEFAULT);
             Printer.show(rooms, "room");
             Integer roomId = InputDataReader
                     .getIntegerInput(scanner, "Input Room id...", rooms.size());

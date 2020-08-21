@@ -3,6 +3,7 @@ package com.senla.hotel.controller;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -26,36 +27,12 @@ public class RoomController {
         roomService.addRoom(room);
     }
 
-    public List<Room> showAllRooms() {
-        return roomService.showAllRooms();
+    public List<Room> showAllRooms(final SortField sortField) {
+        return roomService.showAll(sortField);
     }
 
-    public List<Room> showVacantRooms() {
-        return roomService.showVacantRooms();
-    }
-
-    public List<Room> showAllRoomsSortedByAccommodation() {
-        return roomService.showAllRoomsSortedByAccommodation();
-    }
-
-    public List<Room> showAllRoomsSortedByPrice() {
-        return roomService.showAllRoomsSortedByPrice();
-    }
-
-    public List<Room> showAllRoomsSortedByStars() {
-        return roomService.showAllRoomsSortedByStars();
-    }
-
-    public List<Room> showVacantRoomsSortedByAccommodation() {
-        return roomService.showVacantRoomsSortedByAccommodation();
-    }
-
-    public List<Room> showVacantRoomsSortedByPrice() {
-        return roomService.showVacantRoomsSortedByPrice();
-    }
-
-    public List<Room> showVacantRoomsSortedByStars() {
-        return roomService.showVacantRoomsSortedByStars();
+    public List<Room> showVacantRooms(final SortField sortField) {
+        return roomService.showVacant(sortField);
     }
 
     public Room showRoomDetails(final Integer roomNumber) throws EntityNotFoundException {

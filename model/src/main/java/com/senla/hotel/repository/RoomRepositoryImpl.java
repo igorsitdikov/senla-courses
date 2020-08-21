@@ -88,7 +88,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public void changeRoomStatus(final Room room) {
+    public void update(final Room room) {
         try {
             roomDao.update(room);
         } catch (PersistException e) {
@@ -106,13 +106,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     public void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
         final Room room = (Room) findByRoomNumber(number);
         room.setPrice(price);
-    }
-
-    @Override
-    public void addHistory(final Room room, final RoomHistory roomHistory) {
-        final List<RoomHistory> histories = room.getHistories();
-        histories.add(roomHistory);
-        room.setHistories(histories);
     }
 
     @Override

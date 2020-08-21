@@ -19,13 +19,11 @@ public interface RoomRepository {
 
     AEntity findByRoomNumber(Integer number) throws EntityNotFoundException;
 
-    void changeRoomStatus(Room room);
+    void update(Room room);
 
     void changePrice(Long id, BigDecimal price) throws EntityNotFoundException;
 
     void changePrice(Integer number, BigDecimal price) throws EntityNotFoundException;
-
-    void addHistory(Room room, RoomHistory roomHistory);
 
     void setRooms(List<Room> rooms);
 
