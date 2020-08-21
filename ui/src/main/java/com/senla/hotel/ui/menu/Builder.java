@@ -119,6 +119,8 @@ public class Builder {
                 new CountVacantAction(roomController)));
         menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_DETAILS, menu,
                 new ShowDetailsAction(roomController)));
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_LAST_RESIDENTS, menu,
+                new ShowLastResidentsAction(roomController)));
         menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 

@@ -41,9 +41,21 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
         return "UPDATE resident SET first_name = ?, last_name = ?, gender = ?, vip =?, phone = ? WHERE id = ?;";
     }
 
+    public String getLastResidentsByRoomIdQuery() {
+        return "SELECT * FROM history\n" +
+                "    JOIN resident on resident.id = history.resident_id\n" +
+                "WHERE room_id = ? ORDER BY history.check_out DESC LIMIT ?;";
+    }
+
     @Override
     public String getDeleteQuery() {
         return "DELETE FROM resident WHERE id = ?";
+    }
+
+    @Override
+    public List<Resident> getLastResidentsByRoomId(final Long roomId, final Integer limit) throws PersistException {
+        String sql = getLastResidentsByRoomIdQuery();
+        return getAllBySqlQuery(sql, roomId, limit);
     }
 
     @Override

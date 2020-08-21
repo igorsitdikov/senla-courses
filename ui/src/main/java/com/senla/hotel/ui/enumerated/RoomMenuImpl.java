@@ -8,7 +8,8 @@ public enum RoomMenuImpl implements MenuEnum {
     CHANGE_ROOM_PRICE(3, "Change price"),
     CHANGE_ROOM_STATUS(4, "Change status"),
     TOTAL_VACANT_ROOMS(5, "Total vacant rooms"),
-    SHOW_DETAILS(6, "Show room's details");
+    SHOW_DETAILS(6, "Show room's details"),
+    SHOW_LAST_RESIDENTS(7, "Show last residents");
 
     private int id;
     private String title;

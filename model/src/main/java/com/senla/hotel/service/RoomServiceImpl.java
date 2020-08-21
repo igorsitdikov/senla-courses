@@ -3,6 +3,7 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -36,6 +37,8 @@ public class RoomServiceImpl implements RoomService {
     private CsvWriter csvWriter;
     @Autowired
     private RoomDao roomRepository;
+    @Autowired
+    private ResidentDao residentRepository;
     @PropertyLoad(propertyName = "rooms")
     private String property;
     @PropertyLoad(type = Type.INTEGER)
@@ -44,17 +47,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
         return roomRepository.getVacantOnDate(date);
-//
-//        final List<Room> rooms = roomRepository.getAll();
-//        final List<Room> result = new ArrayList<>();
-//        for (final Room room : rooms) {
-//            final List<RoomHistory> histories = room.getHistories();
-//            if (room.getStatus() != RoomStatus.REPAIR &&
-//                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
-//                result.add(room);
-//            }
-//        }
-//        return result;
     }
 
     @Override
@@ -167,17 +159,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     public List<Resident> showLastResidents(final Long id, final Integer amount) throws EntityNotFoundException, PersistException {
-        final List<RoomHistory> histories = findById(id).getHistories();
-        final List<Resident> residents = new ArrayList<>();
-        if (histories.size() > amount) {
-            for (int i = histories.size() - amount; i < histories.size(); i++) {
-                residents.add(findById(id).getHistories().get(i).getResident());
-            }
-        } else {
-            for (int i = 0; i < histories.size(); i++) {
-                residents.add(findById(id).getHistories().get(i).getResident());
-            }
-        }
-        return residents;
+        return residentRepository.getLastResidentsByRoomId(id, amount);
     }
 }
