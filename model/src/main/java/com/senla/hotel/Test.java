@@ -50,11 +50,11 @@ public class Test {
         }
         attendanceController.deleteAttendance(4L);
         PrinterUtils.show("Show all attendances");
-        PrinterUtils.show(attendanceController.showAttendances());
+        PrinterUtils.show(attendanceController.showAttendances(SortField.DEFAULT));
         PrinterUtils.show("Show attendances sorted by name");
-        PrinterUtils.show(attendanceController.showAttendancesSortedByName());
+        PrinterUtils.show(attendanceController.showAttendances(SortField.NAME));
         PrinterUtils.show("Show attendances sorted by price");
-        PrinterUtils.show(attendanceController.showAttendancesSortedByPrice());
+        PrinterUtils.show(attendanceController.showAttendances(SortField.PRICE));
         final Room room101 =
             new Room(101, Stars.STANDARD, Accommodation.SGL, BigDecimal.valueOf(100), RoomStatus.VACANT);
         final Room room102 =
@@ -109,11 +109,11 @@ public class Test {
         residentController.createResident(stephani);
         residentController.createResident(carl);
         PrinterUtils.show("Show all residents");
-        PrinterUtils.show(residentController.showResidents());
+        PrinterUtils.show(residentController.showResidents(SortField.DEFAULT));
         PrinterUtils.show("Show count residents");
         PrinterUtils.show(residentController.showCountResidents());
         PrinterUtils.show("Sort by name");
-        PrinterUtils.show(residentController.showResidentsSortedByName());
+        PrinterUtils.show(residentController.showResidents(SortField.NAME));
         hotelController.checkIn(mike, room101, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5));
         hotelController.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 25));
         hotelController.checkIn(alex, room102, LocalDate.of(2020, 8, 6), LocalDate.of(2020, 8, 10));
@@ -130,7 +130,7 @@ public class Test {
         PrinterUtils.show(hotelController.calculateBill(alex));
         PrinterUtils.show("Show 3 last residents by room");
         PrinterUtils.show(roomController.showLastResidents(room102, 3));
-        PrinterUtils.show(residentController.showResidentsSortedByCheckOutDate());
+        PrinterUtils.show(residentController.showResidents(SortField.DATE));
         PrinterUtils.show("Vacant rooms on date");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
         roomController.changePrice(203, BigDecimal.valueOf(2.0));

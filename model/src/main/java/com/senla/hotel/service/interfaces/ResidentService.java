@@ -2,6 +2,7 @@ package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 
@@ -21,11 +22,13 @@ public interface ResidentService {
 
     void createResident(Resident resident) throws PersistException;
 
-    List<Resident> showResidents() throws PersistException;
+//    List<Resident> showResidents() throws PersistException;
 
-    List<Resident> showResidentsSortedByName() throws PersistException;
+    List<Resident> showResidents(SortField sortField) throws PersistException;
 
-    List<Resident> showResidentsSortedByCheckOutDate() throws PersistException;
+//    List<Resident> showResidentsSortedByName() throws PersistException;
+//
+//    List<Resident> showResidentsSortedByCheckOutDate() throws PersistException;
 
     void importResidents();
 

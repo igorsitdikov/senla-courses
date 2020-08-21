@@ -9,23 +9,23 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.Scanner;
 
 public class ShowDetailsAction implements Action {
-    private RoomController roomController;
+    private final RoomController roomController;
 
-    public ShowDetailsAction(RoomController roomController) {
+    public ShowDetailsAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
     @Override
     public void execute() {
 
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
-            Integer roomNumber = InputDataReader
+            final Integer roomNumber = InputDataReader
                     .getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
-            Room room = roomController.showRoomDetails(roomNumber);
+            final Room room = roomController.showRoomDetails(roomNumber);
             Printer.show(room);
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
+        } catch (final Exception e) {
+            System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
         }
 
     }

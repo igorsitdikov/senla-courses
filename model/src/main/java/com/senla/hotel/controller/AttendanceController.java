@@ -3,6 +3,7 @@ package com.senla.hotel.controller;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
@@ -24,16 +25,8 @@ public class AttendanceController {
         attendanceService.delete(id);
     }
 
-    public List<Attendance> showAttendances() throws PersistException {
-        return attendanceService.showAttendances();
-    }
-
-    public List<Attendance> showAttendancesSortedByName() throws PersistException {
-        return attendanceService.showAttendancesSortedByName();
-    }
-
-    public List<Attendance> showAttendancesSortedByPrice() throws PersistException {
-        return attendanceService.showAttendancesSortedByPrice();
+    public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
+        return attendanceService.showAttendances(sortField);
     }
 
     public void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException, PersistException {

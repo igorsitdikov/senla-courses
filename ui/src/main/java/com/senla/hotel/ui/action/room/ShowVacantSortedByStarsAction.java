@@ -10,18 +10,18 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowVacantSortedByStarsAction implements Action {
-    private RoomController roomController;
+    private final RoomController roomController;
 
-    public ShowVacantSortedByStarsAction(RoomController roomController) {
+    public ShowVacantSortedByStarsAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
     @Override
     public void execute(){
         try {
-            List<Room> rooms = roomController.showVacantRooms(SortField.STARS);
+            final List<Room> rooms = roomController.showVacantRooms(SortField.STARS);
             Printer.show(rooms);
-        } catch (PersistException e) {
+        } catch (final PersistException e) {
             System.err.println(e.getMessage());
         }
     }

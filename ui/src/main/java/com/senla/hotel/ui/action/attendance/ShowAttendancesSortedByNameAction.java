@@ -2,6 +2,7 @@ package com.senla.hotel.ui.action.attendance;
 
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.Printer;
@@ -9,20 +10,19 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowAttendancesSortedByNameAction implements Action {
-    private AttendanceController attendanceController;
+    private final AttendanceController attendanceController;
 
-    public ShowAttendancesSortedByNameAction(AttendanceController attendanceController) {
+    public ShowAttendancesSortedByNameAction(final AttendanceController attendanceController) {
         this.attendanceController = attendanceController;
     }
 
     @Override
     public void execute() {
-        List<Attendance> attendances = null;
         try {
-            attendances = attendanceController.showAttendancesSortedByName();
-        } catch (PersistException e) {
+            final List<Attendance> attendances = attendanceController.showAttendances(SortField.NAME);
+            Printer.show(attendances);
+        } catch (final PersistException e) {
             System.err.println(e.getMessage());
         }
-        Printer.show(attendances);
     }
 }

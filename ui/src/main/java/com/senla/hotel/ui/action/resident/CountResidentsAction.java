@@ -5,9 +5,9 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class CountResidentsAction implements Action {
-    private ResidentController residentController;
+    private final ResidentController residentController;
 
-    public CountResidentsAction(ResidentController residentController) {
+    public CountResidentsAction(final ResidentController residentController) {
         this.residentController = residentController;
     }
 
@@ -15,8 +15,8 @@ public class CountResidentsAction implements Action {
     public void execute() {
         try {
             final int residents = residentController.showCountResidents();
-            System.out.println(String.format("Total residents: %d", residents));
-        } catch (PersistException e) {
+            System.out.printf("Total residents: %d%n%n", residents);
+        } catch (final PersistException e) {
             e.printStackTrace();
         }
     }

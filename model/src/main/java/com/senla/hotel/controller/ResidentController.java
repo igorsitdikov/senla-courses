@@ -4,6 +4,7 @@ import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.ResidentService;
@@ -19,16 +20,8 @@ public class ResidentController {
         residentService.createResident(resident);
     }
 
-    public List<Resident> showResidents() throws PersistException {
-        return residentService.showResidents();
-    }
-
-    public List<Resident> showResidentsSortedByName() throws PersistException {
-        return residentService.showResidentsSortedByName();
-    }
-
-    public List<Resident> showResidentsSortedByCheckOutDate() throws PersistException {
-        return residentService.showResidentsSortedByCheckOutDate();
+    public List<Resident> showResidents(final SortField sortField) throws PersistException {
+        return residentService.showResidents(sortField);
     }
 
     public int showCountResidents() throws PersistException {

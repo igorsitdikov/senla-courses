@@ -5,6 +5,7 @@ import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.AttendanceMapperImpl;
 import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
@@ -54,20 +55,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<Attendance> showAttendances() throws PersistException {
-        return attendanceRepository.getAll();
-    }
-
-    @Override
-    public List<Attendance> showAttendancesSortedByName() throws PersistException {
-        final List<Attendance> attendances = new ArrayList<>(showAttendances());
-        return sortAttendances(attendances, new AttendanceNameComparator());
-    }
-
-    @Override
-    public List<Attendance> showAttendancesSortedByPrice() throws PersistException {
-        final List<Attendance> attendances = new ArrayList<>(showAttendances());
-        return sortAttendances(attendances, new AttendancePriceComparator());
+    public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
+        final List<Attendance> attendances = attendanceRepository.getAll();
+        switch (sortField) {
+            case PRICE: return sortAttendances(attendances, new AttendancePriceComparator());
+            case NAME: return sortAttendances(attendances, new AttendanceNameComparator());
+        }
+        return attendances;
     }
 
     @Override
@@ -106,6 +100,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void exportAttendances() throws PersistException {
         final EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
-        csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances()));
+        csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances(SortField.DEFAULT)));
     }
 }
