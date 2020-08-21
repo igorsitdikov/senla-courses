@@ -75,7 +75,7 @@ public class RoomHistoryRepositoryImpl implements RoomHistoryRepository {
     }
 
     @Override
-    public AEntity add(final AEntity entity) {
+    public AEntity create(final AEntity entity) {
         try {
             return roomHistoryDao.create((RoomHistory) entity);
         } catch (PersistException e) {

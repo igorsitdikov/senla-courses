@@ -8,15 +8,15 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import java.util.List;
 
 public interface ResidentRepository {
-    AEntity add(AEntity entity);
+    AEntity create(AEntity entity);
 
-    AEntity findById(Long id) throws EntityNotFoundException;
+    void update(Resident resident);
 
-    void addHistory(Resident resident, RoomHistory history);
+    AEntity getById(Long id) throws EntityNotFoundException;
 
     int showTotalNumber();
 
     void setResidents(List<Resident> residents);
 
-    List<Resident> getResidents();
+    List<Resident> getAll();
 }

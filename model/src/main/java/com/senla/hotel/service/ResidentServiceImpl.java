@@ -47,17 +47,11 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException {
-        final Resident resident = (Resident) residentRepository.findById(id);
+        final Resident resident = (Resident) residentRepository.getById(id);
         if (resident == null) {
             throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
         }
         return resident;
-    }
-
-    @Override
-    public void addHistoryToResident(final Long id, final RoomHistory roomHistory) throws EntityNotFoundException {
-        final Resident resident = findById(id);
-        residentRepository.addHistory(resident, roomHistory);
     }
 
     @Override
@@ -78,12 +72,12 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void createResident(final Resident resident) {
-        residentRepository.add(resident);
+        residentRepository.create(resident);
     }
 
     @Override
     public List<Resident> showResidents() {
-        return residentRepository.getResidents();
+        return residentRepository.getAll();
     }
 
     @Override
