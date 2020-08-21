@@ -11,25 +11,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public interface AttendanceService {
-
-//    Attendance findByName(String name);
-
-    List<Attendance> sortAttendances(List<Attendance> attendances, Comparator<Attendance> comparator);
-
     Attendance findById(Long id) throws EntityNotFoundException, PersistException;
 
     void createAttendance(Attendance attendance) throws EntityAlreadyExistsException, PersistException;
-
-//    List<Attendance> showAttendances() throws PersistException;
-//    List<AEntity> add(List<Attendance> attendances, AEntity entity);
 
     List<Attendance> showAttendances(SortField sortField) throws PersistException;
 
     void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
 
     void delete(Long id) throws EntityNotFoundException, PersistException;
-
-//    void changeAttendancePrice(String name, BigDecimal price);
 
     void importAttendances();
 

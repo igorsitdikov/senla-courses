@@ -6,5 +6,5 @@ public enum SortField {
     ACCOMMODATION,
     PRICE,
     NAME,
-    DATE
+    CHECK_OUT_DATE
 }

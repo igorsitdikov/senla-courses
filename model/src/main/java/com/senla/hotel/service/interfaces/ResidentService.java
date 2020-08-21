@@ -10,9 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public interface ResidentService {
-
-    List<Resident> sortResidents(List<Resident> residents, Comparator<Resident> comparator);
-
     Resident findById(Long id) throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)
@@ -22,13 +19,7 @@ public interface ResidentService {
 
     void createResident(Resident resident) throws PersistException;
 
-//    List<Resident> showResidents() throws PersistException;
-
     List<Resident> showResidents(SortField sortField) throws PersistException;
-
-//    List<Resident> showResidentsSortedByName() throws PersistException;
-//
-//    List<Resident> showResidentsSortedByCheckOutDate() throws PersistException;
 
     void importResidents();
 

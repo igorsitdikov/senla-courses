@@ -17,7 +17,6 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -37,18 +36,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceRepository.findById(id);
     }
 
-//    @Override
-//    public Attendance findByName(final String name) {
-//        return (Attendance) attendanceRepository.findByName(name);
-//    }
-
-    @Override
-    public List<Attendance> sortAttendances(final List<Attendance> attendances,
-                                            final Comparator<Attendance> comparator) {
-        attendances.sort(comparator);
-        return attendances;
-    }
-
     @Override
     public void createAttendance(final Attendance attendance) throws PersistException {
         attendanceRepository.create(attendance);
@@ -58,9 +45,18 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
         final List<Attendance> attendances = attendanceRepository.getAll();
         switch (sortField) {
-            case PRICE: return sortAttendances(attendances, new AttendancePriceComparator());
-            case NAME: return sortAttendances(attendances, new AttendanceNameComparator());
+            case PRICE:
+                return sortAttendances(attendances, new AttendancePriceComparator());
+            case NAME:
+                return sortAttendances(attendances, new AttendanceNameComparator());
+            default:
+                return attendances;
         }
+    }
+
+    private List<Attendance> sortAttendances(final List<Attendance> attendances,
+                                             final Comparator<Attendance> comparator) {
+        attendances.sort(comparator);
         return attendances;
     }
 
@@ -71,23 +67,11 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceRepository.update(attendance);
     }
 
-//    @Override
-//    public List<AEntity> add(final List<Attendance> attendances, final AEntity entity) {
-//        final List<AEntity> result = new ArrayList<>(attendances);
-//        result.add(entity);
-//        return result;
-//    }
-
     @Override
     public void delete(final Long id) throws PersistException {
         final Attendance attendance = attendanceRepository.findById(id);
         attendanceRepository.delete(attendance);
     }
-
-//    @Override
-//    public void changeAttendancePrice(final String name, final BigDecimal price) {
-//        attendanceRepository.changePrice(name, price);
-//    }
 
     @Override
     public void importAttendances() {

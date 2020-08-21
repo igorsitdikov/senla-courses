@@ -19,7 +19,7 @@ public class ShowResidentsSortedByCheckOutDateAction implements Action {
     @Override
     public void execute() {
         try {
-            final List<Resident> residents = residentController.showResidents(SortField.DATE);
+            final List<Resident> residents = residentController.showResidents(SortField.CHECK_OUT_DATE);
             Printer.show(residents);
         } catch (final PersistException e) {
             System.err.println(e.getMessage());

@@ -47,13 +47,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
-        final List<Room> result = new ArrayList<>(rooms);
-        result.sort(comparator);
-        return result;
-    }
-
-    @Override
     public Room findById(final Long id) throws EntityNotFoundException, PersistException {
         final Room room = roomRepository.findById(id);
         if (room == null) {
@@ -64,7 +57,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room findByNumber(final Integer number) throws EntityNotFoundException, PersistException {
-        final Room room = (Room) roomRepository.findByNumber(number);
+        final Room room = roomRepository.findByNumber(number);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }
@@ -148,6 +141,12 @@ public class RoomServiceImpl implements RoomService {
             default:
                 return rooms;
         }
+    }
+
+    private List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
+        final List<Room> result = new ArrayList<>(rooms);
+        result.sort(comparator);
+        return result;
     }
 
     @Override

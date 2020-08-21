@@ -130,7 +130,7 @@ public class Test {
         PrinterUtils.show(hotelController.calculateBill(alex));
         PrinterUtils.show("Show 3 last residents by room");
         PrinterUtils.show(roomController.showLastResidents(room102, 3));
-        PrinterUtils.show(residentController.showResidents(SortField.DATE));
+        PrinterUtils.show(residentController.showResidents(SortField.CHECK_OUT_DATE));
         PrinterUtils.show("Vacant rooms on date");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));
         roomController.changePrice(203, BigDecimal.valueOf(2.0));
