@@ -34,7 +34,6 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
                 "resident.first_name, resident.last_name, resident.gender, resident.vip, resident.phone, room.number, " +
                 "room.price, room.status, room.stars, room.accommodation " +
                 "FROM history JOIN resident ON resident.id = history.resident_id JOIN room ON room.id = history.room_id ";
-//        return "SELECT * FROM history JOIN resident ON resident.id = history.resident_id JOIN room ON room.id = history.room_id ";
     }
 
     @Override
@@ -52,8 +51,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     public String getCalculateBillQuery() {
-        return "\n" +
-                "SELECT (SUM(DATEDIFF(history.check_out, history.check_in) * attendance.price) + DATEDIFF(check_out, check_in) * room.price) AS result FROM history\n" +
+        return  "SELECT (SUM(DATEDIFF(history.check_out, history.check_in) * attendance.price) + DATEDIFF(check_out, check_in) * room.price) AS result FROM history\n" +
                 "                  LEFT JOIN resident ON resident.id = history.resident_id\n" +
                 "                  LEFT JOIN room ON room.id = history.room_id\n" +
                 "                  LEFT JOIN histories_attendances on history.id = histories_attendances.history_id\n" +
@@ -110,15 +108,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(statement, id);
             final ResultSet rs = statement.executeQuery();
-//            ResultSetMetaData rsmd = rs.getMetaData();
-//            int columnsNumber = rsmd.getColumnCount();
             while (rs.next()) {
-//                for (int i = 1; i <= columnsNumber; i++) {
-//                    if (i > 1) System.out.print(",  ");
-//                    String columnValue = rs.getString(i);
-//                    System.out.print(columnValue + " " + rsmd.getColumnName(i));
-//                }
-//                System.out.println("");
                 result.add(rs.getDouble("result"));
             }
         } catch (final Exception e) {
