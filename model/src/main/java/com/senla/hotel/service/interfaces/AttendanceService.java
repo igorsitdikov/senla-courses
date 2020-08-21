@@ -25,7 +25,7 @@ public interface AttendanceService {
 
     List<Attendance> showAttendancesSortedByPrice();
 
-    List<AEntity> add(List<Attendance> attendances, AEntity entity);
+//    List<AEntity> add(List<Attendance> attendances, AEntity entity);
 
     void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException;
 

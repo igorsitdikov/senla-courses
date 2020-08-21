@@ -3,7 +3,6 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
@@ -35,7 +34,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance findById(final Long id) throws EntityNotFoundException {
-        return (Attendance) attendanceRepository.findById(id);
+        return (Attendance) attendanceRepository.getById(id);
     }
 
 //    @Override
@@ -52,12 +51,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException {
-        attendanceRepository.add(attendance);
+        attendanceRepository.create(attendance);
     }
 
     @Override
     public List<Attendance> showAttendances() {
-        return attendanceRepository.getAttendances();
+        return attendanceRepository.getAll();
     }
 
     @Override
@@ -74,19 +73,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void changeAttendancePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        attendanceRepository.changePrice(id, price);
+        final Attendance attendance = (Attendance) attendanceRepository.getById(id);
+        attendance.setPrice(price);
+        attendanceRepository.update(attendance);
     }
 
-    @Override
-    public List<AEntity> add(final List<Attendance> attendances, final AEntity entity) {
-        final List<AEntity> result = new ArrayList<>(attendances);
-        result.add(entity);
-        return result;
-    }
+//    @Override
+//    public List<AEntity> add(final List<Attendance> attendances, final AEntity entity) {
+//        final List<AEntity> result = new ArrayList<>(attendances);
+//        result.add(entity);
+//        return result;
+//    }
 
     @Override
     public void delete(final Long id) throws EntityNotFoundException {
-        attendanceRepository.deleteAttendance(id);
+        Attendance attendance = (Attendance) attendanceRepository.getById(id);
+        attendanceRepository.delete(attendance);
     }
 
 //    @Override

@@ -20,7 +20,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Autowired
     private RoomDao roomDao;
     private static List<Room> rooms = new ArrayList<>();
-    private static Long counter = 0L;
 
     @Override
     public List<Room> getVacantRooms() {
@@ -119,11 +118,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public void setRooms(final List<Room> rooms) {
         RoomRepositoryImpl.rooms = new ArrayList<>(rooms);
-    }
-
-    @Override
-    public void setCounter(final Long counter) {
-        RoomRepositoryImpl.counter = counter;
     }
 
     @Override

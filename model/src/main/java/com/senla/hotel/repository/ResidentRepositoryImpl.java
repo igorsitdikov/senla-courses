@@ -19,7 +19,6 @@ public class ResidentRepositoryImpl implements ResidentRepository {
     private ResidentDao residentDao;
 
     private static List<Resident> residents = new ArrayList<>();
-    private static Long counter = 0L;
 
     @Override
     public AEntity add(final AEntity entity) {
@@ -62,11 +61,6 @@ public class ResidentRepositoryImpl implements ResidentRepository {
     @Override
     public void setResidents(final List<Resident> residents) {
         ResidentRepositoryImpl.residents = new ArrayList<>(residents);
-    }
-
-    @Override
-    public void setCounter(final Long counter) {
-        ResidentRepositoryImpl.counter = counter;
     }
 
     @Override

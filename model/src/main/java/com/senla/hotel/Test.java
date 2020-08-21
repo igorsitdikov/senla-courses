@@ -27,8 +27,6 @@ public class Test {
         final HotelController hotelController = context.getObject(HotelController.class);
         final RoomController roomController = context.getObject(RoomController.class);
 
-        hotelController.importData();
-
         final Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         final Attendance wakeup = new Attendance(BigDecimal.valueOf(1.5).setScale(2), "Wake-up");
         final Attendance laundry = new Attendance(BigDecimal.valueOf(4.5).setScale(2), "Laundry");
@@ -156,7 +154,6 @@ public class Test {
         residentController.importResidents();
         attendanceController.importAttendances();
         hotelController.importHistories();
-        hotelController.exportData();
     }
 
 }
