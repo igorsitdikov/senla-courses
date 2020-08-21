@@ -2,7 +2,7 @@ package com.senla.hotel.utils;
 
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 
 import java.util.List;
 import java.util.Objects;

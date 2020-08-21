@@ -6,7 +6,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomService;
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomHistoryMapperImpl implements EntityMapper<RoomHistory> {
+public class RoomHistoryMapperImpl implements RoomHistoryMapper {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Autowired
     private RoomService roomService;
@@ -39,14 +39,14 @@ public class RoomHistoryMapperImpl implements EntityMapper<RoomHistory> {
         try {
             history.setRoom(roomService.findById(Long.parseLong(elements[3])));
         } catch (final EntityNotFoundException e) {
-            System.err.println(String.format("No such room with id %s %s", elements[3], e));
-        } catch (PersistException e) {
+            System.err.printf("No such room with id %s %s%n%n", elements[3], e);
+        } catch (final PersistException e) {
             e.printStackTrace();
         }
         try {
             history.setResident(residentService.findById(Long.parseLong(elements[4])));
         } catch (final EntityNotFoundException | PersistException e) {
-            System.err.println(String.format("No such resident with id %s %s", elements[4], e));
+            System.err.printf("No such resident with id %s %s%n%n", elements[4], e);
         }
         final List<Attendance> historyList = new ArrayList<>();
         if (elements.length > 5) {
@@ -54,7 +54,7 @@ public class RoomHistoryMapperImpl implements EntityMapper<RoomHistory> {
                 try {
                     historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
                 } catch (final EntityNotFoundException | PersistException e) {
-                    System.err.println(String.format("No such attendance with id %s %s", elements[i], e));
+                    System.err.printf("No such attendance with id %s %s%n%n", elements[i], e);
                 }
             }
         }

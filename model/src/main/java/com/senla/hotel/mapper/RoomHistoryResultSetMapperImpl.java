@@ -5,9 +5,9 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
-import com.senla.hotel.mapper.interfaces.ResultSetMapper;
-import com.senla.hotel.mapper.interfaces.RoomHistoryResultSetMapper;
-import com.senla.hotel.mapper.interfaces.RoomResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.ResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,14 +19,14 @@ public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMappe
     private RoomResultSetMapper residentResultSetMapper;
 
     @Override
-    public RoomHistory sourceToDestination(ResultSet source) throws SQLException {
-        ResultSetMapper<Resident> residentResultSetMapper = new ResidentResultSetMapperImpl();
+    public RoomHistory sourceToDestination(final ResultSet source) throws SQLException {
+        final ResultSetMapper<Resident> residentResultSetMapper = new ResidentResultSetMapperImpl();
 
-        RoomHistory roomHistory = new RoomHistory();
+        final RoomHistory roomHistory = new RoomHistory();
         roomHistory.setId(source.getLong("history.id"));
 
-        Room room = roomResultSetMapper.sourceToDestination(source);
-        Resident resident = residentResultSetMapper.sourceToDestination(source);
+        final Room room = roomResultSetMapper.sourceToDestination(source);
+        final Resident resident = residentResultSetMapper.sourceToDestination(source);
 
         roomHistory.setRoom(room);
         roomHistory.setResident(resident);

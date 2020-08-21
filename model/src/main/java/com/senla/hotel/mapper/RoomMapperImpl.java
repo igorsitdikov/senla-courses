@@ -9,14 +9,14 @@ import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomMapperImpl implements EntityMapper<Room> {
+public class RoomMapperImpl implements RoomMapper {
     @Autowired
     private RoomHistoryService roomHistoryService;
 
@@ -27,7 +27,7 @@ public class RoomMapperImpl implements EntityMapper<Room> {
         }
 
         final String[] elements = source.split(SEPARATOR);
-        Room room = new Room();
+        final Room room = new Room();
         room.setId(Long.valueOf(elements[0]));
         room.setNumber(Integer.valueOf(elements[1]));
         room.setStars(Stars.valueOf(elements[2]));
@@ -35,13 +35,13 @@ public class RoomMapperImpl implements EntityMapper<Room> {
         room.setPrice(new BigDecimal(elements[4]));
         room.setStatus(RoomStatus.valueOf(elements[5]));
 
-        List<RoomHistory> historyList = new ArrayList<>();
+        final List<RoomHistory> historyList = new ArrayList<>();
         if (elements.length > 6) {
             for (int i = 6; i < elements.length; i++) {
                 try {
                     historyList.add(roomHistoryService.findById(Long.parseLong(elements[i])));
-                } catch (EntityNotFoundException | PersistException e) {
-                    System.err.println(String.format("No such history with id %s %s", elements[i], e));
+                } catch (final EntityNotFoundException | PersistException e) {
+                    System.err.printf("No such history with id %s %s%n%n", elements[i], e);
                 }
             }
         }
@@ -70,7 +70,7 @@ public class RoomMapperImpl implements EntityMapper<Room> {
         sb.append(destination.getStatus());
         sb.append(SEPARATOR);
         destination.getHistories()
-            .forEach(history -> sb.append(history.getId()).append(SEPARATOR));
+                .forEach(history -> sb.append(history.getId()).append(SEPARATOR));
 
         return sb.toString();
     }

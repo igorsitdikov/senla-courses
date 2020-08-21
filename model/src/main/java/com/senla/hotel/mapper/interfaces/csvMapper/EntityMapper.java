@@ -1,4 +1,4 @@
-package com.senla.hotel.mapper.interfaces;
+package com.senla.hotel.mapper.interfaces.csvMapper;
 
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.EntityIsEmptyException;

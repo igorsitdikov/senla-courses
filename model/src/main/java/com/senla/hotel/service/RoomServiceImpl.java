@@ -13,7 +13,7 @@ import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.RoomMapperImpl;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
