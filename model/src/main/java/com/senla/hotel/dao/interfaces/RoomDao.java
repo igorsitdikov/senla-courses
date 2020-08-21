@@ -8,5 +8,5 @@ import java.util.List;
 public interface RoomDao extends GenericDao<Room, Long> {
     List<Room> getVacantRooms() throws PersistException;
 
-    Room getRoomByNumber(Integer number) throws PersistException;
+    Room findByNumber(Integer number) throws PersistException;
 }
