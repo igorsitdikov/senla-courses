@@ -43,7 +43,16 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
-        return vacantOnDate(date);
+        final List<Room> rooms = roomRepository.getAll();
+        final List<Room> result = new ArrayList<>();
+        for (final Room room : rooms) {
+            final List<RoomHistory> histories = room.getHistories();
+            if (room.getStatus() != RoomStatus.REPAIR &&
+                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+                result.add(room);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -65,20 +74,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> vacantOnDate(final LocalDate date) throws PersistException {
-        final List<Room> rooms = roomRepository.getAll();
-        final List<Room> result = new ArrayList<>();
-        for (final Room room : rooms) {
-            final List<RoomHistory> histories = room.getHistories();
-            if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
-                result.add(room);
-            }
-        }
-        return result;
-    }
-
-    @Override
     public int countVacantRooms() throws PersistException {
         return roomRepository.getVacantRooms().size();
     }
@@ -86,12 +81,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
         changePrice(number, price);
-    }
-
-    private void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException, PersistException {
-        final Room room = findById(id);
-        room.setPrice(price);
-        roomRepository.update(room);
     }
 
     private void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {

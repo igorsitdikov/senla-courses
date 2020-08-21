@@ -13,14 +13,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public interface RoomService {
-
     List<Room> showVacantRoomsOnDate(LocalDate date) throws PersistException;
 
     Room findById(Long id) throws EntityNotFoundException, PersistException;
 
     Room findByNumber(Integer number) throws EntityNotFoundException, PersistException;
-
-    List<Room> vacantOnDate(LocalDate date) throws PersistException;
 
     List<Resident> showLastResidents(Long id, Integer number) throws EntityNotFoundException, PersistException;
 
