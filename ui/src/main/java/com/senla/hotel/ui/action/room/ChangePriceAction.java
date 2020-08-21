@@ -2,6 +2,7 @@ package com.senla.hotel.ui.action.room;
 
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 
@@ -25,8 +26,8 @@ public class ChangePriceAction implements Action {
 
         try {
             roomController.changePrice(roomNumber, dailyPrice);
-        } catch (EntityNotFoundException e) {
-            e.printStackTrace();
+        } catch (EntityNotFoundException | PersistException e) {
+            System.err.println(e.getMessage());
         }
     }
 }
