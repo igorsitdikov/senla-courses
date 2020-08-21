@@ -27,5 +27,5 @@ public interface HotelAdminService {
 
     void importHistories();
 
-    void exportHistories();
+    void exportHistories() throws PersistException;
 }

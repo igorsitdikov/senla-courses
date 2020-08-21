@@ -43,11 +43,11 @@ public class HotelController {
         hotelAdminService.importHistories();
     }
 
-    public void exportHistories() {
+    public void exportHistories() throws PersistException {
         hotelAdminService.exportHistories();
     }
 
-    public List<RoomHistory> showHistories() {
+    public List<RoomHistory> showHistories() throws PersistException {
         return historyService.showHistories();
     }
 }
