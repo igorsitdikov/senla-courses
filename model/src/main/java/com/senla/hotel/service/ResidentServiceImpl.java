@@ -47,7 +47,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException {
-        final Resident resident = (Resident) residentRepository.getById(id);
+        final Resident resident = (Resident) residentRepository.findById(id);
         if (resident == null) {
             throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
         }

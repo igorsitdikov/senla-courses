@@ -92,7 +92,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    public RoomHistory getById(Long id) throws PersistException {
+    public RoomHistory findById(Long id) throws PersistException {
         return getBy("history.id", id);
     }
 

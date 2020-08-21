@@ -5,7 +5,6 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface AttendanceRepository {
@@ -14,7 +13,7 @@ public interface AttendanceRepository {
 //    void update(Long id, BigDecimal price) throws EntityNotFoundException;
     void update(Attendance attendance) throws EntityNotFoundException;
 
-    AEntity getById(Long id) throws EntityNotFoundException;
+    AEntity findById(Long id) throws EntityNotFoundException;
 
     void setAttendances(List<Attendance> attendances);
 

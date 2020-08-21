@@ -20,5 +20,5 @@ public interface RoomHistoryRepository {
 
     void setHistories(List<RoomHistory> roomHistories);
 
-    List<RoomHistory> getHistories();
+    List<RoomHistory> getAll();
 }

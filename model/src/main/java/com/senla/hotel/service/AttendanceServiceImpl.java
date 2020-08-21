@@ -34,7 +34,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance findById(final Long id) throws EntityNotFoundException {
-        return (Attendance) attendanceRepository.getById(id);
+        return (Attendance) attendanceRepository.findById(id);
     }
 
 //    @Override
@@ -73,7 +73,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void changeAttendancePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        final Attendance attendance = (Attendance) attendanceRepository.getById(id);
+        final Attendance attendance = (Attendance) attendanceRepository.findById(id);
         attendance.setPrice(price);
         attendanceRepository.update(attendance);
     }
@@ -87,7 +87,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void delete(final Long id) throws EntityNotFoundException {
-        Attendance attendance = (Attendance) attendanceRepository.getById(id);
+        Attendance attendance = (Attendance) attendanceRepository.findById(id);
         attendanceRepository.delete(attendance);
     }
 

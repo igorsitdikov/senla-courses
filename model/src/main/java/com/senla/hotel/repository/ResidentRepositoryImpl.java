@@ -5,7 +5,6 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.repository.interfaces.ResidentRepository;
@@ -40,9 +39,9 @@ public class ResidentRepositoryImpl implements ResidentRepository {
     }
 
     @Override
-    public AEntity getById(final Long id) throws EntityNotFoundException {
+    public AEntity findById(final Long id) throws EntityNotFoundException {
         try {
-            return residentDao.getById(id);
+            return residentDao.findById(id);
         } catch (PersistException e) {
             e.printStackTrace();
         }
