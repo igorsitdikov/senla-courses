@@ -2,6 +2,7 @@ package com.senla.hotel.service;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -9,7 +10,6 @@ import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.repository.interfaces.RoomHistoryRepository;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
@@ -30,7 +30,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     @Autowired
     private RoomHistoryService roomHistoryService;
     @Autowired
-    private RoomHistoryRepository roomHistoryRepository;
+    private RoomHistoryDao roomHistoryRepository;
     @Autowired
     private Connector connector;
 
@@ -152,7 +152,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void exportHistories() {
+    public void exportHistories() throws PersistException {
         roomHistoryService.exportHistories();
     }
 }
