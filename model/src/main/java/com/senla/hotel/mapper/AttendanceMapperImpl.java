@@ -3,7 +3,6 @@ package com.senla.hotel.mapper;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.csvMapper.AttendanceMapper;
-import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 
 import java.math.BigDecimal;
 

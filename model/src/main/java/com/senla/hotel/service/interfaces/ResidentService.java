@@ -6,7 +6,6 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 
-import java.util.Comparator;
 import java.util.List;
 
 public interface ResidentService {

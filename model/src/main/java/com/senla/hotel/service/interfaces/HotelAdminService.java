@@ -14,12 +14,12 @@ public interface HotelAdminService {
             throws EntityNotFoundException, SQLException, PersistException;
 
     void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
-            throws EntityNotFoundException, PersistException;
+            throws EntityNotFoundException, PersistException, SQLException;
 
-    void checkOut(Long residentId, LocalDate date) throws EntityNotFoundException;
+    void checkOut(Long residentId, LocalDate date) throws EntityNotFoundException, SQLException, PersistException;
 
     void checkOut(Resident resident, LocalDate date)
-            throws EntityNotFoundException;
+            throws EntityNotFoundException, SQLException, PersistException;
 
     BigDecimal calculateBill(Long id) throws EntityNotFoundException, PersistException;
 
