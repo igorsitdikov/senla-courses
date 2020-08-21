@@ -12,20 +12,20 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ShowVacantOnDateAction implements Action {
-    private RoomController roomController;
+    private final RoomController roomController;
 
-    public ShowVacantOnDateAction(RoomController roomController) {
+    public ShowVacantOnDateAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
-        LocalDate date = InputDataReader.getLocalDateInput(scanner, "Input date with format \"YYYY-MM-DD\"...");
+        final Scanner scanner = new Scanner(System.in);
+        final LocalDate date = InputDataReader.getLocalDateInput(scanner, "Input date with format \"YYYY-MM-DD\"...");
         try {
-            List<Room> rooms = roomController.showVacantRoomsOnDate(date);
+            final List<Room> rooms = roomController.showVacantRoomsOnDate(date);
             Printer.show(rooms);
-        } catch (PersistException e) {
+        } catch (final PersistException e) {
             System.err.println(e.getMessage());
         }
     }

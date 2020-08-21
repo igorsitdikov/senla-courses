@@ -4,6 +4,7 @@ import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
@@ -12,10 +13,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddAttendanceToResidentAction implements Action {
-    private AttendanceController attendanceController;
-    private ResidentController residentController;
+    private final AttendanceController attendanceController;
+    private final ResidentController residentController;
 
-    public AddAttendanceToResidentAction(AttendanceController attendanceController, ResidentController residentController) {
+    public AddAttendanceToResidentAction(final AttendanceController attendanceController, final ResidentController residentController) {
         this.attendanceController = attendanceController;
         this.residentController = residentController;
     }
@@ -23,24 +24,24 @@ public class AddAttendanceToResidentAction implements Action {
     @Override
     public void execute() {
 
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Attendance> attendances = attendanceController.showAttendances();
+            final List<Attendance> attendances = attendanceController.showAttendances(SortField.DEFAULT);
             Printer.show(attendances, "attendance");
 
-            Integer attendanceId = InputDataReader
+            final Integer attendanceId = InputDataReader
                 .getIntegerInput(scanner, "Input Attendance id...", attendances.size());
 
-            final List<Resident> residents = residentController.showResidents();
+            final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents, "resident");
 
-            Integer residentId = InputDataReader
+            final Integer residentId = InputDataReader
                 .getIntegerInput(scanner, "Input Resident id...", residents.size());
 
             residentController
                 .addAttendanceToResident(residents.get(residentId - 1), attendances.get(attendanceId - 1));
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to add an Attendance to Resident! Input valid parameters! %s", e));
+        } catch (final Exception e) {
+            System.err.printf("Failed to add an Attendance to Resident! Input valid parameters! %s%n%n", e);
         }
     }
 }

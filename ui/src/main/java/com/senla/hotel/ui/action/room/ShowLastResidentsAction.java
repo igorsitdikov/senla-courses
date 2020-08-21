@@ -12,28 +12,28 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ShowLastResidentsAction implements Action {
-    private RoomController roomController;
+    private final RoomController roomController;
 
-    public ShowLastResidentsAction(RoomController roomController) {
+    public ShowLastResidentsAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
             final List<Room> rooms = roomController.showAllRooms(SortField.DEFAULT);
             Printer.show(rooms, "room");
 
-            Integer roomId = InputDataReader
+            final Integer roomId = InputDataReader
                 .getIntegerInput(scanner, "Input Room id...", rooms.size() - 1);
-            Integer number = InputDataReader
+            final Integer number = InputDataReader
                 .getIntegerInput(scanner, "Input number of last...", Integer.MAX_VALUE);
 
-            List<Resident> residents = roomController.showLastResidents(rooms.get(roomId - 1), number);
+            final List<Resident> residents = roomController.showLastResidents(rooms.get(roomId - 1), number);
             Printer.show(residents);
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to show Resident in Room! Input valid parameters! %s", e));
+        } catch (final Exception e) {
+            System.err.printf("Failed to show Resident in Room! Input valid parameters! %s%n%n", e);
         }
     }
 }

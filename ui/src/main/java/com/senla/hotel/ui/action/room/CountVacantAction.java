@@ -5,9 +5,9 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class CountVacantAction implements Action {
-    private RoomController roomController;
+    private final RoomController roomController;
 
-    public CountVacantAction(RoomController roomController) {
+    public CountVacantAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
@@ -15,8 +15,8 @@ public class CountVacantAction implements Action {
     public void execute() {
         try {
             final int vacantRooms = roomController.countVacantRooms();
-            System.out.println(String.format("Total vacant rooms: %d", vacantRooms));
-        } catch (PersistException e) {
+            System.out.printf("Total vacant rooms: %d%n%n", vacantRooms);
+        } catch (final PersistException e) {
             System.err.println(e.getMessage());
         }
     }

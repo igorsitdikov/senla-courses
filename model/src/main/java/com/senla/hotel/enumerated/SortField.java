@@ -4,5 +4,7 @@ public enum SortField {
     DEFAULT,
     STARS,
     ACCOMMODATION,
-    PRICE
+    PRICE,
+    NAME,
+    DATE
 }
