@@ -4,6 +4,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 
 import java.math.BigDecimal;
@@ -12,10 +13,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public interface RoomService {
-    void addHistoryToRoom(Long id, RoomHistory history) throws EntityNotFoundException;
-
-    void updateCheckOutHistory(Long id, RoomHistory history, LocalDate checkOut)
-            throws EntityNotFoundException;
 
     List<Room> showVacantRoomsOnDate(LocalDate date);
 
@@ -37,8 +34,6 @@ public interface RoomService {
 
     int countVacantRooms();
 
-    void changeRoomPrice(Long id, BigDecimal price) throws EntityNotFoundException;
-
     void changeRoomPrice(Integer number, BigDecimal price) throws EntityNotFoundException;
 
     void changeRoomStatus(Long id, RoomStatus status) throws EntityNotFoundException;
@@ -47,21 +42,9 @@ public interface RoomService {
 
     void addRoom(Room room);
 
-    List<Room> showAllRooms();
+    List<Room> showAll(SortField sortField);
 
-    List<Room> showAllRoomsSortedByPrice();
-
-    List<Room> showAllRoomsSortedByAccommodation();
-
-    List<Room> showAllRoomsSortedByStars();
-
-    List<Room> showVacantRooms();
-
-    List<Room> showVacantRoomsSortedByPrice();
-
-    List<Room> showVacantRoomsSortedByAccommodation();
-
-    List<Room> showVacantRoomsSortedByStars();
+    List<Room> showVacant(SortField sortField);
 
     Room showRoomDetails(Integer number) throws EntityNotFoundException;
 }
