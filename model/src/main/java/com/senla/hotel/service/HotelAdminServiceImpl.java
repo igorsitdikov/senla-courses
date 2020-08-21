@@ -8,6 +8,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.repository.interfaces.RoomHistoryRepository;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.service.interfaces.ResidentService;
@@ -35,7 +36,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, PersistException {
         final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
@@ -71,7 +72,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, PersistException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 

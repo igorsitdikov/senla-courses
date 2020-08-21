@@ -6,6 +6,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.*;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public class HotelController {
     private static RoomHistoryService historyService;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, PersistException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
