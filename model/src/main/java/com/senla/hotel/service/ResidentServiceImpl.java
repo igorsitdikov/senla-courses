@@ -11,7 +11,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.ResidentMapperImpl;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
@@ -103,7 +103,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void exportResidents() throws PersistException {
-        EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
+        final EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents()));
     }
 

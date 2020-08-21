@@ -7,7 +7,7 @@ import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.AttendanceMapperImpl;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
@@ -86,7 +86,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void delete(final Long id) throws PersistException {
-        Attendance attendance = attendanceRepository.findById(id);
+        final Attendance attendance = attendanceRepository.findById(id);
         attendanceRepository.delete(attendance);
     }
 
@@ -105,7 +105,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void exportAttendances() throws PersistException {
-        EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
+        final EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances()));
     }
 }

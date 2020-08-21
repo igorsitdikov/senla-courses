@@ -33,7 +33,7 @@ public class Connector {
     private void createConnection() {
         try {
             connection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException sqlEx) {
+        } catch (final SQLException sqlEx) {
             sqlEx.printStackTrace();
         }
     }

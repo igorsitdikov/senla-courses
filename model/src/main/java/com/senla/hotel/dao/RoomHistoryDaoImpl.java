@@ -7,7 +7,7 @@ import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.interfaces.RoomHistoryResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.*;
@@ -22,7 +22,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     @Autowired
     private AttendanceDao attendanceDao;
 
-    public RoomHistoryDaoImpl(Connector connector) {
+    public RoomHistoryDaoImpl(final Connector connector) {
         super(connector);
     }
 
@@ -55,16 +55,16 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    protected List<RoomHistory> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<RoomHistory> result = new LinkedList<>();
+    protected List<RoomHistory> parseResultSet(final ResultSet rs) throws PersistException {
+        final LinkedList<RoomHistory> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                RoomHistory roomHistory = mapper.sourceToDestination(rs);
-                List<Attendance> attendances = attendanceDao.getAllAttendancesByHistoryId(roomHistory.getId());
+                final RoomHistory roomHistory = mapper.sourceToDestination(rs);
+                final List<Attendance> attendances = attendanceDao.getAllAttendancesByHistoryId(roomHistory.getId());
                 roomHistory.setAttendances(attendances);
                 result.add(roomHistory);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
         return result;
@@ -72,14 +72,14 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public RoomHistory getByResidentAndCheckedInStatus(final Long id) throws PersistException {
-        List<RoomHistory> list;
+        final List<RoomHistory> list;
         String sql = getSelectQuery();
         sql += " WHERE history.status = 'CHECKED_IN' AND resident.id = ?";
-        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(id, statement);
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
         if (list == null || list.size() == 0) {
@@ -92,43 +92,43 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    public RoomHistory findById(Long id) throws PersistException {
+    public RoomHistory findById(final Long id) throws PersistException {
         return getBy("history.id", id);
     }
 
     @Override
     public void addAttendanceToHistory(final Long historyId, final Long attendanceId) throws PersistException {
-        String sql = getCreateQueryAttendanceToHistory();
-        try (PreparedStatement statement = connector.getConnection()
+        final String sql = getCreateQueryAttendanceToHistory();
+        try (final PreparedStatement statement = connector.getConnection()
                 .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, historyId);
             statement.setLong(2, attendanceId);
-            int count = statement.executeUpdate();
+            final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);
             }
-        } catch (SQLIntegrityConstraintViolationException e) {
+        } catch (final SQLIntegrityConstraintViolationException e) {
             throw new PersistException("Attendance already added!");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e.getMessage());
         }
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, RoomHistory object) throws PersistException {
+    protected void prepareStatementForInsert(final PreparedStatement statement, final RoomHistory object) throws PersistException {
         try {
             statement.setLong(1, object.getRoom().getId());
             statement.setLong(2, object.getResident().getId());
             statement.setDate(3, Date.valueOf(object.getCheckIn()));
             statement.setDate(4, Date.valueOf(object.getCheckOut()));
             statement.setString(5, object.getStatus().toString());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }
 
     @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, RoomHistory object) throws PersistException {
+    protected void prepareStatementForUpdate(final PreparedStatement statement, final RoomHistory object) throws PersistException {
         try {
             statement.setLong(1, object.getRoom().getId());
             statement.setLong(2, object.getResident().getId());
@@ -136,7 +136,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             statement.setDate(4, Date.valueOf(object.getCheckOut()));
             statement.setString(5, object.getStatus().toString());
             statement.setLong(6, object.getId());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }

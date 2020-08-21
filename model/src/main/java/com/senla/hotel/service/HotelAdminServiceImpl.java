@@ -46,17 +46,17 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 roomHistoryRepository.create(history);
                 roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
                 connector.getConnection().commit();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 try {
                     connector.getConnection().rollback();
                     System.err.print("Transaction is being rolled back");
-                } catch (SQLException ex) {
+                } catch (final SQLException ex) {
                     ex.printStackTrace();
                 }
             } finally {
                 try {
                     connector.getConnection().setAutoCommit(true);
-                } catch (SQLException throwables) {
+                } catch (final SQLException throwables) {
                     throwables.printStackTrace();
                 }
             }
@@ -92,17 +92,17 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             } else {
                 roomService.changeRoomStatus(room.getId(), RoomStatus.VACANT);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             try {
                 connector.getConnection().rollback();
                 System.err.print("Transaction is being rolled back");
-            } catch (SQLException ex) {
+            } catch (final SQLException ex) {
                 ex.printStackTrace();
             }
         } finally {
             try {
                 connector.getConnection().setAutoCommit(true);
-            } catch (SQLException throwables) {
+            } catch (final SQLException throwables) {
                 throwables.printStackTrace();
             }
         }

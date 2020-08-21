@@ -8,7 +8,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.RoomHistoryMapperImpl;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
@@ -51,7 +51,7 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
 
     @Override
     public void exportHistories() throws PersistException {
-        EntityMapper<RoomHistory> roomHistoryMapper = new RoomHistoryMapperImpl();
+        final EntityMapper<RoomHistory> roomHistoryMapper = new RoomHistoryMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(roomHistoryMapper, roomHistoryRepository.getAll()));
     }
 

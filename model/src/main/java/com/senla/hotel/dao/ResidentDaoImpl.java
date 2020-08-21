@@ -7,7 +7,7 @@ import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.interfaces.ResidentResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
@@ -22,7 +22,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     @Autowired
     private RoomHistoryDao roomHistoryDao;
 
-    public ResidentDaoImpl(Connector connector) {
+    public ResidentDaoImpl(final Connector connector) {
         super(connector);
     }
 
@@ -47,36 +47,36 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     }
 
     @Override
-    protected List<Resident> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<Resident> result = new LinkedList<>();
+    protected List<Resident> parseResultSet(final ResultSet rs) throws PersistException {
+        final LinkedList<Resident> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Resident resident = mapper.sourceToDestination(rs);
-                RoomHistory history = roomHistoryDao.getByResidentAndCheckedInStatus(resident.getId());
+                final Resident resident = mapper.sourceToDestination(rs);
+                final RoomHistory history = roomHistoryDao.getByResidentAndCheckedInStatus(resident.getId());
                 resident.setHistory(history);
                 result.add(resident);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
         return result;
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, Resident object) throws PersistException {
+    protected void prepareStatementForInsert(final PreparedStatement statement, final Resident object) throws PersistException {
         try {
             statement.setString(1, object.getFirstName());
             statement.setString(2, object.getLastName());
             statement.setString(3, object.getGender().toString());
             statement.setInt(4, object.getVip() ? 1 : 0);
             statement.setString(5, object.getPhone());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }
 
     @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, Resident object) throws PersistException {
+    protected void prepareStatementForUpdate(final PreparedStatement statement, final Resident object) throws PersistException {
         try {
             statement.setString(1, object.getFirstName());
             statement.setString(2, object.getLastName());
@@ -84,7 +84,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             statement.setInt(4, object.getVip() ? 1 : 0);
             statement.setString(5, object.getPhone());
             statement.setLong(6, object.getId());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }

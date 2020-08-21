@@ -14,7 +14,7 @@ public class CsvWriterImpl implements CsvWriter {
         try (final PrintWriter pw = new PrintWriter(path)) {
             entities.forEach(pw::println);
         } catch (final FileNotFoundException e) {
-            System.err.println(String.format("File not found %s %s%n", path, e));
+            System.err.printf("File not found %s %s%n%n", path, e);
         }
     }
 }

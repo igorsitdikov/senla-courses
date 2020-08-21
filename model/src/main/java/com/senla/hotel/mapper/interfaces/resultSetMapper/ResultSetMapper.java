@@ -1,4 +1,4 @@
-package com.senla.hotel.mapper.interfaces;
+package com.senla.hotel.mapper.interfaces.resultSetMapper;
 
 import com.senla.hotel.entity.AEntity;
 

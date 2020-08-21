@@ -5,7 +5,7 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.interfaces.AttendanceResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
     @Autowired
     private AttendanceResultSetMapper mapper;
 
-    public AttendanceDaoImpl(Connector connector) {
+    public AttendanceDaoImpl(final Connector connector) {
         super(connector);
     }
 
@@ -50,50 +50,50 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
     }
 
     @Override
-    public List<Attendance> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<Attendance> result = new LinkedList<>();
+    public List<Attendance> parseResultSet(final ResultSet rs) throws PersistException {
+        final LinkedList<Attendance> result = new LinkedList<>();
         try {
             while (rs.next()) {
-                Attendance attendance = mapper.sourceToDestination(rs);
+                final Attendance attendance = mapper.sourceToDestination(rs);
                 result.add(attendance);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
         return result;
     }
     @Override
     public List<Attendance> getAllAttendancesByHistoryId(final Long id) throws PersistException {
-        List<Attendance> list;
-        String sql = getSelectAttendancesInHistory();
+        final List<Attendance> list;
+        final String sql = getSelectAttendancesInHistory();
         try {
-            PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
             setVariableToStatement(id, statement);
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
         return list;
     }
 
     @Override
-    protected void prepareStatementForInsert(PreparedStatement statement, Attendance object) throws PersistException {
+    protected void prepareStatementForInsert(final PreparedStatement statement, final Attendance object) throws PersistException {
         try {
             statement.setString(1, object.getName());
             statement.setBigDecimal(2, object.getPrice());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }
 
     @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, Attendance object) throws PersistException {
+    protected void prepareStatementForUpdate(final PreparedStatement statement, final Attendance object) throws PersistException {
         try {
             statement.setString(1, object.getName());
             statement.setBigDecimal(2, object.getPrice());
             statement.setLong(3, object.getId());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new PersistException(e);
         }
     }
