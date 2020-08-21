@@ -43,16 +43,18 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
-        final List<Room> rooms = roomRepository.getAll();
-        final List<Room> result = new ArrayList<>();
-        for (final Room room : rooms) {
-            final List<RoomHistory> histories = room.getHistories();
-            if (room.getStatus() != RoomStatus.REPAIR &&
-                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
-                result.add(room);
-            }
-        }
-        return result;
+        return roomRepository.getVacantOnDate(date);
+//
+//        final List<Room> rooms = roomRepository.getAll();
+//        final List<Room> result = new ArrayList<>();
+//        for (final Room room : rooms) {
+//            final List<RoomHistory> histories = room.getHistories();
+//            if (room.getStatus() != RoomStatus.REPAIR &&
+//                    (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
+//                result.add(room);
+//            }
+//        }
+//        return result;
     }
 
     @Override

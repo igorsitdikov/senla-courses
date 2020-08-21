@@ -6,11 +6,13 @@ import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,19 +73,13 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    public RoomHistory getByResidentAndCheckedInStatus(final Long id) throws PersistException {
+    public RoomHistory getByResidentAndCheckedInStatus(final Long id) throws PersistException, EntityNotFoundException {
         final List<RoomHistory> list;
         String sql = getSelectQuery();
         sql += " WHERE history.status = 'CHECKED_IN' AND resident.id = ?";
-        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            setVariableToStatement(id, statement);
-            final ResultSet rs = statement.executeQuery();
-            list = parseResultSet(rs);
-        } catch (final Exception e) {
-            throw new PersistException(e);
-        }
+        list = getAllBySqlQuery(sql, id);
         if (list == null || list.size() == 0) {
-            return null;
+            throw new EntityNotFoundException("Room not found");
         }
         if (list.size() > 1) {
             throw new PersistException("Received more than one record.");
@@ -101,8 +97,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
         final String sql = getCreateQueryAttendanceToHistory();
         try (final PreparedStatement statement = connector.getConnection()
                 .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, historyId);
-            statement.setLong(2, attendanceId);
+            setVariableToStatement(statement, historyId, attendanceId);
             final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);

@@ -9,8 +9,10 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +38,12 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     @Override
     public String getUpdateQuery() {
         return "UPDATE room SET number = ?, price = ?, status = ?, stars =?, accommodation = ? WHERE id = ?;";
+    }
+
+    public String getVacantOnDate() {
+        return "SELECT DISTINCT room.id, room.number, room.price, room.status, room.stars, room.accommodation, history.room_id FROM history\n" +
+                "    RIGHT JOIN room on history.room_id = room.id\n" +
+                "WHERE history.status = 'CHECKED_IN' OR room.status = 'VACANT' OR history.check_out < ? ORDER BY number;\n";
     }
 
     @Override
@@ -65,6 +73,12 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             throw new PersistException(e);
         }
         return result;
+    }
+
+    @Override
+    public List<Room> getVacantOnDate(final LocalDate date) throws PersistException {
+        String sql = getVacantOnDate();
+        return getAllBySqlQuery(sql, date);
     }
 
     @Override
