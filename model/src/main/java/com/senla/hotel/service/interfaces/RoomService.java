@@ -9,7 +9,6 @@ import com.senla.hotel.exceptions.PersistException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 public interface RoomService {

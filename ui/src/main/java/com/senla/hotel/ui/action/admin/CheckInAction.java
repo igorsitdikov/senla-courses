@@ -45,7 +45,7 @@ public class CheckInAction implements Action {
             hotelController
                     .checkIn(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate);
         } catch (final Exception e) {
-            System.err.printf("Failed to check-in! Input valid parameters! %s%n%n", e);
+            System.err.println(e.getMessage());
         }
     }
 }

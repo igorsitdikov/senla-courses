@@ -80,10 +80,6 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
-        changePrice(number, price);
-    }
-
-    private void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         room.setPrice(price);
         roomRepository.update(room);

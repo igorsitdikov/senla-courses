@@ -7,7 +7,6 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 
 public interface AttendanceService {

@@ -10,6 +10,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,11 +28,11 @@ public class HotelController {
     private static RoomHistoryService historyService;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException, PersistException {
+            throws EntityNotFoundException, PersistException, SQLException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
-    public void checkOut(final Resident resident, final LocalDate date) throws EntityNotFoundException {
+    public void checkOut(final Resident resident, final LocalDate date) throws EntityNotFoundException, SQLException, PersistException {
         hotelAdminService.checkOut(resident, date);
     }
 

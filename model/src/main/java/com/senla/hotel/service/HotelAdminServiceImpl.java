@@ -36,7 +36,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException, PersistException {
+            throws EntityNotFoundException, PersistException, SQLException {
         final Room room = roomService.findById(roomId);
         final Resident resident = residentService.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
@@ -46,19 +46,11 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 roomHistoryRepository.create(history);
                 roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
                 connector.getConnection().commit();
-            } catch (final Exception e) {
-                try {
-                    connector.getConnection().rollback();
-                    System.err.print("Transaction is being rolled back");
-                } catch (final SQLException ex) {
-                    ex.printStackTrace();
-                }
+            } catch (final SQLException e) {
+                connector.getConnection().rollback();
+                throw new PersistException("Transaction is being rolled back");
             } finally {
-                try {
-                    connector.getConnection().setAutoCommit(true);
-                } catch (final SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+                connector.getConnection().setAutoCommit(true);
             }
             System.out.printf("%s was checked-in in room №%d%n",
                     resident.toString(),
@@ -72,12 +64,12 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException, PersistException {
+            throws EntityNotFoundException, PersistException, SQLException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 
     @Override
-    public void checkOut(final Long residentId, final LocalDate date) {
+    public void checkOut(final Long residentId, final LocalDate date) throws SQLException, PersistException {
         try {
             connector.getConnection().setAutoCommit(false);
             final Resident resident = residentService.findById(residentId);
@@ -92,23 +84,15 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 roomService.changeRoomStatus(room.getId(), RoomStatus.VACANT);
             }
         } catch (final Exception e) {
-            try {
-                connector.getConnection().rollback();
-                System.err.print("Transaction is being rolled back");
-            } catch (final SQLException ex) {
-                ex.printStackTrace();
-            }
+            connector.getConnection().rollback();
+            throw new PersistException("Transaction is being rolled back");
         } finally {
-            try {
-                connector.getConnection().setAutoCommit(true);
-            } catch (final SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            connector.getConnection().setAutoCommit(true);
         }
     }
 
     @Override
-    public void checkOut(final Resident resident, final LocalDate date) {
+    public void checkOut(final Resident resident, final LocalDate date) throws SQLException, PersistException {
         checkOut(resident.getId(), date);
     }
 
