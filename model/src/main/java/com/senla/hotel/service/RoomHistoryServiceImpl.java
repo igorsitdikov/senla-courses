@@ -28,7 +28,7 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
 
     @Override
     public RoomHistory create(final RoomHistory history) {
-        return (RoomHistory) roomHistoryRepository.add(history);
+        return (RoomHistory) roomHistoryRepository.create(history);
     }
 
     @Override

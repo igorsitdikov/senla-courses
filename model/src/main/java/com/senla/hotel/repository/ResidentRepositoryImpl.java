@@ -21,36 +21,32 @@ public class ResidentRepositoryImpl implements ResidentRepository {
     private static List<Resident> residents = new ArrayList<>();
 
     @Override
-    public AEntity add(final AEntity entity) {
+    public AEntity create(final AEntity entity) {
         try {
             return residentDao.create((Resident) entity);
         } catch (PersistException e) {
             e.printStackTrace();
         }
         return null;
-//        entity.setId(++counter);
-//        residents.add((Resident) entity);
-//        return entity;
     }
 
     @Override
-    public AEntity findById(final Long id) throws EntityNotFoundException {
+    public void update(final Resident resident) {
+        try {
+            residentDao.update(resident);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public AEntity getById(final Long id) throws EntityNotFoundException {
         try {
             return residentDao.getById(id);
         } catch (PersistException e) {
             e.printStackTrace();
         }
-//        for (final Resident resident : residents) {
-//            if (resident.getId().equals(id)) {
-//                return resident;
-//            }
-//        }
         throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
-    }
-
-    @Override
-    public void addHistory(final Resident resident, final RoomHistory history) {
-        resident.setHistory(history);
     }
 
     @Override
@@ -60,11 +56,11 @@ public class ResidentRepositoryImpl implements ResidentRepository {
 
     @Override
     public void setResidents(final List<Resident> residents) {
-        ResidentRepositoryImpl.residents = new ArrayList<>(residents);
+//        ResidentRepositoryImpl.residents = new ArrayList<>(residents);
     }
 
     @Override
-    public List<Resident> getResidents() {
+    public List<Resident> getAll() {
         try {
             return residentDao.getAll();
         } catch (PersistException e) {

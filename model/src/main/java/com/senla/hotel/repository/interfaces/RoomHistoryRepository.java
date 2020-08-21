@@ -16,7 +16,7 @@ public interface RoomHistoryRepository {
 
     void addAttendance(Long id, Attendance attendance) throws EntityNotFoundException;
 
-    AEntity add(AEntity entity);
+    AEntity create(AEntity entity);
 
     void setHistories(List<RoomHistory> roomHistories);
 

@@ -14,8 +14,6 @@ public interface ResidentService {
 
     Resident findById(Long id) throws EntityNotFoundException;
 
-    void addHistoryToResident(Long id, RoomHistory roomHistory) throws EntityNotFoundException;
-
     void addAttendanceToResident(Resident resident, Attendance attendance)
             throws EntityNotFoundException;
 

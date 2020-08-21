@@ -42,9 +42,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             try {
                 connector.getConnection().setAutoCommit(false);
                 final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
-                final RoomHistory roomHistoryEntity = roomHistoryService.create(history);
-                residentService.addHistoryToResident(residentId, roomHistoryEntity);
-//            roomService.addHistoryToRoom(roomId, roomHistoryEntity);
+                roomHistoryRepository.create(history);
                 roomService.changeRoomStatus(roomId, RoomStatus.OCCUPIED);
                 connector.getConnection().commit();
             } catch (Exception e) {
