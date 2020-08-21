@@ -2,6 +2,7 @@ package com.senla.hotel.ui.action.resident;
 
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.Printer;
 
@@ -16,7 +17,11 @@ public class ShowResidentsSortedByCheckOutDateAction implements Action {
 
     @Override
     public void execute() {
-        List<Resident> residents = residentController.showResidentsSortedByCheckOutDate();
-        Printer.show(residents);
+        try {
+            List<Resident> residents = residentController.showResidentsSortedByCheckOutDate();
+            Printer.show(residents);
+        } catch (PersistException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

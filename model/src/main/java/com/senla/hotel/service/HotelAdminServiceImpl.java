@@ -115,7 +115,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public BigDecimal calculateBill(final Long id) throws EntityNotFoundException {
+    public BigDecimal calculateBill(final Long id) throws EntityNotFoundException, PersistException {
         final Resident resident = residentService.findById(id);
         if (resident.getHistory() != null) {
             final long days = ChronoUnit.DAYS.between(resident.getHistory().getCheckIn(),
@@ -141,7 +141,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException {
+    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException, PersistException {
         final Long id = resident.getId();
         return calculateBill(id);
     }

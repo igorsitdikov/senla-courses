@@ -21,9 +21,9 @@ public interface HotelAdminService {
     void checkOut(Resident resident, LocalDate date)
             throws EntityNotFoundException;
 
-    BigDecimal calculateBill(Long id) throws EntityNotFoundException;
+    BigDecimal calculateBill(Long id) throws EntityNotFoundException, PersistException;
 
-    BigDecimal calculateBill(Resident resident) throws EntityNotFoundException;
+    BigDecimal calculateBill(Resident resident) throws EntityNotFoundException, PersistException;
 
     void importHistories();
 

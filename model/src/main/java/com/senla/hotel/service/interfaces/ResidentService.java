@@ -12,24 +12,24 @@ public interface ResidentService {
 
     List<Resident> sortResidents(List<Resident> residents, Comparator<Resident> comparator);
 
-    Resident findById(Long id) throws EntityNotFoundException;
+    Resident findById(Long id) throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)
             throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Long residentId, Long attendanceId) throws EntityNotFoundException, PersistException;
 
-    void createResident(Resident resident);
+    void createResident(Resident resident) throws PersistException;
 
-    List<Resident> showResidents();
+    List<Resident> showResidents() throws PersistException;
 
-    List<Resident> showResidentsSortedByName();
+    List<Resident> showResidentsSortedByName() throws PersistException;
 
-    List<Resident> showResidentsSortedByCheckOutDate();
+    List<Resident> showResidentsSortedByCheckOutDate() throws PersistException;
 
     void importResidents();
 
-    void exportResidents();
+    void exportResidents() throws PersistException;
 
-    int showCountResidents();
+    int showCountResidents() throws PersistException;
 }
