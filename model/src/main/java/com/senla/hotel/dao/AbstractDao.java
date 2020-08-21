@@ -7,10 +7,8 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Singleton
@@ -45,7 +43,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            setVariableToStatement(variable, statement);
+            setVariableToStatement(statement, variable);
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
@@ -60,19 +58,24 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return list.iterator().next();
     }
 
-    protected <E> void setVariableToStatement(final E variable, final PreparedStatement statement) throws SQLException {
-        if (variable instanceof Long) {
-            statement.setLong(1, (Long) variable);
-        } else if (variable instanceof BigDecimal) {
-            statement.setBigDecimal(1, (BigDecimal) variable);
-        } else if (variable instanceof Double) {
-            statement.setDouble(1, (Double) variable);
-        } else if (variable instanceof Integer) {
-            statement.setInt(1, (Integer) variable);
-        } else if (variable instanceof String) {
-            statement.setString(1, (String) variable);
-        } else if (variable instanceof Enum) {
-            statement.setString(1, variable.toString());
+    @SafeVarargs
+    protected final <E> void setVariableToStatement(final PreparedStatement statement, final E... variable) throws SQLException {
+        for (int i = 0; i < variable.length; i++) {
+            if (variable[i] instanceof Long) {
+                statement.setLong(i + 1, (Long) variable[i]);
+            } else if (variable[i] instanceof BigDecimal) {
+                statement.setBigDecimal(i + 1, (BigDecimal) variable[i]);
+            } else if (variable[i] instanceof Double) {
+                statement.setDouble(i + 1, (Double) variable[i]);
+            } else if (variable[i] instanceof Integer) {
+                statement.setInt(i + 1, (Integer) variable[i]);
+            } else if (variable[i] instanceof String) {
+                statement.setString(i + 1, (String) variable[i]);
+            } else if (variable[i] instanceof Enum) {
+                statement.setString(i + 1, variable[i].toString());
+            } else if (variable[i] instanceof LocalDate) {
+                statement.setDate(i + 1, Date.valueOf((LocalDate) variable[i]));
+            }
         }
     }
 
@@ -91,12 +94,17 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     }
 
     protected <E> List<T> getAllWhere(final String field, final E variable) throws PersistException {
-        final List<T> list;
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
+        return getAllBySqlQuery(sql, variable);
+    }
+
+    @SafeVarargs
+    protected final <E> List<T> getAllBySqlQuery(final String sql, final E... variables) throws PersistException {
+        final List<T> list;
         try {
             final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
-            setVariableToStatement(variable, statement);
+            setVariableToStatement(statement, variables);
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
@@ -150,11 +158,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     public void delete(final T object) throws PersistException {
         final String sql = getDeleteQuery();
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
-            try {
-                statement.setObject(1, object.getId());
-            } catch (final Exception e) {
-                throw new PersistException(e);
-            }
+            setVariableToStatement(statement, object.getId());
             final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On delete modify more then 1 record: " + count);

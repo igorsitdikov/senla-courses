@@ -62,19 +62,11 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
         }
         return result;
     }
+
     @Override
     public List<Attendance> getAllAttendancesByHistoryId(final Long id) throws PersistException {
-        final List<Attendance> list;
         final String sql = getSelectAttendancesInHistory();
-        try {
-            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
-            setVariableToStatement(id, statement);
-            final ResultSet rs = statement.executeQuery();
-            list = parseResultSet(rs);
-        } catch (final Exception e) {
-            throw new PersistException(e);
-        }
-        return list;
+        return getAllBySqlQuery(sql, id);
     }
 
     @Override

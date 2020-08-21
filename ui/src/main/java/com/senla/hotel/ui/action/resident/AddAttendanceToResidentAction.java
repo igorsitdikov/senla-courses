@@ -28,8 +28,8 @@ public class AddAttendanceToResidentAction implements Action {
         try {
             final List<Attendance> attendances = attendanceController.showAttendances(SortField.DEFAULT);
             Printer.show(attendances, "attendance");
-
-            final Integer attendanceId = InputDataReader
+            Printer.show(attendances.size());
+            Integer attendanceId = InputDataReader
                 .getIntegerInput(scanner, "Input Attendance id...", attendances.size());
 
             final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
