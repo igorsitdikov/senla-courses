@@ -69,9 +69,10 @@ public class RoomMapperImpl implements RoomMapper {
         sb.append(SEPARATOR);
         sb.append(destination.getStatus());
         sb.append(SEPARATOR);
-        destination.getHistories()
+        if (destination.getHistories() != null) {
+            destination.getHistories()
                 .forEach(history -> sb.append(history.getId()).append(SEPARATOR));
-
+        }
         return sb.toString();
     }
 }
