@@ -8,6 +8,7 @@ import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.AttendanceMapperImpl;
+import com.senla.hotel.mapper.interfaces.csvMapper.AttendanceMapper;
 import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
@@ -28,6 +29,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     private CsvWriter csvWriter;
     @Autowired
     private AttendanceDao attendanceRepository;
+    @Autowired
+    private AttendanceMapper attendanceMapper;
     @PropertyLoad(propertyName = "attendances")
     private String property;
 
@@ -74,16 +77,14 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void importAttendances() {
-//        EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
-//        final List<Attendance> attendances =
-//            ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
-//        attendanceRepository.setAttendances(attendances);
+    public void importAttendances() throws PersistException {
+        final List<Attendance> attendances =
+            ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
+            attendanceRepository.insertMany(attendances);
     }
 
     @Override
     public void exportAttendances() throws PersistException {
-        final EntityMapper<Attendance> attendanceMapper = new AttendanceMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances(SortField.DEFAULT)));
     }
 }

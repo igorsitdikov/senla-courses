@@ -1,12 +1,17 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
+import com.senla.hotel.service.RoomServiceImpl;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomService;
@@ -16,10 +21,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class RoomHistoryMapperImpl implements RoomHistoryMapper {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Autowired
-    private RoomService roomService;
+    private RoomServiceImpl roomService;
     @Autowired
     private ResidentService residentService;
     @Autowired
@@ -37,20 +43,25 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         history.setCheckIn(LocalDate.parse(elements[1], formatter));
         history.setCheckOut(LocalDate.parse(elements[2], formatter));
         try {
-            history.setRoom(roomService.findById(Long.parseLong(elements[3])));
+            final long id = Long.parseLong(elements[3]);
+            final Room room = roomService.findById(id);
+            history.setRoom(room);
         } catch (final EntityNotFoundException e) {
             System.err.printf("No such room with id %s %s%n%n", elements[3], e);
         } catch (final PersistException e) {
             e.printStackTrace();
         }
         try {
-            history.setResident(residentService.findById(Long.parseLong(elements[4])));
+            final long id = Long.parseLong(elements[4]);
+            final Resident resident = residentService.findById(id);
+            history.setResident(resident);
         } catch (final EntityNotFoundException | PersistException e) {
             System.err.printf("No such resident with id %s %s%n%n", elements[4], e);
         }
+        history.setStatus(HistoryStatus.valueOf(elements[5]));
         final List<Attendance> historyList = new ArrayList<>();
-        if (elements.length > 5) {
-            for (int i = 5; i < elements.length; i++) {
+        if (elements.length > 6) {
+            for (int i = 6; i < elements.length; i++) {
                 try {
                     historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
                 } catch (final EntityNotFoundException | PersistException e) {
@@ -78,6 +89,8 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         sb.append(destination.getRoom().getId());
         sb.append(SEPARATOR);
         sb.append(destination.getResident().getId());
+        sb.append(SEPARATOR);
+        sb.append(destination.getStatus());
         sb.append(SEPARATOR);
         destination.getAttendances()
                 .forEach(attendance -> sb.append(attendance.getId()).append(SEPARATOR));

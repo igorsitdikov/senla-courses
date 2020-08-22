@@ -13,6 +13,7 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.ResidentMapperImpl;
 import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
@@ -37,6 +38,8 @@ public class ResidentServiceImpl implements ResidentService {
     private RoomHistoryDao roomHistoryRepository;
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private ResidentMapper residentMapper;
     @PropertyLoad(propertyName = "residents")
     private String property;
 
@@ -90,16 +93,14 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public void importResidents() {
-//        EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
-//        final List<Resident> residents =
-//            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
-//        residentRepository.setResidents(residents);
+    public void importResidents() throws PersistException {
+        final List<Resident> residents =
+            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
+        residentRepository.insertMany(residents);
     }
 
     @Override
     public void exportResidents() throws PersistException {
-        final EntityMapper<Resident> residentMapper = new ResidentMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents(SortField.DEFAULT)));
     }
 

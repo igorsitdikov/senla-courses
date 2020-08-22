@@ -15,6 +15,7 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.RoomMapperImpl;
 import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
@@ -39,6 +40,8 @@ public class RoomServiceImpl implements RoomService {
     private RoomDao roomRepository;
     @Autowired
     private ResidentDao residentRepository;
+    @Autowired
+    private RoomMapper roomMapper;
     @PropertyLoad(propertyName = "rooms")
     private String property;
     @PropertyLoad(type = Type.INTEGER)
@@ -140,15 +143,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void importRooms() {
-//        final EntityMapper<Room> roomMapper = new RoomMapperImpl();
-//        final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
-//        roomRepository.setRooms(rooms);
+    public void importRooms() throws PersistException {
+        final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
+        roomRepository.insertMany(rooms);
     }
 
     @Override
     public void exportRooms() throws PersistException {
-        final EntityMapper<Room> roomMapper = new RoomMapperImpl();
         csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, roomRepository.getAll()));
     }
 

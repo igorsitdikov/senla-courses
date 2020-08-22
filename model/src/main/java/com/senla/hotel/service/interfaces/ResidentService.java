@@ -20,7 +20,7 @@ public interface ResidentService {
 
     List<Resident> showResidents(SortField sortField) throws PersistException;
 
-    void importResidents();
+    void importResidents() throws PersistException;
 
     void exportResidents() throws PersistException;
 

@@ -20,7 +20,7 @@ public interface RoomService {
 
     List<Resident> showLastResidents(Long id, Integer number) throws EntityNotFoundException, PersistException;
 
-    void importRooms();
+    void importRooms() throws PersistException;
 
     void exportRooms() throws PersistException;
 

@@ -64,7 +64,7 @@ public class RoomController {
         roomService.changeRoomStatus(number, status);
     }
 
-    public void importRooms() {
+    public void importRooms() throws PersistException {
         roomService.importRooms();
     }
 

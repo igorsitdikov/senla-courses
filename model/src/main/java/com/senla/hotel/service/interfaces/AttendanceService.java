@@ -20,7 +20,7 @@ public interface AttendanceService {
 
     void delete(Long id) throws EntityNotFoundException, PersistException;
 
-    void importAttendances();
+    void importAttendances() throws PersistException;
 
     void exportAttendances() throws PersistException;
 }

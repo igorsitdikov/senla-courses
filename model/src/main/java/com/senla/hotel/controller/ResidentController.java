@@ -33,7 +33,7 @@ public class ResidentController {
         residentService.addAttendanceToResident(resident, attendance);
     }
 
-    public void importResidents() {
+    public void importResidents() throws PersistException {
         residentService.importResidents();
     }
 
