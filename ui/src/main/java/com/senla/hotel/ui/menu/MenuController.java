@@ -3,6 +3,7 @@ package com.senla.hotel.ui.menu;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.controller.HotelController;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.utils.Connector;
 
@@ -22,7 +23,7 @@ public final class MenuController {
     private Connector connector;
 
     public void run() {
-//        hotelController.importData();
+        hotelController.importData();
         final Scanner scanner = new Scanner(System.in);
 
         boolean exit = false;
@@ -55,11 +56,14 @@ public final class MenuController {
         }
         scanner.close();
         try {
+            hotelController.exportData();
             connector.closeConnection();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             System.err.println(e.getMessage());
+        } catch (final PersistException e) {
+            System.err.printf("Could not save data %s%n", e.getMessage());
         }
-//        hotelController.exportData();
+
         System.out.println("Goodbye! Your changes have been saved!");
     }
 }
