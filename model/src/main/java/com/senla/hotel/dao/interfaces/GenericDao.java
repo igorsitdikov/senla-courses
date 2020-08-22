@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface GenericDao<T extends AEntity, ID extends Serializable> {
 
+    void insertMany(List<T> list) throws PersistException;
+
     T create(T object) throws PersistException;
 
     T findById(ID id) throws PersistException;

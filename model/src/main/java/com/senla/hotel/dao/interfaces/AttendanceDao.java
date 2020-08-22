@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AttendanceDao extends GenericDao<Attendance, Long> {
     List<Attendance> getAllAttendancesByHistoryId(final Long id) throws PersistException;
+
+    void insertMany(List<Attendance> list) throws PersistException;
 }

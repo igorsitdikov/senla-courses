@@ -10,6 +10,7 @@ import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
 
     public String getSelectAttendancesInHistory() {
         return "SELECT * FROM history\n" +
-                "    JOIN histories_attendances ha on history.id = ha.history_id\n" +
-                "    JOIN attendance on ha.attendance_id = attendance.id\n" +
-                "WHERE history_id = ?;";
+               "    JOIN histories_attendances ha on history.id = ha.history_id\n" +
+               "    JOIN attendance on ha.attendance_id = attendance.id\n" +
+               "WHERE history_id = ?;";
     }
 
     @Override
@@ -70,7 +71,8 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
     }
 
     @Override
-    protected void prepareStatementForInsert(final PreparedStatement statement, final Attendance object) throws PersistException {
+    protected void prepareStatementForInsert(final PreparedStatement statement, final Attendance object)
+        throws PersistException {
         try {
             statement.setString(1, object.getName());
             statement.setBigDecimal(2, object.getPrice());
@@ -80,7 +82,8 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
     }
 
     @Override
-    protected void prepareStatementForUpdate(final PreparedStatement statement, final Attendance object) throws PersistException {
+    protected void prepareStatementForUpdate(final PreparedStatement statement, final Attendance object)
+        throws PersistException {
         try {
             statement.setString(1, object.getName());
             statement.setBigDecimal(2, object.getPrice());

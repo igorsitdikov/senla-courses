@@ -1,25 +1,15 @@
 package com.senla.hotel.mapper;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
-import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
-import com.senla.hotel.service.interfaces.RoomHistoryService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RoomMapperImpl implements RoomMapper {
-    @Autowired
-    private RoomHistoryService roomHistoryService;
-
     @Override
     public Room sourceToDestination(final String source) throws EntityIsEmptyException {
         if (source.isEmpty()) {
@@ -34,18 +24,6 @@ public class RoomMapperImpl implements RoomMapper {
         room.setAccommodation(Accommodation.valueOf(elements[3]));
         room.setPrice(new BigDecimal(elements[4]));
         room.setStatus(RoomStatus.valueOf(elements[5]));
-
-        final List<RoomHistory> historyList = new ArrayList<>();
-        if (elements.length > 6) {
-            for (int i = 6; i < elements.length; i++) {
-                try {
-                    historyList.add(roomHistoryService.findById(Long.parseLong(elements[i])));
-                } catch (final EntityNotFoundException | PersistException e) {
-                    System.err.printf("No such history with id %s %s%n%n", elements[i], e);
-                }
-            }
-        }
-        room.setHistories(historyList);
 
         return room;
     }
@@ -69,10 +47,7 @@ public class RoomMapperImpl implements RoomMapper {
         sb.append(SEPARATOR);
         sb.append(destination.getStatus());
         sb.append(SEPARATOR);
-        if (destination.getHistories() != null) {
-            destination.getHistories()
-                .forEach(history -> sb.append(history.getId()).append(SEPARATOR));
-        }
+
         return sb.toString();
     }
 }

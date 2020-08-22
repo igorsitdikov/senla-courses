@@ -33,7 +33,7 @@ public class AttendanceController {
         attendanceService.changeAttendancePrice(id, price);
     }
 
-    public void importAttendances() {
+    public void importAttendances() throws PersistException {
         attendanceService.importAttendances();
     }
 

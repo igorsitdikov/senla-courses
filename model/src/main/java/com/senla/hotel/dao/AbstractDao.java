@@ -3,6 +3,7 @@ package com.senla.hotel.dao;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
@@ -111,6 +112,21 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             throw new PersistException(e);
         }
         return list;
+    }
+
+    @Override
+    public void insertMany(final List<T> list) throws PersistException {
+        final String sql = getCreateQuery();
+        try (final PreparedStatement statement = connector.getConnection()
+            .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (final T object : list) {
+                prepareStatementForInsert(statement, object);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override

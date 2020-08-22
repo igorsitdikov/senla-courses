@@ -121,7 +121,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void importHistories() {
+    public void importHistories() throws PersistException {
         roomHistoryService.importHistories();
     }
 

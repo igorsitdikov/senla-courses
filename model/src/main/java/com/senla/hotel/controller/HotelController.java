@@ -40,7 +40,7 @@ public class HotelController {
         return hotelAdminService.calculateBill(resident);
     }
 
-    public void importHistories() {
+    public void importHistories() throws PersistException {
         hotelAdminService.importHistories();
     }
 

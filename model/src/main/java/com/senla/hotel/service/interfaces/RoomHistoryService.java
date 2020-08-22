@@ -11,7 +11,7 @@ public interface RoomHistoryService {
 
     RoomHistory findById(Long id) throws EntityNotFoundException, PersistException;
 
-    void importHistories();
+    void importHistories() throws PersistException;
 
     void exportHistories() throws PersistException;
 
