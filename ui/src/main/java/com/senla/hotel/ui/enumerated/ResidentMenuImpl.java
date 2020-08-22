@@ -6,7 +6,9 @@ public enum ResidentMenuImpl implements MenuEnum {
     SHOW_RESIDENTS(1, "Show residents"),
     ADD_RESIDENT(2, "Add resident"),
     TOTAL_RESIDENTS(3, "Total residents"),
-    ATTENDANCE_TO_RESIDENT(4, "Add attendance to resident");
+    ATTENDANCE_TO_RESIDENT(4, "Add attendance to resident"),
+    EXPORT_RESIDENTS_TO_CSV(5, "Export residents to csv"),
+    IMPORT_RESIDENTS_FROM_CSV(6, "Import residents from csv");
 
     private int id;
     private String title;
