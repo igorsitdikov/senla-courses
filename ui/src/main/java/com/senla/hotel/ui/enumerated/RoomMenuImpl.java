@@ -9,7 +9,9 @@ public enum RoomMenuImpl implements MenuEnum {
     CHANGE_ROOM_STATUS(4, "Change status"),
     TOTAL_VACANT_ROOMS(5, "Total vacant rooms"),
     SHOW_DETAILS(6, "Show room's details"),
-    SHOW_LAST_RESIDENTS(7, "Show last residents");
+    SHOW_LAST_RESIDENTS(7, "Show last residents"),
+    EXPORT_ROOMS_TO_CSV(8, "Export rooms to csv"),
+    IMPORT_ROOMS_FROM_CSV(9, "Import rooms from csv");
 
     private int id;
     private String title;
