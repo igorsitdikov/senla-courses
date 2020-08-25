@@ -7,14 +7,11 @@ import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.RoomMapperImpl;
-import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
@@ -154,12 +151,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException, PersistException {
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws PersistException {
         final Long id = room.getId();
         return showLastResidents(id, amount);
     }
 
-    public List<Resident> showLastResidents(final Long id, final Integer amount) throws EntityNotFoundException, PersistException {
+    public List<Resident> showLastResidents(final Long id, final Integer amount) throws PersistException {
         return residentRepository.getLastResidentsByRoomId(id, amount);
     }
 }

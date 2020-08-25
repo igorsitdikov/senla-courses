@@ -24,6 +24,8 @@ public class HotelController {
     @Autowired
     private static AttendanceService attendanceService;
     @Autowired
+    private static RoomHistoryService roomHistoryService;
+    @Autowired
     private static RoomService roomService;
     @Autowired
     private static ResidentService residentService;
@@ -46,11 +48,11 @@ public class HotelController {
     }
 
     public void importHistories() throws PersistException {
-        hotelAdminService.importHistories();
+        roomHistoryService.importHistories();
     }
 
     public void exportHistories() throws PersistException {
-        hotelAdminService.exportHistories();
+        roomHistoryService.exportHistories();
     }
 
     public List<RoomHistory> showHistories() throws PersistException {

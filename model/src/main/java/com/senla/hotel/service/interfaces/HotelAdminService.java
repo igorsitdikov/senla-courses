@@ -24,8 +24,4 @@ public interface HotelAdminService {
     BigDecimal calculateBill(Long id) throws EntityNotFoundException, PersistException;
 
     BigDecimal calculateBill(Resident resident) throws EntityNotFoundException, PersistException;
-
-    void importHistories() throws PersistException;
-
-    void exportHistories() throws PersistException;
 }

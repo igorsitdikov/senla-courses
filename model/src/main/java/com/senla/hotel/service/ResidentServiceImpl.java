@@ -3,6 +3,7 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
@@ -11,10 +12,7 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.ResidentMapperImpl;
-import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
-import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
@@ -37,7 +35,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Autowired
     private RoomHistoryDao roomHistoryRepository;
     @Autowired
-    private AttendanceService attendanceService;
+    private AttendanceDao attendanceRepository;
     @Autowired
     private ResidentMapper residentMapper;
     @PropertyLoad(propertyName = "residents")
@@ -56,13 +54,13 @@ public class ResidentServiceImpl implements ResidentService {
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
             throws EntityNotFoundException, PersistException {
         final Long residentId = resident.getId();
-        final Long attendanceId = attendanceService.findById(attendance.getId()).getId();
+        final Long attendanceId = attendanceRepository.findById(attendance.getId()).getId();
         addAttendanceToResident(residentId, attendanceId);
     }
 
     @Override
     public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException, PersistException {
-        final Attendance attendance = attendanceService.findById(attendanceId);
+        final Attendance attendance = attendanceRepository.findById(attendanceId);
         final RoomHistory history = roomHistoryRepository
                 .getByResidentAndCheckedInStatus(residentId);
         roomHistoryRepository.addAttendanceToHistory(history.getId(), attendance.getId());
@@ -95,7 +93,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public void importResidents() throws PersistException {
         final List<Resident> residents =
-            ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
+                ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
         residentRepository.insertMany(residents);
     }
 
