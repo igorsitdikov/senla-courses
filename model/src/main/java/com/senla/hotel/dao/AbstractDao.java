@@ -51,7 +51,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             throw new PersistException(e);
         }
         if (list == null || list.size() == 0) {
-            return null;
+            throw new PersistException("Entity not found.");
         }
         if (list.size() > 1) {
             throw new PersistException("Received more than one record.");
