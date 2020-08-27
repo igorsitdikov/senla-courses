@@ -23,16 +23,19 @@ public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMappe
         final ResultSetMapper<Resident> residentResultSetMapper = new ResidentResultSetMapperImpl();
 
         final RoomHistory roomHistory = new RoomHistory();
-        roomHistory.setId(source.getLong("history.id"));
+        roomHistory.setId(source.getLong("h_id"));
+        if (source.wasNull()) {
+            return new RoomHistory();
+        }
 
         final Room room = roomResultSetMapper.sourceToDestination(source);
         final Resident resident = residentResultSetMapper.sourceToDestination(source);
 
         roomHistory.setRoom(room);
         roomHistory.setResident(resident);
-        roomHistory.setCheckIn(source.getDate("history.check_in").toLocalDate());
-        roomHistory.setCheckOut(source.getDate("history.check_out").toLocalDate());
-        roomHistory.setStatus(HistoryStatus.valueOf(source.getString("history.status")));
+        roomHistory.setCheckIn(source.getDate("h_check_in").toLocalDate());
+        roomHistory.setCheckOut(source.getDate("h_check_out").toLocalDate());
+        roomHistory.setStatus(HistoryStatus.valueOf(source.getString("h_status")));
         return roomHistory;
     }
 }

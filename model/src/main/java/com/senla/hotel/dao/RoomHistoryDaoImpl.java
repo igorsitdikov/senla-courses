@@ -30,10 +30,27 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public String getSelectQuery() {
-        return "SELECT history.id, room.id, resident.id, history.resident_id, history.room_id, history.check_in, history.check_out, history.status, " +
-                "resident.first_name, resident.last_name, resident.gender, resident.vip, resident.phone, room.number, " +
-                "room.price, room.status, room.stars, room.accommodation " +
-                "FROM history JOIN resident ON resident.id = history.resident_id JOIN room ON room.id = history.room_id ";
+        return "SELECT  room.id AS rm_id,\n" +
+                "       room.number AS rm_number,\n" +
+                "       room.price AS rm_price,\n" +
+                "       room.status AS rm_status,\n" +
+                "       room.stars AS rm_stars,\n" +
+                "       room.accommodation AS rm_accommodation, " +
+                "       resident.id         AS rt_id,\n" +
+                "       resident.first_name AS rt_first_name,\n" +
+                "       resident.last_name  AS rt_last_name,\n" +
+                "       resident.gender     AS rt_gender,\n" +
+                "       resident.vip        AS rt_vip,\n" +
+                "       resident.phone      AS rt_phone,\n" +
+                "       history.id          AS h_id,\n" +
+                "       history.room_id     AS h_room_id,\n" +
+                "       history.resident_id AS h_resident_id,\n" +
+                "       history.check_in    AS h_check_in,\n" +
+                "       history.check_out   AS h_check_out,\n" +
+                "       history.status      AS h_status\n" +
+                "FROM history JOIN resident " +
+                "  ON resident.id = history.resident_id " +
+                "JOIN room ON room.id = history.room_id ";
     }
 
     @Override
@@ -51,12 +68,16 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     public String getCalculateBillQuery() {
-        return  "SELECT (SUM(DATEDIFF(history.check_out, history.check_in) * attendance.price) + DATEDIFF(check_out, check_in) * room.price) AS result FROM history\n" +
-                "                  LEFT JOIN resident ON resident.id = history.resident_id\n" +
-                "                  LEFT JOIN room ON room.id = history.room_id\n" +
-                "                  LEFT JOIN histories_attendances on history.id = histories_attendances.history_id\n" +
-                "                  LEFT JOIN attendance on histories_attendances.attendance_id = attendance.id\n" +
-                "WHERE history.id = ? AND history.status = 'CHECKED_IN';";
+        return  "SELECT SUM(DATEDIFF(check_out, check_in) * room.price) as room_price,\n" +
+                "       (SUM(attendance.price * DATEDIFF(check_out, check_in)) +\n" +
+                "        DATEDIFF(check_out, check_in) * room.price)    AS room_price_with_attendances\n" +
+                "FROM history\n" +
+                "         LEFT JOIN resident ON resident.id = history.resident_id\n" +
+                "         LEFT JOIN room ON room.id = history.room_id\n" +
+                "         LEFT JOIN histories_attendances on history.id = histories_attendances.history_id\n" +
+                "         LEFT JOIN attendance on histories_attendances.attendance_id = attendance.id\n" +
+                "WHERE history.id = ?\n" +
+                "  AND history.status = 'CHECKED_IN';";
     }
 
     @Override
@@ -109,7 +130,11 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             setVariableToStatement(statement, id);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                result.add(rs.getDouble("result"));
+                Double result1 = rs.getDouble("room_price_with_attendances");
+                if (rs.wasNull()) {
+                    result1 = rs.getDouble("room_price");
+                }
+                result.add(result1);
             }
         } catch (final Exception e) {
             throw new PersistException(e);

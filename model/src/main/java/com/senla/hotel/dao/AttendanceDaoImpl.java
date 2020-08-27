@@ -45,8 +45,8 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
 
     public String getSelectAttendancesInHistory() {
         return "SELECT * FROM history\n" +
-               "    JOIN histories_attendances ha on history.id = ha.history_id\n" +
-               "    JOIN attendance on ha.attendance_id = attendance.id\n" +
+               "    JOIN histories_attendances ha ON history.id = ha.history_id\n" +
+               "    JOIN attendance ON ha.attendance_id = attendance.id\n" +
                "WHERE history_id = ?;";
     }
 
