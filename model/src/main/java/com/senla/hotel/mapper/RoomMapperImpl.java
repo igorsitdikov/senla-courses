@@ -10,6 +10,7 @@ import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import java.math.BigDecimal;
 
 public class RoomMapperImpl implements RoomMapper {
+
     @Override
     public Room sourceToDestination(final String source) throws EntityIsEmptyException {
         if (source.isEmpty()) {

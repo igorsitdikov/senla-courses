@@ -7,12 +7,22 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Scanner {
+
     private static final String CLASS_EXTENSION = ".class";
     private static final String CLASS_POSTFIX = "Impl";
     private static final String DOT = ".";
@@ -86,7 +96,7 @@ public class Scanner {
     private Set<Class<?>> findClasses(final File directory, final String packageName) {
         Set<Class<?>> classes = new HashSet<>();
         final Path start = Paths.get(directory.getPath());
-        try (final Stream<Path> stream = Files.walk(start, Integer.MAX_VALUE)) {
+        try (Stream<Path> stream = Files.walk(start, Integer.MAX_VALUE)) {
             classes = stream
                 .map(String::valueOf)
                 .filter(path -> Files.isRegularFile(Paths.get(path)) &&

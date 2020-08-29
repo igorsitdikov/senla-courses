@@ -13,6 +13,7 @@ import java.util.List;
 
 @Singleton
 public class ResidentController {
+
     @Autowired
     private static ResidentService residentService;
 

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangePriceAction implements Action {
+
     private final RoomController roomController;
 
     public ChangePriceAction(final RoomController roomController) {

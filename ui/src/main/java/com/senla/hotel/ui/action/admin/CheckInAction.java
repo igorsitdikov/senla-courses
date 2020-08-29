@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CheckInAction implements Action {
+
     private final ResidentController residentController;
     private final HotelController hotelController;
     private final RoomController roomController;

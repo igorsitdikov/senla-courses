@@ -5,6 +5,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class ImportAttendanceAction implements Action {
+
     private AttendanceController attendanceController;
 
     public ImportAttendanceAction(final AttendanceController attendanceController) {

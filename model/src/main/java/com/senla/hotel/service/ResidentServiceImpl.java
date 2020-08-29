@@ -26,6 +26,7 @@ import java.util.List;
 
 @Singleton
 public class ResidentServiceImpl implements ResidentService {
+
     @Autowired
     private CsvReader csvReader;
     @Autowired
@@ -106,5 +107,4 @@ public class ResidentServiceImpl implements ResidentService {
     public int showCountResidents() throws PersistException {
         return residentRepository.getAll().size();
     }
-
 }

@@ -1,6 +1,7 @@
 package com.senla.hotel.enumerated;
 
 public enum Type {
+
     STRING(String.class),
     BOOLEAN(Boolean.class),
     INTEGER(Integer.class),

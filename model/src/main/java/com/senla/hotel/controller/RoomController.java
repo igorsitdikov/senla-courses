@@ -19,6 +19,7 @@ import java.util.List;
 
 @Singleton
 public class RoomController {
+
     @Autowired
     private static RoomService roomService;
     @PropertyLoad(type = Type.BOOLEAN)

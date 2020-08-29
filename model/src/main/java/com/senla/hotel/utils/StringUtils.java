@@ -4,6 +4,7 @@ import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 
 public class StringUtils {
+
     public static String accommodationToString(final Accommodation accommodation) {
         switch (accommodation) {
             case SGL_CHD:

@@ -3,6 +3,7 @@ package com.senla.hotel.ui.enumerated;
 import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 
 public enum ResidentMenuImpl implements MenuEnum {
+
     SHOW_RESIDENTS(1, "Show residents"),
     ADD_RESIDENT(2, "Add resident"),
     TOTAL_RESIDENTS(3, "Total residents"),

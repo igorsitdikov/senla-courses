@@ -10,6 +10,7 @@ import java.util.Scanner;
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
 public class ChangeStatusAction implements Action {
+
     private final RoomController roomController;
 
     public ChangeStatusAction(final RoomController roomController) {

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddRoomAction implements Action {
+
     private final RoomController roomController;
 
     public AddRoomAction(final RoomController roomController) {
@@ -66,7 +67,6 @@ public class AddRoomAction implements Action {
                                      "\t3 = REPAIR...",
                                      RoomStatus.values().length));
             roomController.addRoom(new Room(roomNumber, stars, accommodation, dailyPrice, status));
-
         } catch (final Exception e) {
             System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
         }

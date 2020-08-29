@@ -14,6 +14,7 @@ import java.util.List;
 
 @Singleton
 public class AttendanceController {
+
     @Autowired
     private static AttendanceService attendanceService;
 

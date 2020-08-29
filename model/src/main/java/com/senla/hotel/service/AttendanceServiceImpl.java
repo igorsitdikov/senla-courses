@@ -7,9 +7,7 @@ import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.AttendanceMapperImpl;
 import com.senla.hotel.mapper.interfaces.csvMapper.AttendanceMapper;
-import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.AttendanceNameComparator;
@@ -23,6 +21,7 @@ import java.util.List;
 
 @Singleton
 public class AttendanceServiceImpl implements AttendanceService {
+
     @Autowired
     private CsvReader csvReader;
     @Autowired
@@ -80,7 +79,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     public void importAttendances() throws PersistException {
         final List<Attendance> attendances =
             ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
-            attendanceRepository.insertMany(attendances);
+        attendanceRepository.insertMany(attendances);
     }
 
     @Override

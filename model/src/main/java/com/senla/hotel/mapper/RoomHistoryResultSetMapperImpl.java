@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMapper {
+
     @Autowired
     private RoomResultSetMapper roomResultSetMapper;
     @Autowired

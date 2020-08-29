@@ -7,8 +7,6 @@ import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.mapper.RoomHistoryMapperImpl;
-import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
@@ -19,6 +17,7 @@ import java.util.List;
 
 @Singleton
 public class RoomHistoryServiceImpl implements RoomHistoryService {
+
     @Autowired
     private CsvReader csvReader;
     @Autowired

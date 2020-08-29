@@ -23,10 +23,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Singleton
 public class SerializationUtils {
+
     @Autowired
     private RoomDao roomRepository;
     @Autowired
@@ -45,7 +45,6 @@ public class SerializationUtils {
             final ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(hotelState));
             objectOutputStream.writeObject(entitiesList);
             objectOutputStream.close();
-
         } catch (final FileNotFoundException e) {
             System.err.printf("No such file! %s%n", e);
         } catch (final IOException e) {
@@ -70,7 +69,6 @@ public class SerializationUtils {
                 }
             }
             objectInputStream.close();
-
         } catch (final FileNotFoundException e) {
             System.err.printf("File was not found with name %s%n", hotelState);
         } catch (final IOException e) {

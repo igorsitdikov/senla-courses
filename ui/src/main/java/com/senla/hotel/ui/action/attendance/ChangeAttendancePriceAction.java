@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangeAttendancePriceAction implements Action {
+
     private final AttendanceController attendanceController;
 
     public ChangeAttendancePriceAction(final AttendanceController attendanceController) {

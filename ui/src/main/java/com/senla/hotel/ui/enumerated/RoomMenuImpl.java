@@ -3,6 +3,7 @@ package com.senla.hotel.ui.enumerated;
 import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 
 public enum RoomMenuImpl implements MenuEnum {
+
     SHOW_ROOMS(1, "Show rooms"),
     ADD_ROOM(2, "Add a room"),
     CHANGE_ROOM_PRICE(3, "Change price"),

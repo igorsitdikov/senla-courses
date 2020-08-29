@@ -5,6 +5,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class CountResidentsAction implements Action {
+
     private final ResidentController residentController;
 
     public CountResidentsAction(final ResidentController residentController) {

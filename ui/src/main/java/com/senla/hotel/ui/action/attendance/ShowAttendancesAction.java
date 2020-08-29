@@ -10,6 +10,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowAttendancesAction implements Action {
+
     private final AttendanceController attendanceController;
 
     public ShowAttendancesAction(final AttendanceController attendanceController) {

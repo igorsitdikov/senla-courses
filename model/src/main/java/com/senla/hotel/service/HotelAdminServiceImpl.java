@@ -21,6 +21,7 @@ import java.time.LocalDate;
 
 @Singleton
 public class HotelAdminServiceImpl implements HotelAdminService {
+
     @Autowired
     private RoomDao roomRepository;
     @Autowired

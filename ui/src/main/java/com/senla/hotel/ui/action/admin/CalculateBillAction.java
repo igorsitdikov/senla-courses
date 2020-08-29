@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CalculateBillAction implements Action {
+
     private ResidentController residentController;
     private HotelController hotelController;
 

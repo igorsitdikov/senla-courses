@@ -5,6 +5,7 @@ import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class MenuItem {
+
     private MenuEnum menuEnum;
     private Action action;
     private Menu nextMenu;

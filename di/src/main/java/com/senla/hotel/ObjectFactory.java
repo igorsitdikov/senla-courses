@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectFactory {
+
     private final AppContext context;
     private List<ObjectConfigurator> configurators = new ArrayList<>();
 
@@ -75,7 +76,3 @@ public class ObjectFactory {
         return implClass.getDeclaredConstructor().newInstance();
     }
 }
-
-
-
-

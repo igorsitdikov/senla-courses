@@ -9,6 +9,7 @@ import com.senla.hotel.exceptions.PersistException;
 import java.util.List;
 
 public interface ResidentService {
+
     Resident findById(Long id) throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)

@@ -10,6 +10,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowRoomsSortedByStarsAction implements Action {
+
     private final RoomController roomController;
 
     public ShowRoomsSortedByStarsAction(final RoomController roomController) {

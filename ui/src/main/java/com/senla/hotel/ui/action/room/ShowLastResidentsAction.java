@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ShowLastResidentsAction implements Action {
+
     private final RoomController roomController;
 
     public ShowLastResidentsAction(final RoomController roomController) {

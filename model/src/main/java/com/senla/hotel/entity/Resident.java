@@ -5,6 +5,7 @@ import com.senla.hotel.enumerated.Gender;
 import java.util.Objects;
 
 public class Resident extends AEntity {
+
     private String firstName;
     private String lastName;
     private Gender gender;

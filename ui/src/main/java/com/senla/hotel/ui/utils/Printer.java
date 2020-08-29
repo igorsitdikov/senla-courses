@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class Printer {
+
     public static <T> void show(final List<T> entities) {
         entities.forEach(System.out::println);
     }

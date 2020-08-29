@@ -12,12 +12,17 @@ import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMap
 import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
+
     @Autowired
     private RoomHistoryResultSetMapper mapper;
 
@@ -126,7 +131,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
         final List<Double> result = new LinkedList<>();
         final String sql = getCalculateBillQuery();
         System.out.println("id " + id);
-        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(statement, id);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -151,7 +156,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     @Override
     public void addAttendanceToHistory(final Long historyId, final Long attendanceId) throws PersistException {
         final String sql = getCreateQueryAttendanceToHistory();
-        try (final PreparedStatement statement = connector.getConnection()
+        try (PreparedStatement statement = connector.getConnection()
                 .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             setVariableToStatement(statement, historyId, attendanceId);
             final int count = statement.executeUpdate();

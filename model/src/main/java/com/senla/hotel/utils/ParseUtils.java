@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ParseUtils {
+
     public static <T extends AEntity> List<T> stringToEntities(final Stream<String> stream,
                                                                final EntityMapper<T> mapper,
                                                                final Class<T> tClass) {
@@ -41,5 +42,4 @@ public class ParseUtils {
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
     }
-
 }

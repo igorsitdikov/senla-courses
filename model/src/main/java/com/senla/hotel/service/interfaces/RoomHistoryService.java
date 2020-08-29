@@ -7,6 +7,7 @@ import com.senla.hotel.exceptions.PersistException;
 import java.util.List;
 
 public interface RoomHistoryService {
+
     RoomHistory create(RoomHistory history) throws PersistException;
 
     RoomHistory findById(Long id) throws EntityNotFoundException, PersistException;

@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 @Singleton
 public final class MenuController {
+
     @Autowired
     private HotelController hotelController;
     @Autowired

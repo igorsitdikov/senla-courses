@@ -11,6 +11,7 @@ import java.util.Scanner;
 import static com.senla.hotel.ui.utils.EnumConverter.integerToGender;
 
 public class AddResidentAction implements Action {
+
     private final ResidentController residentController;
 
     public AddResidentAction(final ResidentController residentController) {

@@ -5,6 +5,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class ExportHistoryAction implements Action {
+
     private HotelController hotelController;
 
     public ExportHistoryAction(final HotelController hotelController) {

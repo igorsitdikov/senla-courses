@@ -10,6 +10,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowRoomsAction implements Action {
+
     private final RoomController roomController;
 
     public ShowRoomsAction(final RoomController roomController) {
@@ -24,6 +25,5 @@ public class ShowRoomsAction implements Action {
         } catch (final PersistException e) {
             System.err.println(e.getMessage());
         }
-
     }
 }

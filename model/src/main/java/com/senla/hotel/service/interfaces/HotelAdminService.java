@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public interface HotelAdminService {
+
     void checkIn(Long residentId, Long roomId, LocalDate checkIn, LocalDate checkOut)
             throws EntityNotFoundException, SQLException, PersistException;
 

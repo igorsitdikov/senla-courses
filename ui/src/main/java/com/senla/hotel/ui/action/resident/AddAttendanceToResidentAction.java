@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddAttendanceToResidentAction implements Action {
+
     private final AttendanceController attendanceController;
     private final ResidentController residentController;
 

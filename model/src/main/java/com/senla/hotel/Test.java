@@ -7,7 +7,11 @@ import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.enumerated.*;
+import com.senla.hotel.enumerated.Accommodation;
+import com.senla.hotel.enumerated.Gender;
+import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.utils.PrinterUtils;
@@ -152,6 +156,5 @@ public class Test {
         attendanceController.importAttendances();
         hotelController.importHistories();
     }
-
 }
 

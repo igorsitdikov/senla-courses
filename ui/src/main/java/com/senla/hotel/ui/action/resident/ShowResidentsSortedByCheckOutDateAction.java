@@ -10,6 +10,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowResidentsSortedByCheckOutDateAction implements Action {
+
     private final ResidentController residentController;
 
     public ShowResidentsSortedByCheckOutDateAction(final ResidentController residentController) {

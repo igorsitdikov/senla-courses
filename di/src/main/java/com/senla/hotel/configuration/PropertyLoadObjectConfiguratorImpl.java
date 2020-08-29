@@ -11,6 +11,7 @@ import com.senla.hotel.utils.ObjectConverter;
 import java.lang.reflect.Field;
 
 public class PropertyLoadObjectConfiguratorImpl implements ObjectConfigurator {
+
     private final PropertyLoader propertyLoader;
 
     public PropertyLoadObjectConfiguratorImpl() {

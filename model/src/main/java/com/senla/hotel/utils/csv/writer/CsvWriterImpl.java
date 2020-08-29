@@ -9,9 +9,10 @@ import java.util.List;
 
 @Singleton
 public class CsvWriterImpl implements CsvWriter {
+
     @Override
     public void write(final String path, final List<String> entities) {
-        try (final PrintWriter pw = new PrintWriter(path)) {
+        try (PrintWriter pw = new PrintWriter(path)) {
             entities.forEach(pw::println);
         } catch (final FileNotFoundException e) {
             System.err.printf("File not found %s %s%n%n", path, e);

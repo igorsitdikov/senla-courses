@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoomResultSetMapperImpl implements RoomResultSetMapper {
+
     @Override
     public Room sourceToDestination(final ResultSet source) throws SQLException {
         final Room room = new Room();

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface AttendanceService {
+
     Attendance findById(Long id) throws EntityNotFoundException, PersistException;
 
     void createAttendance(Attendance attendance) throws EntityAlreadyExistsException, PersistException;

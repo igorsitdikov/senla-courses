@@ -17,6 +17,7 @@ import java.util.List;
 
 @Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
+
     @Autowired
     private RoomResultSetMapper mapper;
 

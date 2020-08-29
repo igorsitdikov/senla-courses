@@ -1,7 +1,6 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
 
@@ -9,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ResidentResultSetMapperImpl implements ResidentResultSetMapper {
+
     @Override
     public Resident sourceToDestination(final ResultSet source) throws SQLException {
         final Resident resident = new Resident();

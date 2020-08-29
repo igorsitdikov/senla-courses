@@ -3,6 +3,7 @@ package com.senla.hotel.ui.enumerated;
 import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 
 public enum ShowResidentsMenuImpl implements MenuEnum {
+
     ALL_RESIDENTS(1, "Show all residents"),
     SORT_BY_NAME(2, "Show all residents sorted by name"),
     SORT_BY_CHECK_OUT(3, "Show all residents sorted by check out date");

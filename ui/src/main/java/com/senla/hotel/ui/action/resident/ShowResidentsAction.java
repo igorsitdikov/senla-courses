@@ -9,6 +9,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.List;
 
 public class ShowResidentsAction implements Action {
+
     private final ResidentController residentController;
 
     public ShowResidentsAction(final ResidentController residentController) {

@@ -9,6 +9,7 @@ import com.senla.hotel.ui.utils.Printer;
 import java.util.Scanner;
 
 public class ShowDetailsAction implements Action {
+
     private final RoomController roomController;
 
     public ShowDetailsAction(final RoomController roomController) {
@@ -27,6 +28,5 @@ public class ShowDetailsAction implements Action {
         } catch (final Exception e) {
             System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
         }
-
     }
 }

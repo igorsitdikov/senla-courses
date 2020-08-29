@@ -6,7 +6,8 @@ import com.senla.hotel.exceptions.PersistException;
 import java.util.List;
 
 public interface AttendanceDao extends GenericDao<Attendance, Long> {
-    List<Attendance> getAllAttendancesByHistoryId(final Long id) throws PersistException;
+
+    List<Attendance> getAllAttendancesByHistoryId(Long id) throws PersistException;
 
     void insertMany(List<Attendance> list) throws PersistException;
 }

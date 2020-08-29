@@ -3,6 +3,7 @@ package com.senla.hotel.ui.enumerated;
 import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 
 public enum HotelAdminMenuImpl implements MenuEnum {
+
     CHECK_IN(1, "Check in resident"),
     CHECK_OUT(2, "Check out resident"),
     CALCULATE_BILL(3, "Calculate resident's bill"),

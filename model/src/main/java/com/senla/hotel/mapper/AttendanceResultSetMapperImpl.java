@@ -1,13 +1,13 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Attendance;
-import com.senla.hotel.entity.Room;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AttendanceResultSetMapperImpl implements AttendanceResultSetMapper {
+
     @Override
     public Attendance sourceToDestination(final ResultSet source) throws SQLException {
         final Attendance attendance = new Attendance();

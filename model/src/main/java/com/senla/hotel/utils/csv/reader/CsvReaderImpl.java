@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 @Singleton
 public class CsvReaderImpl implements CsvReader {
+
     @Override
     public Stream<String> read(final String path) {
         try {

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ShowVacantOnDateAction implements Action {
+
     private final RoomController roomController;
 
     public ShowVacantOnDateAction(final RoomController roomController) {

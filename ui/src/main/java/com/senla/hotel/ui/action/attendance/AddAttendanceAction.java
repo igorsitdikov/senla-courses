@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddAttendanceAction implements Action {
+
     private final AttendanceController attendanceController;
 
     public AddAttendanceAction(final AttendanceController attendanceController) {

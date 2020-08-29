@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomService {
+
     List<Room> showVacantRoomsOnDate(LocalDate date) throws PersistException;
 
     Room findById(Long id) throws EntityNotFoundException, PersistException;

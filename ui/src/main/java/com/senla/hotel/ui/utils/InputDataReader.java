@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class InputDataReader {
+
     public static Integer getIntegerInput(final Scanner scanner, final String message, final Integer limit) {
         System.out.println(message);
 
@@ -80,7 +81,6 @@ public class InputDataReader {
             if (scanner.hasNextDouble()) {
                 input = scanner.nextDouble();
                 isValid = true;
-
             } else {
                 System.out.println("Wrong input. Please, input a double.");
                 scanner.nextLine();

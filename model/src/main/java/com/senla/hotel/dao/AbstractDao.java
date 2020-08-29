@@ -3,17 +3,21 @@ package com.senla.hotel.dao;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
 @Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
+
     public AbstractDao(final Connector connector) {
         this.connector = connector;
     }
@@ -43,7 +47,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         final List<T> list;
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
-        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(statement, variable);
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
@@ -60,7 +64,8 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     }
 
     @SafeVarargs
-    protected final <E> void setVariableToStatement(final PreparedStatement statement, final E... variable) throws SQLException {
+    protected final <E> void setVariableToStatement(final PreparedStatement statement, final E... variable)
+        throws SQLException {
         for (int i = 0; i < variable.length; i++) {
             if (variable[i] instanceof Long) {
                 statement.setLong(i + 1, (Long) variable[i]);
@@ -116,8 +121,8 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public void insertMany(final List<T> list) throws PersistException {
-        final String sql = getCreateQuery();
-        try (final PreparedStatement statement = connector.getConnection()
+        String sql = getCreateQuery();
+        try (PreparedStatement statement = connector.getConnection()
             .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (final T object : list) {
                 prepareStatementForInsert(statement, object);
@@ -135,14 +140,14 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             throw new PersistException("Object is already persist.");
         }
         final String sql = getCreateQuery();
-        try (final PreparedStatement statement = connector.getConnection()
-                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connector.getConnection()
+            .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForInsert(statement, object);
             final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);
             }
-            try (final ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     object.setId(generatedKeys.getLong(1));
                 } else {
@@ -159,7 +164,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     @Override
     public void update(final T object) throws PersistException {
         final String sql = getUpdateQuery();
-        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             prepareStatementForUpdate(statement, object);
             final int count = statement.executeUpdate();
             if (count != 1) {
@@ -173,7 +178,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     @Override
     public void delete(final T object) throws PersistException {
         final String sql = getDeleteQuery();
-        try (final PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(statement, object.getId());
             final int count = statement.executeUpdate();
             if (count != 1) {

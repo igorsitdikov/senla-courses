@@ -5,6 +5,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class ImportRoomAction implements Action {
+
     private RoomController roomController;
 
     public ImportRoomAction(final RoomController roomController) {

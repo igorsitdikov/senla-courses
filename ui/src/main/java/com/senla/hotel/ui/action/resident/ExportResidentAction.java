@@ -5,6 +5,7 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 
 public class ExportResidentAction implements Action {
+
     private ResidentController residentController;
 
     public ExportResidentAction(final ResidentController residentController) {

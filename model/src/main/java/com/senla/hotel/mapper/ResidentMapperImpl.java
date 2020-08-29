@@ -6,6 +6,7 @@ import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
 
 public class ResidentMapperImpl implements ResidentMapper {
+
     @Override
     public Resident sourceToDestination(final String source) throws EntityIsEmptyException {
         if (source.isEmpty()) {

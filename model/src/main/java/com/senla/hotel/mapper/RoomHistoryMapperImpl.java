@@ -14,7 +14,6 @@ import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
 import com.senla.hotel.service.RoomServiceImpl;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
-import com.senla.hotel.service.interfaces.RoomService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +22,7 @@ import java.util.List;
 
 @Singleton
 public class RoomHistoryMapperImpl implements RoomHistoryMapper {
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Autowired
     private RoomServiceImpl roomService;
@@ -93,7 +93,7 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         sb.append(destination.getStatus());
         sb.append(SEPARATOR);
         destination.getAttendances()
-                .forEach(attendance -> sb.append(attendance.getId()).append(SEPARATOR));
+            .forEach(attendance -> sb.append(attendance.getId()).append(SEPARATOR));
 
         return sb.toString();
     }

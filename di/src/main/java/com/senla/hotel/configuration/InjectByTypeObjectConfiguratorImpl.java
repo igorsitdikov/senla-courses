@@ -7,6 +7,7 @@ import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
 import java.lang.reflect.Field;
 
 public class InjectByTypeObjectConfiguratorImpl implements ObjectConfigurator {
+
     @Override
     public void configure(final Object t, final AppContext context) throws IllegalAccessException {
         for (final Field field : t.getClass().getDeclaredFields()) {

@@ -7,9 +7,10 @@ import com.senla.hotel.exceptions.PersistException;
 import java.math.BigDecimal;
 
 public interface RoomHistoryDao extends GenericDao<RoomHistory, Long> {
-    RoomHistory getByResidentAndCheckedInStatus(final Long id) throws PersistException, EntityNotFoundException;
+
+    RoomHistory getByResidentAndCheckedInStatus(Long id) throws PersistException, EntityNotFoundException;
 
     BigDecimal calculateBill(Long id) throws PersistException;
 
-    void addAttendanceToHistory(final Long historyId, final Long attendanceId) throws PersistException;
+    void addAttendanceToHistory(Long historyId, Long attendanceId) throws PersistException;
 }

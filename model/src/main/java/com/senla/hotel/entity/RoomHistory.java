@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RoomHistory extends AEntity {
+
     private Room room;
     private Resident resident;
     private List<Attendance> attendances = new LinkedList<>();

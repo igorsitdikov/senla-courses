@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 @Singleton
 public class Connector {
+
     @PropertyLoad
     private String url;
     @PropertyLoad
@@ -37,6 +38,4 @@ public class Connector {
             System.err.println("Failed to connect to database!");
         }
     }
-
-
 }

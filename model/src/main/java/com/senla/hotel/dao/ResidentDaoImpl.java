@@ -18,6 +18,7 @@ import java.util.List;
 
 @Singleton
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
+
     @Autowired
     private ResidentResultSetMapper mapper;
     @Autowired
