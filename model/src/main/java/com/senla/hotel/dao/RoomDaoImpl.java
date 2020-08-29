@@ -9,7 +9,6 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -27,7 +26,13 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM room ";
+        return "SELECT  room.id AS rm_id,\n" +
+                "       room.number AS rm_number,\n" +
+                "       room.price AS rm_price,\n" +
+                "       room.status AS rm_status,\n" +
+                "       room.stars AS rm_stars,\n" +
+                "       room.accommodation AS rm_accommodation " +
+                "FROM room ";
     }
 
     @Override
@@ -41,9 +46,19 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     }
 
     public String getVacantOnDate() {
-        return "SELECT DISTINCT room.id, room.number, room.price, room.status, room.stars, room.accommodation, history.room_id FROM history\n" +
-                "    RIGHT JOIN room on history.room_id = room.id\n" +
-                "WHERE history.status = 'CHECKED_IN' OR room.status = 'VACANT' OR history.check_out < ? ORDER BY number;\n";
+        return "SELECT DISTINCT " +
+                "       room.id AS rm_id,\n" +
+                "       room.number AS rm_number,\n" +
+                "       room.price AS rm_price,\n" +
+                "       room.status AS rm_status,\n" +
+                "       room.stars AS rm_stars,\n" +
+                "       room.accommodation AS rm_accommodation," +
+                "FROM history\n" +
+                "   RIGHT JOIN room ON history.room_id = room.id \n" +
+                "WHERE history.status = 'CHECKED_IN' " +
+                "   OR room.status = 'VACANT' " +
+                "   OR history.check_out < ? " +
+                "ORDER BY room.number;\n";
     }
 
     @Override

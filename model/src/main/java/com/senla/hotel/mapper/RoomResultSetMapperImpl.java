@@ -13,12 +13,15 @@ public class RoomResultSetMapperImpl implements RoomResultSetMapper {
     @Override
     public Room sourceToDestination(final ResultSet source) throws SQLException {
         final Room room = new Room();
-        room.setId(source.getLong("room.id"));
-        room.setNumber(source.getInt("room.number"));
-        room.setPrice(source.getBigDecimal("room.price"));
-        room.setStatus(RoomStatus.valueOf(source.getString("room.status")));
-        room.setStars(Stars.valueOf(source.getString("room.stars")));
-        room.setAccommodation(Accommodation.valueOf(source.getString("room.accommodation")));
+        room.setId(source.getLong("rm_id"));
+        if (source.wasNull()) {
+            return new Room();
+        }
+        room.setNumber(source.getInt("rm_number"));
+        room.setPrice(source.getBigDecimal("rm_price"));
+        room.setStatus(RoomStatus.valueOf(source.getString("rm_status")));
+        room.setStars(Stars.valueOf(source.getString("rm_stars")));
+        room.setAccommodation(Accommodation.valueOf(source.getString("rm_accommodation")));
         return room;
     }
 }

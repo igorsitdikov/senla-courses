@@ -8,6 +8,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
@@ -20,6 +21,8 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     @Autowired
     private ResidentResultSetMapper mapper;
     @Autowired
+    private RoomHistoryResultSetMapper historyMapper;
+    @Autowired
     private RoomHistoryDao roomHistoryDao;
 
     public ResidentDaoImpl(final Connector connector) {
@@ -28,7 +31,102 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
 
     @Override
     public String getSelectQuery() {
-        return "SELECT * FROM resident ";
+       return getSelectQueryWithResidentAndRoom("");
+    }
+
+    private String getSelectQueryWithResidentAndRoom(String parameter) {
+        return String.format("SELECT  rt_id, " +
+                "       rt_first_name,\n" +
+                "       rt_last_name,\n" +
+                "       rt_gender,\n" +
+                "       rt_vip,\n" +
+                "       rt_phone,\n" +
+                "       h_id,\n" +
+                "       h_room_id,\n" +
+                "       h_resident_id,\n" +
+                "       h_check_in,\n" +
+                "       h_check_out,\n" +
+                "       h_status,\n" +
+                "       room.id AS rm_id,\n" +
+                "       room.number AS rm_number,\n" +
+                "       room.price AS rm_price,\n" +
+                "       room.status AS rm_status,\n" +
+                "       room.stars AS rm_stars,\n" +
+                "       room.accommodation AS rm_accommodation\n" +
+                "FROM (\n" +
+                "         SELECT DISTINCT resident.id         AS rt_id,\n" +
+                "                         resident.first_name AS rt_first_name,\n" +
+                "                         resident.last_name  AS rt_last_name,\n" +
+                "                         resident.gender     AS rt_gender,\n" +
+                "                         resident.vip        AS rt_vip,\n" +
+                "                         resident.phone      AS rt_phone,\n" +
+                "                         history.id          AS h_id,\n" +
+                "                         history.room_id     AS h_room_id,\n" +
+                "                         history.resident_id AS h_resident_id,\n" +
+                "                         history.check_in    AS h_check_in,\n" +
+                "                         history.check_out   AS h_check_out,\n" +
+                "                         history.status      AS h_status\n" +
+                "         FROM history\n" +
+                "                  RIGHT JOIN resident ON resident.id = history.resident_id\n" +
+                "         UNION\n" +
+                "         SELECT DISTINCT resident.id         AS rt_id,\n" +
+                "                         resident.first_name AS rt_first_name,\n" +
+                "                         resident.last_name  AS rt_last_name,\n" +
+                "                         resident.gender     AS rt_gender,\n" +
+                "                         resident.vip        AS rt_vip,\n" +
+                "                         resident.phone      AS rt_phone,\n" +
+                "                         history.id          AS h_id,\n" +
+                "                         history.room_id     AS h_room_id,\n" +
+                "                         history.resident_id AS h_resident_id,\n" +
+                "                         history.check_in    AS h_check_in,\n" +
+                "                         history.check_out   AS h_check_out,\n" +
+                "                         history.status      AS h_status\n" +
+                "         FROM history\n" +
+                "                  LEFT JOIN resident ON resident.id = history.resident_id\n" +
+                "     ) AS a\n" +
+                "         LEFT JOIN room ON a.h_room_id = room.id\n" +
+                "WHERE a.rt_first_name IS NOT NULL\n" +
+                "  AND (h_id IN (SELECT MAX(history.id) FROM history GROUP BY history.resident_id) OR h_id IS NULL) %s\n" +
+                "GROUP BY a.rt_first_name\n" +
+                "UNION\n" +
+                "SELECT *\n" +
+                "FROM (SELECT DISTINCT resident.id         AS rt_id,\n" +
+                "                      resident.first_name AS rt_first_name,\n" +
+                "                      resident.last_name  AS rt_last_name,\n" +
+                "                      resident.gender     AS rt_gender,\n" +
+                "                      resident.vip        AS rt_vip,\n" +
+                "                      resident.phone      AS rt_phone,\n" +
+                "                      history.id          AS h_id,\n" +
+                "                      history.room_id     AS h_room_id,\n" +
+                "                      history.resident_id AS h_resident_id,\n" +
+                "                      history.check_in    AS h_check_in,\n" +
+                "                      history.check_out   AS h_check_out,\n" +
+                "                      history.status      AS h_status\n" +
+                "      FROM history\n" +
+                "               RIGHT JOIN resident ON resident.id = history.resident_id\n" +
+                "      UNION\n" +
+                "      SELECT DISTINCT resident.id         AS rt_id,\n" +
+                "                      resident.first_name AS rt_first_name,\n" +
+                "                      resident.last_name  AS rt_last_name,\n" +
+                "                      resident.gender     AS rt_gender,\n" +
+                "                      resident.vip        AS rt_vip,\n" +
+                "                      resident.phone      AS rt_phone,\n" +
+                "                      history.id          AS h_id,\n" +
+                "                      history.room_id     AS h_room_id,\n" +
+                "                      history.resident_id AS h_resident_id,\n" +
+                "                      history.check_in    AS h_check_in,\n" +
+                "                      history.check_out   AS h_check_out,\n" +
+                "                      history.status      AS h_status\n" +
+                "      FROM history\n" +
+                "               LEFT JOIN resident ON resident.id = history.resident_id\n" +
+                "     ) AS a\n" +
+                "         RIGHT JOIN room ON a.h_room_id = room.id\n" +
+                "WHERE a.rt_first_name IS NOT NULL\n" +
+                "  AND ( h_id IN (SELECT MAX(history.id) FROM history GROUP BY history.resident_id) OR h_id IS NULL) %s", parameter, parameter);
+    }
+
+    public String getSelectQueryById(String parameter) {
+        return getSelectQueryWithResidentAndRoom(parameter);
     }
 
     @Override
@@ -44,12 +142,21 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     public String getLastResidentsByRoomIdQuery() {
         return "SELECT * FROM history\n" +
                 "    JOIN resident on resident.id = history.resident_id\n" +
-                "WHERE room_id = ? ORDER BY history.check_out DESC LIMIT ?;";
+                "WHERE room_id = ? " +
+                "ORDER BY history.check_out " +
+                "DESC " +
+                "LIMIT ?;";
     }
 
     @Override
     public String getDeleteQuery() {
         return "DELETE FROM resident WHERE id = ?";
+    }
+
+    @Override
+    public Resident findById(final Long id) throws PersistException {
+        String sql = getSelectQueryById("AND rt_id = ?");
+        return getAllBySqlQuery(sql, id, id).iterator().next();
     }
 
     @Override
@@ -64,7 +171,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
         try {
             while (rs.next()) {
                 final Resident resident = mapper.sourceToDestination(rs);
-                final RoomHistory history = roomHistoryDao.getByResidentAndCheckedInStatus(resident.getId());
+                final RoomHistory history = historyMapper.sourceToDestination(rs);
                 resident.setHistory(history);
                 result.add(resident);
             }

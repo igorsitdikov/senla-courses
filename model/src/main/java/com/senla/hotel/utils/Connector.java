@@ -34,7 +34,7 @@ public class Connector {
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (final SQLException sqlEx) {
-            sqlEx.printStackTrace();
+            System.err.println("Failed to connect to database!");
         }
     }
 
