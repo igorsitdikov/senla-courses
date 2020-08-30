@@ -13,21 +13,22 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddRoomAction implements Action {
-    private RoomController roomController;
 
-    public AddRoomAction(RoomController roomController) {
+    private final RoomController roomController;
+
+    public AddRoomAction(final RoomController roomController) {
         this.roomController = roomController;
     }
 
     @Override
     public void execute() {
 
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
-            Integer roomNumber =
+            final Integer roomNumber =
                 InputDataReader
                     .getIntegerInput(scanner, "Input the Room number...", Integer.MAX_VALUE);
-            Stars stars =
+            final Stars stars =
                 EnumConverter.integerToStar(
                     InputDataReader
                         .getIntegerInput(scanner, "Input the Room rate from 1 to 9, where" +
@@ -40,7 +41,7 @@ public class AddRoomAction implements Action {
                                                   "7 - STANDARD, " +
                                                   "8 - APARTMENT, " +
                                                   "9 - HONEYMOON ROOM...", Stars.values().length));
-            Accommodation accommodation =
+            final Accommodation accommodation =
                 EnumConverter.integerToAccommodation(
                     InputDataReader
                         .getIntegerInput(scanner, "Input the Room accommodation, where" +
@@ -55,9 +56,9 @@ public class AddRoomAction implements Action {
                                                   "9 - TRIPLE RESIDENTS WITH 1 CHILDREN, " +
                                                   "10 - TRIPLE RESIDENTS WITH 2 CHILDREN...",
                                          Accommodation.values().length));
-            BigDecimal dailyPrice =
+            final BigDecimal dailyPrice =
                 BigDecimal.valueOf(InputDataReader.getDoubleInput(scanner, "Input the Room daily price..."));
-            RoomStatus status = EnumConverter.integerToStatus(
+            final RoomStatus status = EnumConverter.integerToStatus(
                 InputDataReader
                     .getIntegerInput(scanner,
                                      "Input the Room status, where\n " +
@@ -66,9 +67,8 @@ public class AddRoomAction implements Action {
                                      "\t3 = REPAIR...",
                                      RoomStatus.values().length));
             roomController.addRoom(new Room(roomNumber, stars, accommodation, dailyPrice, status));
-
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to add a Room! Input valid parameters! %s", e));
+        } catch (final Exception e) {
+            System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
         }
     }
 }

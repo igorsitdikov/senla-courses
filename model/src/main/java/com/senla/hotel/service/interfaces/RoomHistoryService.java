@@ -2,17 +2,19 @@ package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 
 import java.util.List;
 
 public interface RoomHistoryService {
-    RoomHistory create(RoomHistory history);
 
-    RoomHistory findById(Long id) throws EntityNotFoundException;
+    RoomHistory create(RoomHistory history) throws PersistException;
 
-    void importHistories();
+    RoomHistory findById(Long id) throws EntityNotFoundException, PersistException;
 
-    void exportHistories();
+    void importHistories() throws PersistException;
 
-    List<RoomHistory> showHistories();
+    void exportHistories() throws PersistException;
+
+    List<RoomHistory> showHistories() throws PersistException;
 }

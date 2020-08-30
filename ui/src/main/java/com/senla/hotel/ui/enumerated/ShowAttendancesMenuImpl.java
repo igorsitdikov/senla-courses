@@ -3,6 +3,7 @@ package com.senla.hotel.ui.enumerated;
 import com.senla.hotel.ui.enumerated.interfaces.MenuEnum;
 
 public enum ShowAttendancesMenuImpl implements MenuEnum {
+
     ALL_ATTENDANCES(1, "Show all attendances"),
     SORT_ATTENDANCES_BY_NAME(2, "Show attendances sorted by name"),
     SORT_ATTENDANCES_BY_PRICE(3, "Show attendances sorted by price");

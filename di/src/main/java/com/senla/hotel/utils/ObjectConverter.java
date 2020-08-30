@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ObjectConverter {
+
     private static Map<String, Method> converters = new HashMap<>();
 
     static {

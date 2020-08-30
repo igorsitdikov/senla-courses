@@ -1,13 +1,14 @@
 package com.senla.hotel.configuration;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.Scanner;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.configuration.interfaces.Config;
 
 import java.util.Map;
 import java.util.Set;
 
 public class ConfigImpl implements Config {
+
     private final Scanner scanner;
     private Map<Class<?>, Class<?>> ifc2ImplClass;
 

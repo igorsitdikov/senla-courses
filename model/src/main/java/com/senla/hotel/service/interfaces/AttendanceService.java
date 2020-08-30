@@ -1,39 +1,27 @@
 package com.senla.hotel.service.interfaces;
 
-import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 
 public interface AttendanceService {
 
-    Attendance findByName(String name);
+    Attendance findById(Long id) throws EntityNotFoundException, PersistException;
 
-    List<Attendance> sortAttendances(List<Attendance> attendances, Comparator<Attendance> comparator);
+    void createAttendance(Attendance attendance) throws EntityAlreadyExistsException, PersistException;
 
-    Attendance findById(Long id) throws EntityNotFoundException;
+    List<Attendance> showAttendances(SortField sortField) throws PersistException;
 
-    void createAttendance(Attendance attendance) throws EntityAlreadyExistsException;
+    void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
 
-    List<Attendance> showAttendances();
+    void delete(Long id) throws EntityNotFoundException, PersistException;
 
-    List<Attendance> showAttendancesSortedByName();
+    void importAttendances() throws PersistException;
 
-    List<Attendance> showAttendancesSortedByPrice();
-
-    List<AEntity> add(List<Attendance> attendances, AEntity entity);
-
-    void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException;
-
-    void delete(Long id) throws EntityNotFoundException;
-
-    void changeAttendancePrice(String name, BigDecimal price);
-
-    void importAttendances();
-
-    void exportAttendances();
+    void exportAttendances() throws PersistException;
 }

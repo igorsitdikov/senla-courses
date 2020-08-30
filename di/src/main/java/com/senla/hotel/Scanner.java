@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Scanner {
+
     private static final String CLASS_EXTENSION = ".class";
     private static final String CLASS_POSTFIX = "Impl";
     private static final String DOT = ".";
@@ -95,7 +96,7 @@ public class Scanner {
     private Set<Class<?>> findClasses(final File directory, final String packageName) {
         Set<Class<?>> classes = new HashSet<>();
         final Path start = Paths.get(directory.getPath());
-        try (final Stream<Path> stream = Files.walk(start, Integer.MAX_VALUE)) {
+        try (Stream<Path> stream = Files.walk(start, Integer.MAX_VALUE)) {
             classes = stream
                 .map(String::valueOf)
                 .filter(path -> Files.isRegularFile(Paths.get(path)) &&

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppContext {
+
     private ObjectFactory factory;
     private Map<Class<?>, Object> cache = new HashMap<>();
     private Config config;
@@ -43,5 +44,4 @@ public class AppContext {
     public void setFactory(final ObjectFactory factory) {
         this.factory = factory;
     }
-
 }

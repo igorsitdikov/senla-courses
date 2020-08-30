@@ -8,23 +8,24 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangeAttendancePriceAction implements Action {
-    private AttendanceController attendanceController;
 
-    public ChangeAttendancePriceAction(AttendanceController attendanceController) {
+    private final AttendanceController attendanceController;
+
+    public ChangeAttendancePriceAction(final AttendanceController attendanceController) {
         this.attendanceController = attendanceController;
     }
 
     @Override
     public void execute() {
 
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
-            String name = InputDataReader.getStringInput(scanner);
-            BigDecimal dailyPrice = BigDecimal.valueOf(InputDataReader
+            final Long id = InputDataReader.getLongInput(scanner);
+            final BigDecimal dailyPrice = BigDecimal.valueOf(InputDataReader
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
-            attendanceController.changePrice(name, dailyPrice);
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to change price a Attendance! Input valid parameters! %s", e));
+            attendanceController.changePrice(id, dailyPrice);
+        } catch (final Exception e) {
+            System.err.printf("Failed to change price a Attendance! Input valid parameters! %s%n%n", e);
         }
     }
 }

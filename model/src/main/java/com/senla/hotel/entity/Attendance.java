@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Attendance extends AEntity {
+
     private BigDecimal price;
     private String name;
 

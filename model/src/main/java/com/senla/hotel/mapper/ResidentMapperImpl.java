@@ -3,9 +3,10 @@ package com.senla.hotel.mapper;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
+import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
 
-public class ResidentMapperImpl implements EntityMapper<Resident> {
+public class ResidentMapperImpl implements ResidentMapper {
+
     @Override
     public Resident sourceToDestination(final String source) throws EntityIsEmptyException {
         if (source.isEmpty()) {

@@ -9,13 +9,52 @@ import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.ui.action.admin.CalculateBillAction;
 import com.senla.hotel.ui.action.admin.CheckInAction;
 import com.senla.hotel.ui.action.admin.CheckOutAction;
-import com.senla.hotel.ui.action.attendance.*;
-import com.senla.hotel.ui.action.resident.*;
-import com.senla.hotel.ui.action.room.*;
-import com.senla.hotel.ui.enumerated.*;
+import com.senla.hotel.ui.action.admin.ExportHistoryAction;
+import com.senla.hotel.ui.action.admin.ImportHistoryAction;
+import com.senla.hotel.ui.action.attendance.AddAttendanceAction;
+import com.senla.hotel.ui.action.attendance.ChangeAttendancePriceAction;
+import com.senla.hotel.ui.action.attendance.ExportAttendanceAction;
+import com.senla.hotel.ui.action.attendance.ImportAttendanceAction;
+import com.senla.hotel.ui.action.attendance.ShowAttendancesAction;
+import com.senla.hotel.ui.action.attendance.ShowAttendancesSortedByNameAction;
+import com.senla.hotel.ui.action.attendance.ShowAttendancesSortedByPriceAction;
+import com.senla.hotel.ui.action.resident.AddAttendanceToResidentAction;
+import com.senla.hotel.ui.action.resident.AddResidentAction;
+import com.senla.hotel.ui.action.resident.CountResidentsAction;
+import com.senla.hotel.ui.action.resident.ExportResidentAction;
+import com.senla.hotel.ui.action.resident.ImportResidentAction;
+import com.senla.hotel.ui.action.resident.ShowResidentsAction;
+import com.senla.hotel.ui.action.resident.ShowResidentsSortedByCheckOutDateAction;
+import com.senla.hotel.ui.action.resident.ShowResidentsSortedByNameAction;
+import com.senla.hotel.ui.action.room.AddRoomAction;
+import com.senla.hotel.ui.action.room.ChangePriceAction;
+import com.senla.hotel.ui.action.room.ChangeStatusAction;
+import com.senla.hotel.ui.action.room.CountVacantAction;
+import com.senla.hotel.ui.action.room.ExportRoomAction;
+import com.senla.hotel.ui.action.room.ImportRoomAction;
+import com.senla.hotel.ui.action.room.ShowDetailsAction;
+import com.senla.hotel.ui.action.room.ShowLastResidentsAction;
+import com.senla.hotel.ui.action.room.ShowRoomsAction;
+import com.senla.hotel.ui.action.room.ShowRoomsSortedByAccommodationAction;
+import com.senla.hotel.ui.action.room.ShowRoomsSortedByPriceAction;
+import com.senla.hotel.ui.action.room.ShowRoomsSortedByStarsAction;
+import com.senla.hotel.ui.action.room.ShowVacantAction;
+import com.senla.hotel.ui.action.room.ShowVacantOnDateAction;
+import com.senla.hotel.ui.action.room.ShowVacantSortedByAccommodationAction;
+import com.senla.hotel.ui.action.room.ShowVacantSortedByPriceAction;
+import com.senla.hotel.ui.action.room.ShowVacantSortedByStarsAction;
+import com.senla.hotel.ui.enumerated.AttendanceMenuImpl;
+import com.senla.hotel.ui.enumerated.HotelAdminMenuImpl;
+import com.senla.hotel.ui.enumerated.MainMenuImpl;
+import com.senla.hotel.ui.enumerated.ResidentMenuImpl;
+import com.senla.hotel.ui.enumerated.RoomMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowAttendancesMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowResidentsMenuImpl;
+import com.senla.hotel.ui.enumerated.ShowRoomsMenuImpl;
 
 @Singleton
 public class Builder {
+
     private static final String MAIN_MENU = "Main menu";
     private static final String HOTEL_ADMIN_MENU = "Hotel admin menu";
     private static final String ROOM_MENU = "Room menu";
@@ -59,6 +98,10 @@ public class Builder {
                 new AddAttendanceAction(attendanceController)));
         menu.addMenuItem(new MenuItem(AttendanceMenuImpl.CHANGE_ATTENDANCE_PRICE, menu,
                 new ChangeAttendancePriceAction(attendanceController)));
+        menu.addMenuItem(new MenuItem(AttendanceMenuImpl.EXPORT_ATTENDANCES_TO_CSV, menu,
+                new ExportAttendanceAction(attendanceController)));
+        menu.addMenuItem(new MenuItem(AttendanceMenuImpl.IMPORT_ATTENDANCES_FROM_CSV, menu,
+                new ImportAttendanceAction(attendanceController)));
         menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
@@ -82,6 +125,10 @@ public class Builder {
                 new CountResidentsAction(residentController)));
         menu.addMenuItem(new MenuItem(ResidentMenuImpl.ATTENDANCE_TO_RESIDENT, menu,
                 new AddAttendanceToResidentAction(attendanceController, residentController)));
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.EXPORT_RESIDENTS_TO_CSV, menu,
+                new ExportResidentAction(residentController)));
+        menu.addMenuItem(new MenuItem(ResidentMenuImpl.IMPORT_RESIDENTS_FROM_CSV, menu,
+                new ImportResidentAction(residentController)));
         menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
@@ -102,6 +149,10 @@ public class Builder {
                 new CheckOutAction(residentController, hotelController)));
         menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.CALCULATE_BILL, menu,
                 new CalculateBillAction(residentController, hotelController)));
+        menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.EXPORT_HISTORIES_TO_CSV, menu,
+                new ExportHistoryAction(hotelController)));
+        menu.addMenuItem(new MenuItem(HotelAdminMenuImpl.IMPORT_HISTORIES_FROM_CSV, menu,
+                new ImportHistoryAction(hotelController)));
         menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 
@@ -119,6 +170,12 @@ public class Builder {
                 new CountVacantAction(roomController)));
         menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_DETAILS, menu,
                 new ShowDetailsAction(roomController)));
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.SHOW_LAST_RESIDENTS, menu,
+                new ShowLastResidentsAction(roomController)));
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.EXPORT_ROOMS_TO_CSV, menu,
+                new ExportRoomAction(roomController)));
+        menu.addMenuItem(new MenuItem(RoomMenuImpl.IMPORT_ROOMS_FROM_CSV, menu,
+                new ImportRoomAction(roomController)));
         menu.addMenuItem(new MenuItem(MainMenuImpl.TO_PREVIOUS_MENU, previous));
     }
 

@@ -6,6 +6,7 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 
 public class EnumConverter {
+
     public static RoomStatus integerToStatus(final Integer input) {
         RoomStatus roomStatus = null;
         switch (input) {

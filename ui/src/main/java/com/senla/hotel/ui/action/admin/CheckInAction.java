@@ -5,6 +5,7 @@ import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
@@ -14,11 +15,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CheckInAction implements Action {
-    private ResidentController residentController;
-    private HotelController hotelController;
-    private RoomController roomController;
 
-    public CheckInAction(ResidentController residentController, HotelController hotelController, RoomController roomController) {
+    private final ResidentController residentController;
+    private final HotelController hotelController;
+    private final RoomController roomController;
+
+    public CheckInAction(final ResidentController residentController, final HotelController hotelController, final RoomController roomController) {
         this.residentController = residentController;
         this.hotelController = hotelController;
         this.roomController = roomController;
@@ -27,24 +29,24 @@ public class CheckInAction implements Action {
     @Override
     public void execute() {
 
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Room> rooms = roomController.showAllRooms();
+            final List<Room> rooms = roomController.showAllRooms(SortField.DEFAULT);
             Printer.show(rooms, "room");
-            Integer roomId = InputDataReader
-                    .getIntegerInput(scanner, "Input Room id...", rooms.size() - 1);
+            final Integer roomId = InputDataReader
+                    .getIntegerInput(scanner, "Input Room id...", rooms.size());
 
-            final List<Resident> residents = residentController.showResidents();
+            final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents, "resident");
-            Integer residentId = InputDataReader
-                    .getIntegerInput(scanner, "Input Resident id...", residents.size() - 1);
-            LocalDate checkInDate = InputDataReader.getLocalDateInput(scanner, "Input check-in date...");
-            LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
+            final Integer residentId = InputDataReader
+                    .getIntegerInput(scanner, "Input Resident id...", residents.size());
+            final LocalDate checkInDate = InputDataReader.getLocalDateInput(scanner, "Input check-in date...");
+            final LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
 
             hotelController
                     .checkIn(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate);
-        } catch (Exception e) {
-            System.err.println(String.format("Failed to check-in! Input valid parameters! %s", e));
+        } catch (final Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 }

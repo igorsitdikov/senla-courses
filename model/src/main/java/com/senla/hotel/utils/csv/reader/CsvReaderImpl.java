@@ -10,12 +10,13 @@ import java.util.stream.Stream;
 
 @Singleton
 public class CsvReaderImpl implements CsvReader {
+
     @Override
     public Stream<String> read(final String path) {
         try {
             return Files.lines(Paths.get(path));
         } catch (final IOException e) {
-            System.err.println(String.format("File not found %s %s%n", path, e));
+            System.err.printf("File not found %s %s%n%n", path, e);
         }
         return null;
     }

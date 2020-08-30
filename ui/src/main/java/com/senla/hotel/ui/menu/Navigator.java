@@ -6,6 +6,7 @@ import java.util.List;
 
 @Singleton
 public class Navigator {
+
     private Menu currentMenu;
 
     public Menu getCurrentMenu() {

@@ -2,38 +2,28 @@ package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
+import com.senla.hotel.exceptions.PersistException;
 
-import java.util.Comparator;
 import java.util.List;
 
 public interface ResidentService {
 
-    List<Resident> sortResidents(List<Resident> residents, Comparator<Resident> comparator);
-
-    Resident findById(Long id) throws EntityNotFoundException;
-
-    void addHistoryToResident(Long id, RoomHistory roomHistory) throws EntityNotFoundException;
-
-    void addAttendanceToResident(Long id, Attendance attendance) throws EntityNotFoundException;
+    Resident findById(Long id) throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Resident resident, Attendance attendance)
-            throws EntityNotFoundException;
+            throws EntityNotFoundException, PersistException;
 
-    void addAttendanceToResident(Long residentId, Long attendanceId) throws EntityNotFoundException;
+    void addAttendanceToResident(Long residentId, Long attendanceId) throws EntityNotFoundException, PersistException;
 
-    void createResident(Resident resident);
+    void createResident(Resident resident) throws PersistException;
 
-    List<Resident> showResidents();
+    List<Resident> showResidents(SortField sortField) throws PersistException;
 
-    List<Resident> showResidentsSortedByName();
+    void importResidents() throws PersistException;
 
-    List<Resident> showResidentsSortedByCheckOutDate();
+    void exportResidents() throws PersistException;
 
-    void importResidents();
-
-    void exportResidents();
-
-    int showCountResidents();
+    int showCountResidents() throws PersistException;
 }

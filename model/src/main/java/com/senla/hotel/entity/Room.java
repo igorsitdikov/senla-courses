@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Room extends AEntity {
+
     private Integer number;
     private Stars stars;
     private Accommodation accommodation;

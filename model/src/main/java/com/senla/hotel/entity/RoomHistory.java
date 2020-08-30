@@ -1,32 +1,37 @@
 package com.senla.hotel.entity;
 
+import com.senla.hotel.enumerated.HistoryStatus;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class RoomHistory extends AEntity {
+
     private Room room;
     private Resident resident;
     private List<Attendance> attendances = new LinkedList<>();
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private HistoryStatus status;
 
     public RoomHistory() {
     }
 
-    public RoomHistory(final Room room, final Resident resident, final LocalDate checkIn, final LocalDate checkOut) {
+    public RoomHistory(Room room, Resident resident, LocalDate checkIn, LocalDate checkOut, HistoryStatus status) {
         this.room = room;
         this.resident = resident;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.status = status;
     }
 
     public Room getRoom() {
         return room;
     }
 
-    public void setRoom(final Room room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 
@@ -34,7 +39,7 @@ public class RoomHistory extends AEntity {
         return resident;
     }
 
-    public void setResident(final Resident resident) {
+    public void setResident(Resident resident) {
         this.resident = resident;
     }
 
@@ -42,7 +47,7 @@ public class RoomHistory extends AEntity {
         return attendances;
     }
 
-    public void setAttendances(final List<Attendance> attendances) {
+    public void setAttendances(List<Attendance> attendances) {
         this.attendances = attendances;
     }
 
@@ -50,7 +55,7 @@ public class RoomHistory extends AEntity {
         return checkIn;
     }
 
-    public void setCheckIn(final LocalDate checkIn) {
+    public void setCheckIn(LocalDate checkIn) {
         this.checkIn = checkIn;
     }
 
@@ -58,8 +63,16 @@ public class RoomHistory extends AEntity {
         return checkOut;
     }
 
-    public void setCheckOut(final LocalDate checkOut) {
+    public void setCheckOut(LocalDate checkOut) {
         this.checkOut = checkOut;
+    }
+
+    public HistoryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(HistoryStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -72,10 +85,10 @@ public class RoomHistory extends AEntity {
         }
         final RoomHistory that = (RoomHistory) o;
         return Objects.equals(room, that.room) &&
-               Objects.equals(resident, that.resident) &&
-               Objects.equals(attendances, that.attendances) &&
-               Objects.equals(checkIn, that.checkIn) &&
-               Objects.equals(checkOut, that.checkOut);
+                Objects.equals(resident, that.resident) &&
+                Objects.equals(attendances, that.attendances) &&
+                Objects.equals(checkIn, that.checkIn) &&
+                Objects.equals(checkOut, that.checkOut);
     }
 
     @Override
@@ -86,14 +99,14 @@ public class RoomHistory extends AEntity {
     @Override
     public String toString() {
         return String.format("Room's history №%d: %n" +
-                             "\tRoom № %d.%n" +
-                             "\t%s. %n" +
-                             "\tCheck-in %s. %n" +
-                             "\tCheck-out %s.",
-                             id,
-                             room.getNumber(),
-                             resident.toString(),
-                             checkIn,
-                             checkOut);
+                        "\tRoom № %d.%n" +
+                        "\t%s. %n" +
+                        "\tCheck-in %s. %n" +
+                        "\tCheck-out %s.",
+                id,
+                room.getNumber(),
+                resident.toString(),
+                checkIn,
+                checkOut);
     }
 }

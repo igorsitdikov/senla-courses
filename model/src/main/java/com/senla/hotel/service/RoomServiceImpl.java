@@ -3,15 +3,16 @@ package com.senla.hotel.service;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.enumerated.Type;
+import com.senla.hotel.dao.interfaces.ResidentDao;
+import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.mapper.RoomMapperImpl;
-import com.senla.hotel.mapper.interfaces.EntityMapper;
-import com.senla.hotel.repository.interfaces.RoomRepository;
+import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
@@ -24,60 +25,34 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
 public class RoomServiceImpl implements RoomService {
+
     @Autowired
     private CsvReader csvReader;
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private RoomRepository roomRepository;
+    private RoomDao roomDao;
+    @Autowired
+    private ResidentDao residentDao;
+    @Autowired
+    private RoomMapper roomMapper;
     @PropertyLoad(propertyName = "rooms")
     private String property;
     @PropertyLoad(type = Type.INTEGER)
     private Integer amountHistories;
 
     @Override
-    public void addHistoryToRoom(final Long id, final RoomHistory history) throws EntityNotFoundException {
-        final Room room = findById(id);
-        final LinkedList<RoomHistory> histories = new LinkedList<>(room.getHistories());
-        if (histories.size() == amountHistories) {
-            histories.removeFirst();
-        }
-        room.setHistories(histories);
-        roomRepository.addHistory(room, history);
+    public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
+        return roomDao.getVacantOnDate(date);
     }
 
     @Override
-    public void updateCheckOutHistory(final Long id, final RoomHistory history, final LocalDate checkOut)
-        throws EntityNotFoundException {
-        final Room room = findById(id);
-        final List<RoomHistory> histories = room.getHistories();
-        for (final RoomHistory roomHistory : histories) {
-            if (roomHistory.equals(history)) {
-                roomHistory.setCheckOut(checkOut);
-            }
-        }
-    }
-
-    @Override
-    public List<Room> showVacantRoomsOnDate(final LocalDate date) {
-        return vacantOnDate(date);
-    }
-
-    @Override
-    public List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
-        final List<Room> result = new ArrayList<>(rooms);
-        result.sort(comparator);
-        return result;
-    }
-
-    @Override
-    public Room findById(final Long id) throws EntityNotFoundException {
-        final Room room = (Room) roomRepository.findById(id);
+    public Room findById(final Long id) throws EntityNotFoundException, PersistException {
+        final Room room = roomDao.findById(id);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with id %d%n", id));
         }
@@ -85,8 +60,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room findRoomByRoomNumber(final Integer number) throws EntityNotFoundException {
-        final Room room = (Room) roomRepository.findByRoomNumber(number);
+    public Room findByNumber(final Integer number) throws EntityNotFoundException, PersistException {
+        final Room room = roomDao.findByNumber(number);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }
@@ -94,44 +69,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> vacantOnDate(final LocalDate date) {
-        final List<Room> rooms = roomRepository.getRooms();
-        final List<Room> result = new ArrayList<>();
-        for (final Room room : rooms) {
-            final List<RoomHistory> histories = room.getHistories();
-            if (room.getStatus() != RoomStatus.REPAIR &&
-                (histories.size() == 0 || histories.get(histories.size() - 1).getCheckOut().isBefore(date))) {
-                result.add(room);
-            }
-        }
-        return result;
+    public int countVacantRooms() throws PersistException {
+        return roomDao.getVacantRooms().size();
     }
 
     @Override
-    public int countVacantRooms() {
-        return roomRepository.countVacantRooms();
+    public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
+        final Room room = findByNumber(number);
+        room.setPrice(price);
+        roomDao.update(room);
     }
 
     @Override
-    public void changeRoomPrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        changePrice(id, price);
-    }
-
-    @Override
-    public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
-        changePrice(number, price);
-    }
-
-    private void changePrice(final Long id, final BigDecimal price) throws EntityNotFoundException {
-        roomRepository.changePrice(id, price);
-    }
-
-    private void changePrice(final Integer number, final BigDecimal price) throws EntityNotFoundException {
-        roomRepository.changePrice(number, price);
-    }
-
-    @Override
-    public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException {
+    public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException, PersistException {
         final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             System.out.println("Room is already occupied");
@@ -139,102 +89,75 @@ public class RoomServiceImpl implements RoomService {
             System.out.println("Room is not available now");
         } else {
             room.setStatus(status);
+            roomDao.update(room);
         }
     }
 
     @Override
-    public void changeRoomStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException {
-        final Room room = findRoomByRoomNumber(number);
+    public void changeRoomStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException, PersistException {
+        final Room room = findByNumber(number);
         changeRoomStatus(room.getId(), status);
     }
 
     @Override
-    public void addRoom(final Room room) {
-        roomRepository.add(room);
+    public void addRoom(final Room room) throws PersistException {
+        roomDao.create(room);
     }
 
     @Override
-    public List<Room> showAllRooms() {
-        return roomRepository.getRooms();
+    public List<Room> showAll(final SortField sortField) throws PersistException {
+        final List<Room> rooms = roomDao.getAll();
+        return sortRooms(sortField, rooms);
+    }
+
+    private List<Room> sortRooms(final SortField sortField, final List<Room> rooms) {
+        switch (sortField) {
+            case STARS:
+                return sortRooms(rooms, new RoomStarsComparator());
+            case ACCOMMODATION:
+                return sortRooms(rooms, new RoomAccommodationComparator());
+            case PRICE:
+                return sortRooms(rooms, new RoomPriceComparator());
+            default:
+                return rooms;
+        }
+    }
+
+    private List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
+        final List<Room> result = new ArrayList<>(rooms);
+        result.sort(comparator);
+        return result;
     }
 
     @Override
-    public List<Room> showAllRoomsSortedByPrice() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomPriceComparator());
+    public List<Room> showVacant(final SortField sortField) throws PersistException {
+        final List<Room> rooms = roomDao.getVacantRooms();
+        return sortRooms(sortField, rooms);
     }
 
     @Override
-    public List<Room> showAllRoomsSortedByAccommodation() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomAccommodationComparator());
+    public Room showRoomDetails(final Integer number) throws EntityNotFoundException, PersistException {
+        return findByNumber(number);
     }
 
     @Override
-    public List<Room> showAllRoomsSortedByStars() {
-        final List<Room> rooms = showAllRooms();
-        return sortRooms(rooms, new RoomStarsComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRooms() {
-        return roomRepository.getVacantRooms();
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByPrice() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomPriceComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByAccommodation() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomAccommodationComparator());
-    }
-
-    @Override
-    public List<Room> showVacantRoomsSortedByStars() {
-        final List<Room> rooms = showVacantRooms();
-        return sortRooms(rooms, new RoomStarsComparator());
-    }
-
-    @Override
-    public Room showRoomDetails(final Integer number) throws EntityNotFoundException {
-        return findRoomByRoomNumber(number);
-    }
-
-    @Override
-    public void importRooms() {
-        EntityMapper<Room> roomMapper = new RoomMapperImpl();
+    public void importRooms() throws PersistException {
         final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
-        roomRepository.setRooms(rooms);
+        roomDao.insertMany(rooms);
     }
 
     @Override
-    public void exportRooms() {
-        EntityMapper<Room> roomMapper = new RoomMapperImpl();
-        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, showAllRooms()));
+    public void exportRooms() throws PersistException {
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, roomDao.getAll()));
     }
 
     @Override
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException {
+    public List<Resident> showLastResidents(final Room room, final Integer amount) throws PersistException {
         final Long id = room.getId();
         return showLastResidents(id, amount);
     }
 
-    public List<Resident> showLastResidents(final Long id, final Integer amount) throws EntityNotFoundException {
-        final List<RoomHistory> histories = findById(id).getHistories();
-        final List<Resident> residents = new ArrayList<>();
-        if (histories.size() > amount) {
-            for (int i = histories.size() - amount; i < histories.size(); i++) {
-                residents.add(findById(id).getHistories().get(i).getResident());
-            }
-        } else {
-            for (int i = 0; i < histories.size(); i++) {
-                residents.add(findById(id).getHistories().get(i).getResident());
-            }
-        }
-        return residents;
+    public List<Resident> showLastResidents(final Long id, final Integer amount) throws PersistException {
+        return residentDao.getLastResidentsByRoomId(id, amount);
     }
 }

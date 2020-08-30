@@ -2,22 +2,26 @@ package com.senla.hotel.ui.menu;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.AppContext;
-import com.senla.hotel.Application;
 import com.senla.hotel.controller.HotelController;
+import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.utils.InputDataReader;
+import com.senla.hotel.utils.Connector;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 @Singleton
 public final class MenuController {
+
     @Autowired
     private HotelController hotelController;
     @Autowired
     private Navigator navigator;
     @Autowired
     private Builder builder;
+    @Autowired
+    private Connector connector;
 
     public void run() {
         hotelController.importData();
@@ -52,7 +56,15 @@ public final class MenuController {
             navigator.printMenu();
         }
         scanner.close();
-        hotelController.exportData();
+        try {
+            hotelController.exportData();
+            connector.closeConnection();
+        } catch (final SQLException e) {
+            System.err.println(e.getMessage());
+        } catch (final PersistException e) {
+            System.err.printf("Could not save data %s%n", e.getMessage());
+        }
+
         System.out.println("Goodbye! Your changes have been saved!");
     }
 }
