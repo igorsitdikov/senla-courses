@@ -3,11 +3,15 @@ package com.senla.hotel.ui.action.attendance;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangeAttendancePriceAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ChangeAttendancePriceAction.class);
 
     private final AttendanceController attendanceController;
 
@@ -25,7 +29,7 @@ public class ChangeAttendancePriceAction implements Action {
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
             attendanceController.changePrice(id, dailyPrice);
         } catch (final Exception e) {
-            System.err.printf("Failed to change price a Attendance! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to change price a Attendance! Input valid parameters! {}", e.getMessage());
         }
     }
 }

@@ -3,8 +3,12 @@ package com.senla.hotel.ui.action.attendance;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ImportAttendanceAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ImportAttendanceAction.class);
 
     private AttendanceController attendanceController;
 
@@ -17,7 +21,7 @@ public class ImportAttendanceAction implements Action {
         try {
             attendanceController.importAttendances();
         } catch (final PersistException e) {
-            System.err.printf("Could not import attendances from csv %s%n", e.getMessage());
+            logger.error("Could not import attendances from csv {}", e.getMessage());
         }
     }
 }

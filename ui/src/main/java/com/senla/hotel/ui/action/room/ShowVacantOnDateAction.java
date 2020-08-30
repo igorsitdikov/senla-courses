@@ -6,12 +6,16 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 public class ShowVacantOnDateAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ShowVacantOnDateAction.class);
 
     private final RoomController roomController;
 
@@ -27,7 +31,7 @@ public class ShowVacantOnDateAction implements Action {
             final List<Room> rooms = roomController.showVacantRoomsOnDate(date);
             Printer.show(rooms);
         } catch (final PersistException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }

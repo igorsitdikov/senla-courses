@@ -2,6 +2,8 @@ package com.senla.hotel.utils;
 
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +11,8 @@ import java.sql.SQLException;
 
 @Singleton
 public class Connector {
+
+    private static final Logger logger = LogManager.getLogger(Connector.class);
 
     @PropertyLoad
     private String url;
@@ -35,7 +39,7 @@ public class Connector {
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (final SQLException sqlEx) {
-            System.err.println("Failed to connect to database!");
+            logger.error("Failed to connect to database!");
         }
     }
 }

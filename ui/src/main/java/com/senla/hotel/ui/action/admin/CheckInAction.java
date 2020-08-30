@@ -9,12 +9,16 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 public class CheckInAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(CheckInAction.class);
 
     private final ResidentController residentController;
     private final HotelController hotelController;
@@ -46,7 +50,7 @@ public class CheckInAction implements Action {
             hotelController
                     .checkIn(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate);
         } catch (final Exception e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }

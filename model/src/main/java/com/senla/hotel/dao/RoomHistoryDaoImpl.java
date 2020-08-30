@@ -130,7 +130,6 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     public BigDecimal calculateBill(final Long id) throws PersistException {
         final List<Double> result = new LinkedList<>();
         final String sql = getCalculateBillQuery();
-        System.out.println("id " + id);
         try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             setVariableToStatement(statement, id);
             final ResultSet rs = statement.executeQuery();

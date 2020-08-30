@@ -4,12 +4,16 @@ import com.senla.hotel.controller.RoomController;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
 import static com.senla.hotel.ui.utils.EnumConverter.integerToStatus;
 
 public class ChangeStatusAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ChangeStatusAction.class);
 
     private final RoomController roomController;
 
@@ -34,7 +38,7 @@ public class ChangeStatusAction implements Action {
 
             roomController.changeStatus(roomNumber, status);
         } catch (final Exception e) {
-            System.err.printf("Failed to change Room's status! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to change Room's status! Input valid parameters! {}", e.getMessage());
         }
     }
 }

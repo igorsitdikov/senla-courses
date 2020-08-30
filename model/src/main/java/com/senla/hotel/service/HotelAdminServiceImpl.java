@@ -14,6 +14,8 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.utils.Connector;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -21,6 +23,8 @@ import java.time.LocalDate;
 
 @Singleton
 public class HotelAdminServiceImpl implements HotelAdminService {
+
+    private static final Logger logger = LogManager.getLogger(HotelAdminServiceImpl.class);
 
     @Autowired
     private RoomDao roomRepository;
@@ -50,19 +54,19 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             } finally {
                 connector.getConnection().setAutoCommit(true);
             }
-            System.out.printf("%s was checked-in in room №%d%n",
-                    resident.toString(),
-                    room.getNumber());
+            logger.info("{} was checked-in in room №{}",
+                        resident.toString(),
+                        room.getNumber());
         } else if (room.getStatus() == RoomStatus.OCCUPIED) {
-            System.out.printf("Room №%d is already in used.%n", room.getNumber());
+            logger.info("Room №{} is already in used.", room.getNumber());
         } else {
-            System.out.printf("Room №%d is repaired.%n", room.getNumber());
+            logger.info("Room №{} is repaired.", room.getNumber());
         }
     }
 
     @Override
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException, PersistException, SQLException {
+            throws PersistException, SQLException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
 
@@ -77,7 +81,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             roomHistoryDao.update(history);
             final Room room = history.getRoom();
             if (room.getStatus() != RoomStatus.OCCUPIED) {
-                System.out.printf("The room №%d has no resident.", room.getNumber());
+                logger.warn("The room №{} has no resident.", room.getNumber());
             } else {
                 room.setStatus(RoomStatus.VACANT);
                 roomRepository.update(room);
@@ -101,20 +105,20 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         final Resident resident = residentDao.findById(id);
         if (resident.getHistory() != null) {
             final BigDecimal total = roomHistoryDao.calculateBill(resident.getHistory().getId());
-            System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
-                    resident.toString(),
-                    total,
-                    resident.getHistory().getRoom().getNumber());
+            logger.info("{} has to pay {} BYN for the room №{}",
+                        resident.toString(),
+                        total,
+                        resident.getHistory().getRoom().getNumber());
             return total;
         } else {
-            System.out.printf("%s is not checked-in.%n",
-                    resident.toString());
+            logger.warn("{} is not checked-in.",
+                        resident.toString());
         }
         return null;
     }
 
     @Override
-    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException, PersistException {
+    public BigDecimal calculateBill(final Resident resident) throws PersistException {
         final Long id = resident.getId();
         return calculateBill(id);
     }

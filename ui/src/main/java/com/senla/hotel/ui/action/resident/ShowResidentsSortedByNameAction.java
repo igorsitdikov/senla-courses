@@ -6,10 +6,14 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class ShowResidentsSortedByNameAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ShowResidentsSortedByNameAction.class);
 
     private final ResidentController residentController;
 
@@ -23,7 +27,7 @@ public class ShowResidentsSortedByNameAction implements Action {
             final List<Resident> residents = residentController.showResidents(SortField.NAME);
             Printer.show(residents);
         } catch (final PersistException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }

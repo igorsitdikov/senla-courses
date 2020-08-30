@@ -8,11 +8,15 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class AddAttendanceToResidentAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(AddAttendanceToResidentAction.class);
 
     private final AttendanceController attendanceController;
     private final ResidentController residentController;
@@ -42,7 +46,7 @@ public class AddAttendanceToResidentAction implements Action {
             residentController
                 .addAttendanceToResident(residents.get(residentId - 1), attendances.get(attendanceId - 1));
         } catch (final Exception e) {
-            System.err.printf("Failed to add an Attendance to Resident! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to add an Attendance to Resident! Input valid parameters! {}", e.getMessage());
         }
     }
 }
