@@ -3,8 +3,12 @@ package com.senla.hotel.ui.action.resident;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CountResidentsAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(CountResidentsAction.class);
 
     private final ResidentController residentController;
 
@@ -16,9 +20,9 @@ public class CountResidentsAction implements Action {
     public void execute() {
         try {
             final int residents = residentController.showCountResidents();
-            System.out.printf("Total residents: %d%n%n", residents);
+            logger.info("Total residents: {}", residents);
         } catch (final PersistException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 }

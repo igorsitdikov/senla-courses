@@ -8,12 +8,16 @@ import com.senla.hotel.ui.exceptions.ListEntitiesIsEmptyException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 public class CheckOutAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(CheckOutAction.class);
 
     private final ResidentController residentController;
     private final HotelController hotelController;
@@ -37,9 +41,9 @@ public class CheckOutAction implements Action {
 
             hotelController.checkOut(residents.get(residentId - 1), checkOutDate);
         } catch (final ListEntitiesIsEmptyException ex) {
-            System.err.println(ex.getMessage());
+            logger.error(ex.getMessage());
         } catch (final Exception e) {
-            System.err.printf("Failed to check-out! Input valid parameters! %n%s%n%n", e);
+            logger.error("Failed to check-out! Input valid parameters! {}", e.getMessage());
         }
     }
 }

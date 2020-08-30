@@ -3,6 +3,8 @@ package com.senla.hotel.utils;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.csvMapper.EntityMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ParseUtils {
+
+    private static final Logger logger = LogManager.getLogger(ParseUtils.class);
 
     public static <T extends AEntity> List<T> stringToEntities(final Stream<String> stream,
                                                                final EntityMapper<T> mapper,
@@ -19,7 +23,7 @@ public class ParseUtils {
                 try {
                     return mapper.sourceToDestination(entity);
                 } catch (final EntityIsEmptyException e) {
-                    System.err.println(e.getMessage());
+                    logger.error(e.getMessage());
                 }
                 return null;
             })
@@ -35,7 +39,7 @@ public class ParseUtils {
                 try {
                     return mapper.destinationToSource(entity);
                 } catch (final EntityIsEmptyException e) {
-                    System.err.println(e.getMessage());
+                    logger.error(e.getMessage());
                 }
                 return null;
             })

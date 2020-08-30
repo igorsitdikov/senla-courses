@@ -4,11 +4,15 @@ import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddAttendanceAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(AddAttendanceAction.class);
 
     private final AttendanceController attendanceController;
 
@@ -26,7 +30,7 @@ public class AddAttendanceAction implements Action {
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
             attendanceController.createAttendance(new Attendance(dailyPrice, name));
         } catch (final Exception e) {
-            System.err.printf("Failed to add a Attendance! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to add a Attendance! Input valid parameters! {}", e.getMessage());
         }
     }
 }

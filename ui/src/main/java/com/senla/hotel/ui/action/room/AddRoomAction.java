@@ -8,11 +8,15 @@ import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.EnumConverter;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class AddRoomAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(AddRoomAction.class);
 
     private final RoomController roomController;
 
@@ -68,7 +72,7 @@ public class AddRoomAction implements Action {
                                      RoomStatus.values().length));
             roomController.addRoom(new Room(roomNumber, stars, accommodation, dailyPrice, status));
         } catch (final Exception e) {
-            System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to add a Room! Input valid parameters! {}", e.getMessage());
         }
     }
 }

@@ -3,8 +3,12 @@ package com.senla.hotel.ui.action.admin;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ImportHistoryAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ImportHistoryAction.class);
 
     private HotelController hotelController;
 
@@ -17,7 +21,7 @@ public class ImportHistoryAction implements Action {
         try {
             hotelController.importHistories();
         } catch (final PersistException e) {
-            System.err.printf("Could not import histories from csv %s%n", e.getMessage());
+            logger.error("Could not import histories from csv {}", e.getMessage());
         }
     }
 }

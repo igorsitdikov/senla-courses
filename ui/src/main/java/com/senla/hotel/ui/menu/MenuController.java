@@ -6,6 +6,8 @@ import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.utils.Connector;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.Scanner;
 
 @Singleton
 public final class MenuController {
+
+    private static final Logger logger = LogManager.getLogger(MenuController.class);
 
     @Autowired
     private HotelController hotelController;
@@ -41,7 +45,7 @@ public final class MenuController {
             }
 
             if (choice >= menuItems.size() || choice < 0) {
-                System.out.println("Incorrect choice. Try again");
+                logger.warn("Incorrect choice. Try again");
                 continue;
             } else {
                 navigator.navigate(choice);
@@ -60,11 +64,11 @@ public final class MenuController {
             hotelController.exportData();
             connector.closeConnection();
         } catch (final SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         } catch (final PersistException e) {
-            System.err.printf("Could not save data %s%n", e.getMessage());
+            logger.error("Could not save data {}", e.getMessage());
         }
 
-        System.out.println("Goodbye! Your changes have been saved!");
+        logger.info("Goodbye! Your changes have been saved!");
     }
 }

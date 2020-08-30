@@ -20,6 +20,9 @@ import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import com.senla.hotel.utils.csv.writer.CsvWriterImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +32,8 @@ import java.util.List;
 
 @Singleton
 public class RoomServiceImpl implements RoomService {
+
+    private static final Logger logger = LogManager.getLogger(RoomServiceImpl.class);
 
     @Autowired
     private CsvReader csvReader;
@@ -84,9 +89,9 @@ public class RoomServiceImpl implements RoomService {
     public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException, PersistException {
         final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
-            System.out.println("Room is already occupied");
+            logger.warn("Room is already occupied");
         } else if (room.getStatus() == RoomStatus.REPAIR && status == RoomStatus.OCCUPIED) {
-            System.out.println("Room is not available now");
+            logger.warn("Room is not available now");
         } else {
             room.setStatus(status);
             roomDao.update(room);

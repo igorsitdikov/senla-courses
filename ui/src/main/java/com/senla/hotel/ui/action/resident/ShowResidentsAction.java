@@ -5,10 +5,14 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class ShowResidentsAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ShowResidentsAction.class);
 
     private final ResidentController residentController;
 
@@ -22,7 +26,7 @@ public class ShowResidentsAction implements Action {
             final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents);
         } catch (final Exception e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }

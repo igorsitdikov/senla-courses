@@ -7,11 +7,15 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ShowLastResidentsAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ShowLastResidentsAction.class);
 
     private final RoomController roomController;
 
@@ -34,7 +38,7 @@ public class ShowLastResidentsAction implements Action {
             final List<Resident> residents = roomController.showLastResidents(rooms.get(roomId - 1), number);
             Printer.show(residents);
         } catch (final Exception e) {
-            System.err.printf("Failed to show Resident in Room! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to show Resident in Room! Input valid parameters! {}", e.getMessage());
         }
     }
 }

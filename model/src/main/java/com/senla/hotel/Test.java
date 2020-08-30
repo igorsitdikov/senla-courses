@@ -15,11 +15,15 @@ import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.utils.PrinterUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Test {
+
+    private static final Logger logger = LogManager.getLogger(Test.class);
 
     public static void main(final String[] args) throws Exception {
         final AppContext context = Application.run("com.senla.hotel");
@@ -35,22 +39,22 @@ public class Test {
         try {
             attendanceController.createAttendance(ironing);
         } catch (final EntityAlreadyExistsException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         try {
             attendanceController.createAttendance(wakeup);
         } catch (final EntityAlreadyExistsException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         try {
             attendanceController.createAttendance(laundry);
         } catch (final EntityAlreadyExistsException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         try {
             attendanceController.createAttendance(dogWalking);
         } catch (final EntityAlreadyExistsException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         attendanceController.deleteAttendance(4L);
         PrinterUtils.show("Show all attendances");
@@ -143,7 +147,7 @@ public class Test {
         try {
             roomController.changeStatus(301, RoomStatus.REPAIR);
         } catch (final RoomStatusChangingException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         PrinterUtils.show("Vacant rooms on date after updating status room №301");
         PrinterUtils.show(roomController.showVacantRoomsOnDate(LocalDate.of(2020, 8, 13)));

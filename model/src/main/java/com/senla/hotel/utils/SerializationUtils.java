@@ -13,6 +13,8 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +28,8 @@ import java.util.List;
 
 @Singleton
 public class SerializationUtils {
+
+    private static final Logger logger = LogManager.getLogger(SerializationUtils.class);
 
     @Autowired
     private RoomDao roomRepository;
@@ -46,9 +50,9 @@ public class SerializationUtils {
             objectOutputStream.writeObject(entitiesList);
             objectOutputStream.close();
         } catch (final FileNotFoundException e) {
-            System.err.printf("No such file! %s%n", e);
+            logger.error("No such file! {}", e.getMessage());
         } catch (final IOException e) {
-            System.err.printf("Fail to save the Hotel state! %s%n", e);
+            logger.error("Fail to save the Hotel state! {}", e.getMessage());
         }
     }
 
@@ -70,13 +74,13 @@ public class SerializationUtils {
             }
             objectInputStream.close();
         } catch (final FileNotFoundException e) {
-            System.err.printf("File was not found with name %s%n", hotelState);
+            logger.error("File was not found with name {}", hotelState);
         } catch (final IOException e) {
-            System.err.printf("Fail to load data from file %s%n", hotelState);
+            logger.error("Fail to load data from file {}", hotelState);
         } catch (final ClassNotFoundException e) {
-            System.err.println("Class was not found");
+            logger.error("Class was not found");
         } catch (final PersistException e) {
-            System.err.printf("Couldn't add to database %s%n", e.getMessage());
+            logger.error("Couldn't add to database {}", e.getMessage());
         }
     }
 }

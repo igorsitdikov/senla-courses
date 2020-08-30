@@ -5,11 +5,15 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ChangePriceAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ChangePriceAction.class);
 
     private final RoomController roomController;
 
@@ -28,7 +32,7 @@ public class ChangePriceAction implements Action {
         try {
             roomController.changePrice(roomNumber, dailyPrice);
         } catch (final EntityNotFoundException | PersistException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }

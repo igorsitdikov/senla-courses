@@ -5,12 +5,16 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
 import static com.senla.hotel.ui.utils.EnumConverter.integerToGender;
 
 public class AddResidentAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(AddResidentAction.class);
 
     private final ResidentController residentController;
 
@@ -36,7 +40,7 @@ public class AddResidentAction implements Action {
                             "2 - FEMALE", 2));
             residentController.createResident(new Resident(firstName, lastName, gender, vip, phone, null));
         } catch (final Exception e) {
-            System.err.printf("Failed to add a Resident! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to add a Resident! Input valid parameters! {}", e.getMessage());
         }
     }
 }

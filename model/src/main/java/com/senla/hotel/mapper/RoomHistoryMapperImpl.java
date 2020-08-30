@@ -14,6 +14,8 @@ import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
 import com.senla.hotel.service.RoomServiceImpl;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +24,8 @@ import java.util.List;
 
 @Singleton
 public class RoomHistoryMapperImpl implements RoomHistoryMapper {
+
+    private static final Logger logger = LogManager.getLogger(RoomHistoryMapperImpl.class);
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Autowired
@@ -47,7 +51,7 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
             final Room room = roomService.findById(id);
             history.setRoom(room);
         } catch (final EntityNotFoundException e) {
-            System.err.printf("No such room with id %s %s%n%n", elements[3], e);
+            logger.error("No such room with id {} {}", elements[3], e);
         } catch (final PersistException e) {
             e.printStackTrace();
         }
@@ -56,7 +60,7 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
             final Resident resident = residentService.findById(id);
             history.setResident(resident);
         } catch (final EntityNotFoundException | PersistException e) {
-            System.err.printf("No such resident with id %s %s%n%n", elements[4], e);
+            logger.error("No such resident with id {} {}", elements[4], e);
         }
         history.setStatus(HistoryStatus.valueOf(elements[5]));
         final List<Attendance> historyList = new ArrayList<>();
@@ -65,7 +69,7 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
                 try {
                     historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
                 } catch (final EntityNotFoundException | PersistException e) {
-                    System.err.printf("No such attendance with id %s %s%n%n", elements[i], e);
+                    logger.error("No such attendance with id {} {}", elements[i], e);
                 }
             }
         }

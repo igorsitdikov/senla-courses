@@ -1,11 +1,16 @@
 package com.senla.hotel.ui.utils;
 
+import com.senla.hotel.Scanner;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EnumConverter {
+
+    private static final Logger logger = LogManager.getLogger(EnumConverter.class);
 
     public static RoomStatus integerToStatus(final Integer input) {
         RoomStatus roomStatus = null;
@@ -20,7 +25,7 @@ public class EnumConverter {
                 roomStatus = RoomStatus.REPAIR;
                 break;
             default:
-                System.out.println("Wrong input. Please, input a number from 1 to 3. Try again!");
+                logger.warn("Wrong input. Please, input a number from 1 to 3. Try again!");
         }
         return roomStatus;
     }
@@ -59,7 +64,7 @@ public class EnumConverter {
                 accommodation = Accommodation.TRPL_2_CHD;
                 break;
             default:
-                System.out.println("Wrong input. Please, input a number from 1 to 10.%n");
+                logger.warn("Wrong input. Please, input a number from 1 to 10.%n");
         }
         return accommodation;
     }
@@ -95,7 +100,7 @@ public class EnumConverter {
                 roomStar = Stars.HONEYMOON_ROOM;
                 break;
             default:
-                System.out.println("Wrong input. Please, input a number from 1 to 9.");
+                logger.warn("Wrong input. Please, input a number from 1 to 9.");
         }
         return roomStar;
     }
@@ -110,7 +115,7 @@ public class EnumConverter {
                 gender = Gender.FEMALE;
                 break;
             default:
-                System.out.println("Wrong input. Please, input a number from 1 to 2. Try again!");
+                logger.warn("Wrong input. Please, input a number from 1 to 2. Try again!");
         }
         return gender;
     }

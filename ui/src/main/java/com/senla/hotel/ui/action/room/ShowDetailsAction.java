@@ -5,10 +5,14 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.ui.utils.Printer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
 public class ShowDetailsAction implements Action {
+
+    private static final Logger logger = LogManager.getLogger(ShowDetailsAction.class);
 
     private final RoomController roomController;
 
@@ -26,7 +30,7 @@ public class ShowDetailsAction implements Action {
             final Room room = roomController.showRoomDetails(roomNumber);
             Printer.show(room);
         } catch (final Exception e) {
-            System.err.printf("Failed to add a Room! Input valid parameters! %s%n%n", e);
+            logger.error("Failed to add a Room! Input valid parameters! {}", e.getMessage());
         }
     }
 }

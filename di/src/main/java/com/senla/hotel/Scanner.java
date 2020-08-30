@@ -1,5 +1,8 @@
 package com.senla.hotel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -23,6 +26,8 @@ import java.util.stream.Stream;
 
 public class Scanner {
 
+    private static final Logger logger = LogManager.getLogger(Scanner.class);
+
     private static final String CLASS_EXTENSION = ".class";
     private static final String CLASS_POSTFIX = "Impl";
     private static final String DOT = ".";
@@ -36,7 +41,7 @@ public class Scanner {
         try {
             this.allClasses = getClasses(packageName);
         } catch (final IOException e) {
-            System.err.println("General I/O exception: " + e.getMessage());
+            logger.error("General I/O exception: {}", e.getMessage());
         }
         this.interfaces = findInterfaces();
         this.classes = findClasses();
@@ -110,14 +115,14 @@ public class Scanner {
                     try {
                         return Class.forName(clazz);
                     } catch (final ClassNotFoundException e) {
-                        System.err.println("Class was not found");
+                        logger.error("Class was not found");
                     }
                     return null;
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         } catch (final IOException e) {
-            System.err.println("General I/O exception: " + e.getMessage());
+            logger.error("General I/O exception: {}", e.getMessage());
         }
 
         return classes;
@@ -150,7 +155,7 @@ public class Scanner {
         try {
             classes = getClasses(packageName);
         } catch (final IOException e) {
-            System.err.println("General I/O exception: " + e.getMessage());
+            logger.error("General I/O exception: {}", e.getMessage());
         }
         return findInfImpl(classes, annotation);
     }

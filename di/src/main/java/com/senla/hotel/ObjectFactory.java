@@ -2,6 +2,9 @@ package com.senla.hotel;
 
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
 import com.senla.hotel.exception.ConverterNotExistsException;
+import com.senla.hotel.properties.PropertyLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectFactory {
+
+    private static final Logger logger = LogManager.getLogger(ObjectFactory.class);
 
     private final AppContext context;
     private List<ObjectConfigurator> configurators = new ArrayList<>();
@@ -26,13 +31,13 @@ public class ObjectFactory {
         try {
             t = create(implClass);
         } catch (final InstantiationException e) {
-            System.err.println("Instantiation! " + e);
+            logger.error("Instantiation! {}", e.getMessage());
         } catch (final IllegalAccessException e) {
-            System.err.println("Illegal access! " + e);
+            logger.error("Illegal access! {}", e.getMessage());
         } catch (final InvocationTargetException e) {
-            System.err.println("Invocation target! " + e);
+            logger.error("Invocation target! {}", e.getMessage());
         } catch (final NoSuchMethodException e) {
-            System.err.println("No such method! " + e);
+            logger.error("No such method! {}", e.getMessage());
         }
         configure(t);
         return t;
@@ -43,9 +48,9 @@ public class ObjectFactory {
             try {
                 objectConfigurator.configure(t, context);
             } catch (final IllegalAccessException e) {
-                System.err.println("Illegal access! " + e);
+                logger.error("Illegal access! {}", e.getMessage());
             } catch (final ConverterNotExistsException e) {
-                System.err.println("No converter for this type! " + e);
+                logger.error("No converter for this type! {}", e.getMessage());
             }
         });
     }
