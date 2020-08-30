@@ -25,18 +25,18 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
     @PropertyLoad(propertyName = "histories")
     private String property;
     @Autowired
-    private RoomHistoryDao roomHistoryRepository;
+    private RoomHistoryDao roomHistoryDao;
     @Autowired
     private RoomHistoryMapper roomHistoryMapper;
 
     @Override
     public RoomHistory create(final RoomHistory history) throws PersistException {
-        return roomHistoryRepository.create(history);
+        return roomHistoryDao.create(history);
     }
 
     @Override
     public RoomHistory findById(final Long id) throws EntityNotFoundException, PersistException {
-        final RoomHistory history = roomHistoryRepository.findById(id);
+        final RoomHistory history = roomHistoryDao.findById(id);
         if (history == null) {
             throw new EntityNotFoundException(String.format("No history with id %d%n", id));
         }
@@ -47,16 +47,16 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
     public void importHistories() throws PersistException {
         final List<RoomHistory> histories =
             ParseUtils.stringToEntities(csvReader.read(property), roomHistoryMapper, RoomHistory.class);
-        roomHistoryRepository.insertMany(histories);
+        roomHistoryDao.insertMany(histories);
     }
 
     @Override
     public void exportHistories() throws PersistException {
-        csvWriter.write(property, ParseUtils.entitiesToCsv(roomHistoryMapper, roomHistoryRepository.getAll()));
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomHistoryMapper, roomHistoryDao.getAll()));
     }
 
     @Override
     public List<RoomHistory> showHistories() throws PersistException {
-        return roomHistoryRepository.getAll();
+        return roomHistoryDao.getAll();
     }
 }

@@ -35,9 +35,9 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private RoomDao roomRepository;
+    private RoomDao roomDao;
     @Autowired
-    private ResidentDao residentRepository;
+    private ResidentDao residentDao;
     @Autowired
     private RoomMapper roomMapper;
     @PropertyLoad(propertyName = "rooms")
@@ -47,12 +47,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
-        return roomRepository.getVacantOnDate(date);
+        return roomDao.getVacantOnDate(date);
     }
 
     @Override
     public Room findById(final Long id) throws EntityNotFoundException, PersistException {
-        final Room room = roomRepository.findById(id);
+        final Room room = roomDao.findById(id);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with id %d%n", id));
         }
@@ -61,7 +61,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room findByNumber(final Integer number) throws EntityNotFoundException, PersistException {
-        final Room room = roomRepository.findByNumber(number);
+        final Room room = roomDao.findByNumber(number);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }
@@ -70,14 +70,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public int countVacantRooms() throws PersistException {
-        return roomRepository.getVacantRooms().size();
+        return roomDao.getVacantRooms().size();
     }
 
     @Override
     public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         room.setPrice(price);
-        roomRepository.update(room);
+        roomDao.update(room);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class RoomServiceImpl implements RoomService {
             System.out.println("Room is not available now");
         } else {
             room.setStatus(status);
-            roomRepository.update(room);
+            roomDao.update(room);
         }
     }
 
@@ -101,12 +101,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void addRoom(final Room room) throws PersistException {
-        roomRepository.create(room);
+        roomDao.create(room);
     }
 
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomRepository.getAll();
+        final List<Room> rooms = roomDao.getAll();
         return sortRooms(sortField, rooms);
     }
 
@@ -131,7 +131,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacant(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomRepository.getVacantRooms();
+        final List<Room> rooms = roomDao.getVacantRooms();
         return sortRooms(sortField, rooms);
     }
 
@@ -143,12 +143,12 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void importRooms() throws PersistException {
         final List<Room> rooms = ParseUtils.stringToEntities(csvReader.read(property), roomMapper, Room.class);
-        roomRepository.insertMany(rooms);
+        roomDao.insertMany(rooms);
     }
 
     @Override
     public void exportRooms() throws PersistException {
-        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, roomRepository.getAll()));
+        csvWriter.write(property, ParseUtils.entitiesToCsv(roomMapper, roomDao.getAll()));
     }
 
     @Override
@@ -158,6 +158,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     public List<Resident> showLastResidents(final Long id, final Integer amount) throws PersistException {
-        return residentRepository.getLastResidentsByRoomId(id, amount);
+        return residentDao.getLastResidentsByRoomId(id, amount);
     }
 }

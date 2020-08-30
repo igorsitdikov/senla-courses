@@ -32,11 +32,11 @@ public class ResidentServiceImpl implements ResidentService {
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private ResidentDao residentRepository;
+    private ResidentDao residentDao;
     @Autowired
-    private RoomHistoryDao roomHistoryRepository;
+    private RoomHistoryDao roomHistoryDao;
     @Autowired
-    private AttendanceDao attendanceRepository;
+    private AttendanceDao attendanceDao;
     @Autowired
     private ResidentMapper residentMapper;
     @PropertyLoad(propertyName = "residents")
@@ -44,7 +44,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException, PersistException {
-        final Resident resident = residentRepository.findById(id);
+        final Resident resident = residentDao.findById(id);
         if (resident == null) {
             throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
         }
@@ -55,26 +55,26 @@ public class ResidentServiceImpl implements ResidentService {
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
             throws EntityNotFoundException, PersistException {
         final Long residentId = resident.getId();
-        final Long attendanceId = attendanceRepository.findById(attendance.getId()).getId();
+        final Long attendanceId = attendanceDao.findById(attendance.getId()).getId();
         addAttendanceToResident(residentId, attendanceId);
     }
 
     @Override
     public void addAttendanceToResident(final Long residentId, final Long attendanceId) throws EntityNotFoundException, PersistException {
-        final Attendance attendance = attendanceRepository.findById(attendanceId);
-        final RoomHistory history = roomHistoryRepository
+        final Attendance attendance = attendanceDao.findById(attendanceId);
+        final RoomHistory history = roomHistoryDao
                 .getByResidentAndCheckedInStatus(residentId);
-        roomHistoryRepository.addAttendanceToHistory(history.getId(), attendance.getId());
+        roomHistoryDao.addAttendanceToHistory(history.getId(), attendance.getId());
     }
 
     @Override
     public void createResident(final Resident resident) throws PersistException {
-        residentRepository.create(resident);
+        residentDao.create(resident);
     }
 
     @Override
     public List<Resident> showResidents(final SortField sortField) throws PersistException {
-        final List<Resident> residents = residentRepository.getAll();
+        final List<Resident> residents = residentDao.getAll();
         switch (sortField) {
             case NAME:
                 return sortResidents(residents, new ResidentFullNameComparator());
@@ -95,7 +95,7 @@ public class ResidentServiceImpl implements ResidentService {
     public void importResidents() throws PersistException {
         final List<Resident> residents =
                 ParseUtils.stringToEntities(csvReader.read(property), residentMapper, Resident.class);
-        residentRepository.insertMany(residents);
+        residentDao.insertMany(residents);
     }
 
     @Override
@@ -105,6 +105,6 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public int showCountResidents() throws PersistException {
-        return residentRepository.getAll().size();
+        return residentDao.getAll().size();
     }
 }

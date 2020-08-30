@@ -25,9 +25,9 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     @Autowired
     private RoomDao roomRepository;
     @Autowired
-    private ResidentDao residentRepository;
+    private ResidentDao residentDao;
     @Autowired
-    private RoomHistoryDao roomHistoryRepository;
+    private RoomHistoryDao roomHistoryDao;
     @Autowired
     private Connector connector;
 
@@ -35,12 +35,12 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
             throws PersistException, SQLException {
         final Room room = roomRepository.findById(roomId);
-        final Resident resident = residentRepository.findById(residentId);
+        final Resident resident = residentDao.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
             try {
                 connector.getConnection().setAutoCommit(false);
                 final RoomHistory history = new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
-                roomHistoryRepository.create(history);
+                roomHistoryDao.create(history);
                 room.setStatus(RoomStatus.OCCUPIED);
                 roomRepository.update(room);
                 connector.getConnection().commit();
@@ -70,11 +70,11 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     public void checkOut(final Long residentId, final LocalDate date) throws SQLException, PersistException {
         try {
             connector.getConnection().setAutoCommit(false);
-            final Resident resident = residentRepository.findById(residentId);
+            final Resident resident = residentDao.findById(residentId);
             final RoomHistory history = resident.getHistory();
             history.setStatus(HistoryStatus.CHECKED_OUT);
             history.setCheckOut(date);
-            roomHistoryRepository.update(history);
+            roomHistoryDao.update(history);
             final Room room = history.getRoom();
             if (room.getStatus() != RoomStatus.OCCUPIED) {
                 System.out.printf("The room №%d has no resident.", room.getNumber());
@@ -98,9 +98,9 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     public BigDecimal calculateBill(final Long id) throws PersistException {
-        final Resident resident = residentRepository.findById(id);
+        final Resident resident = residentDao.findById(id);
         if (resident.getHistory() != null) {
-            final BigDecimal total = roomHistoryRepository.calculateBill(resident.getHistory().getId());
+            final BigDecimal total = roomHistoryDao.calculateBill(resident.getHistory().getId());
             System.out.printf("%s has to pay %.2f BYN for the room №%d%n",
                     resident.toString(),
                     total,

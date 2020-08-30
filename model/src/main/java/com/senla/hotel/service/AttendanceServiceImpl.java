@@ -27,7 +27,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private CsvWriter csvWriter;
     @Autowired
-    private AttendanceDao attendanceRepository;
+    private AttendanceDao attendanceDao;
     @Autowired
     private AttendanceMapper attendanceMapper;
     @PropertyLoad(propertyName = "attendances")
@@ -35,17 +35,17 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance findById(final Long id) throws PersistException {
-        return attendanceRepository.findById(id);
+        return attendanceDao.findById(id);
     }
 
     @Override
     public void createAttendance(final Attendance attendance) throws PersistException {
-        attendanceRepository.create(attendance);
+        attendanceDao.create(attendance);
     }
 
     @Override
     public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
-        final List<Attendance> attendances = attendanceRepository.getAll();
+        final List<Attendance> attendances = attendanceDao.getAll();
         switch (sortField) {
             case PRICE:
                 return sortAttendances(attendances, new AttendancePriceComparator());
@@ -64,22 +64,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
-        final Attendance attendance = attendanceRepository.findById(id);
+        final Attendance attendance = attendanceDao.findById(id);
         attendance.setPrice(price);
-        attendanceRepository.update(attendance);
+        attendanceDao.update(attendance);
     }
 
     @Override
     public void delete(final Long id) throws PersistException {
-        final Attendance attendance = attendanceRepository.findById(id);
-        attendanceRepository.delete(attendance);
+        final Attendance attendance = attendanceDao.findById(id);
+        attendanceDao.delete(attendance);
     }
 
     @Override
     public void importAttendances() throws PersistException {
         final List<Attendance> attendances =
             ParseUtils.stringToEntities(csvReader.read(property), attendanceMapper, Attendance.class);
-        attendanceRepository.insertMany(attendances);
+        attendanceDao.insertMany(attendances);
     }
 
     @Override
