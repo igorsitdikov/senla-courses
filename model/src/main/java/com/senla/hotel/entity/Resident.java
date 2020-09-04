@@ -24,8 +24,8 @@ public class Resident extends AEntity {
     private Boolean vip;
     @Column(name = "phone")
     private String phone;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "history_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "resident", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "history_id", referencedColumnName = "id")
     private RoomHistory history;
 
     public Resident() {

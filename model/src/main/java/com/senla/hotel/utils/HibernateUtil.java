@@ -24,9 +24,9 @@ public class HibernateUtil {
             try {
                 Configuration configuration = new Configuration();
                 configuration.addAnnotatedClass(Attendance.class);
-//                configuration.addAnnotatedClass(RoomHistory.class);
-//                configuration.addAnnotatedClass(Room.class);
-//                configuration.addAnnotatedClass(Resident.class);
+                configuration.addAnnotatedClass(RoomHistory.class);
+                configuration.addAnnotatedClass(Room.class);
+                configuration.addAnnotatedClass(Resident.class);
 //                configuration.configure("hibernate.properties");
                 logger.info("Hibernate configuration has been loaded!");
                 registry = new StandardServiceRegistryBuilder()

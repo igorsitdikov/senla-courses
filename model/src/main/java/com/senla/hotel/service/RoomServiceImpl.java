@@ -120,6 +120,9 @@ public class RoomServiceImpl implements RoomService {
         SessionFactory factory = hibernateUtil.getSessionFactory();
         try ( Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
+//            CriteriaQuery<Resident> criteria = builder.createQuery(Resident.class);
+//            criteria.from(Resident.class);
+//            List<Resident> data = session.createQuery(criteria).getResultList();
             CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
             criteria.from(Attendance.class);
             List<Attendance> data = session.createQuery(criteria).getResultList();
