@@ -10,7 +10,6 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
-import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.utils.Connector;

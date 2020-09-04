@@ -1,17 +1,12 @@
 package com.senla.hotel.ui.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public class InputDataReader {
 
-    private static final Logger logger = LogManager.getLogger(Printer.class);
-
     public static Integer getIntegerInput(final Scanner scanner, final String message, final Integer limit) {
-        logger.info(message);
+        System.out.println(message);
 
         boolean isValid = false;
         Integer input = null;
@@ -20,7 +15,7 @@ public class InputDataReader {
             if (input > 0 && input <= limit) {
                 isValid = true;
             } else {
-                logger.warn("Number is not valid. Input number 1-{}", limit);
+                System.out.printf("Number is not valid. Input number 1-%d%n", limit);
             }
         }
 
@@ -36,7 +31,7 @@ public class InputDataReader {
                 input = scanner.nextInt();
                 isValid = true;
             } else {
-                logger.warn("Wrong input. Please, input a number.");
+                System.out.println("Wrong input. Please, input a number.");
                 scanner.nextLine();
             }
         }
@@ -44,7 +39,7 @@ public class InputDataReader {
     }
 
     public static Long getLongInput(final Scanner scanner, final String message) {
-        logger.info(message);
+        System.out.println(message);
         return getLongInput(scanner);
     }
 
@@ -57,7 +52,7 @@ public class InputDataReader {
                 input = scanner.nextLong();
                 isValid = true;
             } else {
-                logger.warn("Wrong input. Please, input a number.");
+                System.out.println("Wrong input. Please, input a number.");
                 scanner.nextLine();
             }
         }
@@ -65,7 +60,7 @@ public class InputDataReader {
     }
 
     public static String getStringInput(final Scanner scanner, final String message) {
-        logger.info(message);
+        System.out.println(message);
         return getStringInput(scanner);
     }
 
@@ -74,7 +69,7 @@ public class InputDataReader {
     }
 
     public static Double getDoubleInput(final Scanner scanner, final String message) {
-        logger.info(message);
+        System.out.println(message);
         return getDoubleInput(scanner);
     }
 
@@ -87,7 +82,7 @@ public class InputDataReader {
                 input = scanner.nextDouble();
                 isValid = true;
             } else {
-                logger.warn("Wrong input. Please, input a double.");
+                System.out.println("Wrong input. Please, input a double.");
                 scanner.nextLine();
             }
         }
@@ -95,7 +90,7 @@ public class InputDataReader {
     }
 
     public static LocalDate getLocalDateInput(final Scanner scanner, final String message) {
-        logger.info(message);
+        System.out.println(message);
         return getLocalDateInput(scanner);
     }
 
@@ -109,7 +104,7 @@ public class InputDataReader {
                 date = LocalDate.parse(input);
                 isValid = true;
             } else {
-                logger.warn("Wrong input. Please, input the date in \"YYYY-MM-DD\" format.");
+                System.out.println("Wrong input. Please, input the date in \"YYYY-MM-DD\" format.");
                 scanner.nextLine();
             }
         }

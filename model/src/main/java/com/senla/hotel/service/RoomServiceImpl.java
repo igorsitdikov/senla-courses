@@ -20,7 +20,6 @@ import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
-import com.senla.hotel.utils.csv.writer.CsvWriterImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

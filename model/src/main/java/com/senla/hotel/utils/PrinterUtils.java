@@ -13,6 +13,7 @@ public class PrinterUtils {
         entities.forEach(logger::info);
     }
 
-    public static <T> void show(final T entity) { logger.info(entity);
+    public static <T> void show(final T entity) {
+        logger.info(entity);
     }
 }
