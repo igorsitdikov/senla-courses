@@ -2,14 +2,25 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.Gender;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "resident")
 public class Resident extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column
     private Gender gender;
+    @Column
     private Boolean vip;
+    @Column
     private String phone;
     private RoomHistory history;
 
@@ -28,6 +39,16 @@ public class Resident extends AEntity {
         this.vip = vip;
         this.phone = phone;
         this.history = history;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -1,11 +1,19 @@
 package com.senla.hotel.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "attendance")
 public class Attendance extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name = "price")
     private BigDecimal price;
+    @Column(name = "name")
     private String name;
 
     public Attendance() {
@@ -14,6 +22,16 @@ public class Attendance extends AEntity {
     public Attendance(final BigDecimal price, final String name) {
         this.price = price;
         this.name = name;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public BigDecimal getPrice() {
@@ -42,7 +60,7 @@ public class Attendance extends AEntity {
         }
         final Attendance that = (Attendance) o;
         return Objects.equals(price, that.price) &&
-               Objects.equals(name, that.name);
+                Objects.equals(name, that.name);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -14,6 +15,7 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomService;
+import com.senla.hotel.utils.HibernateUtil;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
@@ -22,7 +24,10 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,6 +49,8 @@ public class RoomServiceImpl implements RoomService {
     private ResidentDao residentDao;
     @Autowired
     private RoomMapper roomMapper;
+    @Autowired
+    private HibernateUtil hibernateUtil;
     @PropertyLoad(propertyName = "rooms")
     private String property;
     @PropertyLoad(type = Type.INTEGER)
@@ -110,6 +117,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
+        SessionFactory factory = hibernateUtil.getSessionFactory();
+        try ( Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
+            criteria.from(Attendance.class);
+            List<Attendance> data = session.createQuery(criteria).getResultList();
+            System.out.println();
+        }
         final List<Room> rooms = roomDao.getAll();
         return sortRooms(sortField, rooms);
     }

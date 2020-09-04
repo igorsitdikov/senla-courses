@@ -4,13 +4,7 @@ import java.io.Serializable;
 
 public abstract class AEntity implements Serializable {
 
-    protected Long id;
+    public abstract Long getId();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
+    public abstract void setId(Long id);
 }

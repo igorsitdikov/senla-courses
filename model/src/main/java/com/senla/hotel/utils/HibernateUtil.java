@@ -1,25 +1,39 @@
 package com.senla.hotel.utils;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.Room;
+import com.senla.hotel.entity.RoomHistory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 @Singleton
 public class HibernateUtil {
 
+    private static final Logger logger = LogManager.getLogger(HibernateUtil.class);
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
-                registry = new StandardServiceRegistryBuilder().configure().build();
-                final MetadataSources sources = new MetadataSources(registry);
-                final Metadata metadata = sources.getMetadataBuilder().build();
-                sessionFactory = metadata.getSessionFactoryBuilder().build();
+                Configuration configuration = new Configuration();
+                configuration.addAnnotatedClass(Attendance.class);
+//                configuration.addAnnotatedClass(RoomHistory.class);
+//                configuration.addAnnotatedClass(Room.class);
+//                configuration.addAnnotatedClass(Resident.class);
+//                configuration.configure("hibernate.properties");
+                logger.info("Hibernate configuration has been loaded!");
+                registry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties())
+                        .build();
+                logger.info("Hibernate ServiceRegistry has been created!");
+                sessionFactory = configuration.buildSessionFactory(registry);
             } catch (final Exception e) {
                 e.printStackTrace();
                 if (registry != null) {
@@ -30,7 +44,7 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    public static void shutdown() {
+    public void shutdown() {
         if (registry != null) {
             StandardServiceRegistryBuilder.destroy(registry);
         }

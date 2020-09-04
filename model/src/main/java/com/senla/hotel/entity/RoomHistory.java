@@ -2,13 +2,19 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.HistoryStatus;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "history")
 public class RoomHistory extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private Room room;
     private Resident resident;
     private List<Attendance> attendances = new LinkedList<>();
@@ -25,6 +31,16 @@ public class RoomHistory extends AEntity {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.status = status;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public Room getRoom() {
