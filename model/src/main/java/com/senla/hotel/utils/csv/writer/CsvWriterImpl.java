@@ -1,7 +1,6 @@
 package com.senla.hotel.utils.csv.writer;
 
 import com.senla.hotel.annotation.Singleton;
-import com.senla.hotel.utils.Connector;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

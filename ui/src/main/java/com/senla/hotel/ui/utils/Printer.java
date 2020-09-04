@@ -12,19 +12,19 @@ public class Printer {
     private static final Logger logger = LogManager.getLogger(Printer.class);
 
     public static <T> void show(final List<T> entities) {
-        entities.forEach(logger::info);
+        entities.forEach(System.out::println);
     }
 
     public static <T> void show(final T entity) {
-        logger.info(entity);
+        System.out.println(entity);
     }
 
     public static <T> void show(final List<T> entities, final String text) throws ListEntitiesIsEmptyException {
         if (entities.isEmpty()) {
             throw new ListEntitiesIsEmptyException(String.format("No %ss for choosing", text));
         }
-        logger.info("Choose {}:", text);
+        System.out.printf("Choose %s:%n", text);
         IntStream.range(0, entities.size())
-            .forEach(index -> logger.info("{}. {}", (index + 1), entities.get(index)));
+            .forEach(index -> System.out.printf("%s. %s%n", (index + 1), entities.get(index)));
     }
 }

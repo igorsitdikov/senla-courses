@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.utils;
 
-import com.senla.hotel.Scanner;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -25,7 +24,7 @@ public class EnumConverter {
                 roomStatus = RoomStatus.REPAIR;
                 break;
             default:
-                logger.warn("Wrong input. Please, input a number from 1 to 3. Try again!");
+                System.out.println("Wrong input. Please, input a number from 1 to 3. Try again!");
         }
         return roomStatus;
     }
@@ -64,7 +63,7 @@ public class EnumConverter {
                 accommodation = Accommodation.TRPL_2_CHD;
                 break;
             default:
-                logger.warn("Wrong input. Please, input a number from 1 to 10.%n");
+                System.out.println("Wrong input. Please, input a number from 1 to 10.%n");
         }
         return accommodation;
     }
@@ -100,7 +99,7 @@ public class EnumConverter {
                 roomStar = Stars.HONEYMOON_ROOM;
                 break;
             default:
-                logger.warn("Wrong input. Please, input a number from 1 to 9.");
+                System.out.println("Wrong input. Please, input a number from 1 to 9.");
         }
         return roomStar;
     }
@@ -115,7 +114,7 @@ public class EnumConverter {
                 gender = Gender.FEMALE;
                 break;
             default:
-                logger.warn("Wrong input. Please, input a number from 1 to 2. Try again!");
+                System.out.println("Wrong input. Please, input a number from 1 to 2. Try again!");
         }
         return gender;
     }
