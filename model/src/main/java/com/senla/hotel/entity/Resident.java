@@ -1,6 +1,7 @@
 package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.Gender;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -16,12 +17,15 @@ public class Resident extends AEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column
+    @Column(name = "gender")
     private Gender gender;
-    @Column
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column(name = "vip", nullable = false)
     private Boolean vip;
-    @Column
+    @Column(name = "phone")
     private String phone;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "history_id", referencedColumnName = "id")
     private RoomHistory history;
 
     public Resident() {
@@ -109,11 +113,11 @@ public class Resident extends AEntity {
         }
         final Resident resident = (Resident) o;
         return Objects.equals(firstName, resident.firstName) &&
-               Objects.equals(lastName, resident.lastName) &&
-               gender == resident.gender &&
-               Objects.equals(vip, resident.vip) &&
-               Objects.equals(phone, resident.phone) &&
-               Objects.equals(history, resident.history);
+                Objects.equals(lastName, resident.lastName) &&
+                gender == resident.gender &&
+                Objects.equals(vip, resident.vip) &&
+                Objects.equals(phone, resident.phone) &&
+                Objects.equals(history, resident.history);
     }
 
     @Override

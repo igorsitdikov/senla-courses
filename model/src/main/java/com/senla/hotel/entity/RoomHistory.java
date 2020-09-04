@@ -15,11 +15,21 @@ public class RoomHistory extends AEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "resident_id", referencedColumnName = "id")
     private Resident resident;
+    @ManyToMany
+    @JoinTable(name = "histories_attendances", joinColumns = {@JoinColumn(name = "history_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "attendance_id")})
     private List<Attendance> attendances = new LinkedList<>();
+    @Column(name = "check_in")
     private LocalDate checkIn;
+    @Column(name = "check_out")
     private LocalDate checkOut;
+    @Column(name = "status")
     private HistoryStatus status;
 
     public RoomHistory() {
