@@ -74,7 +74,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         try {
             connector.getConnection().setAutoCommit(false);
             final Resident resident = residentDao.findById(residentId);
-            final RoomHistory history = resident.getHistory();
+            final RoomHistory history = resident.getHistory().iterator().next();
             history.setStatus(HistoryStatus.CHECKED_OUT);
             history.setCheckOut(date);
             roomHistoryDao.update(history);
@@ -103,11 +103,11 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     public BigDecimal calculateBill(final Long id) throws PersistException {
         final Resident resident = residentDao.findById(id);
         if (resident.getHistory() != null) {
-            final BigDecimal total = roomHistoryDao.calculateBill(resident.getHistory().getId());
+            final BigDecimal total = roomHistoryDao.calculateBill(resident.getHistory().iterator().next().getId());
             logger.info("{} has to pay {} BYN for the room №{}",
                         resident.toString(),
                         total,
-                        resident.getHistory().getRoom().getNumber());
+                        resident.getHistory().iterator().next().getRoom().getNumber());
             return total;
         } else {
             logger.warn("{} is not checked-in.",

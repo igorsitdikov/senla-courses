@@ -13,8 +13,10 @@ import com.senla.hotel.utils.Connector;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Singleton
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
@@ -173,7 +175,9 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             while (rs.next()) {
                 final Resident resident = mapper.sourceToDestination(rs);
                 final RoomHistory history = historyMapper.sourceToDestination(rs);
-                resident.setHistory(history);
+                Set<RoomHistory> histories = new HashSet<>();
+                histories.add(history);
+                resident.setHistory(histories);
                 result.add(resident);
             }
         } catch (final Exception e) {

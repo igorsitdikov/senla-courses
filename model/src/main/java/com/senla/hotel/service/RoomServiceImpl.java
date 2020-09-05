@@ -5,7 +5,6 @@ import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -24,7 +23,8 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -85,14 +85,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
+    public void changeRoomPrice(final Integer number, final BigDecimal price)
+        throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         room.setPrice(price);
         roomDao.update(room);
     }
 
     @Override
-    public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException, PersistException {
+    public void changeRoomStatus(final Long id, final RoomStatus status)
+        throws EntityNotFoundException, PersistException {
         final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             logger.warn("Room is already occupied");
@@ -105,7 +107,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void changeRoomStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException, PersistException {
+    public void changeRoomStatus(final Integer number, final RoomStatus status)
+        throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         changeRoomStatus(room.getId(), status);
     }
@@ -118,14 +121,19 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
         SessionFactory factory = hibernateUtil.getSessionFactory();
-        try ( Session session = factory.openSession()) {
+        try (Session session = factory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-//            CriteriaQuery<Resident> criteria = builder.createQuery(Resident.class);
-//            criteria.from(Resident.class);
-//            List<Resident> data = session.createQuery(criteria).getResultList();
-            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
-            criteria.from(Attendance.class);
-            List<Attendance> data = session.createQuery(criteria).getResultList();
+            CriteriaQuery<Resident> criteria = builder.createQuery(Resident.class);
+            criteria.from(Resident.class);
+            List<Resident> data = session.createQuery(criteria).getResultList();
+            data.forEach(el -> {
+                if (el.getHistory().size() > 0) {
+                    System.out.println(el.getHistory().iterator().next().toString());
+                }
+            });
+//            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
+//            criteria.from(Attendance.class);
+//            List<Attendance> data = session.createQuery(criteria).getResultList();
             System.out.println();
         }
         final List<Room> rooms = roomDao.getAll();

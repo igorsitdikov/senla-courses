@@ -2,9 +2,19 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.Gender;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "resident")
@@ -17,6 +27,7 @@ public class Resident extends AEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
     @Type(type = "org.hibernate.type.NumericBooleanType")
@@ -24,9 +35,9 @@ public class Resident extends AEntity {
     private Boolean vip;
     @Column(name = "phone")
     private String phone;
-    @OneToOne(mappedBy = "resident", cascade = CascadeType.ALL)
-//    @JoinColumn(name = "history_id", referencedColumnName = "id")
-    private RoomHistory history;
+    @OneToMany(mappedBy = "resident")
+    @Where(clause = "status = 'CHECKED_IN'")
+    private Set<RoomHistory> history;
 
     public Resident() {
     }
@@ -36,7 +47,7 @@ public class Resident extends AEntity {
                     final Gender gender,
                     final Boolean vip,
                     final String phone,
-                    final RoomHistory history) {
+                    final Set<RoomHistory> history) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -95,11 +106,11 @@ public class Resident extends AEntity {
         this.phone = phone;
     }
 
-    public RoomHistory getHistory() {
+    public Set<RoomHistory> getHistory() {
         return history;
     }
 
-    public void setHistory(final RoomHistory history) {
+    public void setHistory(final Set<RoomHistory> history) {
         this.history = history;
     }
 
@@ -113,11 +124,11 @@ public class Resident extends AEntity {
         }
         final Resident resident = (Resident) o;
         return Objects.equals(firstName, resident.firstName) &&
-                Objects.equals(lastName, resident.lastName) &&
-                gender == resident.gender &&
-                Objects.equals(vip, resident.vip) &&
-                Objects.equals(phone, resident.phone) &&
-                Objects.equals(history, resident.history);
+               Objects.equals(lastName, resident.lastName) &&
+               gender == resident.gender &&
+               Objects.equals(vip, resident.vip) &&
+               Objects.equals(phone, resident.phone) &&
+               Objects.equals(history, resident.history);
     }
 
     @Override

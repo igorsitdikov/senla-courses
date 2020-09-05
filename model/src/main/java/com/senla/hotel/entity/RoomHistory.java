@@ -2,7 +2,19 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.HistoryStatus;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,8 +30,11 @@ public class RoomHistory extends AEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "resident_id", referencedColumnName = "id")
+    @ManyToOne
+//    @JoinColumn(name="cart_id", nullable=false)
+//    @JoinTable(name = "resident", joinColumns = {@JoinColumn(name = "resident_id")}, inverseJoinColumns = {
+//        @JoinColumn(name = "id", unique = true)})
+    @JoinColumn(name = "resident_id", nullable = false)
     private Resident resident;
     @ManyToMany
     @JoinTable(name = "histories_attendances", joinColumns = {@JoinColumn(name = "history_id")}, inverseJoinColumns = {
@@ -29,6 +44,7 @@ public class RoomHistory extends AEntity {
     private LocalDate checkIn;
     @Column(name = "check_out")
     private LocalDate checkOut;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private HistoryStatus status;
 
@@ -119,19 +135,19 @@ public class RoomHistory extends AEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(room, resident, attendances, checkIn, checkOut);
+        return Objects.hash(room, attendances, checkIn, checkOut);
     }
 
     @Override
     public String toString() {
         return String.format("Room's history №%d: %n" +
                         "\tRoom № %d.%n" +
-                        "\t%s. %n" +
+//                        "\t%s. %n" +
                         "\tCheck-in %s. %n" +
                         "\tCheck-out %s.",
                 id,
                 room.getNumber(),
-                resident.toString(),
+//                resident.toString(),
                 checkIn,
                 checkOut);
     }

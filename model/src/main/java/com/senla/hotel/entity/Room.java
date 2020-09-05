@@ -5,7 +5,15 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.utils.StringUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +28,15 @@ public class Room extends AEntity {
     private Long id;
     @Column(name = "number")
     private Integer number;
+    @Enumerated(EnumType.STRING)
     @Column(name = "stars")
     private Stars stars;
+    @Enumerated(EnumType.STRING)
     @Column(name = "accommodation")
     private Accommodation accommodation;
     @Column(name = "price")
     private BigDecimal price;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private RoomStatus status;
     @OneToMany(mappedBy = "room")
