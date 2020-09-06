@@ -7,6 +7,7 @@ import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -42,6 +43,14 @@ public class HibernateUtil {
             }
         }
         return sessionFactory;
+    }
+
+    public Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    public void closeSession(final Session session) {
+        session.close();
     }
 
     public void shutdown() {
