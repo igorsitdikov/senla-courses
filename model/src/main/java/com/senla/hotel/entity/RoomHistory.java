@@ -15,17 +15,21 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/*
+* TODO: add DTO for all entities
+* */
 @Entity
 @Table(name = "history")
 public class RoomHistory extends AEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id", referencedColumnName = "id")
@@ -41,9 +45,9 @@ public class RoomHistory extends AEntity {
             @JoinColumn(name = "attendance_id")})
     private List<Attendance> attendances = new LinkedList<>();
     @Column(name = "check_in")
-    private LocalDate checkIn;
+    private Date checkIn;
     @Column(name = "check_out")
-    private LocalDate checkOut;
+    private Date checkOut;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private HistoryStatus status;
@@ -54,8 +58,8 @@ public class RoomHistory extends AEntity {
     public RoomHistory(Room room, Resident resident, LocalDate checkIn, LocalDate checkOut, HistoryStatus status) {
         this.room = room;
         this.resident = resident;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+        this.checkIn = Date.valueOf(checkIn);
+        this.checkOut = Date.valueOf(checkOut);
         this.status = status;
     }
 
@@ -94,19 +98,19 @@ public class RoomHistory extends AEntity {
     }
 
     public LocalDate getCheckIn() {
-        return checkIn;
+        return checkIn.toLocalDate();
     }
 
     public void setCheckIn(LocalDate checkIn) {
-        this.checkIn = checkIn;
+        this.checkIn = Date.valueOf(checkIn);
     }
 
     public LocalDate getCheckOut() {
-        return checkOut;
+        return checkOut.toLocalDate();
     }
 
     public void setCheckOut(LocalDate checkOut) {
-        this.checkOut = checkOut;
+        this.checkOut = Date.valueOf(checkOut);
     }
 
     public HistoryStatus getStatus() {

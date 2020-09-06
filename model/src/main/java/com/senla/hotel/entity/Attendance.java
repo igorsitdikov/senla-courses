@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Attendance extends AEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "price")
     private BigDecimal price;

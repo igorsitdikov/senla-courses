@@ -24,7 +24,7 @@ import java.util.Objects;
 public class Room extends AEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "number")
     private Integer number;
