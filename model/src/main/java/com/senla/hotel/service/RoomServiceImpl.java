@@ -7,14 +7,16 @@ import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
+import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.hibernatedao.interfaces.RoomHibernateDao;
+import com.senla.hotel.hibernatedao.interfaces.RoomHistoryHibernateDao;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
 import com.senla.hotel.service.interfaces.RoomService;
-import com.senla.hotel.utils.HibernateUtil;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
 import com.senla.hotel.utils.comparator.RoomPriceComparator;
@@ -23,11 +25,7 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,7 +48,9 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomMapper roomMapper;
     @Autowired
-    private HibernateUtil hibernateUtil;
+    private RoomHibernateDao roomHibernateDao;
+    @Autowired
+    private RoomHistoryHibernateDao roomHistoryHibernateDao;
     @PropertyLoad(propertyName = "rooms")
     private String property;
     @PropertyLoad(type = Type.INTEGER)
@@ -120,22 +120,39 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Resident> criteria = builder.createQuery(Resident.class);
-            criteria.from(Resident.class);
-            List<Resident> data = session.createQuery(criteria).getResultList();
-            data.forEach(el -> {
-                if (el.getHistory().size() > 0) {
-                    System.out.println(el.getHistory().iterator().next().toString());
-                }
-            });
-//            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
-//            criteria.from(Attendance.class);
-//            List<Attendance> data = session.createQuery(criteria).getResultList();
+//        final List<Room> data = roomHibernateDao.getVacantOnDate(LocalDate.parse("2020-06-20"));
+        try {
+            final RoomHistory data = roomHistoryHibernateDao.getByResidentAndCheckedInStatus(4L);
             System.out.println();
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
         }
+        System.out.println();
+
+//        SessionFactory factory = hibernateUtil.getSessionFactory();
+//        try (Session session = factory.openSession()) {
+//            CriteriaBuilder builder = session.getCriteriaBuilder();
+//            CriteriaQuery<Room> criteria = builder.createQuery(Room.class);
+//            Root<Room> root = criteria.from(Room.class);
+//            criteria.select(root).where(builder.equal(root.get("id"), 4));
+//            Query<Room> query = session.createQuery(criteria);
+//            List<Room> data = query.getResultList();
+////            CriteriaQuery<RoomHistory> criteria = builder.createQuery(RoomHistory.class);
+////            criteria.from(RoomHistory.class);
+////            List<RoomHistory> data = session.createQuery(criteria).getResultList();
+////            CriteriaQuery<Resident> criteria = builder.createQuery(Resident.class);
+////            criteria.from(Resident.class);
+////            List<Resident> data = session.createQuery(criteria).getResultList();
+////            data.forEach(el -> {
+////                if (el.getHistory().size() > 0) {
+////                    System.out.println(el.getHistory().iterator().next().toString());
+////                }
+////            });
+////            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
+////            criteria.from(Attendance.class);
+////            List<Attendance> data = session.createQuery(criteria).getResultList();
+//            System.out.println();
+//        }
         final List<Room> rooms = roomDao.getAll();
         return sortRooms(sortField, rooms);
     }
