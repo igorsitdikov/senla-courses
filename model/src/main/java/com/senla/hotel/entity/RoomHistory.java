@@ -38,7 +38,7 @@ public class RoomHistory extends AEntity {
     @ManyToOne
     @JoinColumn(name = "resident_id", nullable = false)
     private Resident resident;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinTable(name = "histories_attendances", joinColumns = {@JoinColumn(name = "history_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attendance_id")})
     private List<Attendance> attendances = new LinkedList<>();

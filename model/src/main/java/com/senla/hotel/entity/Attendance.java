@@ -60,6 +60,14 @@ public class Attendance extends AEntity {
         this.name = name;
     }
 
+    public List<RoomHistory> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(List<RoomHistory> histories) {
+        this.histories = histories;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

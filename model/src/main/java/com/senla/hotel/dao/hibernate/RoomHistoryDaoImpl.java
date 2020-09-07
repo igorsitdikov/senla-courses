@@ -78,7 +78,21 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public void addAttendanceToHistory(final RoomHistory history, final Attendance attendance) throws PersistException {
-        history.addAttendance(attendance);
-        update(history);
+        SessionFactory factory = hibernateUtil.getSessionFactory();
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<RoomHistory> criteria = builder.createQuery(RoomHistory.class);
+            Root<RoomHistory> root = criteria.from(RoomHistory.class);
+            criteria.select(root).where(builder.equal(root.get("id"), history.getId()));
+            Join<Attendance, RoomHistory> attendanceJoin = root.join("attendances", JoinType.LEFT);
+            RoomHistory roomHistory = session.createQuery(criteria).getSingleResult();
+
+            session.beginTransaction();
+
+            roomHistory.addAttendance(attendance);
+            session.save(roomHistory);
+            session.getTransaction().commit();
+//            update(roomHistory);
+        }
     }
 }
