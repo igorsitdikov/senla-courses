@@ -11,7 +11,13 @@ import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -32,9 +38,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             Predicate equalStatusCheckedIn = builder.equal(root.get("status"), HistoryStatus.CHECKED_IN);
             Predicate equalResidentId = builder.equal(root.get("resident").get("id"), id);
             criteria.select(root).where(builder.and(equalResidentId, equalStatusCheckedIn));
-            RoomHistory data = session.createQuery(criteria).getSingleResult();
-            System.out.println();
-            return data;
+            return session.createQuery(criteria).getSingleResult();
         }
     }
 

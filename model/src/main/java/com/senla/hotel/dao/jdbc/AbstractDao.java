@@ -1,6 +1,5 @@
 package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.PersistException;

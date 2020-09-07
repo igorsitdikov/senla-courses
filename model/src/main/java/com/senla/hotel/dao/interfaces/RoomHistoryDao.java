@@ -13,5 +13,5 @@ public interface RoomHistoryDao extends GenericDao<RoomHistory, Long> {
 
     BigDecimal calculateBill(Long id) throws PersistException;
 
-    void addAttendanceToHistory(final RoomHistory history, final Attendance attendance) throws PersistException;
+    void addAttendanceToHistory(RoomHistory history, Attendance attendance) throws PersistException;
 }

@@ -35,8 +35,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             Predicate equalCheckOutStatus = builder.equal(root.get("status"), HistoryStatus.CHECKED_OUT);
             criteria.select(root).where(builder.and(equalRoomId, equalCheckOutStatus)).orderBy(builder.desc(root.get("checkOut")));
             List<RoomHistory> data = session.createQuery(criteria).setMaxResults(limit).getResultList();
-            List<Resident> residents = data.stream().map(RoomHistory::getResident).collect(Collectors.toList());
-            return residents;
+            return data.stream().map(RoomHistory::getResident).collect(Collectors.toList());
         }
     }
 }

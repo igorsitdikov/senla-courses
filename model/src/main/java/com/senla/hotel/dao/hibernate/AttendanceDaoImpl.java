@@ -18,6 +18,7 @@ import java.util.List;
 
 @Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
+
     public AttendanceDaoImpl(final HibernateUtil hibernateUtil) {
         super(hibernateUtil);
     }
@@ -31,8 +32,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             Root<Attendance> root = criteria.from(Attendance.class);
             Join<Attendance, RoomHistory> historyJoin = root.join("histories", JoinType.LEFT);
             criteria.select(root).where(builder.equal(historyJoin.get("id"), id));
-            List<Attendance> attendances = session.createQuery(criteria).getResultList();
-            return attendances;
+            return session.createQuery(criteria).getResultList();
         }
     }
 }

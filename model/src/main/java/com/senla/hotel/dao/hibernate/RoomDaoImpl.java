@@ -28,7 +28,6 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         super(hibernateUtil);
     }
 
-
     @Override
     public List<Room> getVacantRooms() throws PersistException {
         return getAllWhere("status", RoomStatus.VACANT);
@@ -51,9 +50,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             Predicate equalHistoryCheckedOut = builder.equal(historyJoin.get("status"), HistoryStatus.CHECKED_OUT);
             Predicate lessCheckOutDate = builder.lessThan(historyJoin.get("checkOut"), Date.valueOf(date));
             criteria.select(root).where(builder.or(equalRoomVacant, equalHistoryCheckedOut, lessCheckOutDate));
-            List<Room> data = session.createQuery(criteria).getResultList();
-            System.out.println();
-            return data;
+            return session.createQuery(criteria).getResultList();
         }
     }
 }
