@@ -2,19 +2,7 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.HistoryStatus;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -22,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 /*
-* TODO: add DTO for all entities
-* */
+ * TODO: add DTO for all entities
+ * */
 @Entity
 @Table(name = "history")
 public class RoomHistory extends AEntity {
@@ -61,6 +49,14 @@ public class RoomHistory extends AEntity {
         this.checkIn = Date.valueOf(checkIn);
         this.checkOut = Date.valueOf(checkOut);
         this.status = status;
+    }
+
+    public void addAttendance(Attendance attendance) {
+        this.attendances.add(attendance);
+    }
+
+    public void removeAttendance(Attendance attendance) {
+        this.attendances.remove(attendance);
     }
 
     @Override
