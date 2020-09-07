@@ -1,11 +1,11 @@
-package com.senla.hotel.hibernatedao;
+package com.senla.hotel.dao.hibernate;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.hibernatedao.interfaces.ResidentHibernateDao;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Singleton
-public class ResidentHibernateDaoImpl extends AbstractHibernateDao<Resident, Long> implements ResidentHibernateDao {
+public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
 
-    public ResidentHibernateDaoImpl(final HibernateUtil hibernateUtil) {
+    public ResidentDaoImpl(final HibernateUtil hibernateUtil) {
         super(hibernateUtil);
     }
 

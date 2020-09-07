@@ -1,12 +1,12 @@
-package com.senla.hotel.hibernatedao;
+package com.senla.hotel.dao.hibernate;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.hibernatedao.interfaces.RoomHibernateDao;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,9 +22,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Singleton
-public class RoomHibernateDaoImpl extends AbstractHibernateDao<Room, Long> implements RoomHibernateDao {
+public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
-    public RoomHibernateDaoImpl(final HibernateUtil hibernateUtil) {
+    public RoomDaoImpl(final HibernateUtil hibernateUtil) {
         super(hibernateUtil);
     }
 

@@ -1,4 +1,4 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
+//@Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final Connector connector) {

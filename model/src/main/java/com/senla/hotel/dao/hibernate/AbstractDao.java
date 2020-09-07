@@ -1,9 +1,9 @@
-package com.senla.hotel.hibernatedao;
+package com.senla.hotel.dao.hibernate;
 
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.PersistException;
-import com.senla.hotel.hibernatedao.interfaces.GenericHibernateDao;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,9 +24,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Singleton
-public abstract class AbstractHibernateDao<T extends AEntity, ID extends Long> implements GenericHibernateDao<T, ID> {
+public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
-    public AbstractHibernateDao(final HibernateUtil hibernateUtil) {
+    public AbstractDao(final HibernateUtil hibernateUtil) {
         this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.hibernateUtil = hibernateUtil;
     }

@@ -23,12 +23,9 @@ public class RoomHistory extends AEntity {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
     @ManyToOne
-//    @JoinColumn(name="cart_id", nullable=false)
-//    @JoinTable(name = "resident", joinColumns = {@JoinColumn(name = "resident_id")}, inverseJoinColumns = {
-//        @JoinColumn(name = "id", unique = true)})
     @JoinColumn(name = "resident_id", nullable = false)
     private Resident resident;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "histories_attendances", joinColumns = {@JoinColumn(name = "history_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attendance_id")})
     private List<Attendance> attendances = new LinkedList<>();

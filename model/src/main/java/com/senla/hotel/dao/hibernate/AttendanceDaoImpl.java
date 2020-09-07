@@ -1,0 +1,38 @@
+package com.senla.hotel.dao.hibernate;
+
+import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
+import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
+@Singleton
+public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
+    public AttendanceDaoImpl(final HibernateUtil hibernateUtil) {
+        super(hibernateUtil);
+    }
+
+    @Override
+    public List<Attendance> getAllAttendancesByHistoryId(Long id) throws PersistException {
+        SessionFactory factory = hibernateUtil.getSessionFactory();
+        try (Session session = factory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
+            Root<Attendance> root = criteria.from(Attendance.class);
+            Join<Attendance, RoomHistory> historyJoin = root.join("histories", JoinType.LEFT);
+            criteria.select(root).where(builder.equal(historyJoin.get("id"), id));
+            List<Attendance> attendances = session.createQuery(criteria).getResultList();
+            return attendances;
+        }
+    }
+}

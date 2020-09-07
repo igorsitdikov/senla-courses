@@ -1,4 +1,4 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
@@ -20,7 +20,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-@Singleton
+//@Singleton
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
 
     @Autowired
