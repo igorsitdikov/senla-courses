@@ -64,7 +64,7 @@ public class ResidentServiceImpl implements ResidentService {
         final Attendance attendance = attendanceDao.findById(attendanceId);
         final RoomHistory history = roomHistoryDao
                 .getByResidentAndCheckedInStatus(residentId);
-        roomHistoryDao.addAttendanceToHistory(history.getId(), attendance.getId());
+        roomHistoryDao.addAttendanceToHistory(history, attendance);
     }
 
     @Override

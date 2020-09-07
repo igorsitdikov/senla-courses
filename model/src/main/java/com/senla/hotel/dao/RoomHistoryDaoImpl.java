@@ -153,11 +153,11 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    public void addAttendanceToHistory(final Long historyId, final Long attendanceId) throws PersistException {
+    public void addAttendanceToHistory(final RoomHistory history, final Attendance attendance) throws PersistException {
         final String sql = getCreateQueryAttendanceToHistory();
         try (PreparedStatement statement = connector.getConnection()
                 .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            setVariableToStatement(statement, historyId, attendanceId);
+            setVariableToStatement(statement, history.getId(), attendance.getId());
             final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);
