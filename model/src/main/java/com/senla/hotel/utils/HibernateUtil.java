@@ -20,9 +20,8 @@ public class HibernateUtil {
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 
-    public SessionFactory getSessionFactory() {
+    public HibernateUtil() {
         init();
-        return sessionFactory;
     }
 
     private void init() {
@@ -46,8 +45,11 @@ public class HibernateUtil {
         }
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     public Session openSession() {
-        init();
         return sessionFactory.openSession();
     }
 
