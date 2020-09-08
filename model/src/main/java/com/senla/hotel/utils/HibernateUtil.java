@@ -21,6 +21,11 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
     public SessionFactory getSessionFactory() {
+        init();
+        return sessionFactory;
+    }
+
+    private void init() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
@@ -28,25 +33,22 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(RoomHistory.class);
                 configuration.addAnnotatedClass(Room.class);
                 configuration.addAnnotatedClass(Resident.class);
-//                configuration.configure("hibernate.properties");
                 logger.info("Hibernate configuration has been loaded!");
                 registry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties())
-                        .build();
+                    .applySettings(configuration.getProperties())
+                    .build();
                 logger.info("Hibernate ServiceRegistry has been created!");
                 sessionFactory = configuration.buildSessionFactory(registry);
             } catch (final Exception e) {
-                e.printStackTrace();
-                if (registry != null) {
-                    StandardServiceRegistryBuilder.destroy(registry);
-                }
+                logger.error(e.getMessage());
+                shutdown();
             }
         }
-        return sessionFactory;
     }
 
-    public Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
+    public Session openSession() {
+        init();
+        return sessionFactory.openSession();
     }
 
     public void closeSession(final Session session) {

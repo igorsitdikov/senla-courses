@@ -6,7 +6,6 @@ import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -20,7 +19,8 @@ import java.util.List;
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final HibernateUtil hibernateUtil) {
-        this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.entityClass =
+            (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.hibernateUtil = hibernateUtil;
     }
 
@@ -30,48 +30,46 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public T findById(final Long id) throws PersistException {
-        return getBy("id", id);
+        return getSingleBy("id", id);
     }
 
-    protected <E> T getBy(final String field, final E variable) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+    protected <E> T getSingleBy(final String field, final E variable) throws PersistException {
+        Query<T> query = getQueryBy(field, variable);
+        return query.getSingleResult();
+    }
+
+    private <E> Query<T> getQueryBy(final String field, final E variable) throws PersistException {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
             Root<T> root = criteria.from(entityClass);
             criteria.select(root).where(builder.equal(root.get(field), variable));
-            Query<T> query = session.createQuery(criteria);
-            return query.getSingleResult();
+            return session.createQuery(criteria);
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
     @Override
     public List<T> getAll() throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
             criteria.from(entityClass);
             return session.createQuery(criteria).getResultList();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
-    protected <E> List<T> getAllWhere(final String field, final E variable) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteria = builder.createQuery(entityClass);
-            Root<T> root = criteria.from(entityClass);
-            criteria.select(root).where(builder.equal(root.get(field), variable));
-            Query<T> query = session.createQuery(criteria);
-            return query.getResultList();
-        }
+    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
+        Query<T> query = getQueryBy(field, variable);
+        return query.getResultList();
     }
 
     @Override
     public void insertMany(final List<T> list) throws PersistException {
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             Transaction transaction = session.beginTransaction();
             int i = 0;
             for (T entity : list) {
@@ -83,6 +81,8 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
                 }
             }
             transaction.commit();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
@@ -91,35 +91,38 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         if (object.getId() != null) {
             throw new PersistException("Object is already persist.");
         }
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.save(object);
             session.flush();
             transaction.commit();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
         return object;
     }
 
     @Override
     public void update(final T object) throws PersistException {
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.update(object);
             session.flush();
             transaction.commit();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
     @Override
     public void delete(final T object) throws PersistException {
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.delete(object);
             session.flush();
             transaction.commit();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 }

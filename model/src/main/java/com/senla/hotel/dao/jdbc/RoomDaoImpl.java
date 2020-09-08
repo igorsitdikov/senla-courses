@@ -68,12 +68,12 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public List<Room> getVacantRooms() throws PersistException {
-        return getAllWhere("status", RoomStatus.VACANT);
+        return getAllBy("status", RoomStatus.VACANT);
     }
 
     @Override
     public Room findByNumber(final Integer number) throws PersistException {
-        return getBy("number", number);
+        return getSingleBy("number", number);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,18 +29,17 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public List<Room> getVacantRooms() throws PersistException {
-        return getAllWhere("status", RoomStatus.VACANT);
+        return getAllBy("status", RoomStatus.VACANT);
     }
 
     @Override
     public Room findByNumber(final Integer number) throws PersistException {
-        return getBy("number", number);
+        return getSingleBy("number", number);
     }
 
     @Override
     public List<Room> getVacantOnDate(final LocalDate date) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Room> criteria = builder.createQuery(Room.class);
             Root<Room> root = criteria.from(Room.class);
@@ -51,6 +49,8 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             Predicate lessCheckOutDate = builder.lessThan(historyJoin.get("checkOut"), Date.valueOf(date));
             criteria.select(root).where(builder.or(equalRoomVacant, equalHistoryCheckedOut, lessCheckOutDate));
             return session.createQuery(criteria).getResultList();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 }

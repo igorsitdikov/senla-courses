@@ -39,10 +39,10 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public T findById(final Long id) throws PersistException {
-        return getBy("id", id);
+        return getSingleBy("id", id);
     }
 
-    protected <E> T getBy(final String field, final E variable) throws PersistException {
+    protected <E> T getSingleBy(final String field, final E variable) throws PersistException {
         final List<T> list;
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
@@ -98,7 +98,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return list;
     }
 
-    protected <E> List<T> getAllWhere(final String field, final E variable) throws PersistException {
+    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
         return getAllBySqlQuery(sql, variable);

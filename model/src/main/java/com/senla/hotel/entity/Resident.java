@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Resident extends AEntity {
     private Boolean vip;
     @Column(name = "phone")
     private String phone;
-    @OneToMany(mappedBy = "resident")
+    @OneToMany(mappedBy = "resident", fetch = FetchType.LAZY)
     @Where(clause = "status = 'CHECKED_IN'")
     private Set<RoomHistory> history;
 

@@ -7,7 +7,6 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -25,14 +24,15 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
 
     @Override
     public List<Attendance> getAllAttendancesByHistoryId(Long id) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Attendance> criteria = builder.createQuery(Attendance.class);
             Root<Attendance> root = criteria.from(Attendance.class);
             Join<Attendance, RoomHistory> historyJoin = root.join("histories", JoinType.LEFT);
             criteria.select(root).where(builder.equal(historyJoin.get("id"), id));
             return session.createQuery(criteria).getResultList();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 }

@@ -9,7 +9,6 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,8 +29,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public RoomHistory getByResidentAndCheckedInStatus(final Long id) throws PersistException, EntityNotFoundException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<RoomHistory> criteria = builder.createQuery(RoomHistory.class);
             Root<RoomHistory> root = criteria.from(RoomHistory.class);
@@ -39,18 +37,20 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             Predicate equalResidentId = builder.equal(root.get("resident").get("id"), id);
             criteria.select(root).where(builder.and(equalResidentId, equalStatusCheckedIn));
             return session.createQuery(criteria).getSingleResult();
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
     @Override
     public BigDecimal calculateBill(final Long id) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Object[]> criteria = builder.createQuery(Object[].class);
             Root<RoomHistory> root = criteria.from(RoomHistory.class);
             Join<Attendance, RoomHistory> attendanceJoin = root.join("attendances", JoinType.LEFT);
-            Expression<Integer> diff = builder.function("DATEDIFF", Integer.class, root.get("checkOut"), root.get("checkIn"));
+            Expression<Integer> diff =
+                builder.function("DATEDIFF", Integer.class, root.get("checkOut"), root.get("checkIn"));
             Expression<Number> roomPrice = root.get("room").get("price");
             Expression<Number> totalRoomOnly = builder.prod(diff, roomPrice);
             Expression<Number> allAttendancesPerDay = builder.sum(attendanceJoin.get("price"));
@@ -59,8 +59,8 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             Predicate equalStatusCheckedIn = builder.equal(root.get("status"), HistoryStatus.CHECKED_IN);
             Predicate equalId = builder.equal(root.get("id"), id);
             criteria
-                    .multiselect(totalRoomOnly, total)
-                    .where(builder.and(equalId, equalStatusCheckedIn));
+                .multiselect(totalRoomOnly, total)
+                .where(builder.and(equalId, equalStatusCheckedIn));
             List<Object[]> result = session.createQuery(criteria).getResultList();
             if (result.size() == 0) {
                 throw new PersistException("Received no records.");
@@ -73,26 +73,26 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             } else {
                 return (BigDecimal) result.get(0)[0];
             }
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 
     @Override
     public void addAttendanceToHistory(final RoomHistory history, final Attendance attendance) throws PersistException {
-        SessionFactory factory = hibernateUtil.getSessionFactory();
-        try (Session session = factory.openSession()) {
+        try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<RoomHistory> criteria = builder.createQuery(RoomHistory.class);
             Root<RoomHistory> root = criteria.from(RoomHistory.class);
             criteria.select(root).where(builder.equal(root.get("id"), history.getId()));
-            Join<Attendance, RoomHistory> attendanceJoin = root.join("attendances", JoinType.LEFT);
+            root.join("attendances", JoinType.LEFT);
             RoomHistory roomHistory = session.createQuery(criteria).getSingleResult();
-
             session.beginTransaction();
-
             roomHistory.addAttendance(attendance);
             session.save(roomHistory);
             session.getTransaction().commit();
-//            update(roomHistory);
+        } catch (Exception e) {
+            throw new PersistException(e);
         }
     }
 }
