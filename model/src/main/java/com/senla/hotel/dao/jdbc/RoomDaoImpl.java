@@ -3,7 +3,6 @@ package com.senla.hotel.dao.jdbc;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomDao;
-import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
@@ -36,6 +35,10 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
                "       room.stars AS rm_stars,\n" +
                "       room.accommodation AS rm_accommodation " +
                "FROM room ";
+    }
+
+    public String getCountVacantRoomsQuery() {
+        return "SELECT DISTINCT COUNT(*) AS total FROM room WHERE status = 'VACANT' ";
     }
 
     @Override
@@ -160,6 +163,14 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public Long countVacantRooms() throws PersistException {
-        return null;
+        String sql = getCountVacantRoomsQuery();
+        try {
+            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            final ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getLong("total");
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
     }
 }

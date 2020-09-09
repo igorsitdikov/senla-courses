@@ -154,7 +154,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     }
 
     public String getCountResidentsQuery() {
-        return "SELECT COUNT(*) FROM resident";
+        return "SELECT DISTINCT COUNT(*) AS total FROM resident";
     }
 
     @Override
@@ -222,8 +222,16 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     }
 
     @Override
-    public Long getTotalResidents() throws PersistException {
-        return null;
+    public Long countTotalResidents() throws PersistException {
+        String sql = getCountResidentsQuery();
+        try {
+            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            final ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getLong("total");
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override
