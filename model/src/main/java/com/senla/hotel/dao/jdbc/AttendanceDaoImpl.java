@@ -1,7 +1,6 @@
 package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-@Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
     @Autowired

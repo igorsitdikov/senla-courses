@@ -19,7 +19,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Singleton
+@Singleton
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
 
     public ResidentDaoImpl(final HibernateUtil hibernateUtil) {

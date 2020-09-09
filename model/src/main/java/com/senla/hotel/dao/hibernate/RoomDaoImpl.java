@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     public RoomDaoImpl(final HibernateUtil hibernateUtil) {

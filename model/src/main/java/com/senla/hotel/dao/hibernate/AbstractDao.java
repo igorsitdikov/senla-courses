@@ -16,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final HibernateUtil hibernateUtil) {

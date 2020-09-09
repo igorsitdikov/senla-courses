@@ -1,7 +1,6 @@
 package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-@Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Autowired

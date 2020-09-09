@@ -1,7 +1,6 @@
 package com.senla.hotel.dao.interfaces;
 
 import com.senla.hotel.entity.AEntity;
-import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 
 import java.io.Serializable;

@@ -16,7 +16,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
     public AttendanceDaoImpl(final HibernateUtil hibernateUtil) {

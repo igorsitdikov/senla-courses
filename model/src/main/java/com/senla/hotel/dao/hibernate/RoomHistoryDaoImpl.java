@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
 
     public RoomHistoryDaoImpl(final HibernateUtil hibernateUtil) {

@@ -1,7 +1,6 @@
 package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
@@ -19,7 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-@Singleton
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
 
     @Autowired
