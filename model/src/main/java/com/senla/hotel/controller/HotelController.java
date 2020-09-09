@@ -2,11 +2,16 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dto.AttendanceDTO;
+import com.senla.hotel.dto.ResidentDTO;
+import com.senla.hotel.dto.RoomDTO;
+import com.senla.hotel.dto.RoomHistoryDTO;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.AttendanceService;
@@ -39,16 +44,16 @@ public class HotelController {
     @Autowired
     private static SerializationUtils serializationUtils;
 
-    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
+    public void checkIn(final ResidentDTO resident, final RoomDTO room, final LocalDate checkIn, final LocalDate checkOut)
             throws EntityNotFoundException, PersistException, SQLException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
-    public void checkOut(final Resident resident, final LocalDate date) throws EntityNotFoundException, SQLException, PersistException {
+    public void checkOut(final ResidentDTO resident, final LocalDate date) throws EntityNotFoundException, SQLException, PersistException {
         hotelAdminService.checkOut(resident, date);
     }
 
-    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException, PersistException {
+    public BigDecimal calculateBill(final ResidentDTO resident) throws EntityNotFoundException, PersistException {
         return hotelAdminService.calculateBill(resident);
     }
 
@@ -60,7 +65,7 @@ public class HotelController {
         roomHistoryService.exportHistories();
     }
 
-    public List<RoomHistory> showHistories() throws PersistException {
+    public List<RoomHistoryDTO> showHistories() throws PersistException, EntityIsEmptyException {
         return historyService.showHistories();
     }
 
@@ -68,11 +73,11 @@ public class HotelController {
         serializationUtils.deserialize();
     }
 
-    public void exportData() throws PersistException {
-        final List<Attendance> attendances = attendanceService.showAttendances(SortField.DEFAULT);
-        final List<Room> rooms = roomService.showAll(SortField.DEFAULT);
-        final List<Resident> residents = residentService.showResidents(SortField.DEFAULT);
-        final List<RoomHistory> roomHistories = showHistories();
-        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
+    public void exportData() throws PersistException, EntityIsEmptyException {
+        final List<AttendanceDTO> attendances = attendanceService.showAttendances(SortField.DEFAULT);
+        final List<RoomDTO> rooms = roomService.showAll(SortField.DEFAULT);
+        final List<ResidentDTO> residents = residentService.showResidents(SortField.DEFAULT);
+        final List<RoomHistoryDTO> roomHistories = showHistories();
+//        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
     }
 }

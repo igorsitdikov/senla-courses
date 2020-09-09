@@ -34,8 +34,8 @@ public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMappe
 
         roomHistory.setRoom(room);
         roomHistory.setResident(resident);
-        roomHistory.setCheckIn(source.getDate("h_check_in").toLocalDate());
-        roomHistory.setCheckOut(source.getDate("h_check_out").toLocalDate());
+        roomHistory.setCheckIn(source.getDate("h_check_in"));
+        roomHistory.setCheckOut(source.getDate("h_check_out"));
         roomHistory.setStatus(HistoryStatus.valueOf(source.getString("h_status")));
         return roomHistory;
     }

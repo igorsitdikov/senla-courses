@@ -3,6 +3,8 @@ package com.senla.hotel.controller;
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.PropertyLoad;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dto.ResidentDTO;
+import com.senla.hotel.dto.RoomDTO;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -25,23 +27,23 @@ public class RoomController {
     @PropertyLoad(type = Type.BOOLEAN)
     private Boolean statusAllow;
 
-    public void addRoom(final Room room) throws PersistException {
+    public void addRoom(final RoomDTO room) throws PersistException {
         roomService.addRoom(room);
     }
 
-    public List<Room> showAllRooms(final SortField sortField) throws PersistException {
+    public List<RoomDTO> showAllRooms(final SortField sortField) throws PersistException {
         return roomService.showAll(sortField);
     }
 
-    public List<Room> showVacantRooms(final SortField sortField) throws PersistException {
+    public List<RoomDTO> showVacantRooms(final SortField sortField) throws PersistException {
         return roomService.showVacant(sortField);
     }
 
-    public Room showRoomDetails(final Integer roomNumber) throws EntityNotFoundException, PersistException {
+    public RoomDTO showRoomDetails(final Integer roomNumber) throws EntityNotFoundException, PersistException {
         return roomService.showRoomDetails(roomNumber);
     }
 
-    public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
+    public List<RoomDTO> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
         return roomService.showVacantRoomsOnDate(date);
     }
 
@@ -49,7 +51,7 @@ public class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException, PersistException {
+    public List<ResidentDTO> showLastResidents(final RoomDTO room, final Integer amount) throws EntityNotFoundException, PersistException {
         return roomService.showLastResidents(room, amount);
     }
 

@@ -1,13 +1,14 @@
 package com.senla.hotel.utils.comparator;
 
+import com.senla.hotel.dto.ResidentDTO;
 import com.senla.hotel.entity.Resident;
 
 import java.util.Comparator;
 
-public class ResidentFullNameComparator implements Comparator<Resident> {
+public class ResidentFullNameComparator implements Comparator<ResidentDTO> {
 
     @Override
-    public int compare(final Resident residentFirst, final Resident residentSecond) {
+    public int compare(final ResidentDTO residentFirst, final ResidentDTO residentSecond) {
         final int sizeCmp = residentFirst.getLastName().compareTo(residentSecond.getLastName());
         if (sizeCmp != 0) {
             return sizeCmp;

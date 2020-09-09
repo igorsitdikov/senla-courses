@@ -6,13 +6,17 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
+import com.senla.hotel.dto.AttendanceDTO;
+import com.senla.hotel.dto.ResidentDTO;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
@@ -23,6 +27,7 @@ import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 public class ResidentServiceImpl implements ResidentService {
@@ -39,20 +44,22 @@ public class ResidentServiceImpl implements ResidentService {
     private AttendanceDao attendanceDao;
     @Autowired
     private ResidentMapper residentMapper;
+    @Autowired
+    private ResidentDtoMapper residentDtoMapper;
     @PropertyLoad(propertyName = "residents")
     private String property;
 
     @Override
-    public Resident findById(final Long id) throws EntityNotFoundException, PersistException {
+    public ResidentDTO findById(final Long id) throws EntityNotFoundException, PersistException, EntityIsEmptyException {
         final Resident resident = residentDao.findById(id);
         if (resident == null) {
             throw new EntityNotFoundException(String.format("No resident with id %d%n", id));
         }
-        return resident;
+        return residentDtoMapper.destinationToSource(resident);
     }
 
     @Override
-    public void addAttendanceToResident(final Resident resident, final Attendance attendance)
+    public void addAttendanceToResident(final ResidentDTO resident, final AttendanceDTO attendance)
             throws EntityNotFoundException, PersistException {
         final Long residentId = resident.getId();
         final Long attendanceId = attendanceDao.findById(attendance.getId()).getId();
@@ -68,25 +75,31 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public void createResident(final Resident resident) throws PersistException {
-        residentDao.create(resident);
+    public void createResident(final ResidentDTO resident) throws PersistException, EntityIsEmptyException {
+        Resident entity = residentDtoMapper.sourceToDestination(resident);
+        residentDao.create(entity);
     }
 
     @Override
-    public List<Resident> showResidents(final SortField sortField) throws PersistException {
+    public List<ResidentDTO> showResidents(final SortField sortField) throws PersistException, EntityIsEmptyException {
         final List<Resident> residents = residentDao.getAll();
+        final List<ResidentDTO> residentsDto = new ArrayList<>();
+        for (Resident resident : residents) {
+            ResidentDTO residentDTO = residentDtoMapper.destinationToSource(resident);
+            residentsDto.add(residentDTO);
+        }
         switch (sortField) {
             case NAME:
-                return sortResidents(residents, new ResidentFullNameComparator());
+                return sortResidents(residentsDto, new ResidentFullNameComparator());
             case CHECK_OUT_DATE:
-                return sortResidents(residents, new ResidentCheckOutComparator());
+                return sortResidents(residentsDto, new ResidentCheckOutComparator());
             default:
-                return residents;
+                return residentsDto;
         }
     }
 
-    private List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
-        final List<Resident> result = new ArrayList<>(residents);
+    private List<ResidentDTO> sortResidents(final List<ResidentDTO> residents, final Comparator<ResidentDTO> comparator) throws EntityIsEmptyException {
+        final List<ResidentDTO> result = new ArrayList<>(residents);
         result.sort(comparator);
         return result;
     }
@@ -100,7 +113,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void exportResidents() throws PersistException {
-        csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents(SortField.DEFAULT)));
+//        csvWriter.write(property, ParseUtils.entitiesToCsv(residentMapper, showResidents(SortField.DEFAULT)));
     }
 
     @Override

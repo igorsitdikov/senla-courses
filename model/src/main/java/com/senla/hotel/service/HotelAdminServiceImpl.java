@@ -5,6 +5,8 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
+import com.senla.hotel.dto.ResidentDTO;
+import com.senla.hotel.dto.RoomDTO;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -19,6 +21,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -45,8 +48,11 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             Session session = hibernateUtil.openSession();
             Transaction transaction = session.beginTransaction();
             try {
+                Date checkOutDate = Date.valueOf(checkOut);
+                Date checkInDate = Date.valueOf(checkIn);
                 final RoomHistory history =
-                    new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
+                    new RoomHistory(room, resident, checkInDate, checkOutDate, HistoryStatus.CHECKED_IN);
+
                 roomHistoryDao.create(history);
                 room.setStatus(RoomStatus.OCCUPIED);
                 roomRepository.update(room);
@@ -66,7 +72,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
+    public void checkIn(final ResidentDTO resident, final RoomDTO room, final LocalDate checkIn, final LocalDate checkOut)
         throws PersistException, SQLException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
@@ -79,7 +85,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
             final Resident resident = residentDao.findById(residentId);
             final RoomHistory history = resident.getHistory().iterator().next();
             history.setStatus(HistoryStatus.CHECKED_OUT);
-            history.setCheckOut(date);
+            history.setCheckOut(Date.valueOf(date));
             roomHistoryDao.update(history);
             final Room room = history.getRoom();
             if (room.getStatus() != RoomStatus.OCCUPIED) {
@@ -96,7 +102,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkOut(final Resident resident, final LocalDate date) throws SQLException, PersistException {
+    public void checkOut(final ResidentDTO resident, final LocalDate date) throws SQLException, PersistException {
         checkOut(resident.getId(), date);
     }
 
@@ -118,7 +124,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public BigDecimal calculateBill(final Resident resident) throws PersistException {
+    public BigDecimal calculateBill(final ResidentDTO resident) throws PersistException {
         final Long id = resident.getId();
         return calculateBill(id);
     }

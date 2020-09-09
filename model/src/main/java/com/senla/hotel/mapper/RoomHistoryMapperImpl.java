@@ -2,6 +2,7 @@ package com.senla.hotel.mapper;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dto.ResidentDTO;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -57,7 +58,7 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         }
         try {
             final long id = Long.parseLong(elements[4]);
-            final Resident resident = residentService.findById(id);
+            final ResidentDTO resident = residentService.findById(id);
             history.setResident(resident);
         } catch (final EntityNotFoundException | PersistException e) {
             logger.error("No such resident with id {} {}", elements[4], e);

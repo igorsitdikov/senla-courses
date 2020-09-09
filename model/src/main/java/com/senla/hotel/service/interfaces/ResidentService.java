@@ -1,8 +1,11 @@
 package com.senla.hotel.service.interfaces;
 
+import com.senla.hotel.dto.AttendanceDTO;
+import com.senla.hotel.dto.ResidentDTO;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 
@@ -10,16 +13,16 @@ import java.util.List;
 
 public interface ResidentService {
 
-    Resident findById(Long id) throws EntityNotFoundException, PersistException;
+    ResidentDTO findById(Long id) throws EntityNotFoundException, PersistException, EntityIsEmptyException;
 
-    void addAttendanceToResident(Resident resident, Attendance attendance)
+    void addAttendanceToResident(ResidentDTO resident, AttendanceDTO attendance)
             throws EntityNotFoundException, PersistException;
 
     void addAttendanceToResident(Long residentId, Long attendanceId) throws EntityNotFoundException, PersistException;
 
-    void createResident(Resident resident) throws PersistException;
+    void createResident(ResidentDTO resident) throws PersistException, EntityIsEmptyException;
 
-    List<Resident> showResidents(SortField sortField) throws PersistException;
+    List<ResidentDTO> showResidents(SortField sortField) throws PersistException, EntityIsEmptyException;
 
     void importResidents() throws PersistException;
 

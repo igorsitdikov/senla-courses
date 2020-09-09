@@ -2,6 +2,7 @@ package com.senla.hotel.controller;
 
 import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.annotation.Singleton;
+import com.senla.hotel.dto.AttendanceDTO;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
@@ -18,7 +19,7 @@ public class AttendanceController {
     @Autowired
     private static AttendanceService attendanceService;
 
-    public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException, PersistException {
+    public void createAttendance(final AttendanceDTO attendance) throws EntityAlreadyExistsException, PersistException {
         attendanceService.createAttendance(attendance);
     }
 
@@ -26,7 +27,7 @@ public class AttendanceController {
         attendanceService.delete(id);
     }
 
-    public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
+    public List<AttendanceDTO> showAttendances(final SortField sortField) throws PersistException {
         return attendanceService.showAttendances(sortField);
     }
 

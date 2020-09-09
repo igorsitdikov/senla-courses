@@ -53,11 +53,11 @@ public class RoomHistory extends AEntity {
     public RoomHistory() {
     }
 
-    public RoomHistory(Room room, Resident resident, LocalDate checkIn, LocalDate checkOut, HistoryStatus status) {
+    public RoomHistory(Room room, Resident resident, Date checkIn, Date checkOut, HistoryStatus status) {
         this.room = room;
         this.resident = resident;
-        this.checkIn = Date.valueOf(checkIn);
-        this.checkOut = Date.valueOf(checkOut);
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
         this.status = status;
     }
 
@@ -103,20 +103,20 @@ public class RoomHistory extends AEntity {
         this.attendances = attendances;
     }
 
-    public LocalDate getCheckIn() {
-        return checkIn.toLocalDate();
+    public Date getCheckIn() {
+        return checkIn;
     }
 
-    public void setCheckIn(LocalDate checkIn) {
-        this.checkIn = Date.valueOf(checkIn);
+    public void setCheckIn(Date checkIn) {
+        this.checkIn = checkIn;
     }
 
-    public LocalDate getCheckOut() {
-        return checkOut.toLocalDate();
+    public Date getCheckOut() {
+        return checkOut;
     }
 
-    public void setCheckOut(LocalDate checkOut) {
-        this.checkOut = Date.valueOf(checkOut);
+    public void setCheckOut(Date checkOut) {
+        this.checkOut = checkOut;
     }
 
     public HistoryStatus getStatus() {

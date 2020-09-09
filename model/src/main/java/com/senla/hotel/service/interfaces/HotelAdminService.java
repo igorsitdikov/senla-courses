@@ -1,5 +1,7 @@
 package com.senla.hotel.service.interfaces;
 
+import com.senla.hotel.dto.ResidentDTO;
+import com.senla.hotel.dto.RoomDTO;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.exceptions.EntityNotFoundException;
@@ -14,15 +16,15 @@ public interface HotelAdminService {
     void checkIn(Long residentId, Long roomId, LocalDate checkIn, LocalDate checkOut)
             throws EntityNotFoundException, SQLException, PersistException;
 
-    void checkIn(Resident resident, Room room, LocalDate checkIn, LocalDate checkOut)
+    void checkIn(ResidentDTO resident, RoomDTO room, LocalDate checkIn, LocalDate checkOut)
             throws EntityNotFoundException, PersistException, SQLException;
 
     void checkOut(Long residentId, LocalDate date) throws EntityNotFoundException, SQLException, PersistException;
 
-    void checkOut(Resident resident, LocalDate date)
+    void checkOut(ResidentDTO resident, LocalDate date)
             throws EntityNotFoundException, SQLException, PersistException;
 
     BigDecimal calculateBill(Long id) throws EntityNotFoundException, PersistException;
 
-    BigDecimal calculateBill(Resident resident) throws EntityNotFoundException, PersistException;
+    BigDecimal calculateBill(ResidentDTO resident) throws EntityNotFoundException, PersistException;
 }
