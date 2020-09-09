@@ -22,9 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-/*
- * TODO: add DTO for all entities
- * */
 @Entity
 @Table(name = "history")
 public class RoomHistory extends AEntity {
@@ -152,12 +149,10 @@ public class RoomHistory extends AEntity {
     public String toString() {
         return String.format("Room's history №%d: %n" +
                         "\tRoom № %d.%n" +
-//                        "\t%s. %n" +
                         "\tCheck-in %s. %n" +
                         "\tCheck-out %s.",
                 id,
                 room.getNumber(),
-//                resident.toString(),
                 checkIn,
                 checkOut);
     }
