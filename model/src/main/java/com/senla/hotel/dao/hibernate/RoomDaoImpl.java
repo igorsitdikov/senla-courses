@@ -2,7 +2,6 @@ package com.senla.hotel.dao.hibernate;
 
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomDao;
-import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
@@ -12,7 +11,12 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;

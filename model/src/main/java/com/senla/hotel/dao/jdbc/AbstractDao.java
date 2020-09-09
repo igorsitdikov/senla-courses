@@ -7,7 +7,11 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.Connector;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 

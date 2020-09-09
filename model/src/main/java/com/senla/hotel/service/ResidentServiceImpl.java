@@ -15,8 +15,6 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
-import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 
