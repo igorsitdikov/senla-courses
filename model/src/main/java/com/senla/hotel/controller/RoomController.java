@@ -53,7 +53,7 @@ public class RoomController {
         return roomService.showLastResidents(room, amount);
     }
 
-    public int countVacantRooms() throws PersistException {
+    public Long countVacantRooms() throws PersistException {
         return roomService.countVacantRooms();
     }
 

@@ -74,15 +74,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public List<Resident> showResidents(final SortField sortField) throws PersistException {
-        final List<Resident> residents = residentDao.getAll();
-        switch (sortField) {
-            case NAME:
-                return sortResidents(residents, new ResidentFullNameComparator());
-            case CHECK_OUT_DATE:
-                return sortResidents(residents, new ResidentCheckOutComparator());
-            default:
-                return residents;
-        }
+        return residentDao.getAllSortedBy(sortField);
     }
 
     private List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
@@ -104,7 +96,7 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public int showCountResidents() throws PersistException {
-        return residentDao.getAll().size();
+    public Long showCountResidents() throws PersistException {
+        return residentDao.getTotalResidents();
     }
 }

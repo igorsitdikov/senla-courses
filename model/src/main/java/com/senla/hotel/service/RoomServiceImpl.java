@@ -73,8 +73,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public int countVacantRooms() throws PersistException {
-        return roomDao.getVacantRooms().size();
+    public Long countVacantRooms() throws PersistException {
+        return roomDao.countVacantRooms();
     }
 
     @Override
@@ -113,8 +113,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomDao.getAll();
-        return sortRooms(sortField, rooms);
+        return roomDao.getAllSortedBy(sortField);
     }
 
     private List<Room> sortRooms(final SortField sortField, final List<Room> rooms) {
@@ -138,8 +137,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacant(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomDao.getVacantRooms();
-        return sortRooms(sortField, rooms);
+        return roomDao.getVacantRooms(sortField);
     }
 
     @Override

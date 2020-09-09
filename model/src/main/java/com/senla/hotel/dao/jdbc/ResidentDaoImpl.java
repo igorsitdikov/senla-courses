@@ -150,6 +150,10 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
                 "LIMIT ?;";
     }
 
+    public String getCountResidentsQuery() {
+        return "SELECT COUNT(*) FROM resident";
+    }
+
     @Override
     public String getDeleteQuery() {
         return "DELETE FROM resident WHERE id = ?";
@@ -210,5 +214,10 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
         } catch (final Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    @Override
+    public Long getTotalResidents() throws PersistException {
+        return null;
     }
 }

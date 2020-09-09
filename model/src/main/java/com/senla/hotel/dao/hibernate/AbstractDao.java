@@ -3,8 +3,10 @@ package com.senla.hotel.dao.hibernate;
 import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -20,7 +22,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     public AbstractDao(final HibernateUtil hibernateUtil) {
         this.entityClass =
-            (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.hibernateUtil = hibernateUtil;
     }
 
@@ -38,32 +40,52 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return query.getSingleResult();
     }
 
-    private <E> Query<T> getQueryBy(final String field, final E variable) throws PersistException {
+    protected <E> Query<T> getQueryBy(final String field, final E variable, final SortField sortField) throws PersistException {
         try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
             Root<T> root = criteria.from(entityClass);
-            criteria.select(root).where(builder.equal(root.get(field), variable));
+            criteria
+                    .select(root)
+                    .where(builder.equal(root.get(field), variable))
+                    .orderBy(builder.asc(root.get(sortField.getFieldName())));
             return session.createQuery(criteria);
         } catch (Exception e) {
             throw new PersistException(e);
         }
     }
 
+    private <E> Query<T> getQueryBy(final String field, final E variable) throws PersistException {
+        return getQueryBy(field, variable, SortField.DEFAULT);
+    }
+
     @Override
     public List<T> getAll() throws PersistException {
+        return getAllSortedBy(SortField.DEFAULT);
+    }
+
+    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
+        Query<T> query = getQueryBy(field, variable, SortField.DEFAULT);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<T> getAllSortedBy(final SortField sortField) throws PersistException {
         try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
-            criteria.from(entityClass);
+            Root<T> root = criteria.from(entityClass);
+            criteria
+                    .select(root)
+                    .orderBy(builder.asc(root.get(sortField.getFieldName())));
             return session.createQuery(criteria).getResultList();
         } catch (Exception e) {
             throw new PersistException(e);
         }
     }
 
-    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
-        Query<T> query = getQueryBy(field, variable);
+    protected <E> List<T> getAllBy(final String field, final E variable, final SortField sortField) throws PersistException {
+        Query<T> query = getQueryBy(field, variable, sortField);
         return query.getResultList();
     }
 

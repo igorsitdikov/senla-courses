@@ -4,6 +4,7 @@ import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
 import com.senla.hotel.utils.Connector;
@@ -67,7 +68,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     }
 
     @Override
-    public List<Room> getVacantRooms() throws PersistException {
+    public List<Room> getVacantRooms(final SortField sortField) throws PersistException {
         return getAllBy("status", RoomStatus.VACANT);
     }
 
@@ -121,5 +122,10 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         } catch (final Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    @Override
+    public Long countVacantRooms() throws PersistException {
+        return null;
     }
 }
