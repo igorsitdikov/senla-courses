@@ -4,6 +4,7 @@ import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Singleton
+//@Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
     public AttendanceDaoImpl(final HibernateUtil hibernateUtil) {
@@ -34,5 +35,10 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
         } catch (Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    @Override
+    public List<Attendance> getAllSortedBy(final SortField sortField) throws PersistException {
+        return super.getAllSortedBy(sortField);
     }
 }

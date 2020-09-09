@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface RoomDao extends GenericDao<Room, Long> {
 
+    List<Room> getAllSortedBy(SortField sortField) throws PersistException;
+
     List<Room> getVacantRooms(SortField sortField) throws PersistException;
 
     Room findByNumber(Integer number) throws PersistException;

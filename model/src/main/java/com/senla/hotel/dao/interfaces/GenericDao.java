@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface GenericDao<T extends AEntity, ID extends Serializable> {
 
-    List<T> getAllSortedBy(SortField sortField) throws PersistException;
-
     void insertMany(List<T> list) throws PersistException;
 
     T create(T object) throws PersistException;

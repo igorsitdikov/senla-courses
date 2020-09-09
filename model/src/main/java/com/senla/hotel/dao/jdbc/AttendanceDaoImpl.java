@@ -1,8 +1,10 @@
 package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
 import com.senla.hotel.utils.Connector;
@@ -12,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
     @Autowired
@@ -61,6 +63,20 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             throw new PersistException(e);
         }
         return result;
+    }
+
+    @Override
+    public List<Attendance> getAllSortedBy(final SortField sortField) throws PersistException {
+        final List<Attendance> list;
+        final String sql = getSelectQuery() + " ORDER BY " + sortField.getFieldName() + " ASC ";
+        try {
+            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            final ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     @Override

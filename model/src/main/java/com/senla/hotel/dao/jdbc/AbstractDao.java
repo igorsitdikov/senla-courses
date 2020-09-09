@@ -1,5 +1,6 @@
 package com.senla.hotel.dao.jdbc;
 
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.enumerated.SortField;
@@ -15,7 +16,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final Connector connector) {
@@ -189,18 +190,18 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         }
     }
 
-    @Override
-    public List<T> getAllSortedBy(final SortField sortField) throws PersistException {
-        final List<T> list;
-        final String sql = getSelectQuery() + " ORDER BY " + sortField.getFieldName();
-        try {
-            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
-            final ResultSet rs = statement.executeQuery();
-            list = parseResultSet(rs);
-        } catch (final Exception e) {
-            throw new PersistException(e);
-        }
-        return list;
-    }
+//    @Override
+//    public List<T> getAllSortedBy(final SortField sortField) throws PersistException {
+//        final List<T> list;
+//        final String sql = getSelectQuery() + " ORDER BY " + sortField.getFieldName() + " ASC";
+//        try {
+//            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+//            final ResultSet rs = statement.executeQuery();
+//            list = parseResultSet(rs);
+//        } catch (final Exception e) {
+//            throw new PersistException(e);
+//        }
+//        return list;
+//    }
 }
 

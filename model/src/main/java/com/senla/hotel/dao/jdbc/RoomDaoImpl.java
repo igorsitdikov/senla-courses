@@ -1,7 +1,9 @@
 package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
+import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomDao;
+import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
@@ -15,7 +17,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-//@Singleton
+@Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Autowired
@@ -28,12 +30,12 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     @Override
     public String getSelectQuery() {
         return "SELECT  room.id AS rm_id,\n" +
-                "       room.number AS rm_number,\n" +
-                "       room.price AS rm_price,\n" +
-                "       room.status AS rm_status,\n" +
-                "       room.stars AS rm_stars,\n" +
-                "       room.accommodation AS rm_accommodation " +
-                "FROM room ";
+               "       room.number AS rm_number,\n" +
+               "       room.price AS rm_price,\n" +
+               "       room.status AS rm_status,\n" +
+               "       room.stars AS rm_stars,\n" +
+               "       room.accommodation AS rm_accommodation " +
+               "FROM room ";
     }
 
     @Override
@@ -48,18 +50,18 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     public String getVacantOnDate() {
         return "SELECT DISTINCT " +
-                "       room.id AS rm_id,\n" +
-                "       room.number AS rm_number,\n" +
-                "       room.price AS rm_price,\n" +
-                "       room.status AS rm_status,\n" +
-                "       room.stars AS rm_stars,\n" +
-                "       room.accommodation AS rm_accommodation," +
-                "FROM history\n" +
-                "   RIGHT JOIN room ON history.room_id = room.id \n" +
-                "WHERE history.status = 'CHECKED_IN' " +
-                "   OR room.status = 'VACANT' " +
-                "   OR history.check_out < ? " +
-                "ORDER BY room.number;\n";
+               "       room.id AS rm_id,\n" +
+               "       room.number AS rm_number,\n" +
+               "       room.price AS rm_price,\n" +
+               "       room.status AS rm_status,\n" +
+               "       room.stars AS rm_stars,\n" +
+               "       room.accommodation AS rm_accommodation," +
+               "FROM history\n" +
+               "   RIGHT JOIN room ON history.room_id = room.id \n" +
+               "WHERE history.status = 'CHECKED_IN' " +
+               "   OR room.status = 'VACANT' " +
+               "   OR history.check_out < ? " +
+               "ORDER BY room.number;\n";
     }
 
     @Override
@@ -69,7 +71,23 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public List<Room> getVacantRooms(final SortField sortField) throws PersistException {
-        return getAllBy("status", RoomStatus.VACANT);
+        String sql = getSelectQuery();
+        sql += " WHERE status = ? " + setSortFieldToSql(sortField);
+        return getAllBySqlQuery(sql, RoomStatus.VACANT);
+    }
+
+    private String setSortFieldToSql(final SortField sortField) {
+        String fieldName;
+        switch (sortField) {
+            case ACCOMMODATION:
+            case PRICE:
+            case STARS:
+                fieldName = sortField.getFieldName();
+                break;
+            default:
+                fieldName = SortField.DEFAULT.getFieldName();
+        }
+        return String.format(" ORDER BY rm_%s ASC ", fieldName);
     }
 
     @Override
@@ -98,7 +116,8 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     }
 
     @Override
-    protected void prepareStatementForInsert(final PreparedStatement statement, final Room object) throws PersistException {
+    protected void prepareStatementForInsert(final PreparedStatement statement, final Room object)
+        throws PersistException {
         try {
             statement.setInt(1, object.getNumber());
             statement.setBigDecimal(2, object.getPrice());
@@ -111,7 +130,8 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
     }
 
     @Override
-    protected void prepareStatementForUpdate(final PreparedStatement statement, final Room object) throws PersistException {
+    protected void prepareStatementForUpdate(final PreparedStatement statement, final Room object)
+        throws PersistException {
         try {
             statement.setInt(1, object.getNumber());
             statement.setBigDecimal(2, object.getPrice());
@@ -122,6 +142,20 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         } catch (final Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    @Override
+    public List<Room> getAllSortedBy(final SortField sortField) throws PersistException {
+        final List<Room> list;
+        String sql = getSelectQuery() + setSortFieldToSql(sortField);
+        try {
+            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+            final ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+        } catch (final Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     @Override

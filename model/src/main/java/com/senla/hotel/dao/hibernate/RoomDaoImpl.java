@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
+//@Singleton
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     public RoomDaoImpl(final HibernateUtil hibernateUtil) {
@@ -65,10 +65,14 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             criteria
                     .select(builder.countDistinct(root))
                     .where(equalRoomVacant);
-            Long data = session.createQuery(criteria).getSingleResult();
-            return data;
+            return session.createQuery(criteria).getSingleResult();
         } catch (Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    @Override
+    public List<Room> getAllSortedBy(final SortField sortField) throws PersistException {
+        return super.getAllSortedBy(sortField);
     }
 }

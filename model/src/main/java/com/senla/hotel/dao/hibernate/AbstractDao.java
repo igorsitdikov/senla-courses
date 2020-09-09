@@ -16,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Singleton
+//@Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final HibernateUtil hibernateUtil) {
@@ -68,8 +68,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return query.getResultList();
     }
 
-    @Override
-    public List<T> getAllSortedBy(final SortField sortField) throws PersistException {
+    protected List<T> getAllSortedBy(final SortField sortField) throws PersistException {
         try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
