@@ -58,13 +58,13 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     }
 
     @Override
-    public Long countTotalResidents() throws PersistException {
+    public Integer countTotalResidents() throws PersistException {
         try (Session session = hibernateUtil.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
             Root<Resident> root = criteria.from(Resident.class);
             criteria.select(builder.countDistinct(root));
-            return session.createQuery(criteria).getSingleResult();
+            return session.createQuery(criteria).getSingleResult().intValue();
         } catch (Exception e) {
             throw new PersistException(e);
         }

@@ -220,13 +220,13 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
     }
 
     @Override
-    public Long countTotalResidents() throws PersistException {
+    public Integer countTotalResidents() throws PersistException {
         String sql = getCountResidentsQuery();
         try {
             final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
             final ResultSet rs = statement.executeQuery();
             rs.next();
-            return rs.getLong("total");
+            return rs.getInt("total");
         } catch (final Exception e) {
             throw new PersistException(e);
         }

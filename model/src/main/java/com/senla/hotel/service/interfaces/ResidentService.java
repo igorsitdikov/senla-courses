@@ -25,5 +25,5 @@ public interface ResidentService {
 
     void exportResidents() throws PersistException;
 
-    Long showCountResidents() throws PersistException;
+    Integer showCountResidents() throws PersistException;
 }

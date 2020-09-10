@@ -94,7 +94,7 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public Long showCountResidents() throws PersistException {
+    public Integer showCountResidents() throws PersistException {
         return residentDao.countTotalResidents();
     }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ResidentDao extends GenericDao<Resident, Long> {
 
+    Integer countTotalResidents() throws PersistException;
+
     List<Resident> getAllSortedBy(SortField sortField) throws PersistException;
 
     List<Resident> getLastResidentsByRoomId(Long roomId, Integer limit) throws PersistException;
-
-    Long countTotalResidents() throws PersistException;
 }

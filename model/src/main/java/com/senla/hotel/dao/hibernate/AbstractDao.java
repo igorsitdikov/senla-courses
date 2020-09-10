@@ -19,15 +19,15 @@ import java.util.List;
 @Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
+    private final Class<T> entityClass;
+    private final static Integer BATCH_SIZE = 50;
+    protected HibernateUtil hibernateUtil;
+
     public AbstractDao(final HibernateUtil hibernateUtil) {
         this.entityClass =
                 (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.hibernateUtil = hibernateUtil;
     }
-
-    private final Class<T> entityClass;
-
-    protected HibernateUtil hibernateUtil;
 
     @Override
     public T findById(final Long id) throws PersistException {
@@ -89,19 +89,23 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public void insertMany(final List<T> list) throws PersistException {
+        Transaction transaction = null;
         try (Session session = hibernateUtil.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             int i = 0;
             for (T entity : list) {
                 session.persist(entity);
                 i++;
-                if (i % 50 == 0) {
+                if (i % BATCH_SIZE == 0) {
                     session.flush();
                     session.clear();
                 }
             }
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new PersistException(e);
         }
     }
@@ -111,12 +115,16 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         if (object.getId() != null) {
             throw new PersistException("Object is already persist.");
         }
+        Transaction transaction = null;
         try (Session session = hibernateUtil.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(object);
             session.flush();
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new PersistException(e);
         }
         return object;
@@ -124,24 +132,32 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public void update(final T object) throws PersistException {
+        Transaction transaction = null;
         try (Session session = hibernateUtil.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.update(object);
             session.flush();
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new PersistException(e);
         }
     }
 
     @Override
     public void delete(final T object) throws PersistException {
+        Transaction transaction = null;
         try (Session session = hibernateUtil.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.delete(object);
             session.flush();
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new PersistException(e);
         }
     }
