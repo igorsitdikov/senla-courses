@@ -1,12 +1,30 @@
 package com.senla.hotel.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "attendance")
 public class Attendance extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "price")
     private BigDecimal price;
+    @Column(name = "name")
     private String name;
+    @ManyToMany(mappedBy = "attendances", fetch = FetchType.LAZY)
+    private List<RoomHistory> histories;
 
     public Attendance() {
     }
@@ -14,6 +32,16 @@ public class Attendance extends AEntity {
     public Attendance(final BigDecimal price, final String name) {
         this.price = price;
         this.name = name;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public BigDecimal getPrice() {
@@ -32,6 +60,14 @@ public class Attendance extends AEntity {
         this.name = name;
     }
 
+    public List<RoomHistory> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(List<RoomHistory> histories) {
+        this.histories = histories;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -42,7 +78,7 @@ public class Attendance extends AEntity {
         }
         final Attendance that = (Attendance) o;
         return Objects.equals(price, that.price) &&
-               Objects.equals(name, that.name);
+                Objects.equals(name, that.name);
     }
 
     @Override

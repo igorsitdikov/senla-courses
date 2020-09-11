@@ -2,18 +2,49 @@ package com.senla.hotel.entity;
 
 import com.senla.hotel.enumerated.HistoryStatus;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "history")
 public class RoomHistory extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
+    @ManyToOne
+    @JoinColumn(name = "resident_id", nullable = false)
     private Resident resident;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @JoinTable(name = "histories_attendances", joinColumns = {@JoinColumn(name = "history_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "attendance_id")})
     private List<Attendance> attendances = new LinkedList<>();
-    private LocalDate checkIn;
-    private LocalDate checkOut;
+    @Column(name = "check_in")
+    private Date checkIn;
+    @Column(name = "check_out")
+    private Date checkOut;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private HistoryStatus status;
 
     public RoomHistory() {
@@ -22,9 +53,27 @@ public class RoomHistory extends AEntity {
     public RoomHistory(Room room, Resident resident, LocalDate checkIn, LocalDate checkOut, HistoryStatus status) {
         this.room = room;
         this.resident = resident;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+        this.checkIn = Date.valueOf(checkIn);
+        this.checkOut = Date.valueOf(checkOut);
         this.status = status;
+    }
+
+    public void addAttendance(Attendance attendance) {
+        this.attendances.add(attendance);
+    }
+
+    public void removeAttendance(Attendance attendance) {
+        this.attendances.remove(attendance);
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public Room getRoom() {
@@ -52,19 +101,19 @@ public class RoomHistory extends AEntity {
     }
 
     public LocalDate getCheckIn() {
-        return checkIn;
+        return checkIn.toLocalDate();
     }
 
     public void setCheckIn(LocalDate checkIn) {
-        this.checkIn = checkIn;
+        this.checkIn = Date.valueOf(checkIn);
     }
 
     public LocalDate getCheckOut() {
-        return checkOut;
+        return checkOut.toLocalDate();
     }
 
     public void setCheckOut(LocalDate checkOut) {
-        this.checkOut = checkOut;
+        this.checkOut = Date.valueOf(checkOut);
     }
 
     public HistoryStatus getStatus() {
@@ -93,19 +142,17 @@ public class RoomHistory extends AEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(room, resident, attendances, checkIn, checkOut);
+        return Objects.hash(room, attendances, checkIn, checkOut);
     }
 
     @Override
     public String toString() {
         return String.format("Room's history №%d: %n" +
                         "\tRoom № %d.%n" +
-                        "\t%s. %n" +
                         "\tCheck-in %s. %n" +
                         "\tCheck-out %s.",
                 id,
                 room.getNumber(),
-                resident.toString(),
                 checkIn,
                 checkOut);
     }

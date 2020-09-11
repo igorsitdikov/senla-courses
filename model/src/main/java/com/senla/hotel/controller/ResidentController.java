@@ -25,7 +25,7 @@ public class ResidentController {
         return residentService.showResidents(sortField);
     }
 
-    public int showCountResidents() throws PersistException {
+    public Integer showCountResidents() throws PersistException {
         return residentService.showCountResidents();
     }
 

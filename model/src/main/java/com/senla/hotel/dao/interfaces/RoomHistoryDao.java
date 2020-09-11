@@ -1,5 +1,6 @@
 package com.senla.hotel.dao.interfaces;
 
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
@@ -12,5 +13,5 @@ public interface RoomHistoryDao extends GenericDao<RoomHistory, Long> {
 
     BigDecimal calculateBill(Long id) throws PersistException;
 
-    void addAttendanceToHistory(Long historyId, Long attendanceId) throws PersistException;
+    void addAttendanceToHistory(RoomHistory history, Attendance attendance) throws PersistException;
 }

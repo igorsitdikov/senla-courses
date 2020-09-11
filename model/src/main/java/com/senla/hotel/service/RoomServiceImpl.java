@@ -20,7 +20,6 @@ import com.senla.hotel.utils.comparator.RoomPriceComparator;
 import com.senla.hotel.utils.comparator.RoomStarsComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
-import com.senla.hotel.utils.csv.writer.CsvWriterImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,19 +73,21 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public int countVacantRooms() throws PersistException {
-        return roomDao.getVacantRooms().size();
+    public Long countVacantRooms() throws PersistException {
+        return roomDao.countVacantRooms();
     }
 
     @Override
-    public void changeRoomPrice(final Integer number, final BigDecimal price) throws EntityNotFoundException, PersistException {
+    public void changeRoomPrice(final Integer number, final BigDecimal price)
+        throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         room.setPrice(price);
         roomDao.update(room);
     }
 
     @Override
-    public void changeRoomStatus(final Long id, final RoomStatus status) throws EntityNotFoundException, PersistException {
+    public void changeRoomStatus(final Long id, final RoomStatus status)
+        throws EntityNotFoundException, PersistException {
         final Room room = findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             logger.warn("Room is already occupied");
@@ -99,7 +100,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void changeRoomStatus(final Integer number, final RoomStatus status) throws EntityNotFoundException, PersistException {
+    public void changeRoomStatus(final Integer number, final RoomStatus status)
+        throws EntityNotFoundException, PersistException {
         final Room room = findByNumber(number);
         changeRoomStatus(room.getId(), status);
     }
@@ -111,8 +113,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showAll(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomDao.getAll();
-        return sortRooms(sortField, rooms);
+        return roomDao.getAllSortedBy(sortField);
     }
 
     private List<Room> sortRooms(final SortField sortField, final List<Room> rooms) {
@@ -136,8 +137,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> showVacant(final SortField sortField) throws PersistException {
-        final List<Room> rooms = roomDao.getVacantRooms();
-        return sortRooms(sortField, rooms);
+        return roomDao.getVacantRooms(sortField);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.senla.hotel.ui.utils;
 
-import com.senla.hotel.Scanner;
 import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.RoomStatus;

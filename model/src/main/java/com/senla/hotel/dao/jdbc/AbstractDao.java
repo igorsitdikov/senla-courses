@@ -1,6 +1,5 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.GenericDao;
 import com.senla.hotel.entity.AEntity;
 import com.senla.hotel.exceptions.PersistException;
@@ -15,7 +14,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     public AbstractDao(final Connector connector) {
@@ -40,10 +38,10 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @Override
     public T findById(final Long id) throws PersistException {
-        return getBy("id", id);
+        return getSingleBy("id", id);
     }
 
-    protected <E> T getBy(final String field, final E variable) throws PersistException {
+    protected <E> T getSingleBy(final String field, final E variable) throws PersistException {
         final List<T> list;
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
@@ -65,7 +63,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     @SafeVarargs
     protected final <E> void setVariableToStatement(final PreparedStatement statement, final E... variable)
-        throws SQLException {
+            throws SQLException {
         for (int i = 0; i < variable.length; i++) {
             if (variable[i] instanceof Long) {
                 statement.setLong(i + 1, (Long) variable[i]);
@@ -99,7 +97,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return list;
     }
 
-    protected <E> List<T> getAllWhere(final String field, final E variable) throws PersistException {
+    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
         String sql = getSelectQuery();
         sql += " WHERE " + field + " = ?";
         return getAllBySqlQuery(sql, variable);
@@ -123,7 +121,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     public void insertMany(final List<T> list) throws PersistException {
         String sql = getCreateQuery();
         try (PreparedStatement statement = connector.getConnection()
-            .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             for (final T object : list) {
                 prepareStatementForInsert(statement, object);
                 statement.addBatch();
@@ -141,7 +139,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         }
         final String sql = getCreateQuery();
         try (PreparedStatement statement = connector.getConnection()
-            .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForInsert(statement, object);
             final int count = statement.executeUpdate();
             if (count != 1) {
@@ -188,5 +186,19 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             throw new PersistException(e);
         }
     }
+
+//    @Override
+//    public List<T> getAllSortedBy(final SortField sortField) throws PersistException {
+//        final List<T> list;
+//        final String sql = getSelectQuery() + " ORDER BY " + sortField.getFieldName() + " ASC";
+//        try {
+//            final PreparedStatement statement = connector.getConnection().prepareStatement(sql);
+//            final ResultSet rs = statement.executeQuery();
+//            list = parseResultSet(rs);
+//        } catch (final Exception e) {
+//            throw new PersistException(e);
+//        }
+//        return list;
+//    }
 }
 

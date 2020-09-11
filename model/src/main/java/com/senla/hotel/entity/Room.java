@@ -5,18 +5,41 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.utils.StringUtils;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "room")
 public class Room extends AEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "number")
     private Integer number;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "stars")
     private Stars stars;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "accommodation")
     private Accommodation accommodation;
+    @Column(name = "price")
     private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private RoomStatus status;
+    @OneToMany(mappedBy = "room")
     private List<RoomHistory> histories;
 
     public Room() {
@@ -33,6 +56,16 @@ public class Room extends AEntity {
         this.price = price;
         this.status = status;
         histories = new ArrayList<>();
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public Integer getNumber() {

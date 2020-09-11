@@ -1,7 +1,6 @@
-package com.senla.hotel.dao;
+package com.senla.hotel.dao.jdbc;
 
 import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
@@ -20,7 +19,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-@Singleton
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
 
     @Autowired
@@ -123,7 +121,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
 
     @Override
     public RoomHistory findById(final Long id) throws PersistException {
-        return getBy("history.id", id);
+        return getSingleBy("history.id", id);
     }
 
     @Override
@@ -153,11 +151,11 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
     }
 
     @Override
-    public void addAttendanceToHistory(final Long historyId, final Long attendanceId) throws PersistException {
+    public void addAttendanceToHistory(final RoomHistory history, final Attendance attendance) throws PersistException {
         final String sql = getCreateQueryAttendanceToHistory();
         try (PreparedStatement statement = connector.getConnection()
                 .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            setVariableToStatement(statement, historyId, attendanceId);
+            setVariableToStatement(statement, history.getId(), attendance.getId());
             final int count = statement.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);

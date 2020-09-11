@@ -19,7 +19,7 @@ public class CountResidentsAction implements Action {
     @Override
     public void execute() {
         try {
-            final int residents = residentController.showCountResidents();
+            final Integer residents = residentController.showCountResidents();
             logger.info("Total residents: {}", residents);
         } catch (final PersistException e) {
             logger.error(e.getMessage());

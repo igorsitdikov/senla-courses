@@ -45,7 +45,7 @@ public final class MenuController {
             }
 
             if (choice >= menuItems.size() || choice < 0) {
-                logger.warn("Incorrect choice. Try again");
+                System.out.println("Incorrect choice. Try again");
                 continue;
             } else {
                 navigator.navigate(choice);

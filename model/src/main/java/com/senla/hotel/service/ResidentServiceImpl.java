@@ -15,8 +15,6 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
 import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.comparator.ResidentCheckOutComparator;
-import com.senla.hotel.utils.comparator.ResidentFullNameComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 
@@ -64,7 +62,7 @@ public class ResidentServiceImpl implements ResidentService {
         final Attendance attendance = attendanceDao.findById(attendanceId);
         final RoomHistory history = roomHistoryDao
                 .getByResidentAndCheckedInStatus(residentId);
-        roomHistoryDao.addAttendanceToHistory(history.getId(), attendance.getId());
+        roomHistoryDao.addAttendanceToHistory(history, attendance);
     }
 
     @Override
@@ -74,15 +72,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public List<Resident> showResidents(final SortField sortField) throws PersistException {
-        final List<Resident> residents = residentDao.getAll();
-        switch (sortField) {
-            case NAME:
-                return sortResidents(residents, new ResidentFullNameComparator());
-            case CHECK_OUT_DATE:
-                return sortResidents(residents, new ResidentCheckOutComparator());
-            default:
-                return residents;
-        }
+        return residentDao.getAllSortedBy(sortField);
     }
 
     private List<Resident> sortResidents(final List<Resident> residents, final Comparator<Resident> comparator) {
@@ -104,7 +94,7 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public int showCountResidents() throws PersistException {
-        return residentDao.getAll().size();
+    public Integer showCountResidents() throws PersistException {
+        return residentDao.countTotalResidents();
     }
 }

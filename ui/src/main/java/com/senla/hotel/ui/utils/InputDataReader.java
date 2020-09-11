@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class InputDataReader {
 
-    private static final Logger logger = LogManager.getLogger(Printer.class);
+    private static final Logger logger = LogManager.getLogger(InputDataReader.class);
 
     public static Integer getIntegerInput(final Scanner scanner, final String message, final Integer limit) {
         logger.info(message);

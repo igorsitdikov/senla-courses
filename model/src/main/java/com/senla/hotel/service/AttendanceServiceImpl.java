@@ -10,8 +10,6 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.AttendanceMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.comparator.AttendanceNameComparator;
-import com.senla.hotel.utils.comparator.AttendancePriceComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 
@@ -45,15 +43,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
-        final List<Attendance> attendances = attendanceDao.getAll();
-        switch (sortField) {
-            case PRICE:
-                return sortAttendances(attendances, new AttendancePriceComparator());
-            case NAME:
-                return sortAttendances(attendances, new AttendanceNameComparator());
-            default:
-                return attendances;
-        }
+        return attendanceDao.getAllSortedBy(sortField);
     }
 
     private List<Attendance> sortAttendances(final List<Attendance> attendances,

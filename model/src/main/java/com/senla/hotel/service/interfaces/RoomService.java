@@ -27,7 +27,7 @@ public interface RoomService {
 
     List<Resident> showLastResidents(Room room, Integer number) throws EntityNotFoundException, PersistException;
 
-    int countVacantRooms() throws PersistException;
+    Long countVacantRooms() throws PersistException;
 
     void changeRoomPrice(Integer number, BigDecimal price) throws EntityNotFoundException, PersistException;
 

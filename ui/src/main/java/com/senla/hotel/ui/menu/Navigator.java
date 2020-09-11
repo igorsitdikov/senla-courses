@@ -25,7 +25,7 @@ public class Navigator {
         logger.info(currentMenu.getName());
         final List<MenuItem> items = currentMenu.getMenuItems();
         for (final MenuItem item : items) {
-            logger.info("{}. {}",
+            System.out.printf("%s. %s%n",
                         item.getMenuEnum().getId(),
                         item.getMenuEnum().getTitle());
         }

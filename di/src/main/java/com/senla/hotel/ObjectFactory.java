@@ -2,7 +2,6 @@ package com.senla.hotel;
 
 import com.senla.hotel.configuration.interfaces.ObjectConfigurator;
 import com.senla.hotel.exception.ConverterNotExistsException;
-import com.senla.hotel.properties.PropertyLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
