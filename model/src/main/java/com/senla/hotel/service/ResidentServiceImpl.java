@@ -25,28 +25,21 @@ import java.util.List;
 @Component
 public class ResidentServiceImpl implements ResidentService {
 
-    private final CsvReader csvReader;
-    private final CsvWriter csvWriter;
-    private final ResidentDao residentDao;
-    private final RoomHistoryDao roomHistoryDao;
-    private final AttendanceDao attendanceDao;
-    private final ResidentMapper residentMapper;
+    @Autowired
+    private CsvReader csvReader;
+    @Autowired
+    private CsvWriter csvWriter;
+    @Autowired
+    private ResidentDao residentDao;
+    @Autowired
+    private RoomHistoryDao roomHistoryDao;
+    @Autowired
+    private AttendanceDao attendanceDao;
+    @Autowired
+    private ResidentMapper residentMapper;
     @Value(value = "residents")
     private String property;
 
-    public ResidentServiceImpl(final CsvReader csvReader,
-                               final CsvWriter csvWriter,
-                               final ResidentDao residentDao,
-                               final RoomHistoryDao roomHistoryDao,
-                               final AttendanceDao attendanceDao,
-                               final ResidentMapper residentMapper) {
-        this.csvReader = csvReader;
-        this.csvWriter = csvWriter;
-        this.residentDao = residentDao;
-        this.roomHistoryDao = roomHistoryDao;
-        this.attendanceDao = attendanceDao;
-        this.residentMapper = residentMapper;
-    }
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException, PersistException {

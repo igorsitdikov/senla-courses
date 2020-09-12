@@ -10,7 +10,6 @@ import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.service.interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,13 +19,10 @@ import java.util.List;
 @Component
 public class RoomController {
 
-    private final RoomService roomService;
+    @Autowired
+    private RoomService roomService;
     @Value(value = "#{new Boolean('${RoomController.statusAllow}')}")
     private Boolean statusAllow;
-
-    public RoomController(final RoomService roomService) {
-        this.roomService = roomService;
-    }
 
     public void addRoom(final Room room) throws PersistException {
         roomService.addRoom(room);

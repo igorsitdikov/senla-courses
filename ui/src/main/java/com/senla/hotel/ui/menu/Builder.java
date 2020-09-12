@@ -61,19 +61,15 @@ public class Builder {
     private static final String RESIDENT_MENU = "Resident menu";
     private static final String ATTENDANCE_MENU = "Attendance menu";
     private Menu rootMenu = new Menu(MAIN_MENU);
-    private final HotelController hotelController;
-    private final RoomController roomController;
-    private final AttendanceController attendanceController;
-    private final ResidentController residentController;
+    @Autowired
+    private HotelController hotelController;
+    @Autowired
+    private RoomController roomController;
+    @Autowired
+    private AttendanceController attendanceController;
+    @Autowired
+    private ResidentController residentController;
 
-    public Builder(final HotelController hotelController,
-                   final RoomController roomController,
-                   final AttendanceController attendanceController, final ResidentController residentController) {
-        this.hotelController = hotelController;
-        this.roomController = roomController;
-        this.attendanceController = attendanceController;
-        this.residentController = residentController;
-    }
 
     public Menu buildMenu() {
         Menu hotelAdminMenu = new Menu(HOTEL_ADMIN_MENU);

@@ -24,29 +24,20 @@ import java.util.List;
 @Component
 public class HotelController {
 
-    private final HotelAdminService hotelAdminService;
-    private final AttendanceService attendanceService;
-    private final RoomHistoryService roomHistoryService;
-    private final RoomService roomService;
-    private final ResidentService residentService;
-    private final RoomHistoryService historyService;
-    private final SerializationUtils serializationUtils;
-
-    public HotelController(final HotelAdminService hotelAdminService,
-                           final AttendanceService attendanceService,
-                           final RoomHistoryService roomHistoryService,
-                           final RoomService roomService,
-                           final ResidentService residentService,
-                           final RoomHistoryService historyService,
-                           final SerializationUtils serializationUtils) {
-        this.hotelAdminService = hotelAdminService;
-        this.attendanceService = attendanceService;
-        this.roomHistoryService = roomHistoryService;
-        this.roomService = roomService;
-        this.residentService = residentService;
-        this.historyService = historyService;
-        this.serializationUtils = serializationUtils;
-    }
+    @Autowired
+    private HotelAdminService hotelAdminService;
+    @Autowired
+    private AttendanceService attendanceService;
+    @Autowired
+    private RoomHistoryService roomHistoryService;
+    @Autowired
+    private RoomService roomService;
+    @Autowired
+    private ResidentService residentService;
+    @Autowired
+    private RoomHistoryService historyService;
+    @Autowired
+    private SerializationUtils serializationUtils;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
             throws EntityNotFoundException, PersistException, SQLException {

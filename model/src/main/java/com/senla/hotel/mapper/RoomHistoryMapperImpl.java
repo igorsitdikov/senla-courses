@@ -28,17 +28,12 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
     private static final Logger logger = LogManager.getLogger(RoomHistoryMapperImpl.class);
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private final RoomServiceImpl roomService;
-    private final ResidentService residentService;
-    private final AttendanceService attendanceService;
-
-    public RoomHistoryMapperImpl(final ResidentService residentService,
-                                 final RoomServiceImpl roomService,
-                                 final AttendanceService attendanceService) {
-        this.residentService = residentService;
-        this.roomService = roomService;
-        this.attendanceService = attendanceService;
-    }
+    @Autowired
+    private RoomServiceImpl roomService;
+    @Autowired
+    private ResidentService residentService;
+    @Autowired
+    private AttendanceService attendanceService;
 
     @Override
     public RoomHistory sourceToDestination(final String source) throws EntityIsEmptyException {

@@ -14,11 +14,8 @@ import java.util.List;
 @Component
 public class ResidentController {
 
-    private final ResidentService residentService;
-
-    public ResidentController(final ResidentService residentService) {
-        this.residentService = residentService;
-    }
+    @Autowired
+    private ResidentService residentService;
 
     public void createResident(final Resident resident) throws PersistException {
         residentService.createResident(resident);

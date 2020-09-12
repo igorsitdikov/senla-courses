@@ -7,7 +7,6 @@ import com.senla.hotel.utils.Connector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -18,21 +17,14 @@ import java.util.Scanner;
 public final class MenuController {
 
     private static final Logger logger = LogManager.getLogger(MenuController.class);
-
-    private final HotelController hotelController;
-    private final Navigator navigator;
-    private final Builder builder;
-    private final Connector connector;
-
-    public MenuController(final HotelController hotelController,
-                          final Navigator navigator,
-                          final Builder builder,
-                          final Connector connector) {
-        this.hotelController = hotelController;
-        this.navigator = navigator;
-        this.builder = builder;
-        this.connector = connector;
-    }
+    @Autowired
+    private HotelController hotelController;
+    @Autowired
+    private Navigator navigator;
+    @Autowired
+    private Builder builder;
+    @Autowired
+    private Connector connector;
 
     public void run() {
         hotelController.importData();

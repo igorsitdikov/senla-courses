@@ -30,23 +30,16 @@ import java.util.List;
 public class SerializationUtils {
 
     private static final Logger logger = LogManager.getLogger(SerializationUtils.class);
-
-    private final RoomDao roomRepository;
-    private final AttendanceDao attendanceRepository;
-    private final RoomHistoryDao historyRepository;
-    private final ResidentDao residentRepository;
+    @Autowired
+    private RoomDao roomRepository;
+    @Autowired
+    private AttendanceDao attendanceRepository;
+    @Autowired
+    private RoomHistoryDao historyRepository;
+    @Autowired
+    private ResidentDao residentRepository;
     @Value(value = "hotelState")
     private String hotelState;
-
-    public SerializationUtils(final RoomDao roomRepository,
-                              final AttendanceDao attendanceRepository,
-                              final RoomHistoryDao historyRepository,
-                              final ResidentDao residentRepository) {
-        this.roomRepository = roomRepository;
-        this.attendanceRepository = attendanceRepository;
-        this.historyRepository = historyRepository;
-        this.residentRepository = residentRepository;
-    }
 
     @SafeVarargs
     public final void serialize(final List<? extends AEntity>... entities) {

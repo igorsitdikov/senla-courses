@@ -33,27 +33,21 @@ public class RoomServiceImpl implements RoomService {
 
     private static final Logger logger = LogManager.getLogger(RoomServiceImpl.class);
 
-    private final CsvReader csvReader;
-    private final CsvWriter csvWriter;
-    private final RoomDao roomDao;
-    private final ResidentDao residentDao;
-    private final RoomMapper roomMapper;
+    @Autowired
+    private CsvReader csvReader;
+    @Autowired
+    private CsvWriter csvWriter;
+    @Autowired
+    private RoomDao roomDao;
+    @Autowired
+    private ResidentDao residentDao;
+    @Autowired
+    private RoomMapper roomMapper;
     @Value(value = "rooms")
     private String property;
     @Value(value = "#{new Integer('${RoomService.amountHistories}')}")
     private Integer amountHistories;
 
-    public RoomServiceImpl(final CsvReader csvReader,
-                           final CsvWriter csvWriter,
-                           final RoomDao roomDao,
-                           final ResidentDao residentDao,
-                           final RoomMapper roomMapper) {
-        this.csvReader = csvReader;
-        this.csvWriter = csvWriter;
-        this.roomDao = roomDao;
-        this.residentDao = residentDao;
-        this.roomMapper = roomMapper;
-    }
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {

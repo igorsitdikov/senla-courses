@@ -4,6 +4,7 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
+import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
@@ -16,14 +17,10 @@ import java.sql.SQLException;
 @Component
 public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMapper {
 
-    private final RoomResultSetMapper roomResultSetMapper;
-    private final RoomResultSetMapper residentResultSetMapper;
-
-    public RoomHistoryResultSetMapperImpl(final RoomResultSetMapper roomResultSetMapper,
-                                          final RoomResultSetMapper residentResultSetMapper) {
-        this.roomResultSetMapper = roomResultSetMapper;
-        this.residentResultSetMapper = residentResultSetMapper;
-    }
+    @Autowired
+    private RoomResultSetMapper roomResultSetMapper;
+    @Autowired
+    private ResidentResultSetMapper residentResultSetMapper;
 
     @Override
     public RoomHistory sourceToDestination(final ResultSet source) throws SQLException {

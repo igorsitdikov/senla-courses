@@ -9,8 +9,6 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -21,22 +21,17 @@ import java.util.List;
 @Component
 public class AttendanceServiceImpl implements AttendanceService {
 
-    private final CsvReader csvReader;
-    private final CsvWriter csvWriter;
-    private final AttendanceDao attendanceDao;
-    private final AttendanceMapper attendanceMapper;
+    @Autowired
+    private CsvReader csvReader;
+    @Autowired
+    private CsvWriter csvWriter;
+    @Autowired
+    private AttendanceDao attendanceDao;
+    @Autowired
+    private AttendanceMapper attendanceMapper;
     @Value(value = "attendances")
     private String property;
 
-    public AttendanceServiceImpl(final CsvReader csvReader,
-                                 final CsvWriter csvWriter,
-                                 final AttendanceDao attendanceDao,
-                                 final AttendanceMapper attendanceMapper) {
-        this.csvReader = csvReader;
-        this.csvWriter = csvWriter;
-        this.attendanceDao = attendanceDao;
-        this.attendanceMapper = attendanceMapper;
-    }
 
     @Override
     public Attendance findById(final Long id) throws PersistException {

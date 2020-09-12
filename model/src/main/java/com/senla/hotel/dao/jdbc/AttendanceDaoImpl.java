@@ -6,8 +6,6 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
 import com.senla.hotel.utils.Connector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

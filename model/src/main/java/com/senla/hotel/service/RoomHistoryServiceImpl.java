@@ -18,12 +18,16 @@ import java.util.List;
 @Component
 public class RoomHistoryServiceImpl implements RoomHistoryService {
 
-    private final CsvReader csvReader;
-    private final CsvWriter csvWriter;
+    @Autowired
+    private CsvReader csvReader;
+    @Autowired
+    private RoomHistoryDao roomHistoryDao;
+    @Autowired
+    private RoomHistoryMapper roomHistoryMapper;
+    @Autowired
+    private CsvWriter csvWriter;
     @Value(value = "histories")
     private String property;
-    private final RoomHistoryDao roomHistoryDao;
-    private final RoomHistoryMapper roomHistoryMapper;
 
     public RoomHistoryServiceImpl(final CsvReader csvReader,
                                   final CsvWriter csvWriter,

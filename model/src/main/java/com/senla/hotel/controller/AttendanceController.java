@@ -15,11 +15,8 @@ import java.util.List;
 @Component
 public class AttendanceController {
 
-    private final AttendanceService attendanceService;
-
-    public AttendanceController(final AttendanceService attendanceService) {
-        this.attendanceService = attendanceService;
-    }
+    @Autowired
+    private AttendanceService attendanceService;
 
     public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException, PersistException {
         attendanceService.createAttendance(attendance);

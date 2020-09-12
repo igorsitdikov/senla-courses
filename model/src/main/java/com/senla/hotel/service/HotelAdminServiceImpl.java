@@ -26,21 +26,14 @@ import java.time.LocalDate;
 public class HotelAdminServiceImpl implements HotelAdminService {
 
     private static final Logger logger = LogManager.getLogger(HotelAdminServiceImpl.class);
-
-    private final RoomDao roomRepository;
-    private final ResidentDao residentDao;
-    private final RoomHistoryDao roomHistoryDao;
-    private final HibernateUtil hibernateUtil;
-
-    public HotelAdminServiceImpl(final RoomDao roomRepository,
-                                 final ResidentDao residentDao,
-                                 final RoomHistoryDao roomHistoryDao,
-                                 final HibernateUtil hibernateUtil) {
-        this.roomRepository = roomRepository;
-        this.residentDao = residentDao;
-        this.roomHistoryDao = roomHistoryDao;
-        this.hibernateUtil = hibernateUtil;
-    }
+    @Autowired
+    private RoomDao roomRepository;
+    @Autowired
+    private ResidentDao residentDao;
+    @Autowired
+    private RoomHistoryDao roomHistoryDao;
+    @Autowired
+    private HibernateUtil hibernateUtil;
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
