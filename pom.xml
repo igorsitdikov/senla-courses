@@ -15,7 +15,6 @@
     </properties>
 
     <modules>
-        <module>di</module>
         <module>model</module>
         <module>ui</module>
     </modules>

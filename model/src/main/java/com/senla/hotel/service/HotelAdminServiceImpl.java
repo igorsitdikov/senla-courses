@@ -1,7 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
@@ -17,24 +15,32 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-@Singleton
+@Component
 public class HotelAdminServiceImpl implements HotelAdminService {
 
     private static final Logger logger = LogManager.getLogger(HotelAdminServiceImpl.class);
 
-    @Autowired
-    private RoomDao roomRepository;
-    @Autowired
-    private ResidentDao residentDao;
-    @Autowired
-    private RoomHistoryDao roomHistoryDao;
-    @Autowired
-    private HibernateUtil hibernateUtil;
+    private final RoomDao roomRepository;
+    private final ResidentDao residentDao;
+    private final RoomHistoryDao roomHistoryDao;
+    private final HibernateUtil hibernateUtil;
+
+    public HotelAdminServiceImpl(final RoomDao roomRepository,
+                                 final ResidentDao residentDao,
+                                 final RoomHistoryDao roomHistoryDao,
+                                 final HibernateUtil hibernateUtil) {
+        this.roomRepository = roomRepository;
+        this.residentDao = residentDao;
+        this.roomHistoryDao = roomHistoryDao;
+        this.hibernateUtil = hibernateUtil;
+    }
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)

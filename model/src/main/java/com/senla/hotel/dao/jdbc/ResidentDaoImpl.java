@@ -1,6 +1,5 @@
 package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
@@ -10,6 +9,8 @@ import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResidentResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.utils.Connector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,15 +21,17 @@ import java.util.Set;
 
 public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements ResidentDao {
 
-    @Autowired
-    private ResidentResultSetMapper mapper;
-    @Autowired
-    private RoomHistoryResultSetMapper historyMapper;
-    @Autowired
-    private RoomHistoryDao roomHistoryDao;
+    private final ResidentResultSetMapper mapper;
+    private final RoomHistoryResultSetMapper historyMapper;
+    private final RoomHistoryDao roomHistoryDao;
 
-    public ResidentDaoImpl(final Connector connector) {
+    public ResidentDaoImpl(final Connector connector,
+                           final ResidentResultSetMapper mapper,
+                           final RoomHistoryResultSetMapper historyMapper, final RoomHistoryDao roomHistoryDao) {
         super(connector);
+        this.mapper = mapper;
+        this.historyMapper = historyMapper;
+        this.roomHistoryDao = roomHistoryDao;
     }
 
     @Override

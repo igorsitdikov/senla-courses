@@ -1,8 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
@@ -12,22 +9,31 @@ import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Singleton
+@Component
 public class RoomHistoryServiceImpl implements RoomHistoryService {
 
-    @Autowired
-    private CsvReader csvReader;
-    @Autowired
-    private CsvWriter csvWriter;
-    @PropertyLoad(propertyName = "histories")
+    private final CsvReader csvReader;
+    private final CsvWriter csvWriter;
+    @Value(value = "histories")
     private String property;
-    @Autowired
-    private RoomHistoryDao roomHistoryDao;
-    @Autowired
-    private RoomHistoryMapper roomHistoryMapper;
+    private final RoomHistoryDao roomHistoryDao;
+    private final RoomHistoryMapper roomHistoryMapper;
+
+    public RoomHistoryServiceImpl(final CsvReader csvReader,
+                                  final CsvWriter csvWriter,
+                                  final RoomHistoryDao roomHistoryDao,
+                                  final RoomHistoryMapper roomHistoryMapper) {
+        this.csvReader = csvReader;
+        this.csvWriter = csvWriter;
+        this.roomHistoryDao = roomHistoryDao;
+        this.roomHistoryMapper = roomHistoryMapper;
+    }
 
     @Override
     public RoomHistory create(final RoomHistory history) throws PersistException {

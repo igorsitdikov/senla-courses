@@ -1,7 +1,5 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -15,29 +13,40 @@ import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.SerializationUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
+@Component
 public class HotelController {
 
-    @Autowired
-    private static HotelAdminService hotelAdminService;
-    @Autowired
-    private static AttendanceService attendanceService;
-    @Autowired
-    private static RoomHistoryService roomHistoryService;
-    @Autowired
-    private static RoomService roomService;
-    @Autowired
-    private static ResidentService residentService;
-    @Autowired
-    private static RoomHistoryService historyService;
-    @Autowired
-    private static SerializationUtils serializationUtils;
+    private final HotelAdminService hotelAdminService;
+    private final AttendanceService attendanceService;
+    private final RoomHistoryService roomHistoryService;
+    private final RoomService roomService;
+    private final ResidentService residentService;
+    private final RoomHistoryService historyService;
+    private final SerializationUtils serializationUtils;
+
+    public HotelController(final HotelAdminService hotelAdminService,
+                           final AttendanceService attendanceService,
+                           final RoomHistoryService roomHistoryService,
+                           final RoomService roomService,
+                           final ResidentService residentService,
+                           final RoomHistoryService historyService,
+                           final SerializationUtils serializationUtils) {
+        this.hotelAdminService = hotelAdminService;
+        this.attendanceService = attendanceService;
+        this.roomHistoryService = roomHistoryService;
+        this.roomService = roomService;
+        this.residentService = residentService;
+        this.historyService = historyService;
+        this.serializationUtils = serializationUtils;
+    }
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
             throws EntityNotFoundException, PersistException, SQLException {

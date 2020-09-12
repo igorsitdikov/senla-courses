@@ -6,9 +6,11 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class RoomMapperImpl implements RoomMapper {
 
     @Override

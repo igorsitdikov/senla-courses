@@ -1,8 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
@@ -17,28 +14,39 @@ import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Singleton
+@Component
 public class ResidentServiceImpl implements ResidentService {
 
-    @Autowired
-    private CsvReader csvReader;
-    @Autowired
-    private CsvWriter csvWriter;
-    @Autowired
-    private ResidentDao residentDao;
-    @Autowired
-    private RoomHistoryDao roomHistoryDao;
-    @Autowired
-    private AttendanceDao attendanceDao;
-    @Autowired
-    private ResidentMapper residentMapper;
-    @PropertyLoad(propertyName = "residents")
+    private final CsvReader csvReader;
+    private final CsvWriter csvWriter;
+    private final ResidentDao residentDao;
+    private final RoomHistoryDao roomHistoryDao;
+    private final AttendanceDao attendanceDao;
+    private final ResidentMapper residentMapper;
+    @Value(value = "residents")
     private String property;
+
+    public ResidentServiceImpl(final CsvReader csvReader,
+                               final CsvWriter csvWriter,
+                               final ResidentDao residentDao,
+                               final RoomHistoryDao roomHistoryDao,
+                               final AttendanceDao attendanceDao,
+                               final ResidentMapper residentMapper) {
+        this.csvReader = csvReader;
+        this.csvWriter = csvWriter;
+        this.residentDao = residentDao;
+        this.roomHistoryDao = roomHistoryDao;
+        this.attendanceDao = attendanceDao;
+        this.residentMapper = residentMapper;
+    }
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException, PersistException {

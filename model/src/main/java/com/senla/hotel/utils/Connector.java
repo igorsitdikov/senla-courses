@@ -1,24 +1,24 @@
 package com.senla.hotel.utils;
 
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Singleton
+@Component
 public class Connector {
 
     private static final Logger logger = LogManager.getLogger(Connector.class);
 
-    @PropertyLoad
+    @Value(value = "url")
     private String url;
-    @PropertyLoad
+    @Value(value = "user")
     private String user;
-    @PropertyLoad
+    @Value(value = "password")
     private String password;
     private Connection connection;
 

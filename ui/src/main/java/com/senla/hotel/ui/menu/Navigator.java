@@ -1,12 +1,12 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.hotel.annotation.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Singleton
+@Component
 public class Navigator {
 
     private static final Logger logger = LogManager.getLogger(Navigator.class);

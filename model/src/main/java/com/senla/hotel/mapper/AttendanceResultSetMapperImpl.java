@@ -2,10 +2,12 @@ package com.senla.hotel.mapper;
 
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class AttendanceResultSetMapperImpl implements AttendanceResultSetMapper {
 
     @Override

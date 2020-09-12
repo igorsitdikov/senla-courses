@@ -1,7 +1,5 @@
 package com.senla.hotel.mapper;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -16,24 +14,31 @@ import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.service.interfaces.ResidentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Singleton
+@Component
 public class RoomHistoryMapperImpl implements RoomHistoryMapper {
 
     private static final Logger logger = LogManager.getLogger(RoomHistoryMapperImpl.class);
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    @Autowired
-    private RoomServiceImpl roomService;
-    @Autowired
-    private ResidentService residentService;
-    @Autowired
-    private AttendanceService attendanceService;
+    private final RoomServiceImpl roomService;
+    private final ResidentService residentService;
+    private final AttendanceService attendanceService;
+
+    public RoomHistoryMapperImpl(final ResidentService residentService,
+                                 final RoomServiceImpl roomService,
+                                 final AttendanceService attendanceService) {
+        this.residentService = residentService;
+        this.roomService = roomService;
+        this.attendanceService = attendanceService;
+    }
 
     @Override
     public RoomHistory sourceToDestination(final String source) throws EntityIsEmptyException {

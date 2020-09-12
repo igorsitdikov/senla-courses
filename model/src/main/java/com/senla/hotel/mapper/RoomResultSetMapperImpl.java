@@ -5,10 +5,12 @@ import com.senla.hotel.enumerated.Accommodation;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class RoomResultSetMapperImpl implements RoomResultSetMapper {
 
     @Override

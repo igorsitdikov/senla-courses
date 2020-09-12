@@ -1,15 +1,15 @@
 package com.senla.hotel.utils.csv.writer;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@Singleton
+@Component
 public class CsvWriterImpl implements CsvWriter {
 
     private static final Logger logger = LogManager.getLogger(CsvWriterImpl.class);

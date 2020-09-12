@@ -1,12 +1,13 @@
 package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.AttendanceResultSetMapper;
 import com.senla.hotel.utils.Connector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,11 +16,11 @@ import java.util.List;
 
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
-    @Autowired
-    private AttendanceResultSetMapper mapper;
+    private final AttendanceResultSetMapper mapper;
 
-    public AttendanceDaoImpl(final Connector connector) {
+    public AttendanceDaoImpl(final Connector connector, final AttendanceResultSetMapper mapper) {
         super(connector);
+        this.mapper = mapper;
     }
 
     @Override

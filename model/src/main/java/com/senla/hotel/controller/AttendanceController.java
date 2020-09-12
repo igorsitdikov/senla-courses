@@ -1,22 +1,25 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.AttendanceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Singleton
+@Component
 public class AttendanceController {
 
-    @Autowired
-    private static AttendanceService attendanceService;
+    private final AttendanceService attendanceService;
+
+    public AttendanceController(final AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
+    }
 
     public void createAttendance(final Attendance attendance) throws EntityAlreadyExistsException, PersistException {
         attendanceService.createAttendance(attendance);

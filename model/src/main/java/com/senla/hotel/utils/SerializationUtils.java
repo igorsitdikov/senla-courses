@@ -1,8 +1,5 @@
 package com.senla.hotel.utils;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
@@ -15,6 +12,9 @@ import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.PersistException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,21 +26,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Singleton
+@Component
 public class SerializationUtils {
 
     private static final Logger logger = LogManager.getLogger(SerializationUtils.class);
 
-    @Autowired
-    private RoomDao roomRepository;
-    @Autowired
-    private AttendanceDao attendanceRepository;
-    @Autowired
-    private RoomHistoryDao historyRepository;
-    @Autowired
-    private ResidentDao residentRepository;
-    @PropertyLoad
+    private final RoomDao roomRepository;
+    private final AttendanceDao attendanceRepository;
+    private final RoomHistoryDao historyRepository;
+    private final ResidentDao residentRepository;
+    @Value(value = "hotelState")
     private String hotelState;
+
+    public SerializationUtils(final RoomDao roomRepository,
+                              final AttendanceDao attendanceRepository,
+                              final RoomHistoryDao historyRepository,
+                              final ResidentDao residentRepository) {
+        this.roomRepository = roomRepository;
+        this.attendanceRepository = attendanceRepository;
+        this.historyRepository = historyRepository;
+        this.residentRepository = residentRepository;
+    }
 
     @SafeVarargs
     public final void serialize(final List<? extends AEntity>... entities) {

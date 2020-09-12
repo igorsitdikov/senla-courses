@@ -1,6 +1,5 @@
 package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -8,6 +7,8 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
 import com.senla.hotel.utils.Connector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,11 +18,11 @@ import java.util.List;
 
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
-    @Autowired
-    private RoomResultSetMapper mapper;
+    private final RoomResultSetMapper mapper;
 
-    public RoomDaoImpl(final Connector connector) {
+    public RoomDaoImpl(final Connector connector, final RoomResultSetMapper mapper) {
         super(connector);
+        this.mapper = mapper;
     }
 
     @Override

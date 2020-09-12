@@ -1,8 +1,6 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
+
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
@@ -12,24 +10,33 @@ import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
-@Singleton
+@Component
 public class AttendanceServiceImpl implements AttendanceService {
 
-    @Autowired
-    private CsvReader csvReader;
-    @Autowired
-    private CsvWriter csvWriter;
-    @Autowired
-    private AttendanceDao attendanceDao;
-    @Autowired
-    private AttendanceMapper attendanceMapper;
-    @PropertyLoad(propertyName = "attendances")
+    private final CsvReader csvReader;
+    private final CsvWriter csvWriter;
+    private final AttendanceDao attendanceDao;
+    private final AttendanceMapper attendanceMapper;
+    @Value(value = "attendances")
     private String property;
+
+    public AttendanceServiceImpl(final CsvReader csvReader,
+                                 final CsvWriter csvWriter,
+                                 final AttendanceDao attendanceDao,
+                                 final AttendanceMapper attendanceMapper) {
+        this.csvReader = csvReader;
+        this.csvWriter = csvWriter;
+        this.attendanceDao = attendanceDao;
+        this.attendanceMapper = attendanceMapper;
+    }
 
     @Override
     public Attendance findById(final Long id) throws PersistException {

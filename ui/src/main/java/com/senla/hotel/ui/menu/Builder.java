@@ -1,7 +1,5 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
@@ -51,8 +49,10 @@ import com.senla.hotel.ui.enumerated.RoomMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowAttendancesMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowResidentsMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowRoomsMenuImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Singleton
+@Component
 public class Builder {
 
     private static final String MAIN_MENU = "Main menu";
@@ -61,14 +61,19 @@ public class Builder {
     private static final String RESIDENT_MENU = "Resident menu";
     private static final String ATTENDANCE_MENU = "Attendance menu";
     private Menu rootMenu = new Menu(MAIN_MENU);
-    @Autowired
-    private HotelController hotelController;
-    @Autowired
-    private RoomController roomController;
-    @Autowired
-    private AttendanceController attendanceController;
-    @Autowired
-    private ResidentController residentController;
+    private final HotelController hotelController;
+    private final RoomController roomController;
+    private final AttendanceController attendanceController;
+    private final ResidentController residentController;
+
+    public Builder(final HotelController hotelController,
+                   final RoomController roomController,
+                   final AttendanceController attendanceController, final ResidentController residentController) {
+        this.hotelController = hotelController;
+        this.roomController = roomController;
+        this.attendanceController = attendanceController;
+        this.residentController = residentController;
+    }
 
     public Menu buildMenu() {
         Menu hotelAdminMenu = new Menu(HOTEL_ADMIN_MENU);

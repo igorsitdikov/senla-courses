@@ -1,6 +1,5 @@
 package com.senla.hotel.mapper;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -8,16 +7,23 @@ import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.ResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomHistoryResultSetMapper;
 import com.senla.hotel.mapper.interfaces.resultSetMapper.RoomResultSetMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class RoomHistoryResultSetMapperImpl implements RoomHistoryResultSetMapper {
 
-    @Autowired
-    private RoomResultSetMapper roomResultSetMapper;
-    @Autowired
-    private RoomResultSetMapper residentResultSetMapper;
+    private final RoomResultSetMapper roomResultSetMapper;
+    private final RoomResultSetMapper residentResultSetMapper;
+
+    public RoomHistoryResultSetMapperImpl(final RoomResultSetMapper roomResultSetMapper,
+                                          final RoomResultSetMapper residentResultSetMapper) {
+        this.roomResultSetMapper = roomResultSetMapper;
+        this.residentResultSetMapper = residentResultSetMapper;
+    }
 
     @Override
     public RoomHistory sourceToDestination(final ResultSet source) throws SQLException {
