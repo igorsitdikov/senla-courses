@@ -8,7 +8,7 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Component
+@Repository
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
 
     public RoomHistoryDaoImpl(final HibernateUtil hibernateUtil) {

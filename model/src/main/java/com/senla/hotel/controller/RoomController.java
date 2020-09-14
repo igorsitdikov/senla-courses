@@ -21,7 +21,7 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-    @Value(value = "#{new Boolean('${RoomController.statusAllow}')}")
+    @Value("${RoomController.statusAllow:true}")
     private Boolean statusAllow;
 
     public void addRoom(final Room room) throws PersistException {

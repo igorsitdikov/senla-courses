@@ -9,7 +9,7 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+@Repository
 public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     public RoomDaoImpl(final HibernateUtil hibernateUtil) {

@@ -12,13 +12,13 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
+@Service
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
@@ -29,7 +29,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceDao attendanceDao;
     @Autowired
     private AttendanceMapper attendanceMapper;
-    @Value(value = "attendances")
+    @Value("${attendances:attendances.csv}")
     private String property;
 
 

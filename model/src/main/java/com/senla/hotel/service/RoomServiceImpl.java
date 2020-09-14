@@ -20,7 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
+@Service
 public class RoomServiceImpl implements RoomService {
 
     private static final Logger logger = LogManager.getLogger(RoomServiceImpl.class);
@@ -43,9 +43,9 @@ public class RoomServiceImpl implements RoomService {
     private ResidentDao residentDao;
     @Autowired
     private RoomMapper roomMapper;
-    @Value(value = "rooms")
+    @Value("${rooms:rooms.csv}")
     private String property;
-    @Value(value = "#{new Integer('${RoomService.amountHistories}')}")
+    @Value("${RoomService.amountHistories:3}")
     private Integer amountHistories;
 
 

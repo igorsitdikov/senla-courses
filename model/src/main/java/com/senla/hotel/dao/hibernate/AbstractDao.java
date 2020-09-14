@@ -8,7 +8,7 @@ import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Component
+@Repository
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     private final Class<T> entityClass;

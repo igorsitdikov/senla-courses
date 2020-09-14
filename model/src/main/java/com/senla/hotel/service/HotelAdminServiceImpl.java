@@ -16,13 +16,13 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-@Component
+@Service
 public class HotelAdminServiceImpl implements HotelAdminService {
 
     private static final Logger logger = LogManager.getLogger(HotelAdminServiceImpl.class);

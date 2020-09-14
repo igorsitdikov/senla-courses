@@ -11,11 +11,11 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class RoomHistoryServiceImpl implements RoomHistoryService {
 
     @Autowired
@@ -26,7 +26,7 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
     private RoomHistoryMapper roomHistoryMapper;
     @Autowired
     private CsvWriter csvWriter;
-    @Value(value = "histories")
+    @Value("${histories:histories.csv}")
     private String property;
 
     public RoomHistoryServiceImpl(final CsvReader csvReader,

@@ -7,7 +7,7 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,7 +16,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Component
+@Repository
 public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements AttendanceDao {
 
     public AttendanceDaoImpl(final HibernateUtil hibernateUtil) {
