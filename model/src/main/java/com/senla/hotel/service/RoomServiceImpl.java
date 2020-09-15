@@ -1,15 +1,11 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
-import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
@@ -22,6 +18,9 @@ import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Singleton
+@Service
 public class RoomServiceImpl implements RoomService {
 
     private static final Logger logger = LogManager.getLogger(RoomServiceImpl.class);
@@ -44,10 +43,11 @@ public class RoomServiceImpl implements RoomService {
     private ResidentDao residentDao;
     @Autowired
     private RoomMapper roomMapper;
-    @PropertyLoad(propertyName = "rooms")
+    @Value("${rooms:rooms.csv}")
     private String property;
-    @PropertyLoad(type = Type.INTEGER)
+    @Value("${RoomService.amountHistories:3}")
     private Integer amountHistories;
+
 
     @Override
     public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {

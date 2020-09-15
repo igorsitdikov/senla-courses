@@ -4,7 +4,9 @@ import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
 import com.senla.hotel.mapper.interfaces.csvMapper.ResidentMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ResidentMapperImpl implements ResidentMapper {
 
     @Override

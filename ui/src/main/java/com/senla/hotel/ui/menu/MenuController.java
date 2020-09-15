@@ -1,23 +1,22 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.utils.InputDataReader;
 import com.senla.hotel.utils.Connector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-@Singleton
+@Component
 public final class MenuController {
 
     private static final Logger logger = LogManager.getLogger(MenuController.class);
-
     @Autowired
     private HotelController hotelController;
     @Autowired

@@ -1,7 +1,5 @@
 package com.senla.hotel.ui.menu;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.controller.AttendanceController;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
@@ -51,8 +49,10 @@ import com.senla.hotel.ui.enumerated.RoomMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowAttendancesMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowResidentsMenuImpl;
 import com.senla.hotel.ui.enumerated.ShowRoomsMenuImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Singleton
+@Component
 public class Builder {
 
     private static final String MAIN_MENU = "Main menu";
@@ -69,6 +69,7 @@ public class Builder {
     private AttendanceController attendanceController;
     @Autowired
     private ResidentController residentController;
+
 
     public Menu buildMenu() {
         Menu hotelAdminMenu = new Menu(HOTEL_ADMIN_MENU);

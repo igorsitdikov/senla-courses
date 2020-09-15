@@ -1,17 +1,17 @@
 package com.senla.hotel.utils.csv.reader;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.writer.CsvWriterImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-@Singleton
+@Component
 public class CsvReaderImpl implements CsvReader {
 
     private static final Logger logger = LogManager.getLogger(CsvWriterImpl.class);

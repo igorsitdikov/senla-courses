@@ -1,6 +1,5 @@
 package com.senla.hotel.utils;
 
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -12,8 +11,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Component;
 
-@Singleton
+@Component
 public class HibernateUtil {
 
     private static final Logger logger = LogManager.getLogger(HibernateUtil.class);

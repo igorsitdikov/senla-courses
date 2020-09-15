@@ -1,8 +1,6 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
+
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
@@ -12,12 +10,15 @@ import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
-@Singleton
+@Service
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
@@ -28,8 +29,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceDao attendanceDao;
     @Autowired
     private AttendanceMapper attendanceMapper;
-    @PropertyLoad(propertyName = "attendances")
+    @Value("${attendances:attendances.csv}")
     private String property;
+
 
     @Override
     public Attendance findById(final Long id) throws PersistException {

@@ -1,6 +1,5 @@
 package com.senla.hotel.dao.jdbc;
 
-import com.senla.hotel.annotation.Autowired;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
@@ -21,14 +20,15 @@ import java.util.List;
 
 public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implements RoomHistoryDao {
 
-    @Autowired
-    private RoomHistoryResultSetMapper mapper;
+    private final RoomHistoryResultSetMapper mapper;
+    private final AttendanceDao attendanceDao;
 
-    @Autowired
-    private AttendanceDao attendanceDao;
-
-    public RoomHistoryDaoImpl(final Connector connector) {
+    public RoomHistoryDaoImpl(final Connector connector,
+                              final RoomHistoryResultSetMapper mapper,
+                              final AttendanceDao attendanceDao) {
         super(connector);
+        this.mapper = mapper;
+        this.attendanceDao = attendanceDao;
     }
 
     @Override

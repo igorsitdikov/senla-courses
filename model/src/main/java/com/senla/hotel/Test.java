@@ -17,20 +17,26 @@ import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.utils.PrinterUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Configuration
+@PropertySource("classpath:application.properties")
 public class Test {
 
     private static final Logger logger = LogManager.getLogger(Test.class);
 
     public static void main(final String[] args) throws Exception {
-        final AppContext context = Application.run("com.senla.hotel");
-        final AttendanceController attendanceController = context.getObject(AttendanceController.class);
-        final ResidentController residentController = context.getObject(ResidentController.class);
-        final HotelController hotelController = context.getObject(HotelController.class);
-        final RoomController roomController = context.getObject(RoomController.class);
+        final ApplicationContext context = new AnnotationConfigApplicationContext("com.senla.hotel");
+        final AttendanceController attendanceController = context.getBean(AttendanceController.class);
+        final ResidentController residentController = context.getBean(ResidentController.class);
+        final HotelController hotelController = context.getBean(HotelController.class);
+        final RoomController roomController = context.getBean(RoomController.class);
 
         final Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         final Attendance wakeup = new Attendance(BigDecimal.valueOf(1.5).setScale(2), "Wake-up");

@@ -1,28 +1,27 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
-import com.senla.hotel.enumerated.Type;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.service.interfaces.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
+@Component
 public class RoomController {
 
     @Autowired
-    private static RoomService roomService;
-    @PropertyLoad(type = Type.BOOLEAN)
+    private RoomService roomService;
+    @Value("${RoomController.statusAllow:true}")
     private Boolean statusAllow;
 
     public void addRoom(final Room room) throws PersistException {

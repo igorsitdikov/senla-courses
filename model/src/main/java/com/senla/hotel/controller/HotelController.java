@@ -1,7 +1,5 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -15,29 +13,31 @@ import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.SerializationUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-@Singleton
+@Component
 public class HotelController {
 
     @Autowired
-    private static HotelAdminService hotelAdminService;
+    private HotelAdminService hotelAdminService;
     @Autowired
-    private static AttendanceService attendanceService;
+    private AttendanceService attendanceService;
     @Autowired
-    private static RoomHistoryService roomHistoryService;
+    private RoomHistoryService roomHistoryService;
     @Autowired
-    private static RoomService roomService;
+    private RoomService roomService;
     @Autowired
-    private static ResidentService residentService;
+    private ResidentService residentService;
     @Autowired
-    private static RoomHistoryService historyService;
+    private RoomHistoryService historyService;
     @Autowired
-    private static SerializationUtils serializationUtils;
+    private SerializationUtils serializationUtils;
 
     public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
             throws EntityNotFoundException, PersistException, SQLException {

@@ -1,8 +1,5 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.annotation.Autowired;
-import com.senla.hotel.annotation.PropertyLoad;
-import com.senla.hotel.annotation.Singleton;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
@@ -17,12 +14,15 @@ import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Singleton
+@Service
 public class ResidentServiceImpl implements ResidentService {
 
     @Autowired
@@ -37,8 +37,9 @@ public class ResidentServiceImpl implements ResidentService {
     private AttendanceDao attendanceDao;
     @Autowired
     private ResidentMapper residentMapper;
-    @PropertyLoad(propertyName = "residents")
+    @Value("${residents:residents.csv}")
     private String property;
+
 
     @Override
     public Resident findById(final Long id) throws EntityNotFoundException, PersistException {
