@@ -74,6 +74,10 @@
             <AppenderRef ref="errorLog" />
         </Logger>
 
+        <Logger name="com.senla.hotel" additivity="false" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Logger name="org.hibernate.SQL" additivity="false" level="debug">
             <Appender-ref ref="sqlLog"/>
         </Logger>

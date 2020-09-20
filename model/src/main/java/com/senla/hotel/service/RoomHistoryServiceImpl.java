@@ -29,16 +29,6 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
     @Value("${histories:histories.csv}")
     private String property;
 
-    public RoomHistoryServiceImpl(final CsvReader csvReader,
-                                  final CsvWriter csvWriter,
-                                  final RoomHistoryDao roomHistoryDao,
-                                  final RoomHistoryMapper roomHistoryMapper) {
-        this.csvReader = csvReader;
-        this.csvWriter = csvWriter;
-        this.roomHistoryDao = roomHistoryDao;
-        this.roomHistoryMapper = roomHistoryMapper;
-    }
-
     @Override
     public RoomHistory create(final RoomHistory history) throws PersistException {
         return roomHistoryDao.create(history);

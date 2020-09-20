@@ -30,12 +30,20 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
 
     @Override
     public List<Room> getVacantRooms(final SortField sortField) throws PersistException {
-        return getAllBy("status", RoomStatus.VACANT, sortField);
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+            return getAllBy("status", RoomStatus.VACANT, sortField, session);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override
     public Room findByNumber(final Integer number) throws PersistException {
-        return getSingleBy("number", number);
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+            return getSingleBy("number", number, session);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override

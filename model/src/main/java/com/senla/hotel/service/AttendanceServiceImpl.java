@@ -32,7 +32,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Value("${attendances:attendances.csv}")
     private String property;
 
-
     @Override
     public Attendance findById(final Long id) throws PersistException {
         return attendanceDao.findById(id);
@@ -55,10 +54,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
+    public Attendance changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
         final Attendance attendance = attendanceDao.findById(id);
         attendance.setPrice(price);
-        attendanceDao.update(attendance);
+        return attendanceDao.update(attendance);
     }
 
     @Override
