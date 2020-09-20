@@ -76,7 +76,6 @@
 
         <Logger name="org.hibernate.SQL" additivity="false" level="debug">
             <Appender-ref ref="sqlLog"/>
-
         </Logger>
 
         <Root level="warn">

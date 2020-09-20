@@ -20,6 +20,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.3.7.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.4.21.Final</version>
+        </dependency>
     </dependencies>
     <parent>
         <groupId>com.senla</groupId>
