@@ -12,6 +12,7 @@ import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.service.interfaces.RoomHistoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +40,7 @@ public class RoomHistoryServiceImplTest {
     @Mock
     private RoomHistoryDao roomHistoryDao;
     @InjectMocks
-    private RoomHistoryServiceImpl roomHistoryService;
+    private RoomHistoryService roomHistoryService = new RoomHistoryServiceImpl();
 
     @Test
     void findRoomHistoryByIdTest() throws PersistException, EntityNotFoundException {

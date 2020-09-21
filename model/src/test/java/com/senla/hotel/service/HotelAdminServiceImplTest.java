@@ -1,9 +1,9 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.HotelTest;
-import com.senla.hotel.dao.hibernate.ResidentDaoImpl;
-import com.senla.hotel.dao.hibernate.RoomDaoImpl;
-import com.senla.hotel.dao.hibernate.RoomHistoryDaoImpl;
+import com.senla.hotel.dao.interfaces.ResidentDao;
+import com.senla.hotel.dao.interfaces.RoomDao;
+import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
@@ -12,7 +12,9 @@ import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.Stars;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.utils.HibernateUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,20 +41,20 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 @ContextConfiguration(classes = HotelTest.class)
 public class HotelAdminServiceImplTest {
     @Mock
-    private RoomDaoImpl roomDao;
+    private RoomDao roomDao;
     @Mock
-    private ResidentDaoImpl residentDao;
+    private ResidentDao residentDao;
     @Mock
-    private RoomHistoryDaoImpl roomHistoryDao;
+    private RoomHistoryDao roomHistoryDao;
     @Mock
     private HibernateUtil hibernateUtil;
     @InjectMocks
-    private HotelAdminServiceImpl hotelAdminService;
+    private HotelAdminService hotelAdminService = new HotelAdminServiceImpl();
     @Autowired
     private HibernateUtil hibernate;
 
     @Test
-    void calculateBillTest() throws PersistException {
+    void calculateBillTest() throws PersistException, EntityNotFoundException {
         final Long residentId = 1L;
         final Long historyId = 1L;
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);
@@ -77,7 +79,7 @@ public class HotelAdminServiceImplTest {
     }
 
     @Test
-    void checkInTest() throws PersistException, SQLException {
+    void checkInTest() throws PersistException, SQLException, EntityNotFoundException {
         final Long residentId = 1L;
         final Long roomId = 1L;
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);
@@ -103,7 +105,7 @@ public class HotelAdminServiceImplTest {
     }
 
     @Test
-    void checkOutTest() throws PersistException, SQLException {
+    void checkOutTest() throws PersistException, SQLException, EntityNotFoundException {
         final Long residentId = 1L;
         final Long roomId = 1L;
         final Resident mike = new Resident("Mike", "Smith", Gender.MALE, false, "1234567", null);

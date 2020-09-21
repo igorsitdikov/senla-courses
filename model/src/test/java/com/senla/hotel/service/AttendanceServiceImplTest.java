@@ -1,10 +1,13 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.HotelTest;
-import com.senla.hotel.dao.hibernate.AttendanceDaoImpl;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
+import com.senla.hotel.exceptions.EntityAlreadyExistsException;
+import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.service.interfaces.AttendanceService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,12 +32,12 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 public class AttendanceServiceImplTest {
 
     @Mock
-    private AttendanceDaoImpl attendanceDao;
+    private AttendanceDao attendanceDao;
     @InjectMocks
-    private AttendanceServiceImpl attendanceService;
+    private AttendanceService attendanceService = new AttendanceServiceImpl();
 
     @Test
-    void createResidentTest() throws PersistException {
+    void createResidentTest() throws PersistException, EntityAlreadyExistsException {
         Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         given(attendanceDao.create(ironing)).willReturn(ironing);
 
@@ -62,7 +65,7 @@ public class AttendanceServiceImplTest {
 
 
     @Test
-    void findAttendanceByIdTest() throws PersistException {
+    void findAttendanceByIdTest() throws PersistException, EntityNotFoundException {
         final Long attendanceId = 1L;
         Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         ironing.setId(attendanceId);
@@ -74,7 +77,7 @@ public class AttendanceServiceImplTest {
     }
 
     @Test
-    void updateAttendancePriceTest() throws PersistException {
+    void updateAttendancePriceTest() throws PersistException, EntityNotFoundException {
         final Long attendanceId = 1L;
         Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");
         ironing.setId(attendanceId);
@@ -89,7 +92,7 @@ public class AttendanceServiceImplTest {
     }
 
     @Test
-    void shouldBeDeleteTest() throws PersistException {
+    void shouldBeDeleteTest() throws PersistException, EntityNotFoundException {
         final Long attendanceId = 1L;
 
         Attendance ironing = new Attendance(BigDecimal.valueOf(2.3).setScale(2), "Ironing");

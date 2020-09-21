@@ -1,7 +1,7 @@
 package com.senla.hotel.service;
 
 import com.senla.hotel.HotelTest;
-import com.senla.hotel.dao.hibernate.AttendanceDaoImpl;
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
 import com.senla.hotel.entity.Attendance;
@@ -13,6 +13,7 @@ import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.service.interfaces.ResidentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,9 +38,9 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 @ContextConfiguration(classes = HotelTest.class)
 public class ResidentServiceImplTest {
     @Mock
-    private AttendanceDaoImpl attendanceDao;
+    private AttendanceDao attendanceDao;
     @InjectMocks
-    private ResidentServiceImpl residentService;
+    private ResidentService residentService = new ResidentServiceImpl();
     @Mock
     private ResidentDao residentDao;
     @Mock

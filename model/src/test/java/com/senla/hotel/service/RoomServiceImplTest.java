@@ -12,6 +12,7 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.enumerated.Stars;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.service.interfaces.RoomService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +38,7 @@ public class RoomServiceImplTest {
     @Mock
     private RoomDao roomDao;
     @InjectMocks
-    private RoomServiceImpl roomService;
+    private RoomService roomService = new RoomServiceImpl();
     @Mock
     private ResidentDao residentDao;
 
@@ -102,7 +103,7 @@ public class RoomServiceImplTest {
     }
 
     @Test
-    void showLastResidentsTest() throws PersistException {
+    void showLastResidentsTest() throws PersistException, EntityNotFoundException {
         final Long roomId = 1L;
         final Integer limit = 3;
         final Room room101 =
