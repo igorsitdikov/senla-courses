@@ -160,7 +160,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     }
 
     @Override
-    public void update(final T object) throws PersistException {
+    public T update(final T object) throws PersistException {
         final String sql = getUpdateQuery();
         try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
             prepareStatementForUpdate(statement, object);
@@ -168,6 +168,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (count != 1) {
                 throw new PersistException("On update modify more then 1 record: " + count);
             }
+            return object;
         } catch (final Exception e) {
             throw new PersistException(e);
         }

@@ -17,7 +17,7 @@ public interface AttendanceService {
 
     List<Attendance> showAttendances(SortField sortField) throws PersistException;
 
-    void changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
+    Attendance changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
 
     void delete(Long id) throws EntityNotFoundException, PersistException;
 

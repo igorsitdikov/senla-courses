@@ -27,7 +27,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     private static final Logger logger = LogManager.getLogger(HotelAdminServiceImpl.class);
     @Autowired
-    private RoomDao roomRepository;
+    private RoomDao roomDao;
     @Autowired
     private ResidentDao residentDao;
     @Autowired
@@ -38,7 +38,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
         throws PersistException, SQLException {
-        final Room room = roomRepository.findById(roomId);
+        final Room room = roomDao.findById(roomId);
         final Resident resident = residentDao.findById(residentId);
         if (room.getStatus() == RoomStatus.VACANT) {
             Session session = hibernateUtil.openSession();
@@ -48,7 +48,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                     new RoomHistory(room, resident, checkIn, checkOut, HistoryStatus.CHECKED_IN);
                 roomHistoryDao.create(history);
                 room.setStatus(RoomStatus.OCCUPIED);
-                roomRepository.update(room);
+                roomDao.update(room);
                 transaction.commit();
             } catch (final Exception e) {
                 transaction.rollback();
@@ -85,7 +85,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 logger.warn("The room №{} has no resident.", room.getNumber());
             } else {
                 room.setStatus(RoomStatus.VACANT);
-                roomRepository.update(room);
+                roomDao.update(room);
             }
             transaction.commit();
         } catch (final Exception e) {

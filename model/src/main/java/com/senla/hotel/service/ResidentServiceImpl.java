@@ -54,7 +54,7 @@ public class ResidentServiceImpl implements ResidentService {
     public void addAttendanceToResident(final Resident resident, final Attendance attendance)
             throws EntityNotFoundException, PersistException {
         final Long residentId = resident.getId();
-        final Long attendanceId = attendanceDao.findById(attendance.getId()).getId();
+        final Long attendanceId = attendance.getId();
         addAttendanceToResident(residentId, attendanceId);
     }
 

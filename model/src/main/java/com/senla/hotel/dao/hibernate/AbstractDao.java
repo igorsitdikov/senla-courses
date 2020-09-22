@@ -8,7 +8,7 @@ import com.senla.hotel.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Repository
+@Component
 public abstract class AbstractDao<T extends AEntity, ID extends Long> implements GenericDao<T, ID> {
 
     private final Class<T> entityClass;
@@ -25,37 +25,40 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
 
     public AbstractDao(final HibernateUtil hibernateUtil) {
         this.entityClass =
-                (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.hibernateUtil = hibernateUtil;
     }
 
     @Override
     public T findById(final Long id) throws PersistException {
-        return getSingleBy("id", id);
-    }
-
-    protected <E> T getSingleBy(final String field, final E variable) throws PersistException {
-        Query<T> query = getQueryBy(field, variable);
-        return query.getSingleResult();
-    }
-
-    protected <E> Query<T> getQueryBy(final String field, final E variable, final SortField sortField) throws PersistException {
-        try (Session session = hibernateUtil.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<T> criteria = builder.createQuery(entityClass);
-            Root<T> root = criteria.from(entityClass);
-            criteria
-                    .select(root)
-                    .where(builder.equal(root.get(field), variable))
-                    .orderBy(builder.asc(root.get(sortField.getFieldName())));
-            return session.createQuery(criteria);
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+            return getSingleBy("id", id, session);
         } catch (Exception e) {
             throw new PersistException(e);
         }
     }
 
-    private <E> Query<T> getQueryBy(final String field, final E variable) throws PersistException {
-        return getQueryBy(field, variable, SortField.DEFAULT);
+    protected <E> T getSingleBy(final String field, final E variable, Session session) throws PersistException {
+        Query<T> query = getQueryBy(field, variable, session);
+        return query.getSingleResult();
+    }
+
+    protected <E> Query<T> getQueryBy(final String field,
+                                      final E variable,
+                                      final SortField sortField,
+                                      final Session session) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteria = builder.createQuery(entityClass);
+        Root<T> root = criteria.from(entityClass);
+        criteria
+            .select(root)
+            .where(builder.equal(root.get(field), variable))
+            .orderBy(builder.asc(root.get(sortField.getFieldName())));
+        return session.createQuery(criteria);
+    }
+
+    private <E> Query<T> getQueryBy(final String field, final E variable, Session session) throws PersistException {
+        return getQueryBy(field, variable, SortField.DEFAULT, session);
     }
 
     @Override
@@ -63,27 +66,22 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         return getAllSortedBy(SortField.DEFAULT);
     }
 
-    protected <E> List<T> getAllBy(final String field, final E variable) throws PersistException {
-        Query<T> query = getQueryBy(field, variable, SortField.DEFAULT);
-        return query.getResultList();
-    }
-
     protected List<T> getAllSortedBy(final SortField sortField) throws PersistException {
-        try (Session session = hibernateUtil.openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> criteria = builder.createQuery(entityClass);
             Root<T> root = criteria.from(entityClass);
             criteria
-                    .select(root)
-                    .orderBy(builder.asc(root.get(sortField.getFieldName())));
+                .select(root)
+                .orderBy(builder.asc(root.get(sortField.getFieldName())));
             return session.createQuery(criteria).getResultList();
         } catch (Exception e) {
             throw new PersistException(e);
         }
     }
 
-    protected <E> List<T> getAllBy(final String field, final E variable, final SortField sortField) throws PersistException {
-        Query<T> query = getQueryBy(field, variable, sortField);
+    protected <E> List<T> getAllBy(final String field, final E variable, final SortField sortField, Session session) {
+        Query<T> query = getQueryBy(field, variable, sortField, session);
         return query.getResultList();
     }
 
@@ -131,13 +129,14 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
     }
 
     @Override
-    public void update(final T object) throws PersistException {
+    public T update(final T object) throws PersistException {
         Transaction transaction = null;
         try (Session session = hibernateUtil.openSession()) {
             transaction = session.beginTransaction();
             session.update(object);
             session.flush();
             transaction.commit();
+            return object;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
