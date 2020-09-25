@@ -1,0 +1,4 @@
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="admin"/>
+<user username="admin" password="admin" roles="manager-script, manager-gui, admin"/>
