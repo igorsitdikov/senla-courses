@@ -21,8 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,8 +80,10 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
+    @Transactional
     public List<ResidentDto> showResidents(final SortField sortField) throws PersistException {
-        return residentDao.getAllSortedBy(sortField)
+        final List<Resident> allSortedBy = residentDao.getAllSortedBy(sortField);
+        return allSortedBy
             .stream()
             .map(residentDtoMapper::destinationToSource)
             .collect(Collectors.toList());

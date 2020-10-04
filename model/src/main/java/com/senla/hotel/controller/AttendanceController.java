@@ -42,12 +42,10 @@ public class AttendanceController {
         attendanceService.delete(id);
     }
 
-    @GetMapping
+    @GetMapping(value = "/sort/{sortField}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AttendanceDto> showAttendances(SortField sortField) throws PersistException {
-        sortField = SortField.DEFAULT;
-        final List<AttendanceDto> attendances1 = attendanceService.showAttendances(sortField);
-        return attendances1;
+    public List<AttendanceDto> showAttendances(@PathVariable("sortField") SortField sortField) throws PersistException {
+        return attendanceService.showAttendances(sortField);
     }
 
     @PatchMapping(value = "/{id}")
@@ -57,10 +55,14 @@ public class AttendanceController {
         attendanceService.changeAttendancePrice(id, price);
     }
 
+    @GetMapping(value = "/import")
+    @ResponseStatus(HttpStatus.OK)
     public void importAttendances() throws PersistException {
         attendanceService.importAttendances();
     }
 
+    @GetMapping(value = "/export")
+    @ResponseStatus(HttpStatus.OK)
     public void exportAttendances() throws PersistException {
         attendanceService.exportAttendances();
     }

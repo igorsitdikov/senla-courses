@@ -39,25 +39,24 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         source.setAccommodation(destination.getAccommodation());
         source.setNumber(destination.getNumber());
         source.setStars(destination.getStars());
-        source.setHistoriesDto(historyEntitiesToListDto(destination.getHistories(), source));
+        source.setHistoriesDto(historyEntitiesToListDto(destination.getHistories()));
         return source;
     }
 
-    private List<RoomHistoryDto> historyEntitiesToListDto(List<RoomHistory> histories, RoomDto roomDto) {
+    private List<RoomHistoryDto> historyEntitiesToListDto(List<RoomHistory> histories) {
         List<RoomHistoryDto> roomHistoryDtos = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
-            roomHistoryDtos.add(entityToDto(histories.get(i), roomDto));
+            roomHistoryDtos.add(entityToDto(histories.get(i)));
         }
         return roomHistoryDtos;
     }
 
-    private RoomHistoryDto entityToDto(RoomHistory roomHistory, RoomDto roomDto) {
+    private RoomHistoryDto entityToDto(RoomHistory roomHistory) {
         RoomHistoryDto roomHistoryDto = new RoomHistoryDto();
         roomHistoryDto.setId(roomHistory.getId());
         roomHistoryDto.setCheckOut(roomHistory.getCheckOut());
         roomHistoryDto.setCheckIn(roomHistory.getCheckIn());
         roomHistoryDto.setResidentDto(residentDtoMapper.destinationToSource(roomHistory.getResident()));
-        roomHistoryDto.setRoomDto(roomDto);
         roomHistoryDto.setStatus(roomHistory.getStatus());
         return roomHistoryDto;
     }

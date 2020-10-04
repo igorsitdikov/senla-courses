@@ -1,21 +1,16 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.dto.ResidentDto;
-import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.dto.RoomHistoryDto;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
 import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 @Component
 public class ResidentDtoMapperImpl implements ResidentDtoMapper {
@@ -44,24 +39,24 @@ public class ResidentDtoMapperImpl implements ResidentDtoMapper {
         source.setGender(destination.getGender());
         source.setPhone(destination.getPhone());
         source.setVip(destination.getVip());
-        source.setHistoryDtos(historyEntitiesToListDto(destination.getHistory(), source));
+//        if (destination.getHistory() != null)
+//            source.setHistoryDtos(historyEntitiesToListDto(destination.getHistory()));
         return source;
     }
 
-    private Set<RoomHistoryDto> historyEntitiesToListDto(Set<RoomHistory> histories, ResidentDto residentDto) {
+    private Set<RoomHistoryDto> historyEntitiesToListDto(Set<RoomHistory> histories) {
         Set<RoomHistoryDto> roomHistoryDtos = new HashSet<>();
         for (RoomHistory roomHistory : histories) {
-            roomHistoryDtos.add(entityToDto(roomHistory, residentDto));
+            roomHistoryDtos.add(entityToDto(roomHistory));
         }
         return roomHistoryDtos;
     }
 
-    private RoomHistoryDto entityToDto(RoomHistory roomHistory, ResidentDto residentDto) {
+    private RoomHistoryDto entityToDto(RoomHistory roomHistory) {
         RoomHistoryDto roomHistoryDto = new RoomHistoryDto();
         roomHistoryDto.setId(roomHistory.getId());
         roomHistoryDto.setCheckOut(roomHistory.getCheckOut());
         roomHistoryDto.setCheckIn(roomHistory.getCheckIn());
-        roomHistoryDto.setResidentDto(residentDto);
         roomHistoryDto.setRoomDto(roomDtoMapper.destinationToSource(roomHistory.getRoom()));
         roomHistoryDto.setStatus(roomHistory.getStatus());
         return roomHistoryDto;
