@@ -1,5 +1,7 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.AttendanceDto;
+import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.enumerated.SortField;
@@ -17,11 +19,11 @@ public class ResidentController {
     @Autowired
     private ResidentService residentService;
 
-    public void createResident(final Resident resident) throws PersistException {
+    public void createResident(final ResidentDto resident) throws PersistException {
         residentService.createResident(resident);
     }
 
-    public List<Resident> showResidents(final SortField sortField) throws PersistException {
+    public List<ResidentDto> showResidents(final SortField sortField) throws PersistException {
         return residentService.showResidents(sortField);
     }
 
@@ -29,7 +31,7 @@ public class ResidentController {
         return residentService.showCountResidents();
     }
 
-    public void addAttendanceToResident(final Resident resident, final Attendance attendance)
+    public void addAttendanceToResident(final ResidentDto resident, final AttendanceDto attendance)
             throws EntityNotFoundException, PersistException {
         residentService.addAttendanceToResident(resident, attendance);
     }

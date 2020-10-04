@@ -1,16 +1,24 @@
 package com.senla.hotel.service;
 
+import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
+import com.senla.hotel.dto.AttendanceDto;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
+import com.senla.hotel.dto.RoomHistoryDto;
+import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.utils.HibernateUtil;
+import com.senla.hotel.utils.SerializationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -21,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class HotelAdminServiceImpl implements HotelAdminService {
@@ -29,11 +38,17 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     @Autowired
     private RoomDao roomDao;
     @Autowired
+    private AttendanceDao attendanceDao;
+    @Autowired
     private ResidentDao residentDao;
     @Autowired
     private RoomHistoryDao roomHistoryDao;
     @Autowired
     private HibernateUtil hibernateUtil;
+    @Autowired
+    private SerializationUtils serializationUtils;
+    @Autowired
+    private HotelAdminService hotelAdminService;
 
     @Override
     public void checkIn(final Long residentId, final Long roomId, final LocalDate checkIn, final LocalDate checkOut)
@@ -65,7 +80,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
+    public void checkIn(final ResidentDto resident, final RoomDto room, final LocalDate checkIn, final LocalDate checkOut)
         throws PersistException, SQLException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }
@@ -95,7 +110,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkOut(final Resident resident, final LocalDate date) throws SQLException, PersistException {
+    public void checkOut(final ResidentDto resident, final LocalDate date) throws SQLException, PersistException {
         checkOut(resident.getId(), date);
     }
 
@@ -117,8 +132,22 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public BigDecimal calculateBill(final Resident resident) throws PersistException {
+    public BigDecimal calculateBill(final ResidentDto resident) throws PersistException {
         final Long id = resident.getId();
         return calculateBill(id);
+    }
+
+    @Override
+    public void serialize() throws PersistException {
+        final List<Attendance> attendances = attendanceDao.getAllSortedBy(SortField.DEFAULT);
+        final List<Room> rooms = roomDao.getAllSortedBy(SortField.DEFAULT);
+        final List<Resident> residents = residentDao.getAllSortedBy(SortField.DEFAULT);
+        final List<RoomHistory> roomHistories = roomHistoryDao.getAll();
+        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
+    }
+
+    @Override
+    public void deserialize() {
+        serializationUtils.deserialize();
     }
 }

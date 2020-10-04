@@ -1,5 +1,9 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.AttendanceDto;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
+import com.senla.hotel.dto.RoomHistoryDto;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -36,19 +40,21 @@ public class HotelController {
     private ResidentService residentService;
     @Autowired
     private RoomHistoryService historyService;
-    @Autowired
-    private SerializationUtils serializationUtils;
 
-    public void checkIn(final Resident resident, final Room room, final LocalDate checkIn, final LocalDate checkOut)
-            throws EntityNotFoundException, PersistException, SQLException {
+    public void checkIn(final ResidentDto resident,
+                        final RoomDto room,
+                        final LocalDate checkIn,
+                        final LocalDate checkOut)
+        throws EntityNotFoundException, PersistException, SQLException {
         hotelAdminService.checkIn(resident, room, checkIn, checkOut);
     }
 
-    public void checkOut(final Resident resident, final LocalDate date) throws EntityNotFoundException, SQLException, PersistException {
+    public void checkOut(final ResidentDto resident, final LocalDate date)
+        throws EntityNotFoundException, SQLException, PersistException {
         hotelAdminService.checkOut(resident, date);
     }
 
-    public BigDecimal calculateBill(final Resident resident) throws EntityNotFoundException, PersistException {
+    public BigDecimal calculateBill(final ResidentDto resident) throws EntityNotFoundException, PersistException {
         return hotelAdminService.calculateBill(resident);
     }
 
@@ -60,19 +66,15 @@ public class HotelController {
         roomHistoryService.exportHistories();
     }
 
-    public List<RoomHistory> showHistories() throws PersistException {
+    public List<RoomHistoryDto> showHistories() throws PersistException {
         return historyService.showHistories();
     }
 
     public void importData() {
-        serializationUtils.deserialize();
+        hotelAdminService.deserialize();
     }
 
     public void exportData() throws PersistException {
-        final List<Attendance> attendances = attendanceService.showAttendances(SortField.DEFAULT);
-        final List<Room> rooms = roomService.showAll(SortField.DEFAULT);
-        final List<Resident> residents = residentService.showResidents(SortField.DEFAULT);
-        final List<RoomHistory> roomHistories = showHistories();
-        serializationUtils.serialize(attendances, rooms, residents, roomHistories);
+        hotelAdminService.serialize();
     }
 }

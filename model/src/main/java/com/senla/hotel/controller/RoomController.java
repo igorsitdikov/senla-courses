@@ -1,5 +1,7 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -24,23 +26,23 @@ public class RoomController {
     @Value("${RoomController.statusAllow:true}")
     private Boolean statusAllow;
 
-    public void addRoom(final Room room) throws PersistException {
+    public void addRoom(final RoomDto room) throws PersistException {
         roomService.addRoom(room);
     }
 
-    public List<Room> showAllRooms(final SortField sortField) throws PersistException {
+    public List<RoomDto> showAllRooms(final SortField sortField) throws PersistException {
         return roomService.showAll(sortField);
     }
 
-    public List<Room> showVacantRooms(final SortField sortField) throws PersistException {
+    public List<RoomDto> showVacantRooms(final SortField sortField) throws PersistException {
         return roomService.showVacant(sortField);
     }
 
-    public Room showRoomDetails(final Integer roomNumber) throws EntityNotFoundException, PersistException {
+    public RoomDto showRoomDetails(final Integer roomNumber) throws EntityNotFoundException, PersistException {
         return roomService.showRoomDetails(roomNumber);
     }
 
-    public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
+    public List<RoomDto> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
         return roomService.showVacantRoomsOnDate(date);
     }
 
@@ -48,7 +50,7 @@ public class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws EntityNotFoundException, PersistException {
+    public List<ResidentDto> showLastResidents(final RoomDto room, final Integer amount) throws EntityNotFoundException, PersistException {
         return roomService.showLastResidents(room, amount);
     }
 

@@ -2,6 +2,8 @@ package com.senla.hotel.service;
 
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -9,6 +11,8 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
@@ -27,6 +31,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -43,6 +48,10 @@ public class RoomServiceImpl implements RoomService {
     private ResidentDao residentDao;
     @Autowired
     private RoomMapper roomMapper;
+    @Autowired
+    private RoomDtoMapper roomDtoMapper;
+    @Autowired
+    private ResidentDtoMapper residentDtoMapper;
     @Value("${rooms:rooms.csv}")
     private String property;
     @Value("${RoomService.amountHistories:3}")
@@ -50,26 +59,29 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public List<Room> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
-        return roomDao.getVacantOnDate(date);
+    public List<RoomDto> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
+        return roomDao.getVacantOnDate(date)
+            .stream()
+            .map(roomDtoMapper::destinationToSource)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public Room findById(final Long id) throws EntityNotFoundException, PersistException {
+    public RoomDto findById(final Long id) throws EntityNotFoundException, PersistException {
         final Room room = roomDao.findById(id);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with id %d%n", id));
         }
-        return room;
+        return roomDtoMapper.destinationToSource(room);
     }
 
     @Override
-    public Room findByNumber(final Integer number) throws EntityNotFoundException, PersistException {
+    public RoomDto findByNumber(final Integer number) throws EntityNotFoundException, PersistException {
         final Room room = roomDao.findByNumber(number);
         if (room == null) {
             throw new EntityNotFoundException(String.format("No room with № %d%n", number));
         }
-        return room;
+        return roomDtoMapper.destinationToSource(room);
     }
 
     @Override
@@ -79,16 +91,16 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void changeRoomPrice(final Integer number, final BigDecimal price)
-        throws EntityNotFoundException, PersistException {
-        final Room room = findByNumber(number);
+        throws PersistException {
+        final Room room = roomDao.findByNumber(number);
         room.setPrice(price);
         roomDao.update(room);
     }
 
     @Override
     public void changeRoomStatus(final Long id, final RoomStatus status)
-        throws EntityNotFoundException, PersistException {
-        final Room room = findById(id);
+        throws PersistException {
+        final Room room = roomDao.findById(id);
         if (room.getStatus() == RoomStatus.OCCUPIED && status == RoomStatus.OCCUPIED) {
             logger.warn("Room is already occupied");
         } else if (room.getStatus() == RoomStatus.REPAIR && status == RoomStatus.OCCUPIED) {
@@ -101,47 +113,35 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void changeRoomStatus(final Integer number, final RoomStatus status)
-        throws EntityNotFoundException, PersistException {
-        final Room room = findByNumber(number);
+        throws PersistException {
+        final Room room = roomDao.findByNumber(number);
         changeRoomStatus(room.getId(), status);
     }
 
     @Override
-    public void addRoom(final Room room) throws PersistException {
+    public void addRoom(final RoomDto roomDto) throws PersistException {
+        final Room room = roomDtoMapper.sourceToDestination(roomDto);
         roomDao.create(room);
     }
 
     @Override
-    public List<Room> showAll(final SortField sortField) throws PersistException {
-        return roomDao.getAllSortedBy(sortField);
-    }
-
-    private List<Room> sortRooms(final SortField sortField, final List<Room> rooms) {
-        switch (sortField) {
-            case STARS:
-                return sortRooms(rooms, new RoomStarsComparator());
-            case ACCOMMODATION:
-                return sortRooms(rooms, new RoomAccommodationComparator());
-            case PRICE:
-                return sortRooms(rooms, new RoomPriceComparator());
-            default:
-                return rooms;
-        }
-    }
-
-    private List<Room> sortRooms(final List<Room> rooms, final Comparator<Room> comparator) {
-        final List<Room> result = new ArrayList<>(rooms);
-        result.sort(comparator);
-        return result;
+    public List<RoomDto> showAll(final SortField sortField) throws PersistException {
+        return roomDao.getAllSortedBy(sortField)
+            .stream()
+            .map(roomDtoMapper::destinationToSource)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<Room> showVacant(final SortField sortField) throws PersistException {
-        return roomDao.getVacantRooms(sortField);
+    public List<RoomDto> showVacant(final SortField sortField) throws PersistException {
+        return roomDao.getVacantRooms(sortField)
+            .stream()
+            .map(roomDtoMapper::destinationToSource)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public Room showRoomDetails(final Integer number) throws EntityNotFoundException, PersistException {
+    public RoomDto showRoomDetails(final Integer number) throws EntityNotFoundException, PersistException {
         return findByNumber(number);
     }
 
@@ -157,12 +157,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Resident> showLastResidents(final Room room, final Integer amount) throws PersistException {
+    public List<ResidentDto> showLastResidents(final RoomDto room, final Integer amount) throws PersistException {
         final Long id = room.getId();
         return showLastResidents(id, amount);
     }
 
-    public List<Resident> showLastResidents(final Long id, final Integer amount) throws PersistException {
-        return residentDao.getLastResidentsByRoomId(id, amount);
+    public List<ResidentDto> showLastResidents(final Long id, final Integer amount) throws PersistException {
+        return residentDao.getLastResidentsByRoomId(id, amount)
+            .stream()
+            .map(residentDtoMapper::destinationToSource)
+            .collect(Collectors.toList());
     }
 }

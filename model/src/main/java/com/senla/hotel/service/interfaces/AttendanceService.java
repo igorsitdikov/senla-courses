@@ -1,5 +1,6 @@
 package com.senla.hotel.service.interfaces;
 
+import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
@@ -11,13 +12,13 @@ import java.util.List;
 
 public interface AttendanceService {
 
-    Attendance findById(Long id) throws EntityNotFoundException, PersistException;
+    AttendanceDto findById(Long id) throws EntityNotFoundException, PersistException;
 
-    void createAttendance(Attendance attendance) throws EntityAlreadyExistsException, PersistException;
+    void createAttendance(AttendanceDto attendance) throws EntityAlreadyExistsException, PersistException;
 
-    List<Attendance> showAttendances(SortField sortField) throws PersistException;
+    List<AttendanceDto> showAttendances(SortField sortField) throws PersistException;
 
-    Attendance changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
+    AttendanceDto changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;
 
     void delete(Long id) throws EntityNotFoundException, PersistException;
 
