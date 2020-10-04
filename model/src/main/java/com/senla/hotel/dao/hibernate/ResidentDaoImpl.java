@@ -37,7 +37,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             Query<Resident> query = session.createQuery(criteria);
             return query.getSingleResult();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             List<RoomHistory> data = session.createQuery(criteria).setMaxResults(limit).getResultList();
             return data.stream().map(RoomHistory::getResident).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -66,7 +66,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             criteria.select(builder.countDistinct(root));
             return session.createQuery(criteria).getSingleResult().intValue();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 

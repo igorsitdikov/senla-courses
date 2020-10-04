@@ -57,7 +57,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
                 result.add(attendance);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return result;
     }
@@ -71,7 +71,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return list;
     }
@@ -89,7 +89,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             statement.setString(1, object.getName());
             statement.setBigDecimal(2, object.getPrice());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -101,7 +101,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             statement.setBigDecimal(2, object.getPrice());
             statement.setLong(3, object.getId());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 }

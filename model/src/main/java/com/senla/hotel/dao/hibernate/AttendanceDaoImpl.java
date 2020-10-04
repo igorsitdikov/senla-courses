@@ -33,7 +33,7 @@ public class AttendanceDaoImpl extends AbstractDao<Attendance, Long> implements 
             criteria.select(root).where(builder.equal(historyJoin.get("id"), id));
             return session.createQuery(criteria).getResultList();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 

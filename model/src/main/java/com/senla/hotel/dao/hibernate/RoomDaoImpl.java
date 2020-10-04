@@ -33,7 +33,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             return getAllBy("status", RoomStatus.VACANT, sortField, session);
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
         try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             return getSingleBy("number", number, session);
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             criteria.select(root).where(builder.or(equalRoomVacant, equalHistoryCheckedOut, lessCheckOutDate));
             return session.createQuery(criteria).getResultList();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
                     .where(equalRoomVacant);
             return session.createQuery(criteria).getSingleResult();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 

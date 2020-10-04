@@ -99,7 +99,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
                 result.add(roomHistory);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return result;
     }
@@ -139,7 +139,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
                 result.add(result1);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         if (result.size() == 0) {
             throw new PersistException("Received no records.");
@@ -176,7 +176,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             statement.setDate(4, Date.valueOf(object.getCheckOut()));
             statement.setString(5, object.getStatus().toString());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -190,7 +190,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             statement.setString(5, object.getStatus().toString());
             statement.setLong(6, object.getId());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 }

@@ -1,23 +1,15 @@
 package com.senla.hotel.exceptions;
 
-public class PersistException extends Exception {
+import org.springframework.http.HttpStatus;
 
-    public PersistException() {
-    }
+public class PersistException extends BusinessLogicException {
 
     public PersistException(String message) {
         super(message);
     }
 
-    public PersistException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public PersistException(Throwable cause) {
-        super(cause);
-    }
-
-    public PersistException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public HttpStatus getHttpStatus() {
+        return HttpStatus.UNPROCESSABLE_ENTITY;
     }
 }
