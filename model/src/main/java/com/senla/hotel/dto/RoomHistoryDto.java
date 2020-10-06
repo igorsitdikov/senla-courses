@@ -5,6 +5,7 @@ import com.senla.hotel.enumerated.HistoryStatus;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class RoomHistoryDto extends ADto {
 
@@ -89,5 +90,24 @@ public class RoomHistoryDto extends ADto {
 
     public void setStatus(final HistoryStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomHistoryDto that = (RoomHistoryDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(roomDto, that.roomDto) &&
+                Objects.equals(residentDto, that.residentDto) &&
+                Objects.equals(attendancesDto, that.attendancesDto) &&
+                Objects.equals(checkIn, that.checkIn) &&
+                Objects.equals(checkOut, that.checkOut) &&
+                status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roomDto, residentDto, attendancesDto, checkIn, checkOut, status);
     }
 }

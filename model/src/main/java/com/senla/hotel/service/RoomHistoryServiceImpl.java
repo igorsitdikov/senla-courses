@@ -64,7 +64,8 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
 
     @Override
     public List<RoomHistoryDto> showHistories() throws PersistException {
-        return roomHistoryDao.getAll()
+        List<RoomHistory> histories = roomHistoryDao.getAll();
+        return histories
             .stream()
             .map(roomHistoryDtoMapper::destinationToSource)
             .collect(Collectors.toList());

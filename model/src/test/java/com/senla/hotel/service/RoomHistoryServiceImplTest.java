@@ -15,14 +15,24 @@
 //import com.senla.hotel.enumerated.Stars;
 //import com.senla.hotel.exceptions.EntityNotFoundException;
 //import com.senla.hotel.exceptions.PersistException;
+//import com.senla.hotel.mapper.AttendanceDtoMapperImpl;
+//import com.senla.hotel.mapper.ResidentDtoMapperImpl;
+//import com.senla.hotel.mapper.RoomDtoMapperImpl;
+//import com.senla.hotel.mapper.RoomHistoryDtoMapperImpl;
+//import com.senla.hotel.mapper.interfaces.dtoMapper.AttendanceDtoMapper;
+//import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
+//import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
+//import com.senla.hotel.mapper.interfaces.dtoMapper.RoomHistoryDtoMapper;
 //import com.senla.hotel.service.interfaces.RoomHistoryService;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mock;
+//import org.mockito.Spy;
 //import org.mockito.junit.jupiter.MockitoExtension;
 //import org.springframework.test.context.ContextConfiguration;
 //import org.springframework.test.context.junit.jupiter.SpringExtension;
+//import org.springframework.test.context.web.WebAppConfiguration;
 //
 //import java.math.BigDecimal;
 //import java.time.LocalDate;
@@ -37,11 +47,20 @@
 //
 //@ExtendWith(SpringExtension.class)
 //@ExtendWith(MockitoExtension.class)
+//@WebAppConfiguration
 //@ContextConfiguration(classes = HotelTest.class)
 //public class RoomHistoryServiceImplTest {
 //
 //    @Mock
 //    private RoomHistoryDao roomHistoryDao;
+//    @Spy
+//    private RoomHistoryDtoMapper roomHistoryDtoMapper = new RoomHistoryDtoMapperImpl();
+//    @Spy
+//    private ResidentDtoMapper residentDtoMapper = new ResidentDtoMapperImpl();
+//    @Spy
+//    private AttendanceDtoMapper attendanceDtoMapper = new AttendanceDtoMapperImpl();
+//    @Spy
+//    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
 //    @InjectMocks
 //    private RoomHistoryService roomHistoryService = new RoomHistoryServiceImpl();
 //

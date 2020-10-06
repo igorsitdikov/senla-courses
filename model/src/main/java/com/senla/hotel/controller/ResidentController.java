@@ -1,6 +1,5 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -44,9 +44,12 @@ public class ResidentController {
         return residentService.showCountResidents();
     }
 
-    public void addAttendanceToResident(final ResidentDto resident, final AttendanceDto attendance)
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void addAttendanceToResident(@RequestParam("residentId") final Long residentId,
+                                        @RequestParam("attendanceId") final Long attendanceId)
             throws EntityNotFoundException, PersistException {
-        residentService.addAttendanceToResident(resident, attendance);
+        residentService.addAttendanceToResident(residentId, attendanceId);
     }
 
     @GetMapping(value = "/import")

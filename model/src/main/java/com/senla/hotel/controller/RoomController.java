@@ -10,6 +10,7 @@ import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.service.interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -59,7 +61,10 @@ public class RoomController {
         return roomService.showRoomDetails(roomNumber);
     }
 
-    public List<RoomDto> showVacantRoomsOnDate(final LocalDate date) throws PersistException {
+    @GetMapping(value = "/vacant")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RoomDto> showVacantRoomsOnDate(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+                                               @RequestParam("date") final LocalDate date) throws PersistException {
         return roomService.showVacantRoomsOnDate(date);
     }
 
@@ -69,8 +74,10 @@ public class RoomController {
         roomService.changeRoomPrice(roomNumber, price);
     }
 
-    public List<ResidentDto> showLastResidents(final RoomDto room, final Integer amount) throws EntityNotFoundException, PersistException {
-        return roomService.showLastResidents(room, amount);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ResidentDto> showLastResidents(@RequestParam("id") final Long id, @RequestParam("amount") final Integer amount) throws EntityNotFoundException, PersistException {
+        return roomService.showLastResidents(id, amount);
     }
 
     @GetMapping(value = "/amount")

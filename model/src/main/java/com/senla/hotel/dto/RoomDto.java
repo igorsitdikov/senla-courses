@@ -6,6 +6,7 @@ import com.senla.hotel.enumerated.Stars;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 public class RoomDto extends ADto {
 
@@ -89,5 +90,24 @@ public class RoomDto extends ADto {
 
     public void setHistoriesDto(final List<RoomHistoryDto> historiesDto) {
         this.historiesDto = historiesDto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomDto roomDto = (RoomDto) o;
+        return Objects.equals(id, roomDto.id) &&
+                Objects.equals(number, roomDto.number) &&
+                stars == roomDto.stars &&
+                accommodation == roomDto.accommodation &&
+                Objects.equals(price, roomDto.price) &&
+                status == roomDto.status &&
+                Objects.equals(historiesDto, roomDto.historiesDto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number, stars, accommodation, price, status, historiesDto);
     }
 }

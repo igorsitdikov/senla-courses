@@ -2,6 +2,7 @@ package com.senla.hotel.dto;
 
 import com.senla.hotel.enumerated.Gender;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class ResidentDto extends ADto {
@@ -87,5 +88,24 @@ public class ResidentDto extends ADto {
 
     public void setHistoryDtos(final Set<RoomHistoryDto> historyDtos) {
         this.historyDtos = historyDtos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResidentDto that = (ResidentDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName) &&
+                gender == that.gender &&
+                Objects.equals(vip, that.vip) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(historyDtos, that.historyDtos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, gender, vip, phone, historyDtos);
     }
 }
