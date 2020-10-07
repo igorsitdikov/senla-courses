@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.action.attendance;
 
 import com.senla.hotel.controller.AttendanceController;
-import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class AddAttendanceAction implements Action {
             final String name = InputDataReader.getStringInput(scanner, "Input the Attendance name...");
             final BigDecimal dailyPrice = BigDecimal.valueOf(InputDataReader
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
-            attendanceController.createAttendance(new Attendance(dailyPrice, name));
+            attendanceController.createAttendance(new AttendanceDto(null, dailyPrice, name));
         } catch (final Exception e) {
             logger.error("Failed to add a Attendance! Input valid parameters! {}", e.getMessage());
         }

@@ -3,8 +3,9 @@ package com.senla.hotel.ui.action.admin;
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
 import com.senla.hotel.controller.RoomController;
-import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
+import com.senla.hotel.dto.CheckInDto;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
@@ -35,12 +36,12 @@ public class CheckInAction implements Action {
 
         final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Room> rooms = roomController.showAllRooms(SortField.DEFAULT);
+            final List<RoomDto> rooms = roomController.showAllRooms(SortField.DEFAULT);
             Printer.show(rooms, "room");
             final Integer roomId = InputDataReader
                     .getIntegerInput(scanner, "Input Room id...", rooms.size());
 
-            final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
+            final List<ResidentDto> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents, "resident");
             final Integer residentId = InputDataReader
                     .getIntegerInput(scanner, "Input Resident id...", residents.size());
@@ -48,7 +49,7 @@ public class CheckInAction implements Action {
             final LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
 
             hotelController
-                    .checkIn(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate);
+                    .checkIn(new CheckInDto(residents.get(residentId - 1), rooms.get(roomId - 1), checkInDate, checkOutDate));
         } catch (final Exception e) {
             logger.error(e.getMessage());
         }

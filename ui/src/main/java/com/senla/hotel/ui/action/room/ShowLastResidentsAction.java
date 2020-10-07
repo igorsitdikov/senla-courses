@@ -1,8 +1,8 @@
 package com.senla.hotel.ui.action.room;
 
 import com.senla.hotel.controller.RoomController;
-import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
@@ -27,7 +27,7 @@ public class ShowLastResidentsAction implements Action {
     public void execute() {
         final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Room> rooms = roomController.showAllRooms(SortField.DEFAULT);
+            final List<RoomDto> rooms = roomController.showAllRooms(SortField.DEFAULT);
             Printer.show(rooms, "room");
 
             final Integer roomId = InputDataReader
@@ -35,7 +35,7 @@ public class ShowLastResidentsAction implements Action {
             final Integer number = InputDataReader
                 .getIntegerInput(scanner, "Input number of last...", Integer.MAX_VALUE);
 
-            final List<Resident> residents = roomController.showLastResidents(rooms.get(roomId - 1), number);
+            final List<ResidentDto> residents = roomController.showLastResidents(new Long(roomId), number);
             Printer.show(residents);
         } catch (final Exception e) {
             logger.error("Failed to show Resident in Room! Input valid parameters! {}", e.getMessage());
