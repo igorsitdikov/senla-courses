@@ -4,10 +4,8 @@ import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
-import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.dto.RoomDto;
-import com.senla.hotel.dto.RoomHistoryDto;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
@@ -80,7 +78,10 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
-    public void checkIn(final ResidentDto resident, final RoomDto room, final LocalDate checkIn, final LocalDate checkOut)
+    public void checkIn(final ResidentDto resident,
+                        final RoomDto room,
+                        final LocalDate checkIn,
+                        final LocalDate checkOut)
         throws PersistException, SQLException {
         checkIn(resident.getId(), room.getId(), checkIn, checkOut);
     }

@@ -7,6 +7,7 @@ import com.senla.hotel.enumerated.Gender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,9 +23,10 @@ public final class ResidentMock {
     }};
 
     public static Resident getById(final Long id) {
-        return residentMap.get(id);
+        final Resident resident = residentMap.get(id);
+        resident.setHistory(new HashSet<>());
+        return resident;
     }
-
 
     public static ResidentDto getDtoById(final Long id) {
         return destinationToSource(residentMap.get(id));
@@ -38,7 +40,7 @@ public final class ResidentMock {
                     entry.getValue().getGender(),
                     entry.getValue().getVip(),
                     entry.getValue().getPhone(),
-                    null);
+                    new HashSet<>());
             resident.setId(entry.getKey());
             return resident;
         }).collect(Collectors.toList());

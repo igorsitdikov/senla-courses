@@ -4,7 +4,6 @@ import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.dto.RoomDto;
-import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
@@ -15,9 +14,6 @@ import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
 import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
 import com.senla.hotel.service.interfaces.RoomService;
 import com.senla.hotel.utils.ParseUtils;
-import com.senla.hotel.utils.comparator.RoomAccommodationComparator;
-import com.senla.hotel.utils.comparator.RoomPriceComparator;
-import com.senla.hotel.utils.comparator.RoomStarsComparator;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
 import com.senla.hotel.utils.csv.interfaces.CsvWriter;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 

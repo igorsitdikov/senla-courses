@@ -1,7 +1,6 @@
 package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.dto.RoomHistoryDto;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 

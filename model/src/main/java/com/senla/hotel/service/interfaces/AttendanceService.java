@@ -1,7 +1,6 @@
 package com.senla.hotel.service.interfaces;
 
 import com.senla.hotel.dto.AttendanceDto;
-import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;

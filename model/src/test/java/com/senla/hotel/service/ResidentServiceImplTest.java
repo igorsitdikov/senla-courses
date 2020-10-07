@@ -34,6 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +69,7 @@ public class ResidentServiceImplTest {
         final Long residentId = 1L;
         final Resident resident = ResidentMock.getById(residentId);
         final ResidentDto expected = ResidentMock.getDtoById(residentId);
-
+        expected.setHistoryDtos(new HashSet<>());
         given(residentDao.findById(residentId)).willReturn(resident);
         ResidentDto actual = residentService.findById(residentId);
 

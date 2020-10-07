@@ -1,6 +1,7 @@
 package com.senla.hotel.dto;
 
 public class AmountDto {
+
     private Integer amount;
 
     public AmountDto() {

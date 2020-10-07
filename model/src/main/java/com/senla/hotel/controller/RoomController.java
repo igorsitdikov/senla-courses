@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,7 +59,8 @@ public class RoomController {
 
     @GetMapping(value = "/{roomNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public RoomDto showRoomDetails(@PathVariable final Integer roomNumber) throws EntityNotFoundException, PersistException {
+    public RoomDto showRoomDetails(@PathVariable final Integer roomNumber)
+        throws EntityNotFoundException, PersistException {
         return roomService.showRoomDetails(roomNumber);
     }
 
@@ -73,13 +73,16 @@ public class RoomController {
 
     @PatchMapping(value = "/price/{roomNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePrice(@PathVariable final Integer roomNumber, @RequestBody final PriceDto price) throws EntityNotFoundException, PersistException {
+    public void changePrice(@PathVariable final Integer roomNumber, @RequestBody final PriceDto price)
+        throws EntityNotFoundException, PersistException {
         roomService.changeRoomPrice(roomNumber, price.getPrice());
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResidentDto> showLastResidents(@RequestParam("id") final Long id, @RequestParam("amount") final Integer amount) throws EntityNotFoundException, PersistException {
+    public List<ResidentDto> showLastResidents(@RequestParam("id") final Long id,
+                                               @RequestParam("amount") final Integer amount)
+        throws EntityNotFoundException, PersistException {
         return roomService.showLastResidents(id, amount);
     }
 
@@ -92,7 +95,7 @@ public class RoomController {
     @PatchMapping(value = "/status/{number}")
     @ResponseStatus(HttpStatus.OK)
     public void changeStatus(@PathVariable final Integer number, @RequestParam final RoomStatus status)
-            throws EntityNotFoundException, RoomStatusChangingException, PersistException {
+        throws EntityNotFoundException, RoomStatusChangingException, PersistException {
         if (!statusAllow) {
             throw new RoomStatusChangingException("Changing status is forbidden");
         }
