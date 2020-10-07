@@ -1,12 +1,12 @@
 package com.senla.hotel.mapper;
 
+import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.dto.RoomHistoryDto;
+import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
 import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,9 +14,6 @@ import java.util.List;
 
 @Component
 public class RoomDtoMapperImpl implements RoomDtoMapper {
-
-    @Autowired
-    private ResidentDtoMapper residentDtoMapper;
 
     @Override
     public Room sourceToDestination(final RoomDto source) {
@@ -56,8 +53,19 @@ public class RoomDtoMapperImpl implements RoomDtoMapper {
         roomHistoryDto.setId(roomHistory.getId());
         roomHistoryDto.setCheckOut(roomHistory.getCheckOut());
         roomHistoryDto.setCheckIn(roomHistory.getCheckIn());
-        roomHistoryDto.setResidentDto(residentDtoMapper.destinationToSource(roomHistory.getResident()));
+        roomHistoryDto.setResidentDto(destinationResidentToSourceResident(roomHistory.getResident()));
         roomHistoryDto.setStatus(roomHistory.getStatus());
         return roomHistoryDto;
+    }
+
+    private ResidentDto destinationResidentToSourceResident(final Resident destination) {
+        ResidentDto source = new ResidentDto();
+        source.setId(destination.getId());
+        source.setFirstName(destination.getFirstName());
+        source.setLastName(destination.getLastName());
+        source.setGender(destination.getGender());
+        source.setPhone(destination.getPhone());
+        source.setVip(destination.getVip());
+        return source;
     }
 }

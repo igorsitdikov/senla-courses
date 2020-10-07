@@ -31,7 +31,13 @@ public final class AttendanceMock {
     }
 
     public static List<Attendance> getAll() {
-        return new ArrayList<>(attendanceMap.values());
+        return attendanceMap.entrySet().stream().map(entry -> {
+            Attendance attendance = new Attendance(
+                    entry.getValue().getPrice(),
+                    entry.getValue().getName());
+            attendance.setId(entry.getKey());
+            return attendance;
+        }).collect(Collectors.toList());
     }
 
     public static List<AttendanceDto> getAllDto() {

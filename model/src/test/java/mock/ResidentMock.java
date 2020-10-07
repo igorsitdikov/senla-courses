@@ -31,7 +31,17 @@ public final class ResidentMock {
     }
 
     public static List<Resident> getAll() {
-        return new ArrayList<>(residentMap.values());
+        return residentMap.entrySet().stream().map(entry -> {
+            Resident resident = new Resident(
+                    entry.getValue().getFirstName(),
+                    entry.getValue().getLastName(),
+                    entry.getValue().getGender(),
+                    entry.getValue().getVip(),
+                    entry.getValue().getPhone(),
+                    null);
+            resident.setId(entry.getKey());
+            return resident;
+        }).collect(Collectors.toList());
     }
 
     public static List<ResidentDto> getAllDto() {

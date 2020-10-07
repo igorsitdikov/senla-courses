@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,8 +59,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         final Attendance attendance = attendanceDao.findById(id);
         attendance.setPrice(price);
         final Attendance updatedAttendance = attendanceDao.update(attendance);
-        final AttendanceDto attendanceDto = attendanceDtoMapper.destinationToSource(updatedAttendance);
-        return attendanceDto;
+        return attendanceDtoMapper.destinationToSource(updatedAttendance);
     }
 
     @Override

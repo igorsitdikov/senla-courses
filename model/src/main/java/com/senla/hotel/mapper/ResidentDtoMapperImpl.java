@@ -1,12 +1,12 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.dto.RoomHistoryDto;
 import com.senla.hotel.entity.Resident;
+import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
-import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -14,9 +14,6 @@ import java.util.Set;
 
 @Component
 public class ResidentDtoMapperImpl implements ResidentDtoMapper {
-
-    @Autowired
-    private RoomDtoMapper roomDtoMapper;
 
     @Override
     public Resident sourceToDestination(final ResidentDto source) {
@@ -39,8 +36,7 @@ public class ResidentDtoMapperImpl implements ResidentDtoMapper {
         source.setGender(destination.getGender());
         source.setPhone(destination.getPhone());
         source.setVip(destination.getVip());
-//        if (destination.getHistory() != null)
-//            source.setHistoryDtos(historyEntitiesToListDto(destination.getHistory()));
+        source.setHistoryDtos(historyEntitiesToListDto(destination.getHistory()));
         return source;
     }
 
@@ -57,8 +53,19 @@ public class ResidentDtoMapperImpl implements ResidentDtoMapper {
         roomHistoryDto.setId(roomHistory.getId());
         roomHistoryDto.setCheckOut(roomHistory.getCheckOut());
         roomHistoryDto.setCheckIn(roomHistory.getCheckIn());
-        roomHistoryDto.setRoomDto(roomDtoMapper.destinationToSource(roomHistory.getRoom()));
+        roomHistoryDto.setRoomDto(destinationRoomToSourceRoom(roomHistory.getRoom()));
         roomHistoryDto.setStatus(roomHistory.getStatus());
         return roomHistoryDto;
+    }
+
+    private RoomDto destinationRoomToSourceRoom(final Room destination) {
+        RoomDto source = new RoomDto();
+        source.setId(destination.getId());
+        source.setPrice(destination.getPrice());
+        source.setStatus(destination.getStatus());
+        source.setAccommodation(destination.getAccommodation());
+        source.setNumber(destination.getNumber());
+        source.setStars(destination.getStars());
+        return source;
     }
 }

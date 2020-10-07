@@ -1,5 +1,6 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.PriceDto;
 import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.enumerated.RoomStatus;
@@ -8,7 +9,6 @@ import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.exceptions.RoomStatusChangingException;
 import com.senla.hotel.service.interfaces.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -32,10 +32,13 @@ import java.util.List;
 @RequestMapping("/rooms")
 public class RoomController {
 
-    @Autowired
-    private RoomService roomService;
+    private final RoomService roomService;
     @Value("${RoomController.statusAllow:true}")
     private Boolean statusAllow;
+
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -68,10 +71,10 @@ public class RoomController {
         return roomService.showVacantRoomsOnDate(date);
     }
 
-    @PatchMapping(value = "/{roomNumber}")
+    @PatchMapping(value = "/price/{roomNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePrice(@PathVariable final Integer roomNumber, @RequestBody final BigDecimal price) throws EntityNotFoundException, PersistException {
-        roomService.changeRoomPrice(roomNumber, price);
+    public void changePrice(@PathVariable final Integer roomNumber, @RequestBody final PriceDto price) throws EntityNotFoundException, PersistException {
+        roomService.changeRoomPrice(roomNumber, price.getPrice());
     }
 
     @GetMapping
@@ -86,9 +89,9 @@ public class RoomController {
         return roomService.countVacantRooms();
     }
 
-    @PatchMapping(value = "/{number}")
+    @PatchMapping(value = "/status/{number}")
     @ResponseStatus(HttpStatus.OK)
-    public void changeStatus(@PathVariable final Integer number, @RequestBody final RoomStatus status)
+    public void changeStatus(@PathVariable final Integer number, @RequestParam final RoomStatus status)
             throws EntityNotFoundException, RoomStatusChangingException, PersistException {
         if (!statusAllow) {
             throw new RoomStatusChangingException("Changing status is forbidden");

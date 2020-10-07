@@ -1,53 +1,51 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.dto.CheckInDto;
 import com.senla.hotel.dto.CheckOutDto;
+import com.senla.hotel.dto.PriceDto;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
 import com.senla.hotel.service.interfaces.RoomHistoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 @RestController
 @RequestMapping("/admin")
 public class HotelController {
 
-    @Autowired
-    private HotelAdminService hotelAdminService;
-    @Autowired
-    private RoomHistoryService roomHistoryService;
+    private final HotelAdminService hotelAdminService;
+    private final RoomHistoryService roomHistoryService;
+
+    public HotelController(HotelAdminService hotelAdminService, RoomHistoryService roomHistoryService) {
+        this.hotelAdminService = hotelAdminService;
+        this.roomHistoryService = roomHistoryService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void checkIn(final CheckInDto checkInDto)
+    public void checkIn(@RequestBody final CheckInDto checkInDto)
         throws EntityNotFoundException, PersistException, SQLException {
         hotelAdminService.checkIn(checkInDto.getResident(), checkInDto.getRoom(), checkInDto.getCheckIn(), checkInDto.getCheckOut());
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void checkOut(final CheckOutDto checkOutDto)
+    public void checkOut(@RequestBody final CheckOutDto checkOutDto)
         throws EntityNotFoundException, SQLException, PersistException {
         hotelAdminService.checkOut(checkOutDto.getResident(), checkOutDto.getDate());
     }
 
     @GetMapping(value = "/bill/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BigDecimal calculateBill(@PathVariable("id") final Long id) throws EntityNotFoundException, PersistException {
-        return hotelAdminService.calculateBill(id);
+    public PriceDto calculateBill(@PathVariable("id") final Long id) throws EntityNotFoundException, PersistException {
+        return new PriceDto(hotelAdminService.calculateBill(id));
     }
 
     @GetMapping(value = "/import")

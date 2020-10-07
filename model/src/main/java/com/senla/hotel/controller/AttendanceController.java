@@ -1,12 +1,12 @@
 package com.senla.hotel.controller;
 
 import com.senla.hotel.dto.AttendanceDto;
+import com.senla.hotel.dto.PriceDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityAlreadyExistsException;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.AttendanceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -27,12 +26,15 @@ import java.util.List;
 @RequestMapping("/attendances")
 public class AttendanceController {
 
-    @Autowired
-    private AttendanceService attendanceService;
+    private final AttendanceService attendanceService;
+
+    public AttendanceController(final AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createAttendance(final AttendanceDto attendance) throws EntityAlreadyExistsException, PersistException {
+    public void createAttendance(@RequestBody final AttendanceDto attendance) throws EntityAlreadyExistsException, PersistException {
         attendanceService.createAttendance(attendance);
     }
 
@@ -50,9 +52,9 @@ public class AttendanceController {
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePrice(@PathVariable final Long id, @RequestBody final BigDecimal price)
+    public void changePrice(@PathVariable final Long id, @RequestBody final PriceDto price)
         throws EntityNotFoundException, PersistException {
-        attendanceService.changeAttendancePrice(id, price);
+        attendanceService.changeAttendancePrice(id, price.getPrice());
     }
 
     @GetMapping(value = "/import")

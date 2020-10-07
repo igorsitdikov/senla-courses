@@ -1,20 +1,14 @@
 package com.senla.hotel.controller;
 
+import com.senla.hotel.dto.AmountDto;
 import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.ResidentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,12 +17,15 @@ import java.util.List;
 @RequestMapping("/residents")
 public class ResidentController {
 
-    @Autowired
-    private ResidentService residentService;
+    private final ResidentService residentService;
+
+    public ResidentController(final ResidentService residentService) {
+        this.residentService = residentService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createResident(final ResidentDto resident) throws PersistException {
+    public void createResident(@RequestBody final ResidentDto resident) throws PersistException {
         residentService.createResident(resident);
     }
 
@@ -40,8 +37,8 @@ public class ResidentController {
 
     @GetMapping(value = "/amount")
     @ResponseStatus(HttpStatus.OK)
-    public Integer showCountResidents() throws PersistException {
-        return residentService.showCountResidents();
+    public AmountDto showCountResidents() throws PersistException {
+        return new AmountDto(residentService.showCountResidents());
     }
 
     @GetMapping

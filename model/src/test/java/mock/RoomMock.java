@@ -37,7 +37,16 @@ public final class RoomMock {
     }
 
     public static List<Room> getAll() {
-        return new ArrayList<>(roomMap.values());
+        return roomMap.entrySet().stream().map(entry -> {
+            Room room = new Room(
+                    entry.getValue().getNumber(),
+                    entry.getValue().getStars(),
+                    entry.getValue().getAccommodation(),
+                    entry.getValue().getPrice(),
+                    entry.getValue().getStatus());
+            room.setId(entry.getKey());
+            return room;
+        }).collect(Collectors.toList());
     }
 
     public static List<RoomDto> getAllDto() {
