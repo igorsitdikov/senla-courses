@@ -1,7 +1,7 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.dto.ResidentDto;
-import com.senla.hotel.dto.RoomDto;
+import com.senla.hotel.dto.CheckInDto;
+import com.senla.hotel.dto.CheckOutDto;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.service.interfaces.HotelAdminService;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 @Component
 @RestController
@@ -33,19 +32,16 @@ public class HotelController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void checkIn(final ResidentDto resident,
-                        final RoomDto room,
-                        final LocalDate checkIn,
-                        final LocalDate checkOut)
+    public void checkIn(final CheckInDto checkInDto)
         throws EntityNotFoundException, PersistException, SQLException {
-        hotelAdminService.checkIn(resident, room, checkIn, checkOut);
+        hotelAdminService.checkIn(checkInDto.getResident(), checkInDto.getRoom(), checkInDto.getCheckIn(), checkInDto.getCheckOut());
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void checkOut(final ResidentDto resident, final LocalDate date)
+    public void checkOut(final CheckOutDto checkOutDto)
         throws EntityNotFoundException, SQLException, PersistException {
-        hotelAdminService.checkOut(resident, date);
+        hotelAdminService.checkOut(checkOutDto.getResident(), checkOutDto.getDate());
     }
 
     @GetMapping(value = "/bill/{id}")
