@@ -15,6 +15,8 @@ public interface AttendanceService {
 
     void createAttendance(AttendanceDto attendance) throws EntityAlreadyExistsException, PersistException;
 
+    void updateAttendance(AttendanceDto attendanceDto) throws PersistException;
+
     List<AttendanceDto> showAttendances(SortField sortField) throws PersistException;
 
     AttendanceDto changeAttendancePrice(Long id, BigDecimal price) throws EntityNotFoundException, PersistException;

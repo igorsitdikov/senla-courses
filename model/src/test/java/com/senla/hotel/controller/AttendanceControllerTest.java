@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -118,5 +119,35 @@ public class AttendanceControllerTest extends AbstractControllerTest {
 
         verify(attendanceDao, times(1)).findById(attendanceId);
         verify(attendanceDao, times(1)).delete(attendance);
+    }
+
+    @Test
+    void shouldFindByIdTest() throws Exception {
+        final Long attendanceId = 1L;
+        Attendance attendance = AttendanceMock.getById(attendanceId);
+        AttendanceDto expected = AttendanceMock.getDtoById(attendanceId);
+
+        given(attendanceDao.findById(attendanceId)).willReturn(attendance);
+
+        mockMvc.perform(get("/attendances/" + attendanceId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(expected)));
+
+        verify(attendanceDao, times(1)).findById(attendanceId);
+    }
+
+    @Test
+    void shouldUpdateAttendanceTest() throws Exception {
+        final Long attendanceId = 1L;
+        Attendance attendance = AttendanceMock.getById(attendanceId);
+        AttendanceDto expected = AttendanceMock.getDtoById(attendanceId);
+
+        mockMvc.perform(put("/attendances/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(expected)))
+                .andExpect(status().isOk());
+
+        verify(attendanceDao, times(1)).update(attendance);
     }
 }

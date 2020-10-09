@@ -94,8 +94,12 @@ public class RoomDto extends ADto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         RoomDto roomDto = (RoomDto) o;
         return Objects.equals(id, roomDto.id) &&
                 Objects.equals(number, roomDto.number) &&

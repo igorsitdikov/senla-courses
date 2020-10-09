@@ -33,7 +33,7 @@ public class HotelController {
         this.roomHistoryService = roomHistoryService;
     }
 
-    @PostMapping
+    @PostMapping(value = "/checkin")
     @ResponseStatus(HttpStatus.CREATED)
     public void checkIn(@RequestBody final CheckInDto checkInDto)
         throws EntityNotFoundException, PersistException, SQLException {
@@ -41,7 +41,7 @@ public class HotelController {
             .checkIn(checkInDto.getResident(), checkInDto.getRoom(), checkInDto.getCheckIn(), checkInDto.getCheckOut());
     }
 
-    @PutMapping
+    @PutMapping(value = "/checkout")
     @ResponseStatus(HttpStatus.OK)
     public void checkOut(@RequestBody final CheckOutDto checkOutDto)
         throws EntityNotFoundException, SQLException, PersistException {

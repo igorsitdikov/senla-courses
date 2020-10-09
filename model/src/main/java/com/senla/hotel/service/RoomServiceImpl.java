@@ -48,7 +48,7 @@ public class RoomServiceImpl implements RoomService {
     private ResidentDtoMapper residentDtoMapper;
     @Value("${rooms:rooms.csv}")
     private String property;
-    @Value("${RoomService.amountHistories:3}")
+    @Value("${amountHistories:3}")
     private Integer amountHistories;
 
 

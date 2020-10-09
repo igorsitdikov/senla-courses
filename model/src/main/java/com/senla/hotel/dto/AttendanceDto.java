@@ -44,8 +44,12 @@ public class AttendanceDto extends ADto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         AttendanceDto that = (AttendanceDto) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(price, that.price) &&

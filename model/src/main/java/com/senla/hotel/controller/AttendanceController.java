@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,18 @@ public class AttendanceController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteAttendance(@PathVariable final Long id) throws EntityNotFoundException, PersistException {
         attendanceService.delete(id);
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AttendanceDto findById(@PathVariable final Long id) throws EntityNotFoundException, PersistException {
+        return attendanceService.findById(id);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void updateAttendance(@RequestBody final AttendanceDto attendanceDto) throws PersistException {
+        attendanceService.updateAttendance(attendanceDto);
     }
 
     @GetMapping(value = "/sort/{sortField}")

@@ -115,7 +115,7 @@ public class HotelControllerTest extends AbstractControllerTest {
 
 
         String content = mapper.writeValueAsString(new CheckInDto(residentDto, roomDto, LocalDate.of(2020, 8, 3), LocalDate.of(2020, 8, 5)));
-        mockMvc.perform(post("/admin/")
+        mockMvc.perform(post("/admin/checkin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                 .andExpect(status().isCreated());
@@ -146,7 +146,7 @@ public class HotelControllerTest extends AbstractControllerTest {
         given(roomHistoryDao.update(roomHistory)).willReturn(roomHistory);
 
         String content = mapper.writeValueAsString(new CheckOutDto(residentDto, LocalDate.of(2020, 8, 5)));
-        mockMvc.perform(put("/admin/")
+        mockMvc.perform(put("/admin/checkout")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                 .andExpect(status().isOk());

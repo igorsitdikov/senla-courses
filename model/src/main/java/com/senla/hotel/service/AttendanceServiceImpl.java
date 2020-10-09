@@ -49,6 +49,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public void updateAttendance(final AttendanceDto attendanceDto) throws PersistException {
+        Attendance attendance = attendanceDtoMapper.sourceToDestination(attendanceDto);
+        attendanceDao.update(attendance);
+    }
+
+    @Override
     public List<AttendanceDto> showAttendances(final SortField sortField) throws PersistException {
         final List<Attendance> attendances = attendanceDao.getAllSortedBy(sortField);
         return attendances.stream().map(attendanceDtoMapper::destinationToSource).collect(Collectors.toList());
