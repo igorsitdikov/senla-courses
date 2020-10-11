@@ -2,7 +2,7 @@ package com.senla.hotel.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class EntityIsEmptyException extends BusinessLogicException {
+public class EntityIsEmptyException extends AbstractBusinessLogicException {
 
     public EntityIsEmptyException(final String message) {
         super(message);

@@ -2,7 +2,7 @@ package com.senla.hotel.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class PersistException extends BusinessLogicException {
+public class PersistException extends AbstractBusinessLogicException {
 
     public PersistException(String message) {
         super(message);

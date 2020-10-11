@@ -2,7 +2,7 @@ package com.senla.hotel.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class InvalidArgumentException extends BusinessLogicException {
+public class InvalidArgumentException extends AbstractBusinessLogicException {
 
     public InvalidArgumentException(String message) {
         super(message);

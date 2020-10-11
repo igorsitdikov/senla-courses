@@ -1,6 +1,6 @@
 package com.senla.hotel.controller;
 
-import com.senla.hotel.exceptions.BusinessLogicException;
+import com.senla.hotel.exceptions.AbstractBusinessLogicException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ public class ExceptionControllerAdvice {
 
     private static final Logger logger = LogManager.getLogger(ExceptionControllerAdvice.class);
 
-    @ExceptionHandler(BusinessLogicException.class)
-    private ResponseEntity<ErrorMessage> handleBadRequest(final BusinessLogicException e) {
+    @ExceptionHandler(AbstractBusinessLogicException.class)
+    private ResponseEntity<ErrorMessage> handleBadRequest(final AbstractBusinessLogicException e) {
         logger.error(e.getMessage());
         return new ResponseEntity<>(new ErrorMessage(e.getMessage()), e.getHttpStatus());
     }
