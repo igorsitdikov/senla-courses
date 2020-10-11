@@ -1,16 +1,13 @@
 package com.senla.hotel.mapper;
 
 import com.senla.hotel.dto.ResidentDto;
-import com.senla.hotel.dto.RoomDto;
-import com.senla.hotel.dto.RoomHistoryDto;
 import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.RoomHistoryDtoMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ResidentDtoMapperImpl implements ResidentDtoMapper {
@@ -29,6 +26,8 @@ public class ResidentDtoMapperImpl implements ResidentDtoMapper {
 
     @Override
     public ResidentDto destinationToSource(final Resident destination) {
+        RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
+        RoomHistoryDtoMapper roomHistoryDtoMapper = new RoomHistoryDtoMapperImpl(this, roomDtoMapper);
         ResidentDto source = new ResidentDto();
         source.setId(destination.getId());
         source.setFirstName(destination.getFirstName());
@@ -36,36 +35,11 @@ public class ResidentDtoMapperImpl implements ResidentDtoMapper {
         source.setGender(destination.getGender());
         source.setPhone(destination.getPhone());
         source.setVip(destination.getVip());
-        source.setHistoryDtos(historyEntitiesToListDto(destination.getHistory()));
+        source.setHistoryDtos(destination.getHistory()
+                                  .stream()
+                                  .map(roomHistoryDtoMapper::destinationToSource)
+                                  .collect(Collectors.toSet()));
         return source;
     }
 
-    private Set<RoomHistoryDto> historyEntitiesToListDto(Set<RoomHistory> histories) {
-        Set<RoomHistoryDto> roomHistoryDtos = new HashSet<>();
-        for (RoomHistory roomHistory : histories) {
-            roomHistoryDtos.add(entityToDto(roomHistory));
-        }
-        return roomHistoryDtos;
-    }
-
-    private RoomHistoryDto entityToDto(RoomHistory roomHistory) {
-        RoomHistoryDto roomHistoryDto = new RoomHistoryDto();
-        roomHistoryDto.setId(roomHistory.getId());
-        roomHistoryDto.setCheckOut(roomHistory.getCheckOut());
-        roomHistoryDto.setCheckIn(roomHistory.getCheckIn());
-        roomHistoryDto.setRoomDto(destinationRoomToSourceRoom(roomHistory.getRoom()));
-        roomHistoryDto.setStatus(roomHistory.getStatus());
-        return roomHistoryDto;
-    }
-
-    private RoomDto destinationRoomToSourceRoom(final Room destination) {
-        RoomDto source = new RoomDto();
-        source.setId(destination.getId());
-        source.setPrice(destination.getPrice());
-        source.setStatus(destination.getStatus());
-        source.setAccommodation(destination.getAccommodation());
-        source.setNumber(destination.getNumber());
-        source.setStars(destination.getStars());
-        return source;
-    }
 }

@@ -66,12 +66,12 @@ public class RoomControllerTest extends AbstractControllerTest {
     private RoomHistoryDao roomHistoryDao;
     @Mock
     private AttendanceDao attendanceDao;
+    @Spy
+    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
     @InjectMocks
     private HotelAdminService hotelAdminService = new HotelAdminServiceImpl();
     @Spy
     private ResidentDtoMapper residentDtoMapper = new ResidentDtoMapperImpl();
-    @Spy
-    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
     @InjectMocks
     private RoomService roomService = new RoomServiceImpl();
     @InjectMocks

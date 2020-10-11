@@ -54,11 +54,11 @@ public class ResidentServiceImplTest {
     @InjectMocks
     private ResidentService residentService = new ResidentServiceImpl();
     @Spy
+    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
+    @Spy
     private ResidentDtoMapper residentDtoMapper = new ResidentDtoMapperImpl();
     @Spy
     private AttendanceDtoMapper attendanceDtoMapper = new AttendanceDtoMapperImpl();
-    @Spy
-    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
     @Mock
     private ResidentDao residentDao;
     @Mock

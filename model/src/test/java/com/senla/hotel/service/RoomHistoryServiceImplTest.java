@@ -41,6 +41,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -58,7 +59,11 @@ public class RoomHistoryServiceImplTest {
     @Mock
     private RoomHistoryDao roomHistoryDao;
     @Spy
-    private RoomHistoryDtoMapper roomHistoryDtoMapper = new RoomHistoryDtoMapperImpl();
+    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
+    @Spy
+    private ResidentDtoMapper residentDtoMapper = new ResidentDtoMapperImpl();
+    @Spy
+    private RoomHistoryDtoMapper roomHistoryDtoMapper = new RoomHistoryDtoMapperImpl(residentDtoMapper, roomDtoMapper);
     @InjectMocks
     private RoomHistoryService roomHistoryService = new RoomHistoryServiceImpl();
 
@@ -70,6 +75,7 @@ public class RoomHistoryServiceImplTest {
         final RoomDto roomDto = RoomMock.getDtoById(roomId);
         final Room room = RoomMock.getById(roomId);
         final ResidentDto residentDto = ResidentMock.getDtoById(residentId);
+        residentDto.setHistoryDtos(new HashSet<>());
         final Resident resident = ResidentMock.getById(residentId);
 
         final RoomHistory roomHistory =
@@ -95,6 +101,7 @@ public class RoomHistoryServiceImplTest {
         final RoomDto roomDto = RoomMock.getDtoById(roomId);
         final Room room = RoomMock.getById(roomId);
         final ResidentDto residentDto = ResidentMock.getDtoById(residentId);
+        residentDto.setHistoryDtos(new HashSet<>());
         final Resident resident = ResidentMock.getById(residentId);
 
         final RoomHistory roomHistory1 =
@@ -131,6 +138,7 @@ public class RoomHistoryServiceImplTest {
         final RoomDto roomDto = RoomMock.getDtoById(roomId);
         final Room room = RoomMock.getById(roomId);
         final ResidentDto residentDto = ResidentMock.getDtoById(residentId);
+        residentDto.setHistoryDtos(new HashSet<>());
         final Resident resident = ResidentMock.getById(residentId);
 
         final RoomHistory roomHistory =

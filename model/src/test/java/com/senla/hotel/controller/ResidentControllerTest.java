@@ -15,7 +15,9 @@ import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.ResidentDtoMapperImpl;
+import com.senla.hotel.mapper.RoomDtoMapperImpl;
 import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
 import com.senla.hotel.service.HotelAdminServiceImpl;
 import com.senla.hotel.service.ResidentServiceImpl;
 import com.senla.hotel.service.RoomHistoryServiceImpl;
@@ -65,6 +67,8 @@ public class ResidentControllerTest extends AbstractControllerTest {
     private AttendanceDao attendanceDao;
     @InjectMocks
     private HotelAdminService hotelAdminService = new HotelAdminServiceImpl();
+    @Spy
+    private RoomDtoMapper roomDtoMapper = new RoomDtoMapperImpl();
     @Spy
     private ResidentDtoMapper residentDtoMapper = new ResidentDtoMapperImpl();
     @InjectMocks
