@@ -33,7 +33,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceMapper attendanceMapper;
     @Autowired
     private AttendanceDtoMapper attendanceDtoMapper;
-    @Value("${attendances:attendances.csv}")
+    @Value("${attendances}")
     private String property;
 
     @Override

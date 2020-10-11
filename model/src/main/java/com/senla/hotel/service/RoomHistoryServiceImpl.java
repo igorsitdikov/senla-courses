@@ -31,7 +31,7 @@ public class RoomHistoryServiceImpl implements RoomHistoryService {
     private RoomHistoryDtoMapper roomHistoryDtoMapper;
     @Autowired
     private CsvWriter csvWriter;
-    @Value("${histories:histories.csv}")
+    @Value("${histories}")
     private String property;
 
     @Override

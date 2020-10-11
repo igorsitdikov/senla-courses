@@ -42,7 +42,7 @@ public class ResidentServiceImpl implements ResidentService {
     private ResidentMapper residentMapper;
     @Autowired
     private ResidentDtoMapper residentDtoMapper;
-    @Value("${residents:residents.csv}")
+    @Value("${residents}")
     private String property;
 
 

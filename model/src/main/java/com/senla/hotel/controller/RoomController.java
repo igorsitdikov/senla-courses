@@ -32,7 +32,7 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
-    @Value("${statusAllow:true}")
+    @Value("${statusAllow}")
     private Boolean statusAllow;
 
     public RoomController(RoomService roomService) {

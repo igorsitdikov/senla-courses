@@ -46,9 +46,9 @@ public class RoomServiceImpl implements RoomService {
     private RoomDtoMapper roomDtoMapper;
     @Autowired
     private ResidentDtoMapper residentDtoMapper;
-    @Value("${rooms:rooms.csv}")
+    @Value("${rooms}")
     private String property;
-    @Value("${amountHistories:3}")
+    @Value("${amountHistories}")
     private Integer amountHistories;
 
 
