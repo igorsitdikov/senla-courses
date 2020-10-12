@@ -186,7 +186,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
                 result.add(resident);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return result;
     }
@@ -201,7 +201,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             statement.setInt(4, object.getVip() ? 1 : 0);
             statement.setString(5, object.getPhone());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -216,7 +216,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             statement.setString(5, object.getPhone());
             statement.setLong(6, object.getId());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -229,7 +229,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             rs.next();
             return rs.getInt("total");
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -252,7 +252,7 @@ public class ResidentDaoImpl extends AbstractDao<Resident, Long> implements Resi
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return list;
     }

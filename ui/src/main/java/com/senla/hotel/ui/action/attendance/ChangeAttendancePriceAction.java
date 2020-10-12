@@ -1,7 +1,8 @@
 package com.senla.hotel.ui.action.attendance;
 
 import com.senla.hotel.controller.AttendanceController;
-import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.dto.AttendanceDto;
+import com.senla.hotel.dto.PriceDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
@@ -28,12 +29,12 @@ public class ChangeAttendancePriceAction implements Action {
 
         final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Attendance> attendances = attendanceController.showAttendances(SortField.DEFAULT);
+            final List<AttendanceDto> attendances = attendanceController.showAttendances(SortField.DEFAULT);
             Printer.show(attendances);
             final Long id = InputDataReader.getLongInput(scanner, "Input the Attendance id...");
             final BigDecimal dailyPrice = BigDecimal.valueOf(InputDataReader
                     .getDoubleInput(scanner, "Input the Attendance daily price..."));
-            attendanceController.changePrice(id, dailyPrice);
+            attendanceController.changePrice(new Long(id), new PriceDto(dailyPrice));
         } catch (final Exception e) {
             logger.error("Failed to change price a Attendance! Input valid parameters! {}", e.getMessage());
         }

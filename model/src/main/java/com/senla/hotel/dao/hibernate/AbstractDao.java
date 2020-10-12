@@ -34,7 +34,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
         try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             return getSingleBy("id", id, session);
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
                 .orderBy(builder.asc(root.get(sortField.getFieldName())));
             return session.createQuery(criteria).getResultList();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -123,7 +123,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return object;
     }
@@ -141,7 +141,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -157,7 +157,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 }

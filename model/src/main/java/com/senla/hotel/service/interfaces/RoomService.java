@@ -1,7 +1,7 @@
 package com.senla.hotel.service.interfaces;
 
-import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.enumerated.RoomStatus;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.EntityNotFoundException;
@@ -13,19 +13,19 @@ import java.util.List;
 
 public interface RoomService {
 
-    List<Room> showVacantRoomsOnDate(LocalDate date) throws PersistException;
+    List<RoomDto> showVacantRoomsOnDate(LocalDate date) throws PersistException;
 
-    Room findById(Long id) throws EntityNotFoundException, PersistException;
+    RoomDto findById(Long id) throws EntityNotFoundException, PersistException;
 
-    Room findByNumber(Integer number) throws EntityNotFoundException, PersistException;
+    RoomDto findByNumber(Integer number) throws EntityNotFoundException, PersistException;
 
-    List<Resident> showLastResidents(Long id, Integer number) throws EntityNotFoundException, PersistException;
+    List<ResidentDto> showLastResidents(Long id, Integer number) throws EntityNotFoundException, PersistException;
 
     void importRooms() throws PersistException;
 
     void exportRooms() throws PersistException;
 
-    List<Resident> showLastResidents(Room room, Integer number) throws EntityNotFoundException, PersistException;
+    List<ResidentDto> showLastResidents(RoomDto room, Integer number) throws EntityNotFoundException, PersistException;
 
     Long countVacantRooms() throws PersistException;
 
@@ -35,11 +35,11 @@ public interface RoomService {
 
     void changeRoomStatus(Integer number, RoomStatus status) throws EntityNotFoundException, PersistException;
 
-    void addRoom(Room room) throws PersistException;
+    void addRoom(RoomDto room) throws PersistException;
 
-    List<Room> showAll(SortField sortField) throws PersistException;
+    List<RoomDto> showAll(SortField sortField) throws PersistException;
 
-    List<Room> showVacant(SortField sortField) throws PersistException;
+    List<RoomDto> showVacant(SortField sortField) throws PersistException;
 
-    Room showRoomDetails(Integer number) throws EntityNotFoundException, PersistException;
+    RoomDto showRoomDetails(Integer number) throws EntityNotFoundException, PersistException;
 }

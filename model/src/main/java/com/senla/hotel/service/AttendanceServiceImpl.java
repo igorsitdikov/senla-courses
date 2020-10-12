@@ -2,10 +2,12 @@ package com.senla.hotel.service;
 
 
 import com.senla.hotel.dao.interfaces.AttendanceDao;
+import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.AttendanceMapper;
+import com.senla.hotel.mapper.interfaces.dtoMapper.AttendanceDtoMapper;
 import com.senla.hotel.service.interfaces.AttendanceService;
 import com.senla.hotel.utils.ParseUtils;
 import com.senla.hotel.utils.csv.interfaces.CsvReader;
@@ -15,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
@@ -29,35 +31,41 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceDao attendanceDao;
     @Autowired
     private AttendanceMapper attendanceMapper;
-    @Value("${attendances:attendances.csv}")
+    @Autowired
+    private AttendanceDtoMapper attendanceDtoMapper;
+    @Value("${attendances}")
     private String property;
 
     @Override
-    public Attendance findById(final Long id) throws PersistException {
-        return attendanceDao.findById(id);
+    public AttendanceDto findById(final Long id) throws PersistException {
+        final Attendance attendance = attendanceDao.findById(id);
+        return attendanceDtoMapper.destinationToSource(attendance);
     }
 
     @Override
-    public void createAttendance(final Attendance attendance) throws PersistException {
+    public void createAttendance(final AttendanceDto attendanceDto) throws PersistException {
+        Attendance attendance = attendanceDtoMapper.sourceToDestination(attendanceDto);
         attendanceDao.create(attendance);
     }
 
     @Override
-    public List<Attendance> showAttendances(final SortField sortField) throws PersistException {
-        return attendanceDao.getAllSortedBy(sortField);
-    }
-
-    private List<Attendance> sortAttendances(final List<Attendance> attendances,
-                                             final Comparator<Attendance> comparator) {
-        attendances.sort(comparator);
-        return attendances;
+    public void updateAttendance(final AttendanceDto attendanceDto) throws PersistException {
+        Attendance attendance = attendanceDtoMapper.sourceToDestination(attendanceDto);
+        attendanceDao.update(attendance);
     }
 
     @Override
-    public Attendance changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
+    public List<AttendanceDto> showAttendances(final SortField sortField) throws PersistException {
+        final List<Attendance> attendances = attendanceDao.getAllSortedBy(sortField);
+        return attendances.stream().map(attendanceDtoMapper::destinationToSource).collect(Collectors.toList());
+    }
+
+    @Override
+    public AttendanceDto changeAttendancePrice(final Long id, final BigDecimal price) throws PersistException {
         final Attendance attendance = attendanceDao.findById(id);
         attendance.setPrice(price);
-        return attendanceDao.update(attendance);
+        final Attendance updatedAttendance = attendanceDao.update(attendance);
+        return attendanceDtoMapper.destinationToSource(updatedAttendance);
     }
 
     @Override
@@ -75,6 +83,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void exportAttendances() throws PersistException {
-        csvWriter.write(property, ParseUtils.entitiesToCsv(attendanceMapper, showAttendances(SortField.DEFAULT)));
+        csvWriter.write(property,
+                        ParseUtils.entitiesToCsv(attendanceMapper, attendanceDao.getAllSortedBy(SortField.DEFAULT)));
     }
 }

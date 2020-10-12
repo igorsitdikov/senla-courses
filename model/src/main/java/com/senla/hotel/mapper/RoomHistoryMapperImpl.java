@@ -1,17 +1,16 @@
 package com.senla.hotel.mapper;
 
+import com.senla.hotel.dao.interfaces.AttendanceDao;
+import com.senla.hotel.dao.interfaces.ResidentDao;
+import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.entity.Attendance;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
 import com.senla.hotel.entity.RoomHistory;
 import com.senla.hotel.enumerated.HistoryStatus;
 import com.senla.hotel.exceptions.EntityIsEmptyException;
-import com.senla.hotel.exceptions.EntityNotFoundException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.mapper.interfaces.csvMapper.RoomHistoryMapper;
-import com.senla.hotel.service.RoomServiceImpl;
-import com.senla.hotel.service.interfaces.AttendanceService;
-import com.senla.hotel.service.interfaces.ResidentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,11 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @Autowired
-    private RoomServiceImpl roomService;
+    private RoomDao roomDao;
     @Autowired
-    private ResidentService residentService;
+    private ResidentDao residentDao;
     @Autowired
-    private AttendanceService attendanceService;
+    private AttendanceDao attendanceDao;
 
     @Override
     public RoomHistory sourceToDestination(final String source) throws EntityIsEmptyException {
@@ -48,18 +47,17 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         history.setCheckOut(LocalDate.parse(elements[2], formatter));
         try {
             final long id = Long.parseLong(elements[3]);
-            final Room room = roomService.findById(id);
+            final Room room = roomDao.findById(id);
             history.setRoom(room);
-        } catch (final EntityNotFoundException e) {
-            logger.error("No such room with id {} {}", elements[3], e);
         } catch (final PersistException e) {
+            logger.error("No such room with id {} {}", elements[3], e);
             e.printStackTrace();
         }
         try {
             final long id = Long.parseLong(elements[4]);
-            final Resident resident = residentService.findById(id);
+            final Resident resident = residentDao.findById(id);
             history.setResident(resident);
-        } catch (final EntityNotFoundException | PersistException e) {
+        } catch (final PersistException e) {
             logger.error("No such resident with id {} {}", elements[4], e);
         }
         history.setStatus(HistoryStatus.valueOf(elements[5]));
@@ -67,8 +65,8 @@ public class RoomHistoryMapperImpl implements RoomHistoryMapper {
         if (elements.length > 6) {
             for (int i = 6; i < elements.length; i++) {
                 try {
-                    historyList.add(attendanceService.findById(Long.parseLong(elements[i])));
-                } catch (final EntityNotFoundException | PersistException e) {
+                    historyList.add(attendanceDao.findById(Long.parseLong(elements[i])));
+                } catch (final PersistException e) {
                     logger.error("No such attendance with id {} {}", elements[i], e);
                 }
             }

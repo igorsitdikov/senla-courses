@@ -38,7 +38,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             criteria.select(root).where(builder.and(equalResidentId, equalStatusCheckedIn));
             return session.createQuery(criteria).getSingleResult();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
                 return (BigDecimal) result.get(0)[0];
             }
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class RoomHistoryDaoImpl extends AbstractDao<RoomHistory, Long> implement
             session.save(roomHistory);
             session.getTransaction().commit();
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 }

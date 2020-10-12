@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.action.room;
 
 import com.senla.hotel.controller.RoomController;
-import com.senla.hotel.entity.Room;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
@@ -24,7 +24,7 @@ public class ShowRoomsSortedByStarsAction implements Action {
     @Override
     public void execute() {
         try {
-            final List<Room> rooms  = roomController.showAllRooms(SortField.STARS);
+            final List<RoomDto> rooms  = roomController.showAllRooms(SortField.STARS);
             Printer.show(rooms);
         } catch (final PersistException e) {
             logger.error(e.getMessage());

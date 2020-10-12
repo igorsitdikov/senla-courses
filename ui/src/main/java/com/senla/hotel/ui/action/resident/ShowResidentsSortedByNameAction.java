@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.action.resident;
 
 import com.senla.hotel.controller.ResidentController;
-import com.senla.hotel.entity.Resident;
+import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
@@ -24,7 +24,7 @@ public class ShowResidentsSortedByNameAction implements Action {
     @Override
     public void execute() {
         try {
-            final List<Resident> residents = residentController.showResidents(SortField.NAME);
+            final List<ResidentDto> residents = residentController.showResidents(SortField.NAME);
             Printer.show(residents);
         } catch (final PersistException e) {
             logger.error(e.getMessage());

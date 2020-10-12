@@ -2,7 +2,8 @@ package com.senla.hotel.ui.action.admin;
 
 import com.senla.hotel.controller.HotelController;
 import com.senla.hotel.controller.ResidentController;
-import com.senla.hotel.entity.Resident;
+import com.senla.hotel.dto.CheckOutDto;
+import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.ui.exceptions.ListEntitiesIsEmptyException;
 import com.senla.hotel.ui.interfaces.Action;
@@ -32,14 +33,14 @@ public class CheckOutAction implements Action {
 
         final Scanner scanner = new Scanner(System.in);
         try {
-            final List<Resident> residents = residentController.showResidents(SortField.DEFAULT);
+            final List<ResidentDto> residents = residentController.showResidents(SortField.DEFAULT);
             Printer.show(residents, "resident");
 
             final Integer residentId = InputDataReader
                     .getIntegerInput(scanner, "Input Resident id...", residents.size());
             final LocalDate checkOutDate = InputDataReader.getLocalDateInput(scanner, "Input check-out date...");
 
-            hotelController.checkOut(residents.get(residentId - 1), checkOutDate);
+            hotelController.checkOut(new CheckOutDto(residents.get(residentId - 1), checkOutDate));
         } catch (final ListEntitiesIsEmptyException ex) {
             logger.error(ex.getMessage());
         } catch (final Exception e) {

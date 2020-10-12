@@ -50,7 +50,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         if (list == null || list.size() == 0) {
             throw new PersistException("Entity not found.");
@@ -92,7 +92,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return list;
     }
@@ -112,7 +112,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return list;
     }
@@ -128,7 +128,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             }
             statement.executeBatch();
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
                 }
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
 
         return object;
@@ -170,7 +170,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
             }
             return object;
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -184,7 +184,7 @@ public abstract class AbstractDao<T extends AEntity, ID extends Long> implements
                 throw new PersistException("On delete modify more then 1 record: " + count);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 

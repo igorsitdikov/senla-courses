@@ -104,7 +104,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
                 result.add(room);
             }
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return result;
     }
@@ -125,7 +125,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             statement.setString(4, object.getStars().toString());
             statement.setString(5, object.getAccommodation().toString());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             statement.setString(5, object.getAccommodation().toString());
             statement.setLong(6, object.getId());
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 
@@ -153,7 +153,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             final ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
         return list;
     }
@@ -167,7 +167,7 @@ public class RoomDaoImpl extends AbstractDao<Room, Long> implements RoomDao {
             rs.next();
             return rs.getLong("total");
         } catch (final Exception e) {
-            throw new PersistException(e);
+            throw new PersistException(e.getMessage());
         }
     }
 }

@@ -1,8 +1,15 @@
 package com.senla.hotel.exceptions;
 
-public class RoomStatusChangingException extends Exception {
+import org.springframework.http.HttpStatus;
+
+public class RoomStatusChangingException extends AbstractBusinessLogicException {
 
     public RoomStatusChangingException(final String message) {
         super(message);
+    }
+
+    @Override
+    public HttpStatus getHttpStatus() {
+        return HttpStatus.FORBIDDEN;
     }
 }

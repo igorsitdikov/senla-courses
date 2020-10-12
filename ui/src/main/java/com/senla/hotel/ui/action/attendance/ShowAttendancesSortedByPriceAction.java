@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.action.attendance;
 
 import com.senla.hotel.controller.AttendanceController;
-import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.ui.interfaces.Action;
@@ -24,7 +24,7 @@ public class ShowAttendancesSortedByPriceAction implements Action {
     @Override
     public void execute() {
         try {
-            final List<Attendance> attendances = attendanceController.showAttendances(SortField.PRICE);
+            final List<AttendanceDto> attendances = attendanceController.showAttendances(SortField.PRICE);
             Printer.show(attendances);
         } catch (final PersistException e) {
             logger.error(e.getMessage());

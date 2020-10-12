@@ -1,7 +1,7 @@
 package com.senla.hotel.ui.action.resident;
 
 import com.senla.hotel.controller.ResidentController;
-import com.senla.hotel.entity.Resident;
+import com.senla.hotel.dto.ResidentDto;
 import com.senla.hotel.enumerated.Gender;
 import com.senla.hotel.ui.interfaces.Action;
 import com.senla.hotel.ui.utils.InputDataReader;
@@ -38,7 +38,7 @@ public class AddResidentAction implements Action {
                     .getIntegerInput(scanner, "Input Resident gender 1 or 2, where" +
                             "1 - MALE, " +
                             "2 - FEMALE", 2));
-            residentController.createResident(new Resident(firstName, lastName, gender, vip, phone, null));
+            residentController.createResident(new ResidentDto(null, firstName, lastName, gender, vip, phone, null));
         } catch (final Exception e) {
             logger.error("Failed to add a Resident! Input valid parameters! {}", e.getMessage());
         }
