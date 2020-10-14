@@ -1,32 +1,32 @@
 package com.senla.hotel.config.security;
 
+import com.senla.hotel.dao.interfaces.UserDao;
+import com.senla.hotel.entity.User;
+import com.senla.hotel.exceptions.PersistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class LoadUserDetailService implements UserDetailsService {
-//    private final UserRepository userRepository;
+
+    private final UserDao userDao;
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        return new User("asd","asd", new ArrayList<>());
-//        final Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-//        if (userEntity.isEmpty()) {
-//            throw new UsernameNotFoundException("User with email: " + email + " not found");
-//        } else {
-//            final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
-//                "ROLE_" + userEntity.get().getUserRole().name());
-//            return new User(email, userEntity.get().getPassword(), List.of(authority));
-//        }
+        try {
+            final User userEntity = userDao.findByEmail(email);
+            final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+                    "ROLE_" + userEntity.getRole().name());
+            return new org.springframework.security.core.userdetails.User(email, userEntity.getPassword(), Collections.singletonList(authority));
+        } catch (PersistException e) {
+            throw new UsernameNotFoundException("User with email: " + email + " not found");
+        }
     }
 }

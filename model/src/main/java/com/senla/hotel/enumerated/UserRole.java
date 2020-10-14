@@ -1,4 +1,4 @@
-package com.senla.hotel.config.security;
+package com.senla.hotel.enumerated;
 
 public enum UserRole {
     CUSTOMER, ADMIN
