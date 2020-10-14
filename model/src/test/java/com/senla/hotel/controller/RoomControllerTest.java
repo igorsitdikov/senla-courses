@@ -5,25 +5,21 @@ import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dao.interfaces.ResidentDao;
 import com.senla.hotel.dao.interfaces.RoomDao;
 import com.senla.hotel.dao.interfaces.RoomHistoryDao;
-import com.senla.hotel.dto.*;
-import com.senla.hotel.entity.Attendance;
+import com.senla.hotel.dto.PriceDto;
+import com.senla.hotel.dto.ResidentDto;
+import com.senla.hotel.dto.RoomDto;
 import com.senla.hotel.entity.Resident;
 import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
-import com.senla.hotel.enumerated.*;
-import com.senla.hotel.exceptions.EntityNotFoundException;
-import com.senla.hotel.exceptions.PersistException;
+import com.senla.hotel.enumerated.RoomStatus;
+import com.senla.hotel.enumerated.SortField;
 import com.senla.hotel.mapper.ResidentDtoMapperImpl;
 import com.senla.hotel.mapper.RoomDtoMapperImpl;
 import com.senla.hotel.mapper.interfaces.dtoMapper.ResidentDtoMapper;
 import com.senla.hotel.mapper.interfaces.dtoMapper.RoomDtoMapper;
 import com.senla.hotel.service.HotelAdminServiceImpl;
-import com.senla.hotel.service.ResidentServiceImpl;
 import com.senla.hotel.service.RoomServiceImpl;
 import com.senla.hotel.service.interfaces.HotelAdminService;
-import com.senla.hotel.service.interfaces.ResidentService;
 import com.senla.hotel.service.interfaces.RoomService;
-import mock.AttendanceMock;
 import mock.ResidentMock;
 import mock.RoomMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,27 +28,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,7 +76,12 @@ public class RoomControllerTest extends AbstractControllerTest {
         formattingConversionService.addConverter(new SortFieldEnumConverter()); //Here
 
         ReflectionTestUtils.setField(roomController, "statusAllow", true);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(roomController).setConversionService(formattingConversionService).build();
+        this.mockMvc = MockMvcBuilders
+                .standaloneSetup(roomController)
+                .setConversionService(formattingConversionService)
+                .alwaysDo(print())
+                .apply(SecurityMockMvcConfigurers.springSecurity(springSecurityFilterChain))
+                .build();
     }
 
     @Test

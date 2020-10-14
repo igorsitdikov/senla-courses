@@ -25,6 +25,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
@@ -38,6 +40,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +65,11 @@ public class HotelControllerTest extends AbstractControllerTest {
 
     @BeforeEach
     public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(hotelController).build();
+        this.mockMvc = MockMvcBuilders
+                .standaloneSetup(hotelController)
+                .alwaysDo(print())
+                .apply(SecurityMockMvcConfigurers.springSecurity(springSecurityFilterChain))
+                .build();
     }
 
     @Test

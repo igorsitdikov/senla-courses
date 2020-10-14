@@ -5,6 +5,7 @@ import com.senla.hotel.HotelTest;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebAppConfiguration
 public class AbstractControllerTest {
 
+    @Autowired
+    protected FilterChainProxy springSecurityFilterChain;
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper mapper;

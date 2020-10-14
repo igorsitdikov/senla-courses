@@ -1,6 +1,7 @@
 package com.senla.hotel.controller;
 
 import com.senla.hotel.config.application.SortFieldEnumConverter.SortFieldEnumConverter;
+import com.senla.hotel.config.security.SpringSecurityConfig;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.dto.PriceDto;
@@ -17,9 +18,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +41,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,9 +60,14 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         FormattingConversionService formattingConversionService = new FormattingConversionService();
-        formattingConversionService.addConverter(new SortFieldEnumConverter()); //Here
+        formattingConversionService.addConverter(new SortFieldEnumConverter());
 
-        this.mockMvc = MockMvcBuilders.standaloneSetup(attendanceController).setConversionService(formattingConversionService).build();
+        this.mockMvc = MockMvcBuilders
+                .standaloneSetup(attendanceController)
+                .setConversionService(formattingConversionService)
+                .alwaysDo(print())
+                .apply(SecurityMockMvcConfigurers.springSecurity(springSecurityFilterChain))
+                .build();
     }
 
     @Test
