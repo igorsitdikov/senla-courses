@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -22,31 +24,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/attendances/**").denyAll()
+                .antMatchers(HttpMethod.POST, "/sign-up", "/sign-in").permitAll()
+                .antMatchers("/attendances/**").permitAll()
                 .antMatchers("/rooms/**").permitAll()
-                .antMatchers("/**").denyAll()
+                .antMatchers("/**").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable();
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http
-//            .csrf().disable()
-//            .authorizeRequests()
-//            .antMatchers(HttpMethod.POST, "/api/users/sign-up", "/api/sign-in").permitAll()
-//            .antMatchers(HttpMethod.GET, "/api/beers").permitAll()
-//            .antMatchers(HttpMethod.POST, "/api/orders")
-//            .hasAnyRole(UserRole.CUSTOMER.name(), UserRole.ADMIN.name())
-//            .antMatchers(HttpMethod.PATCH, "/api/orders/**")
-//            .hasAnyRole(UserRole.CUSTOMER.name(), UserRole.ADMIN.name())
-//            .antMatchers("/api/orders/**", "/api/beers/**", "/api/users/**").hasRole(UserRole.ADMIN.name())
-//            .and()
-//            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//            .and()
-//            .formLogin().disable();
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -57,5 +44,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

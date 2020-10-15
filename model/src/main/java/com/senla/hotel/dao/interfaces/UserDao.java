@@ -1,9 +1,9 @@
 package com.senla.hotel.dao.interfaces;
 
-import com.senla.hotel.entity.User;
+import com.senla.hotel.entity.UserEntity;
 import com.senla.hotel.exceptions.PersistException;
 
-public interface UserDao extends GenericDao<User, Long>{
+public interface UserDao extends GenericDao<UserEntity, Long>{
 
-    User findByEmail(String email) throws PersistException;
+    UserEntity findByEmail(String email) throws PersistException;
 }

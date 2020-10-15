@@ -1,4 +1,4 @@
-package com.senla.hotel.config.security;
+package com.senla.hotel.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Data
-@Service
+@Component
 public class JwtUtil {
     @Value("${secret-key}")
     private String secretKey;
