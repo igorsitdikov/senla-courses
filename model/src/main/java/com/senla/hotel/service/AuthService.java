@@ -1,19 +1,16 @@
 package com.senla.hotel.service;
 
-import com.senla.hotel.utils.JwtUtil;
 import com.senla.hotel.dao.interfaces.UserDao;
 import com.senla.hotel.dto.AuthRequestDto;
 import com.senla.hotel.dto.UserDto;
 import com.senla.hotel.dto.UserTokenDto;
 import com.senla.hotel.entity.UserEntity;
-import com.senla.hotel.enumerated.UserRole;
 import com.senla.hotel.exceptions.NoSuchUserException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.exceptions.SuchUserAlreadyExistException;
-import com.senla.hotel.exceptions.SuchUserHasNoPermissionsException;
 import com.senla.hotel.mapper.interfaces.dtoMapper.UserDtoMapper;
-import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
+import com.senla.hotel.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,15 +20,17 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
-@Log
 @Service
-@AllArgsConstructor
 public class AuthService {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final UserDao userDao;
-    private final UserDtoMapper userDtoMapper;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private UserDtoMapper userDtoMapper;
 
     public UserTokenDto signIn(final AuthRequestDto authRequestDto) throws NoSuchUserException {
 

@@ -1,7 +1,6 @@
 package com.senla.hotel.config.security;
 
 import com.senla.hotel.utils.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +15,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
+
+    private static final Integer BEARER_LENGTH = 7;
+    private static final String BEARER = "Bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private final LoadUserDetailService userDetailsService;
     private final JwtUtil jwtUtil;
-    private static final Integer BEARER = 7;
+
+    private JwtRequestFilter(final LoadUserDetailService userDetailsService, final JwtUtil jwtUtil) {
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
@@ -28,13 +34,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     final FilterChain chain)
         throws ServletException, IOException {
 
-        final String authorizationHeader = request.getHeader("Authorization");
+        final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 
         String username = null;
         String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(BEARER);
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
+            jwt = authorizationHeader.substring(BEARER_LENGTH);
             username = jwtUtil.extractUsername(jwt);
         }
 

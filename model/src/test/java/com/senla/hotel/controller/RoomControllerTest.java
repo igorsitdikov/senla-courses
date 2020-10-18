@@ -30,6 +30,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -123,6 +124,7 @@ public class RoomControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void showRoomDetailsTest() throws Exception {
         final Integer roomNumber = 101;
         final Long roomId = 1L;
@@ -141,6 +143,7 @@ public class RoomControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void changePriceTest() throws Exception {
         final Integer roomNumber = 101;
         final Long roomId = 1L;
@@ -159,6 +162,7 @@ public class RoomControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void changeStatusTest() throws Exception {
         final Integer roomNumber = 101;
         final Long roomId = 1L;
@@ -181,6 +185,7 @@ public class RoomControllerTest extends AbstractControllerTest {
 
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void showLastResidentsTest() throws Exception {
         final Long roomId = 1L;
         final Integer limit = 3;
@@ -202,6 +207,7 @@ public class RoomControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void createRoomTest() throws Exception {
         final Long roomId = 1L;
         final Room room = RoomMock.getById(roomId);

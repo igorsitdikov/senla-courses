@@ -1,7 +1,6 @@
 package com.senla.hotel.controller;
 
 import com.senla.hotel.config.application.SortFieldEnumConverter.SortFieldEnumConverter;
-import com.senla.hotel.config.security.SpringSecurityConfig;
 import com.senla.hotel.dao.interfaces.AttendanceDao;
 import com.senla.hotel.dto.AttendanceDto;
 import com.senla.hotel.dto.PriceDto;
@@ -18,16 +17,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockServletContext;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -71,7 +65,8 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createResidentTest() throws Exception {
+    @WithMockUser(roles="ADMIN")
+    void createAttendanceTest() throws Exception {
         final Long attendanceId = 1L;
 
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -101,6 +96,7 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void updateAttendancePriceTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -121,6 +117,7 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void shouldBeDeleteTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -152,11 +149,11 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void shouldUpdateAttendanceTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
         AttendanceDto expected = AttendanceMock.getDtoById(attendanceId);
-
         mockMvc.perform(put("/attendances/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(expected)))

@@ -7,18 +7,22 @@ import com.senla.hotel.exceptions.NoSuchUserException;
 import com.senla.hotel.exceptions.PersistException;
 import com.senla.hotel.exceptions.SuchUserAlreadyExistException;
 import com.senla.hotel.service.AuthService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor
+@Component
 @RestController
 public class AuthController {
 
     private final AuthService authService;
+
+    private AuthController(final AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping(value = "/sign-in")
     @ResponseStatus(HttpStatus.OK)

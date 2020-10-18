@@ -30,6 +30,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -82,6 +83,7 @@ public class ResidentControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void shouldReturnFindAllTest() throws Exception {
         List<Resident> residents = ResidentMock.getAll();
         List<ResidentDto> expected = ResidentMock.getAllDto();
@@ -96,6 +98,7 @@ public class ResidentControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void showCountResidentsTest() throws Exception {
         Integer amount = 3;
         given(residentDao.countTotalResidents()).willReturn(amount);
@@ -109,6 +112,7 @@ public class ResidentControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void addAttendanceToResidentTest() throws Exception {
         final Long residentId = 1L;
         final Long attendanceId = 3L;
@@ -135,6 +139,7 @@ public class ResidentControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void createResidentTest() throws Exception {
         final Long residentId = 1L;
         final ResidentDto expected = ResidentMock.getDtoById(residentId);

@@ -25,8 +25,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
-import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
@@ -73,6 +73,7 @@ public class HotelControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void calculateBillTest() throws Exception {
         final Long residentId = 1L;
         final Long roomId = 1L;
@@ -101,6 +102,7 @@ public class HotelControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void checkInTest() throws Exception {
         final Long residentId = 1L;
         final Long roomId = 1L;
@@ -134,6 +136,7 @@ public class HotelControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void checkOutTest() throws Exception {
         final Long residentId = 1L;
         final Long roomId = 1L;

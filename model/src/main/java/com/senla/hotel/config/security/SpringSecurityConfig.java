@@ -1,6 +1,7 @@
 package com.senla.hotel.config.security;
 
-import lombok.AllArgsConstructor;
+import com.senla.hotel.enumerated.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,24 +15,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
-@AllArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final LoadUserDetailService userDetailsService;
-    private final JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    private LoadUserDetailService userDetailsService;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign-up", "/sign-in").permitAll()
-                .antMatchers("/attendances/**").permitAll()
-                .antMatchers("/rooms/**").permitAll()
-                .antMatchers("/**").permitAll()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable();
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/sign-up", "/sign-in").permitAll()
+            .antMatchers(HttpMethod.GET, "/attendances/**", "/rooms/vacant/**", "/rooms/all/**").permitAll()
+            .antMatchers("/rooms/**", "/residents/**", "/admin/**", "/attendances/**").hasAnyRole(UserRole.ADMIN.name())
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .formLogin().disable();
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
