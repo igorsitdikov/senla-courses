@@ -1,9 +1,11 @@
 package com.senla.hotel.service;
 
+import com.senla.hotel.dao.interfaces.TokenDao;
 import com.senla.hotel.dao.interfaces.UserDao;
 import com.senla.hotel.dto.AuthRequestDto;
 import com.senla.hotel.dto.UserDto;
 import com.senla.hotel.dto.UserTokenDto;
+import com.senla.hotel.entity.TokenEntity;
 import com.senla.hotel.entity.UserEntity;
 import com.senla.hotel.exceptions.NoSuchUserException;
 import com.senla.hotel.exceptions.PersistException;
@@ -23,6 +25,7 @@ import java.util.List;
 @Service
 public class AuthService {
 
+    private static final Integer BEARER_LENGTH = 7;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -31,6 +34,8 @@ public class AuthService {
     private UserDao userDao;
     @Autowired
     private UserDtoMapper userDtoMapper;
+    @Autowired
+    private TokenDao tokenDao;
 
     public UserTokenDto signIn(final AuthRequestDto authRequestDto) throws NoSuchUserException {
 
@@ -49,6 +54,10 @@ public class AuthService {
 
         final User user = getUserDetails(userEntity);
         return new UserTokenDto(jwtUtil.generateToken(user));
+    }
+
+    public void logout(final String token) throws PersistException {
+        tokenDao.create(new TokenEntity(token.substring(BEARER_LENGTH)));
     }
 
     public UserTokenDto signUp(final UserDto user)

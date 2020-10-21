@@ -1,5 +1,6 @@
 package com.senla.hotel.config.security;
 
+import com.senla.hotel.entity.TokenEntity;
 import com.senla.hotel.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,17 +23,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private final LoadUserDetailService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final TokenChecker tokenChecker;
 
-    private JwtRequestFilter(final LoadUserDetailService userDetailsService, final JwtUtil jwtUtil) {
+    private JwtRequestFilter(final LoadUserDetailService userDetailsService, final JwtUtil jwtUtil, final TokenChecker tokenChecker) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.tokenChecker = tokenChecker;
     }
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain chain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 
@@ -44,17 +47,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             username = jwtUtil.extractUsername(jwt);
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        TokenEntity tokenEntity = tokenChecker.validate(jwt);
+
+        if (tokenEntity == null && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             final UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
 
                 final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
-                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }

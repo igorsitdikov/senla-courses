@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS room
         'TRPL_2_CHD')            NOT NULL,
     PRIMARY KEY (id)
 );
+
 CREATE TABLE IF NOT EXISTS history
 (
     id          BIGINT   NOT NULL AUTO_INCREMENT,
@@ -84,5 +85,24 @@ CREATE TABLE IF NOT EXISTS histories_attendances
     CONSTRAINT ha_history_fk
         FOREIGN KEY (history_id) REFERENCES history (id) ON DELETE CASCADE,
     UNIQUE (attendance_id, history_id),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS user
+(
+    id         BIGINT AUTO_INCREMENT,
+    first_name VARCHAR(255)               NOT NULL,
+    last_name  VARCHAR(255)               NOT NULL,
+    email      VARCHAR(255)               NOT NULL,
+    password   VARCHAR(255)               NOT NULL,
+    phone      VARCHAR(15)                NOT NULL,
+    role       ENUM ('CUSTOMER', 'ADMIN') NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS token
+(
+    id      BIGINT AUTO_INCREMENT,
+    token   VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );

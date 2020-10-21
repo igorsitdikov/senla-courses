@@ -10,9 +10,11 @@ import com.senla.hotel.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Component
 @RestController
@@ -36,5 +38,11 @@ public class AuthController {
             @RequestBody final UserDto user)
             throws SuchUserAlreadyExistException, NoSuchUserException, PersistException {
         return authService.signUp(user);
+    }
+
+    @DeleteMapping(value = "/log-out")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(@RequestHeader(name = "Authorization") String token) throws PersistException {
+        authService.logout(token);
     }
 }
