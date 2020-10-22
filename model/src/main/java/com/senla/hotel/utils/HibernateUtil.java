@@ -1,9 +1,6 @@
 package com.senla.hotel.utils;
 
-import com.senla.hotel.entity.Attendance;
-import com.senla.hotel.entity.Resident;
-import com.senla.hotel.entity.Room;
-import com.senla.hotel.entity.RoomHistory;
+import com.senla.hotel.entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -32,6 +29,8 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(RoomHistory.class);
                 configuration.addAnnotatedClass(Room.class);
                 configuration.addAnnotatedClass(Resident.class);
+                configuration.addAnnotatedClass(UserEntity.class);
+                configuration.addAnnotatedClass(TokenEntity.class);
                 logger.info("Hibernate configuration has been loaded!");
                 registry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties())

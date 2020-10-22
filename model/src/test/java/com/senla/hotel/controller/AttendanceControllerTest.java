@@ -19,6 +19,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,13 +54,19 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         FormattingConversionService formattingConversionService = new FormattingConversionService();
-        formattingConversionService.addConverter(new SortFieldEnumConverter()); //Here
+        formattingConversionService.addConverter(new SortFieldEnumConverter());
 
-        this.mockMvc = MockMvcBuilders.standaloneSetup(attendanceController).setConversionService(formattingConversionService).build();
+        this.mockMvc = MockMvcBuilders
+                .standaloneSetup(attendanceController)
+                .setConversionService(formattingConversionService)
+                .alwaysDo(print())
+                .apply(SecurityMockMvcConfigurers.springSecurity(springSecurityFilterChain))
+                .build();
     }
 
     @Test
-    void createResidentTest() throws Exception {
+    @WithMockUser(roles="ADMIN")
+    void createAttendanceTest() throws Exception {
         final Long attendanceId = 1L;
 
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -87,6 +96,7 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void updateAttendancePriceTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -107,6 +117,7 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void shouldBeDeleteTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
@@ -138,11 +149,11 @@ public class AttendanceControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     void shouldUpdateAttendanceTest() throws Exception {
         final Long attendanceId = 1L;
         Attendance attendance = AttendanceMock.getById(attendanceId);
         AttendanceDto expected = AttendanceMock.getDtoById(attendanceId);
-
         mockMvc.perform(put("/attendances/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(expected)))
