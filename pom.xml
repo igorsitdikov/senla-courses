@@ -24,6 +24,7 @@
         <module>application</module>
         <module>controller</module>
         <module>configuration</module>
+        <module>dto</module>
     </modules>
 
     <dependencies>
