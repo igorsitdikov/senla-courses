@@ -17,12 +17,13 @@
 
     <groupId>com.senla</groupId>
     <artifactId>bulletin-board</artifactId>
-    <version>${project.version</version>
+    <version>${project.version}</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>application</module>
         <module>controller</module>
+        <module>configuration</module>
     </modules>
 
     <dependencies>
