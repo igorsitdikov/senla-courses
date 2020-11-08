@@ -11,7 +11,7 @@ public class BulletinDetailsDto {
     private Long id;
     private String title;
     private BigDecimal price;
-    private UserResponseDto author;
+    private UserDto author;
     private String description;
     private List<CommentDto> comments;
 }

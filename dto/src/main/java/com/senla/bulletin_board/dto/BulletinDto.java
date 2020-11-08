@@ -12,5 +12,5 @@ public class BulletinDto {
     private String title;
     private BigDecimal price;
     private LocalDate createdAt;
-    private UserResponseDto author;
+    private UserDto author;
 }

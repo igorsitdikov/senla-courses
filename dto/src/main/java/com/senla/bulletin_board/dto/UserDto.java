@@ -1,9 +1,10 @@
 package com.senla.bulletin_board.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class UserResponseDto {
+public class UserDto {
 
     private Long id;
     private String firstName;
