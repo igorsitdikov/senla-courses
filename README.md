@@ -399,7 +399,28 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 
 Response: `200 OK`
 
-### BB-17 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
+
+### BB-17 Как "Администратор", я хочу добавить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
+
+Request: `POST /api/tariffs`
+
+```
+{
+    "price": 19.5,
+    "term": 7,
+    "description": "19.5$ за 7 дней"
+}
+```
+
+Response: `201 CREATED`
+
+```
+{
+    "id": 3
+}
+```
+
+### BB-18 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
 
 Request: `GET /api/tariffs`
 
@@ -409,30 +430,27 @@ Request: `GET /api/tariffs`
         "id": 1,
         "price": 5,
         "term": 1,
+        "description": "5$ за 1 день"
     },
     {
         "id": 2,
         "price": 12,
         "term": 3,
+        "description": "12$ за 3 дня"
     },
     {
         "id": 3,
         "price": 19.5,
         "term": 7,
+        "description": "19.5$ за 7 дней"
     }
 ]
 ```
 
-### BB-18 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
+### BB-19 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
 
-Request: `POST /api/tariffs/${id}`
+Request: `GET /api/tariffs/${id}?user_id={userId}`
 
-```
-{
-    "userId": 4
-}
-```
-
-Где: `id=3`
+Где: `id=3, userId=4`
 
 Response: `200 OK`
