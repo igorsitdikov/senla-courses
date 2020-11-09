@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(
     classes = {UserController.class, TariffController.class, BulletinController.class, CommentController.class,
+               StarController.class,
                ApiBasePathConfiguration.class})
 @AutoConfigureWebMvc
 @AutoConfigureMockMvc

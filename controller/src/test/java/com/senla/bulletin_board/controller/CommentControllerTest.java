@@ -11,8 +11,9 @@ public class CommentControllerTest extends AbstractControllerTest {
 
     @Test
     public void createCommentTest() throws Exception {
-        final long id = 1L;
-        final CommentRequestDto commentRequestDto = new CommentRequestDto(3L, 4L, "Отличный картофель");
+        final long userId = 3L;
+        final long bulletinId = 4L;
+        final CommentRequestDto commentRequestDto = new CommentRequestDto(userId, bulletinId, "Отличный картофель");
         mockMvc.perform(post("/api/comments/")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(commentRequestDto)))
