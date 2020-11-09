@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebM
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(classes = {UserController.class, ApiBasePathConfiguration.class})
+@SpringBootTest(classes = {UserController.class, TariffController.class, ApiBasePathConfiguration.class})
 @AutoConfigureWebMvc
 @AutoConfigureMockMvc
 public abstract class AbstractControllerTest {
