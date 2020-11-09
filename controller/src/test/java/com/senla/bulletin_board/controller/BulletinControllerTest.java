@@ -1,7 +1,9 @@
 package com.senla.bulletin_board.controller;
 
+import com.senla.bulletin_board.dto.BulletinDetailsDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
+import com.senla.bulletin_board.mock.BulletinDetailsMock;
 import com.senla.bulletin_board.mock.BulletinMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -23,6 +25,18 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json(response));
+    }
+
+    @Test
+    public void showBulletinDetailsTest() throws Exception {
+        final long id = 4;
+        final BulletinDetailsDto expected = BulletinDetailsMock.getById(id);
+
+        final String response = objectMapper.writeValueAsString(expected);
+        mockMvc.perform(get("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(response));

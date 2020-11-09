@@ -301,6 +301,7 @@ Response: `200 OK`
     "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району.",
     "comments": [
         {
+            "id": 1,
             "author": {
                 "id": 3,
                 "firstName": "Петр",

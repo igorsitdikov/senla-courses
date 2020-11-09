@@ -1,7 +1,9 @@
 package com.senla.bulletin_board.controller;
 
+import com.senla.bulletin_board.dto.BulletinDetailsDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
+import com.senla.bulletin_board.mock.BulletinDetailsMock;
 import com.senla.bulletin_board.mock.BulletinMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,12 @@ public class BulletinController {
     @ResponseStatus(HttpStatus.OK)
     public List<BulletinDto> showBulletins() {
         return BulletinMock.getAll();
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BulletinDetailsDto showBulletinDetails(@PathVariable final Long id) {
+        return BulletinDetailsMock.getById(id);
     }
 
     // TODO: add BB-7
