@@ -275,7 +275,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 }
 ```
 
-Response: `200 OK`
+Response: `201 CREATED`
 
 ### BB-12 Как "Пользователь", я хочу просмотреть детали объявления, просматриваю.
 

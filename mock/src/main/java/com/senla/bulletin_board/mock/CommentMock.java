@@ -15,7 +15,6 @@ public class CommentMock {
                                LocalDateTime.parse("2020-09-14T11:30:45")));
     }};
 
-
     public static CommentDto getById(final Long id) {
         return commentMap.get(id);
     }
