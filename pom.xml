@@ -25,6 +25,7 @@
         <module>controller</module>
         <module>configuration</module>
         <module>dto</module>
+        <module>mock</module>
     </modules>
 
     <dependencies>

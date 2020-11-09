@@ -1,4 +1,4 @@
-package mock;
+package com.senla.bulletin_board.mock;
 
 import com.senla.bulletin_board.dto.UserDto;
 import com.senla.bulletin_board.dto.UserRequestDto;

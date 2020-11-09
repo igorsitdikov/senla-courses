@@ -1,4 +1,4 @@
-package mock;
+package com.senla.bulletin_board.mock;
 
 import com.senla.bulletin_board.dto.TariffDto;
 
@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TariffMock {
 

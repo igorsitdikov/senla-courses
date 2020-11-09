@@ -2,6 +2,7 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
+import com.senla.bulletin_board.mock.UserMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,13 +20,7 @@ public class UserController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUser(@PathVariable final Long id) {
-        final UserDto userDto = new UserDto();
-        userDto.setId(id);
-        userDto.setEmail("ivan.ivanov@mail.ru");
-        userDto.setFirstName("Иван");
-        userDto.setSecondName("Иванов");
-        userDto.setPhone("+375331234567");
-        return userDto;
+        return UserMock.getUserDtoById(id);
     }
 
     @PutMapping(value = "/{id}")

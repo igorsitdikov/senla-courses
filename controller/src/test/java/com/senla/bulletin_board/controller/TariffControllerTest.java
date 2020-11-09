@@ -2,9 +2,7 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.TariffDto;
-import com.senla.bulletin_board.dto.UserDto;
-import mock.TariffMock;
-import mock.UserMock;
+import com.senla.bulletin_board.mock.TariffMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 

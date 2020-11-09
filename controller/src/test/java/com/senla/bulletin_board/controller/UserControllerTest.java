@@ -2,7 +2,7 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
-import mock.UserMock;
+import com.senla.bulletin_board.mock.UserMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
