@@ -2,12 +2,14 @@ package com.senla.bulletin_board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class DialogDto {
+@EqualsAndHashCode(callSuper = true)
+public class DialogDto extends AbstractDto {
 
     private Long id;
     private String title;

@@ -26,6 +26,8 @@
         <module>configuration</module>
         <module>dto</module>
         <module>mock</module>
+        <module>entity</module>
+        <module>enumerated</module>
     </modules>
 
     <dependencies>

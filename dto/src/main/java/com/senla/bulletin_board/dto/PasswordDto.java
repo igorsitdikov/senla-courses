@@ -1,9 +1,11 @@
 package com.senla.bulletin_board.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class PasswordDto {
+@EqualsAndHashCode(callSuper = true)
+public class PasswordDto extends AbstractDto {
 
     private String oldPassword;
     private String newPassword;

@@ -1,0 +1,19 @@
+package com.senla.bulletin_board.entity;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.math.BigDecimal;
+
+@Data
+@Entity
+@Table(name = "tariff")
+@EqualsAndHashCode(callSuper = true)
+public class TariffEntity extends AbstractEntity {
+
+    private BigDecimal value;
+    private Integer term;
+    private String description;
+}

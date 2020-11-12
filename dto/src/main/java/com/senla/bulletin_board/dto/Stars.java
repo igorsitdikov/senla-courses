@@ -1,9 +1,11 @@
 package com.senla.bulletin_board.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class Stars {
+@EqualsAndHashCode(callSuper = true)
+public class Stars extends AbstractDto {
 
     private Long userId;
     private Long bulletinId;

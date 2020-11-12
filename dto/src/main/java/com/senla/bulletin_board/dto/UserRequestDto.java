@@ -2,10 +2,12 @@ package com.senla.bulletin_board.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Builder
-public class UserRequestDto {
+@EqualsAndHashCode(callSuper = true)
+public class UserRequestDto extends AbstractDto  {
 
     private Long id;
     private String firstName;
