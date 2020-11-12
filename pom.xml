@@ -28,6 +28,7 @@
         <module>mock</module>
         <module>entity</module>
         <module>enumerated</module>
+        <module>repository</module>
     </modules>
 
     <dependencies>
