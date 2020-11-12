@@ -29,6 +29,7 @@
         <module>entity</module>
         <module>enumerated</module>
         <module>repository</module>
+        <module>service</module>
     </modules>
 
     <dependencies>
