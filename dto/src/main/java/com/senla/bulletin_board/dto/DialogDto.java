@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class MessageDto {
+public class DialogDto {
 
-    private Long senderId;
-    private Long recipientId;
-    private Long dialogId;
-    private String message;
+    private Long id;
+    private String title;
+    private Long sellerId;
+    private Long customerId;
+    private Long bulletinId;
     private LocalDateTime createdAt;
 }

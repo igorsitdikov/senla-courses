@@ -326,7 +326,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 {
     "senderId": 3,
     "recipientId": 1,
-    "bulletinId": 4,
+    "dialogId": 4,
     "message": "Возможна ли доставка 22.02.2021?",
     "createdAt": "2020-09-12 12:00:32"
 }
@@ -340,7 +340,85 @@ Response: `200 OK`
 }
 ```
 
-### BB-14 Как "Пользователь", я хочу оценить продавца, и если пользователь зарегистрирован, ставлю оценку.
+### BB-14 Как "Пользователь", я хочу удалить диалог, и если пользователь авторизован, удаляю диалог.
+
+Request: `DELETE /api/dialogs/${id}`
+
+Где: `id=3`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
+Response: `200 OK`
+
+### BB-15 Как "Пользователь", я хочу написать продавцу, и если пользователь авторизован, создаю новый диалог.
+
+Request: `POST /api/dialogs`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
+```
+{
+    "sellerId": 3,
+    "customerId": 1,
+    "bulletinId": 4,
+    "createdAt": "2020-09-12 12:00:32"
+}
+```
+
+Response: `201 CREATED`
+
+```
+{
+    "id": 1
+}
+```
+
+### BB-16 Как "Пользователь", я хочу получить список диалогов, и если пользователь авторизован, получаю.
+
+Request: `GET /api/users/${id}/dialogs`
+
+Где: `id=3`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
+Response: `200 OK`
+
+```
+[
+    {
+        "id": 1,
+        "title": "Продам отборный картофель, сорт «Вектор»",
+        "sellerId": 3,
+        "customerId": 1,
+        "bulletinId": 4,
+        "createdAt": "2020-09-12 12:00:32"
+    }
+]
+```
+
+### BB-17 Как "Пользователь", я хочу получить список сообщений в диалоге, и если пользователь авторизован, получаю.
+
+Request: `GET /api/dialogs/${id}/messages`
+
+Где: `id=4`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
+Response: `200 OK`
+
+```
+[
+    {
+        "senderId": 3,
+        "recipientId": 1,
+        "dialogId": 4,
+        "message": "Возможна ли доставка 22.02.2021?",
+        "createdAt": "2020-09-12 12:00:32"
+    }
+]
+```
+
+### BB-18 Как "Пользователь", я хочу оценить продавца, и если пользователь зарегистрирован, ставлю оценку.
 
 Request: `POST /api/stars`
 
@@ -354,7 +432,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 }
 ```
 
-Response: `200 OK`
+Response: `201 CREATED`
 
 ```
 {
@@ -362,9 +440,9 @@ Response: `200 OK`
 }
 ```
 
-### BB-15 Как "Пользователь", я хочу просмотреть историю продаж, и если пользователь авторизован, получаю список всех продаж.
+### BB-19 Как "Пользователь", я хочу просмотреть историю продаж, и если пользователь авторизован, получаю список всех продаж.
 
-Request: `POST /api/users/${id}/bulletins`
+Request: `GET /api/users/${id}/bulletins`
 
 Где: `id=4`
 
@@ -390,7 +468,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 
 Response: `200 OK`
 
-### BB-16 Как "Администратор", я хочу удалить объявление, нарушающее правила сайта, удаляю объявление.
+### BB-20 Как "Администратор", я хочу удалить объявление, нарушающее правила сайта, удаляю объявление.
 
 Request: `DELETE /api/bulletins/${id}`
 
@@ -401,7 +479,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 Response: `200 OK`
 
 
-### BB-17 Как "Администратор", я хочу добавить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
+### BB-21 Как "Администратор", я хочу добавить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
 
 Request: `POST /api/tariffs`
 
@@ -421,7 +499,7 @@ Response: `201 CREATED`
 }
 ```
 
-### BB-18 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
+### BB-22 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
 
 Request: `GET /api/tariffs`
 
@@ -448,7 +526,7 @@ Request: `GET /api/tariffs`
 ]
 ```
 
-### BB-19 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
+### BB-23 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
 
 Request: `GET /api/tariffs/${id}?user_id={userId}`
 

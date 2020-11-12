@@ -1,17 +1,16 @@
 package com.senla.bulletin_board.controller;
 
+import com.senla.bulletin_board.dto.BulletinDto;
+import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
+import com.senla.bulletin_board.mock.BulletinMock;
+import com.senla.bulletin_board.mock.DialogMock;
 import com.senla.bulletin_board.mock.UserMock;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -21,6 +20,18 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUser(@PathVariable final Long id) {
         return UserMock.getUserDtoById(id);
+    }
+
+    @GetMapping(value = "/{id}/dialogs")
+    @ResponseStatus(HttpStatus.OK)
+    public List<DialogDto> showDialogs(@PathVariable final Long id) {
+        return DialogMock.getAll();
+    }
+
+    @GetMapping(value = "/{id}/bulletins")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BulletinDto> showBulletins(@PathVariable final Long id) {
+        return BulletinMock.getAll();
     }
 
     @PutMapping(value = "/{id}")
