@@ -6,7 +6,10 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Set;
 
 @Data
 @Entity
@@ -22,4 +25,7 @@ public class UserEntity extends AbstractEntity {
     private String password;
     private String phone;
     private UserRole role;
+    // mb not working
+    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
+    private Set<CommentEntity> comments;
 }
