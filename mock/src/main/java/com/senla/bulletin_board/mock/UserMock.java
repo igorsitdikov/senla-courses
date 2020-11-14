@@ -11,7 +11,7 @@ public class UserMock {
         put(1L, UserRequestDto.builder()
             .id(1L)
             .firstName("Иван")
-            .secondName("Иванов")
+            .lastName("Иванов")
             .email("ivan.ivanov@mail.ru")
             .password("123456")
             .phone("+375331234567")
@@ -19,7 +19,7 @@ public class UserMock {
         put(2L, UserRequestDto.builder()
             .id(2L)
             .firstName("Петр")
-            .secondName("Петров")
+            .lastName("Петров")
             .email("petr.petrov@yandex.ru")
             .password("654321")
             .phone("+375337654321")
@@ -27,7 +27,7 @@ public class UserMock {
         put(3L, UserRequestDto.builder()
             .id(3L)
             .firstName("Алексей")
-            .secondName("Алексеев")
+            .lastName("Алексеев")
             .email("alex.alexeev@gmail.com")
             .password("password")
             .phone("+375337654321")
@@ -35,7 +35,7 @@ public class UserMock {
         put(4L, UserRequestDto.builder()
             .id(4L)
             .firstName("Антон")
-            .secondName("Антонов")
+            .lastName("Антонов")
             .email("anton.antonov@mail.ru")
             .password("anton")
             .phone("+375331234567")
@@ -53,7 +53,7 @@ public class UserMock {
         userDto.setId(userRequestDto.getId());
         userDto.setEmail(userRequestDto.getEmail());
         userDto.setFirstName(userRequestDto.getFirstName());
-        userDto.setSecondName(userRequestDto.getSecondName());
+        userDto.setLastName(userRequestDto.getLastName());
         userDto.setPhone(userRequestDto.getPhone());
         return userDto;
     }

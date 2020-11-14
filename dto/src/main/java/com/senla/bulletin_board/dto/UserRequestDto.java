@@ -11,7 +11,7 @@ public class UserRequestDto extends AbstractDto  {
 
     private Long id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String email;
     private String password;
     private String phone;

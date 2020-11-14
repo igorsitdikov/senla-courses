@@ -1,6 +1,6 @@
 package com.senla.bulletin_board.controller;
 
-import com.senla.bulletin_board.dto.BulletinDto;
+import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
@@ -43,7 +43,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testShowBulletins() throws Exception {
         final long id = 4L;
-        final List<BulletinDto> expected = BulletinMock.getAll();
+        final List<BulletinBaseDto> expected = BulletinMock.getAll();
         mockMvc.perform(get("/api/users/" + id + "/bulletins")
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

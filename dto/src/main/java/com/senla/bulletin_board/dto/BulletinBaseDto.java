@@ -5,16 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CommentDto extends AbstractDto {
+public class BulletinBaseDto extends AbstractDto {
 
-    private UserDto author;
-    private String comment;
-//    private Long bulletinId;
-    private LocalDateTime createdAt;
+    protected Long id;
+    protected String title;
+    protected BigDecimal price;
+    protected LocalDateTime createdAt;
+    protected UserDto author;
 }

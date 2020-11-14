@@ -1,10 +1,11 @@
 package com.senla.bulletin_board.controller;
 
-import com.senla.bulletin_board.dto.BulletinDetailsDto;
 import com.senla.bulletin_board.dto.BulletinDto;
+import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.mock.BulletinDetailsMock;
-import com.senla.bulletin_board.mock.BulletinMock;
+import com.senla.bulletin_board.service.BulletinService;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,33 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping(value = "/bulletins")
 public class BulletinController {
 
+    private final BulletinService bulletinService;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BulletinDto> showBulletins() {
-        return BulletinMock.getAll();
+    public List<BulletinBaseDto> showBulletins() {
+        return bulletinService.showAll();
+//        return BulletinMock.getAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BulletinDetailsDto showBulletinDetails(@PathVariable final Long id) {
-        return BulletinDetailsMock.getById(id);
+    public BulletinDto showBulletinDetails(@PathVariable final Long id) throws Exception {
+        return bulletinService.findDtoById(id);
     }
 
     // TODO: add BB-7
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto createBulletin(@RequestBody final BulletinDto bulletinDto) {
+    public IdDto createBulletin(@RequestBody final BulletinBaseDto bulletinDto) {
         return new IdDto(4L);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateBulletin(@PathVariable final Long id, @RequestBody final BulletinDto bulletinDto) {
+    public void updateBulletin(@PathVariable final Long id, @RequestBody final BulletinBaseDto bulletinDto) {
     }
 
     @DeleteMapping(value = "/{id}")

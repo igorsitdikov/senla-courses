@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -29,10 +31,11 @@ public class UserEntity extends AbstractEntity {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     // mb not working
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
-    private Set<CommentEntity> comments;
+//    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
+//    private Set<CommentEntity> comments;
 
 }

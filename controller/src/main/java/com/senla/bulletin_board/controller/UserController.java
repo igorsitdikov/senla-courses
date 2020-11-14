@@ -1,6 +1,6 @@
 package com.senla.bulletin_board.controller;
 
-import com.senla.bulletin_board.dto.BulletinDto;
+import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}/bulletins")
     @ResponseStatus(HttpStatus.OK)
-    public List<BulletinDto> showBulletins(@PathVariable final Long id) {
+    public List<BulletinBaseDto> showBulletins(@PathVariable final Long id) {
         return BulletinMock.getAll();
     }
 
@@ -41,7 +41,7 @@ public class UserController {
         userDto.setId(id);
         userDto.setEmail(request.getEmail());
         userDto.setFirstName(request.getFirstName());
-        userDto.setSecondName(request.getSecondName());
+        userDto.setLastName(request.getLastName());
         userDto.setPhone(request.getPhone());
         return userDto;
     }

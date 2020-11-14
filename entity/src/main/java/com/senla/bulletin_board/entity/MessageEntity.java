@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ public class MessageEntity extends AbstractEntity {
 
     private String text;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name="sender_id", nullable = false)
