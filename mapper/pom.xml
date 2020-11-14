@@ -9,23 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service</artifactId>
+    <artifactId>mapper</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.senla</groupId>
+            <artifactId>entity</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.senla</groupId>
             <artifactId>dto</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.senla</groupId>
-            <artifactId>repository</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.senla</groupId>
-            <artifactId>mapper</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

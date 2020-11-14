@@ -15,10 +15,13 @@ import javax.persistence.Table;
 public class SellerVoteEntity extends AbstractEntity {
 
     private Integer vote;
+
     @ManyToOne
     @JoinColumn(name = "voter_id")
     private UserEntity voter;
+
     @ManyToOne
     @JoinColumn(name = "bulletin_id")
     private BulletinEntity bulletin;
+
 }

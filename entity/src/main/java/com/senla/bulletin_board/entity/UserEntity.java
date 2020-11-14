@@ -19,13 +19,20 @@ public class UserEntity extends AbstractEntity {
 
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     private String email;
+
     private String password;
+
     private String phone;
+
     private UserRole role;
+
     // mb not working
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     private Set<CommentEntity> comments;
+
 }

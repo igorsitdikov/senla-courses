@@ -15,6 +15,8 @@ import java.sql.Timestamp;
 public class TokenBlacklistEntity extends AbstractEntity {
 
     private String token;
+
     @Column(name = "created_at")
     private Timestamp createdAt;
+
 }

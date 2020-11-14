@@ -18,11 +18,15 @@ public class CommentEntity extends AbstractEntity {
 
     @Column(name = "created_at")
     private Timestamp createdAt;
+
     private String text;
+
     @ManyToOne
     @JoinColumn(name="bulletin_id")
     private BulletinEntity bulletin;
+
     @ManyToOne
     @JoinColumn(name="author_id")
     private UserEntity user;
+
 }

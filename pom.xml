@@ -30,6 +30,8 @@
         <module>enumerated</module>
         <module>repository</module>
         <module>service</module>
+        <module>mapper</module>
+        <module>integration-tests</module>
     </modules>
 
     <dependencies>
@@ -37,6 +39,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>

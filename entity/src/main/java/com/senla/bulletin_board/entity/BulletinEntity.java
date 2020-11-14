@@ -23,13 +23,20 @@ public class BulletinEntity extends AbstractEntity {
 
     @Column(name = "created_at")
     private Timestamp createdAt;
+
     private String title;
+
     private BigDecimal price;
+
     private String text;
+
     private BulletinStatus status;
+
     @OneToMany(mappedBy="bulletin")
     private Set<CommentEntity> comments;
+
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private UserEntity seller;
+
 }

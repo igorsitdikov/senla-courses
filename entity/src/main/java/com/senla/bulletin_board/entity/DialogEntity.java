@@ -17,10 +17,13 @@ public class DialogEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "bulletin_id")
     private BulletinEntity bulletin;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private UserEntity customer;
+
     @ManyToOne
     @JoinColumn(name = "message_id")
     private MessageEntity message;
+
 }

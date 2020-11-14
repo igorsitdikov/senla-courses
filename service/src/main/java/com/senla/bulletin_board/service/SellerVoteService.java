@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Data
 @Service
-public class SellerVoteRepository {
+public class SellerVoteService {
 
 }
