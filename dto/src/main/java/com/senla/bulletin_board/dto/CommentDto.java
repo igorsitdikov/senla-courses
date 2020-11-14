@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 public class CommentDto extends AbstractDto {
 
     private UserDto author;
+    private Long authorId;
     private String comment;
-//    private Long bulletinId;
+    private Long bulletinId;
     private LocalDateTime createdAt;
 }

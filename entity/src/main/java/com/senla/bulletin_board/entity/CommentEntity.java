@@ -23,11 +23,17 @@ public class CommentEntity extends AbstractEntity {
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bulletin_id")
+    @JoinColumn(name = "bulletin_id", insertable = false, updatable = false)
     private BulletinEntity bulletin;
 
+    @Column(name = "bulletin_id")
+    private Long bulletinId;
+
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private UserEntity user;
+
+    @Column(name = "author_id")
+    private Long authorId;
 
 }
