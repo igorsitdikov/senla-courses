@@ -2,6 +2,7 @@ package com.senla.bulletin_board.mock;
 
 import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.BulletinDto;
+import com.senla.bulletin_board.enumerated.BulletinStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class BulletinDetailsMock {
                                     UserMock.getUserDtoById(3L)));
         put(4L, new BulletinDto(4L, "Продам свадебный сервиз", BigDecimal.valueOf(34.12),
                                 LocalDateTime.parse("2020-09-12T12:00:32"), UserMock.getUserDtoById(1L),
-                                "БЕСПЛАТНАЯ доставка по г.Пружаны и району.", CommentMock.getAll()));
+                                "БЕСПЛАТНАЯ доставка по г.Пружаны и району.", CommentMock.getAll(), BulletinStatus.OPEN));
     }};
 
     public static BulletinDto getById(final Long id) {

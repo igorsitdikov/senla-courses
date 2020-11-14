@@ -31,10 +31,13 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDtoEntityMapp
         destination.setText(source.getDescription());
         destination.setCreatedAt(source.getCreatedAt());
         destination.setPrice(source.getPrice());
-        destination.setComments(source.getComments()
-                                    .stream()
-                                    .map(commentDtoEntityMapper::sourceToDestination)
-                                    .collect(Collectors.toSet()));
+        if (source.getComments() != null) {
+            destination.setComments(source.getComments()
+                                        .stream()
+                                        .map(commentDtoEntityMapper::sourceToDestination)
+                                        .collect(Collectors.toSet()));
+        }
+        destination.setStatus(source.getStatus());
         destination.setSeller(userDtoEntityMapper.sourceToDestination(source.getAuthor()));
         return destination;
     }
@@ -49,10 +52,15 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDtoEntityMapp
         source.setCreatedAt(destination.getCreatedAt());
         source.setPrice(destination.getPrice());
         source.setAuthor(userDtoEntityMapper.destinationToSource(destination.getSeller()));
-        source.setComments(destination.getComments()
-                               .stream()
-                               .map(commentDtoEntityMapper::destinationToSource)
-                               .collect(Collectors.toList()));
+        if (destination.getComments() != null) {
+            source.setComments(destination.getComments()
+                                   .stream()
+                                   .map(commentDtoEntityMapper::destinationToSource)
+                                   .collect(Collectors.toList()));
+        } else {
+            source.setComments(new ArrayList<>());
+        }
+        source.setStatus(destination.getStatus());
         return source;
     }
 }

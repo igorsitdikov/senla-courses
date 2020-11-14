@@ -30,7 +30,6 @@ public class BulletinController {
     @ResponseStatus(HttpStatus.OK)
     public List<BulletinBaseDto> showBulletins() {
         return bulletinService.showAll();
-//        return BulletinMock.getAll();
     }
 
     @GetMapping(value = "/{id}")
@@ -43,18 +42,20 @@ public class BulletinController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto createBulletin(@RequestBody final BulletinBaseDto bulletinDto) {
-        return new IdDto(4L);
+    public IdDto createBulletin(@RequestBody final BulletinDto bulletinDto) {
+        return bulletinService.post(bulletinDto);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateBulletin(@PathVariable final Long id, @RequestBody final BulletinBaseDto bulletinDto) {
+    public BulletinDto updateBulletin(@PathVariable final Long id, @RequestBody final BulletinDto bulletinDto)
+        throws Exception {
+        return bulletinService.update(id, bulletinDto);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteBulletin(@PathVariable final Long id) {
-
+        bulletinService.delete(id);
     }
 }

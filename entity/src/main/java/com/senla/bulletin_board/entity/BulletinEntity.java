@@ -36,7 +36,7 @@ public class BulletinEntity extends AbstractEntity {
     private String text;
 
     @Enumerated(EnumType.STRING)
-    private BulletinStatus status;
+    private BulletinStatus status = BulletinStatus.OPEN;
 
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "bulletin", fetch = FetchType.LAZY)

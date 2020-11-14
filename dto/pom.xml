@@ -11,5 +11,13 @@
 
     <artifactId>dto</artifactId>
     <version>${project.version}</version>
+    <dependencies>
+        <dependency>
+            <groupId>com.senla</groupId>
+            <artifactId>enumerated</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

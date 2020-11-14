@@ -1,7 +1,7 @@
 package com.senla.bulletin_board.controller;
 
-import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.BulletinBaseDto;
+import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
@@ -14,8 +14,10 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,8 +54,11 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void showBulletinDetailsTest() throws Exception {
         final long id = 4;
         final BulletinDto expected = BulletinDetailsMock.getById(id);
+        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(expected);
 
+        willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
         final String response = objectMapper.writeValueAsString(expected);
+
         mockMvc.perform(get("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -62,14 +67,16 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void createBulletinTest() throws Exception {
-        final BulletinBaseDto bulletinDto = BulletinMock.getById(4L);
+        final BulletinDto bulletinDto = BulletinDetailsMock.getById(4L);
+        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final String response = objectMapper.writeValueAsString(new IdDto(4L));
 
+        willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
+
         mockMvc.perform(post("/api/bulletins/")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(request)
-                       )
+                            .content(request))
             .andExpect(status().isCreated())
             .andExpect(content().json(response));
     }
@@ -82,8 +89,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(put("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(request)
-                       )
+                            .content(request))
             .andExpect(status().isOk());
     }
 
@@ -92,8 +98,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final long id = 4L;
 
         mockMvc.perform(delete("/api/bulletins/" + id)
-                            .contentType(MediaType.APPLICATION_JSON)
-                       )
+                            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 }

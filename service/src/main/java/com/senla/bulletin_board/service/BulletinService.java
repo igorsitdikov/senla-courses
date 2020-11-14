@@ -2,6 +2,7 @@ package com.senla.bulletin_board.service;
 
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.BulletinBaseDto;
+import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletin_board.repository.BulletinRepository;
