@@ -1,11 +1,8 @@
 package com.senla.bulletin_board.mapper;
 
-import com.senla.bulletin_board.dto.CommentDto;
 import com.senla.bulletin_board.dto.DialogDto;
-import com.senla.bulletin_board.entity.CommentEntity;
 import com.senla.bulletin_board.entity.DialogEntity;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
-import com.senla.bulletin_board.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletin_board.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletin_board.mapper.interfaces.UserDtoEntityMapper;
 import lombok.Data;

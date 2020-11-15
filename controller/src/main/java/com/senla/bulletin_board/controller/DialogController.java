@@ -1,10 +1,8 @@
 package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.DialogDto;
-import com.senla.bulletin_board.dto.DialogRequestDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.MessageDto;
-import com.senla.bulletin_board.mock.MessageMock;
 import com.senla.bulletin_board.service.DialogService;
 import com.senla.bulletin_board.service.MessageService;
 import lombok.Data;

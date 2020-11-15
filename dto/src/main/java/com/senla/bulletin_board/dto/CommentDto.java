@@ -1,5 +1,6 @@
 package com.senla.bulletin_board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class CommentDto extends AbstractDto {
 
     private UserDto author;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long authorId;
     private String comment;
     private Long bulletinId;

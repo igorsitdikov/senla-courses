@@ -1,6 +1,5 @@
 package com.senla.bulletin_board.mock;
 
-import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.enumerated.BulletinStatus;
 

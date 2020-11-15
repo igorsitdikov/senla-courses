@@ -1,9 +1,7 @@
 package com.senla.bulletin_board.mapper;
 
 import com.senla.bulletin_board.dto.BulletinDto;
-import com.senla.bulletin_board.dto.CommentDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
-import com.senla.bulletin_board.entity.CommentEntity;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletin_board.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletin_board.mapper.interfaces.UserDtoEntityMapper;
@@ -11,9 +9,6 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data

@@ -1,9 +1,8 @@
 package com.senla.bulletin_board.controller;
 
-import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.BulletinBaseDto;
+import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
-import com.senla.bulletin_board.mock.BulletinDetailsMock;
 import com.senla.bulletin_board.service.BulletinService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;

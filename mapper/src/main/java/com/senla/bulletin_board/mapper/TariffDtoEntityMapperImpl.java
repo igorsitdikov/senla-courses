@@ -12,7 +12,7 @@ public class TariffDtoEntityMapperImpl implements TariffDtoEntityMapper {
     public TariffEntity sourceToDestination(final TariffDto source) {
         TariffEntity destination = new TariffEntity();
         destination.setId(source.getId());
-        destination.setValue(source.getPrice());
+        destination.setPrice(source.getPrice());
         destination.setDescription(source.getDescription());
         destination.setTerm(source.getTerm());
         return destination;
@@ -22,7 +22,7 @@ public class TariffDtoEntityMapperImpl implements TariffDtoEntityMapper {
     public TariffDto destinationToSource(final TariffEntity destination) {
         TariffDto source = new TariffDto();
         source.setId(destination.getId());
-        source.setPrice(destination.getValue());
+        source.setPrice(destination.getPrice());
         source.setDescription(destination.getDescription());
         source.setTerm(destination.getTerm());
         return source;
