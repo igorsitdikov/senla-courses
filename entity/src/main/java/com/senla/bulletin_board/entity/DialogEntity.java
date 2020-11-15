@@ -31,7 +31,7 @@ public class DialogEntity extends AbstractEntity {
     @Column(name = "customer_id")
     private Long customerId;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
 }

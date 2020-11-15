@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +16,7 @@ public class TokenBlacklistEntity extends AbstractEntity {
 
     private String token;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
 }

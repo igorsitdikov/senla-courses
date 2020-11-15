@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,19 +19,27 @@ public class MessageEntity extends AbstractEntity {
 
     private String text;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sender_id", nullable = false)
+    @JoinColumn(name="sender_id", nullable = false, insertable = false, updatable = false)
     private UserEntity sender;
 
+    @Column(name = "sender_id")
+    private Long senderId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
+    @JoinColumn(name = "recipient_id", nullable = false, insertable = false, updatable = false)
     private UserEntity recipient;
 
+    @Column(name = "recipient_id")
+    private Long recipientId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dialog_id", nullable = false)
+    @JoinColumn(name = "dialog_id", nullable = false, insertable = false, updatable = false)
     private DialogEntity dialog;
 
+    @Column(name = "dialog_id")
+    private Long dialogId;
 }

@@ -26,7 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class BulletinEntity extends AbstractEntity {
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     private String title;
@@ -36,7 +36,8 @@ public class BulletinEntity extends AbstractEntity {
     private String text;
 
     @Enumerated(EnumType.STRING)
-    private BulletinStatus status = BulletinStatus.OPEN;
+    @Column(name = "status", insertable = false)
+    private BulletinStatus status;
 
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "bulletin", fetch = FetchType.LAZY)

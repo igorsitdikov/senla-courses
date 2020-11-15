@@ -6,6 +6,7 @@ import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.MessageDto;
 import com.senla.bulletin_board.mock.MessageMock;
 import com.senla.bulletin_board.service.DialogService;
+import com.senla.bulletin_board.service.MessageService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,7 @@ import java.util.List;
 public class DialogController {
 
     private final DialogService dialogService;
+    private final MessageService messageService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,6 +44,7 @@ public class DialogController {
     @GetMapping(value = "/{id}/messages")
     @ResponseStatus(HttpStatus.OK)
     public List<MessageDto> showMessages(@PathVariable final Long id) {
-        return MessageMock.getAll();
+        return messageService.findAllMessagesByDialogId(id);
+//        return MessageMock.getAll();
     }
 }
