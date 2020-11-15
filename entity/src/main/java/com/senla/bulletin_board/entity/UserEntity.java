@@ -32,6 +32,7 @@ public class UserEntity extends AbstractEntity {
     private String phone;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", insertable = false)
     private UserRole role;
 
     // mb not working

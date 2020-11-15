@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class TariffEntity extends AbstractEntity {
 
-    private BigDecimal value;
+    private BigDecimal price;
 
     private Integer term;
 
