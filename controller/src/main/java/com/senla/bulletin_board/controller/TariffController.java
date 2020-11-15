@@ -2,6 +2,7 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.TariffDto;
+import com.senla.bulletin_board.service.PaymentService;
 import com.senla.bulletin_board.service.TariffService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 public class TariffController {
 
     private final TariffService tariffService;
+    private final PaymentService paymentService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -47,6 +49,6 @@ public class TariffController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void subscribe(@PathVariable final Long id, @RequestParam(name = "user_id") final Long userId) {
-
+        paymentService.addPremium(userId, id);
     }
 }

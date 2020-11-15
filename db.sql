@@ -30,9 +30,8 @@ CREATE TABLE IF NOT EXISTS payment
     id        BIGINT AUTO_INCREMENT,
     user_id   BIGINT                     NOT NULL,
     tariff_id BIGINT                     NOT NULL,
-    balance   DECIMAL(10, 2)             NOT NULL,
     payed_at  DATETIME                   NOT NULL DEFAULT NOW(),
-    premium   ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
+    premium   ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'ACTIVE',
     CONSTRAINT fk_account_user_user_id
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     CONSTRAINT fk_account_tariff_tariff_id

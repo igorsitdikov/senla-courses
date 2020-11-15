@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class PaymentEntity extends AbstractEntity {
 
-    private BigDecimal balance;
-
     @Column(name = "payed_at", insertable = false, updatable = false)
     private LocalDateTime payedAt;
 
@@ -31,11 +29,17 @@ public class PaymentEntity extends AbstractEntity {
     private PremiumStatus premium;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tariff_id")
+    @JoinColumn(name = "tariff_id", insertable = false, updatable = false)
     private TariffEntity tariff;
+
+    @Column(name = "tariff_id")
+    private Long tariffId;
 
 }
