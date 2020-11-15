@@ -24,10 +24,6 @@ public class PaymentEntity extends AbstractEntity {
     @Column(name = "payed_at", insertable = false, updatable = false)
     private LocalDateTime payedAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "premium", insertable = false)
-    private PremiumStatus premium;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;

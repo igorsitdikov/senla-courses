@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS user
     password   VARCHAR(255)           NOT NULL,
     phone      VARCHAR(15)            NOT NULL,
     role       ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
+    premium   ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
     UNIQUE (email),
     PRIMARY KEY (id)
 );
@@ -31,7 +32,6 @@ CREATE TABLE IF NOT EXISTS payment
     user_id   BIGINT                     NOT NULL,
     tariff_id BIGINT                     NOT NULL,
     payed_at  DATETIME                   NOT NULL DEFAULT NOW(),
-    premium   ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'ACTIVE',
     CONSTRAINT fk_account_user_user_id
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     CONSTRAINT fk_account_tariff_tariff_id
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS token_blacklist
     PRIMARY KEY (id)
 );
 
-INSERT INTO tariff (value, term, description)
+INSERT INTO tariff (price, term, description)
 VALUES (5, 1, '5$ за 1 день'),
        (12, 3, '12$ за 3 дня');
 

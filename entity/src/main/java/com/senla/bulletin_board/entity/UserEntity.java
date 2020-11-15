@@ -1,5 +1,6 @@
 package com.senla.bulletin_board.entity;
 
+import com.senla.bulletin_board.enumerated.PremiumStatus;
 import com.senla.bulletin_board.enumerated.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Set;
 
 @Data
 @Entity
@@ -32,8 +36,11 @@ public class UserEntity extends AbstractEntity {
     @Column(name = "role", insertable = false)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "premium", insertable = false)
+    private PremiumStatus premium;
     // mb not working
-//    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
-//    private Set<CommentEntity> comments;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private Set<PaymentEntity> payments;
 
 }
