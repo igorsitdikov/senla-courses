@@ -29,7 +29,7 @@ public class CommentEntity extends AbstractEntity {
     @Column(name = "bulletin_id")
     private Long bulletinId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private UserEntity user;
 

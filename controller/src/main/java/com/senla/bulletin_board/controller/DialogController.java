@@ -1,9 +1,12 @@
 package com.senla.bulletin_board.controller;
 
+import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.DialogRequestDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.MessageDto;
 import com.senla.bulletin_board.mock.MessageMock;
+import com.senla.bulletin_board.service.DialogService;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping(value = "/dialogs")
 public class DialogController {
 
+    private final DialogService dialogService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto createDialog(@RequestBody final DialogRequestDto dialogRequestDto) {
-        return new IdDto(1L);
+    public IdDto createDialog(@RequestBody final DialogDto dialogDto) {
+        //  проверка на права, проверка на существование такого диалога уже, проверка на зарегистрированность, проверка на статус объявления, если закрыт не создавать,
+        return dialogService.post(dialogDto);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteDialog(@PathVariable final Long id) {
+        dialogService.delete(id);
     }
 
     @GetMapping(value = "/{id}/messages")

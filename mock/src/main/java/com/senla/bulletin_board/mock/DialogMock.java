@@ -12,8 +12,9 @@ import java.util.Map;
 public class DialogMock {
 
     private static final Map<Long, DialogDto> dialogMap = new HashMap<Long, DialogDto>() {{
-        put(1L, new DialogDto(1L, "Продам отборный картофель, сорт «Вектор»", 3L, 1L, 4L,
-                LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(1L, new DialogDto(1L, "Продам отборный картофель, сорт «Вектор»", 3L, 1L, 4L, UserMock.getUserDtoById(1L),
+                              BulletinDetailsMock.getById(1L),
+                              LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 
     public static DialogDto getById(final Long id) {
@@ -23,10 +24,10 @@ public class DialogMock {
     public static DialogRequestDto getRequestById(final Long id) {
         DialogDto dialogDto = dialogMap.get(id);
         DialogRequestDto dialogRequestDto = new DialogRequestDto(
-                dialogDto.getSellerId(),
-                dialogDto.getCustomerId(),
-                dialogDto.getBulletinId(),
-                dialogDto.getCreatedAt());
+            dialogDto.getSellerId(),
+            dialogDto.getCustomerId(),
+            dialogDto.getBulletinId(),
+            dialogDto.getCreatedAt());
         return dialogRequestDto;
     }
 

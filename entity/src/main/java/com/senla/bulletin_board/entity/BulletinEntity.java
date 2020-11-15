@@ -42,7 +42,7 @@ public class BulletinEntity extends AbstractEntity {
     @OneToMany(mappedBy = "bulletin", fetch = FetchType.LAZY)
     private Set<CommentEntity> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     private UserEntity seller;
 

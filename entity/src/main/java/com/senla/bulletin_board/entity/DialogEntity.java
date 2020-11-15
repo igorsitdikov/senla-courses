@@ -3,10 +3,13 @@ package com.senla.bulletin_board.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -14,16 +17,21 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 public class DialogEntity extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "bulletin_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bulletin_id", insertable = false, updatable = false)
     private BulletinEntity bulletin;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @Column(name = "bulletin_id")
+    private Long bulletinId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private UserEntity customer;
 
-    @ManyToOne
-    @JoinColumn(name = "message_id")
-    private MessageEntity message;
+    @Column(name = "customer_id")
+    private Long customerId;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
 }

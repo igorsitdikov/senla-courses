@@ -7,14 +7,25 @@ import com.senla.bulletin_board.dto.UserDto;
 import com.senla.bulletin_board.mock.BulletinMock;
 import com.senla.bulletin_board.mock.DialogMock;
 import com.senla.bulletin_board.mock.UserMock;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
+
+//    private final DialogService dialogService;
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -25,6 +36,7 @@ public class UserController {
     @GetMapping(value = "/{id}/dialogs")
     @ResponseStatus(HttpStatus.OK)
     public List<DialogDto> showDialogs(@PathVariable final Long id) {
+//        return dialogService.findAllDto();
         return DialogMock.getAll();
     }
 
