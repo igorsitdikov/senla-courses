@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +28,12 @@ public class BulletinController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BulletinBaseDto> showBulletins() {
-        return bulletinService.showAll();
+    public List<BulletinBaseDto> showBulletins(@RequestParam(value = "filter", required = false) final String[] filters) {
+        if (filters == null) {
+            return bulletinService.showAll();
+        } else {
+            return bulletinService.findAllWithFilter(filters);
+        }
     }
 
     @GetMapping(value = "/{id}")
@@ -36,8 +41,6 @@ public class BulletinController {
     public BulletinDto showBulletinDetails(@PathVariable final Long id) throws Exception {
         return bulletinService.findDtoById(id);
     }
-
-    // TODO: add BB-7
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
