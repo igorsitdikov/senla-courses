@@ -17,6 +17,17 @@ CREATE TABLE IF NOT EXISTS user
     PRIMARY KEY (id)
 );
 
+-- CREATE TABLE IF NOT EXISTS profile
+-- (
+--     id         BIGINT AUTO_INCREMENT,
+--     user_id    BIGINT NOT NULL  UNIQUE,
+--     role       ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
+--     premium    ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
+--     CONSTRAINT fk_profile_user_user_id
+--         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+--     PRIMARY KEY (id)
+-- );
+
 CREATE TABLE IF NOT EXISTS tariff
 (
     id          BIGINT AUTO_INCREMENT,

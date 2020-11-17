@@ -3,6 +3,7 @@ package com.senla.bulletin_board.repository.specification;
 import com.senla.bulletin_board.dto.FilterDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
 import com.senla.bulletin_board.entity.UserEntity;
+import com.senla.bulletin_board.enumerated.SortBulletin;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,9 +17,11 @@ import java.util.List;
 public class BulletinSpecification implements Specification<BulletinEntity> {
 
     private final FilterDto criteria;
+    private final SortBulletin sortBulletin;
 
-    public BulletinSpecification(final FilterDto criteria) {
+    public BulletinSpecification(final FilterDto criteria, final SortBulletin sortBulletin) {
         this.criteria = criteria;
+        this.sortBulletin = sortBulletin;
     }
 
     @Override
@@ -33,7 +36,21 @@ public class BulletinSpecification implements Specification<BulletinEntity> {
         if (criteria.getPriceLte() != null) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), criteria.getPriceLte()));
         }
-        criteriaQuery.orderBy(criteriaBuilder.asc(seller.get("premium")));
+        Path<Object> path = getObjectPath(root, seller);
+        criteriaQuery.orderBy(criteriaBuilder.asc(seller.get("premium")),
+                              criteriaBuilder.desc(path));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    }
+
+    private Path<Object> getObjectPath(final Root<BulletinEntity> root, final Path<UserEntity> seller) {
+        Path<Object> path;
+        switch (sortBulletin) {
+            case AUTHOR:
+                path = seller.get(sortBulletin.getField());
+                break;
+            default:
+                path = root.get(sortBulletin.getField());
+        }
+        return path;
     }
 }

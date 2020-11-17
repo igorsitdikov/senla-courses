@@ -5,6 +5,7 @@ import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.FilterDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
+import com.senla.bulletin_board.enumerated.SortBulletin;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.specification.BulletinSpecification;
@@ -43,9 +44,9 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
 
     }
 
-    public List<BulletinBaseDto> findAllWithFilter(final String[] filters) {
+    public List<BulletinBaseDto> findAllWithFilterAndSort(final String[] filters, final SortBulletin sortBulletin) {
         final FilterDto criteria = convertArrayToDto(filters);
-        BulletinSpecification bulletinSpecification = new BulletinSpecification(criteria);
+        BulletinSpecification bulletinSpecification = new BulletinSpecification(criteria, sortBulletin);
 
         return repository.findAll(bulletinSpecification)
             .stream()
@@ -54,6 +55,9 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
     }
 
     private FilterDto convertArrayToDto(String[] filters) {
+        if (filters == null) {
+            return new FilterDto();
+        }
         Map<String, String> map = Arrays.stream(filters)
             .map(str -> str.split(":"))
             .collect(Collectors.toMap(a -> a[0], a -> a[1]));

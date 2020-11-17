@@ -9,15 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>configuration</artifactId>
-    <version>${project.version}</version>
+    <artifactId>integration-tests</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>com.senla</groupId>
-            <artifactId>enumerated</artifactId>
+            <artifactId>application</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
-
 </project>

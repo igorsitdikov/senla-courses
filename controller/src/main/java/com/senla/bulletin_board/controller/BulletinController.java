@@ -3,6 +3,7 @@ package com.senla.bulletin_board.controller;
 import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
+import com.senla.bulletin_board.enumerated.SortBulletin;
 import com.senla.bulletin_board.service.BulletinService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -28,12 +29,10 @@ public class BulletinController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BulletinBaseDto> showBulletins(@RequestParam(value = "filter", required = false) final String[] filters) {
-        if (filters == null) {
-            return bulletinService.showAll();
-        } else {
-            return bulletinService.findAllWithFilter(filters);
-        }
+    public List<BulletinBaseDto> showBulletins(
+        @RequestParam(value = "filter", required = false) final String[] filters,
+        @RequestParam(value = "sort", required = false) final SortBulletin sortBulletin) {
+        return bulletinService.findAllWithFilterAndSort(filters, sortBulletin);
     }
 
     @GetMapping(value = "/{id}")
