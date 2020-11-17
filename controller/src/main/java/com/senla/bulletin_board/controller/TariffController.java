@@ -2,6 +2,7 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.TariffDto;
+import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.service.PaymentService;
 import com.senla.bulletin_board.service.TariffService;
 import lombok.Data;
@@ -41,10 +42,9 @@ public class TariffController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TariffDto updateTariff(@PathVariable final Long id, @RequestBody final TariffDto tariffDto)
-        throws Exception {
-        return tariffService.update(id, tariffDto);
+        throws EntityNotFoundException {
+        return tariffService.updateTariff(id, tariffDto);
     }
-
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)

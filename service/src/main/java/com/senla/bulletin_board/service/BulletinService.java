@@ -11,7 +11,6 @@ import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.specification.BulletinSpecification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +28,6 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         super(bulletinDtoEntityMapper, bulletinRepository);
         this.bulletinDtoEntityMapper = bulletinDtoEntityMapper;
         this.mapper = mapper;
-    }
-
-    public List<BulletinBaseDto> showAll() {
-        final List<BulletinDto> bulletinDtos = findAllDto();
-        return new ArrayList<>(bulletinDtos);
     }
 
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) {

@@ -3,6 +3,7 @@ package com.senla.bulletin_board.service;
 import com.senla.bulletin_board.dto.AbstractDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.entity.AbstractEntity;
+import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletin_board.repository.CommonRepository;
 import com.senla.bulletin_board.service.interfaces.CommonService;
@@ -41,25 +42,19 @@ public abstract class AbstractService<D extends AbstractDto, E extends AbstractE
     }
 
     @Override
-    public D update(final Long id, final D dto) throws Exception {
-        if (!isExists(id)) {
-            throw new Exception("not found for this id :: " + id);
-        }
+    public D update(final Long id, final D dto) {
         final E entity = dtoEntityMapper.sourceToDestination(dto);
         return dtoEntityMapper.destinationToSource(save(entity));
     }
 
     @Override
-    public D findDtoById(final Long id) throws Exception {
+    public D findDtoById(final Long id) {
         return dtoEntityMapper.destinationToSource(findEntityById(id));
     }
 
     @Override
-    public E findEntityById(final Long id) throws Exception {
+    public E findEntityById(final Long id) {
         final Optional<E> entityById = repository.findById(id);
-        if (!entityById.isPresent()) {
-            throw new Exception("not found for this id :: " + id);
-        }
         return entityById.get();
     }
 
