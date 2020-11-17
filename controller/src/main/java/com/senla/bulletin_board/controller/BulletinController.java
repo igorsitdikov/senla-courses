@@ -4,6 +4,7 @@ import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.BulletinDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.enumerated.SortBulletin;
+import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.service.BulletinService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,14 @@ public class BulletinController {
     @ResponseStatus(HttpStatus.OK)
     public List<BulletinBaseDto> showBulletins(
         @RequestParam(value = "filter", required = false) final String[] filters,
-        @RequestParam(value = "sort", required = false) final SortBulletin sortBulletin) {
-        return bulletinService.findAllWithFilterAndSort(filters, sortBulletin);
+        @RequestParam(value = "sort", required = false) final SortBulletin sort) {
+        return bulletinService.findAllBulletins(filters, sort);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BulletinDto showBulletinDetails(@PathVariable final Long id) throws Exception {
-        return bulletinService.findDtoById(id);
+    public BulletinDto showBulletinDetails(@PathVariable final Long id) throws EntityNotFoundException {
+        return bulletinService.findBulletinById(id);
     }
 
     @PostMapping
@@ -50,13 +51,13 @@ public class BulletinController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BulletinDto updateBulletin(@PathVariable final Long id, @RequestBody final BulletinDto bulletinDto)
-        throws Exception {
-        return bulletinService.update(id, bulletinDto);
+        throws EntityNotFoundException {
+        return bulletinService.updateBulletin(id, bulletinDto);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBulletin(@PathVariable final Long id) {
-        bulletinService.delete(id);
+    public void deleteBulletin(@PathVariable final Long id) throws EntityNotFoundException {
+        bulletinService.deleteBulletin(id);
     }
 }
