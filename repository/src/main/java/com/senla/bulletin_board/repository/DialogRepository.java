@@ -9,4 +9,6 @@ import java.util.List;
 public interface DialogRepository extends CommonRepository<DialogEntity, Long> {
 
     List<DialogEntity> findAllByBulletin_SellerId(final Long id);
+
+    boolean existsByBulletin_TitleAndCustomerId(final String title, final Long customerId);
 }

@@ -3,6 +3,7 @@ package com.senla.bulletin_board.controller;
 import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.MessageDto;
+import com.senla.bulletin_board.exception.EntityAlreadyExistsException;
 import com.senla.bulletin_board.service.DialogService;
 import com.senla.bulletin_board.service.MessageService;
 import lombok.Data;
@@ -28,9 +29,9 @@ public class DialogController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto createDialog(@RequestBody final DialogDto dialogDto) {
+    public IdDto createDialog(@RequestBody final DialogDto dialogDto) throws EntityAlreadyExistsException {
         //  проверка на права, проверка на существование такого диалога уже, проверка на зарегистрированность, проверка на статус объявления, если закрыт не создавать,
-        return dialogService.post(dialogDto);
+        return dialogService.createDialog(dialogDto);
     }
 
     @DeleteMapping(value = "/{id}")

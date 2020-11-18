@@ -4,6 +4,7 @@ import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
+import com.senla.bulletin_board.exception.NoSuchUserException;
 import com.senla.bulletin_board.service.BulletinService;
 import com.senla.bulletin_board.service.DialogService;
 import com.senla.bulletin_board.service.UserService;
@@ -43,7 +44,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}/bulletins")
     @ResponseStatus(HttpStatus.OK)
-    public List<BulletinBaseDto> showBulletins(@PathVariable final Long id) {
+    public List<BulletinBaseDto> showBulletins(@PathVariable final Long id) throws NoSuchUserException {
         return bulletinService.findBulletinsByUserId(id);
     }
 

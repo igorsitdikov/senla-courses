@@ -3,6 +3,9 @@ package com.senla.bulletin_board.controller;
 import com.senla.bulletin_board.dto.SignInDto;
 import com.senla.bulletin_board.dto.TokenDto;
 import com.senla.bulletin_board.dto.UserRequestDto;
+import com.senla.bulletin_board.exception.NoSuchUserException;
+import com.senla.bulletin_board.exception.SuchUserAlreadyExistException;
+import com.senla.bulletin_board.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,15 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
+    private final AuthService authService;
+
     @PostMapping(value = "/sign-in")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDto singIn(@RequestBody final SignInDto request) {
-        return new TokenDto("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI2ODA3MjgsImlhdCI6MTU4MjY0NDcyOH0.oxNyf3jOPRoTuywoe2-oibyVxcisvOaPTWCaX56v9-0");
+    public TokenDto singIn(@RequestBody final SignInDto request) throws NoSuchUserException {
+        return authService.signIn(request);
     }
 
     @PostMapping(value = "/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenDto singUp(@RequestBody final UserRequestDto user) {
-        return new TokenDto("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI2ODA3MjgsImlhdCI6MTU4MjY0NDcyOH0.oxNyf3jOPRoTuywoe2-oibyVxcisvOaPTWCaX56v9-0");
+    public TokenDto singUp(@RequestBody final UserRequestDto user) throws SuchUserAlreadyExistException {
+        return authService.signUp(user);
     }
 }

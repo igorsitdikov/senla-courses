@@ -1,18 +1,27 @@
 package com.senla.bulletin_board.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserRequestDto extends AbstractDto  {
+public class UserRequestDto extends UserDto {
 
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
     private String password;
-    private String phone;
+
+    public UserRequestDto(final String password) {
+        this.password = password;
+    }
+
+    public UserRequestDto(final Long id,
+                          final String firstName,
+                          final String lastName,
+                          final String email,
+                          final String phone,
+                          final String password) {
+        super(id, firstName, lastName, email, phone);
+        this.password = password;
+    }
 }
