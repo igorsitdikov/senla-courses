@@ -3,7 +3,6 @@ package com.senla.bulletin_board.service;
 import com.senla.bulletin_board.dto.AbstractDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.entity.AbstractEntity;
-import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletin_board.repository.CommonRepository;
 import com.senla.bulletin_board.service.interfaces.CommonService;
