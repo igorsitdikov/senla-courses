@@ -11,7 +11,7 @@ import com.senla.bulletin_board.exception.NoSuchUserException;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.UserRepository;
-import com.senla.bulletin_board.repository.specification.BulletinSpecification;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class BulletinService extends AbstractService<BulletinDto, BulletinEntity, BulletinRepository> {
 
@@ -39,7 +40,9 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
 
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
-            throw new NoSuchUserException(String.format("User with such id %d does not exist", id));
+            final String message = String.format("User with such id %d does not exist", id);
+            log.error(message);
+            throw new NoSuchUserException(message);
         }
         return repository.findAllBySellerId(id)
             .stream()
@@ -54,7 +57,9 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
 
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
-            throw new EntityNotFoundException(String.format("Bulletin with such id %d does not exist", id));
+            final String message = String.format("Bulletin with such id %d does not exist", id);
+            log.error(message);
+            throw new EntityNotFoundException(message);
         }
     }
 
@@ -69,10 +74,14 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
     }
 
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, final SortBulletin sort) {
-        final FilterDto criteria = convertArrayToDto(filters);
-        BulletinSpecification bulletinSpecification = new BulletinSpecification(criteria, sort);
-
-        return repository.findAll(bulletinSpecification)
+//        final FilterDto criteria = convertArrayToDto(filters);
+//        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
+//
+//        return repository.findAll(bulletinSpecification)
+//            .stream()
+//            .map(bulletinDtoEntityMapper::destinationToSource)
+//            .collect(Collectors.toList());
+        return repository.findAllSortedByRating()
             .stream()
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
