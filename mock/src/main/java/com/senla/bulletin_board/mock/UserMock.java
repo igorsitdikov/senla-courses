@@ -2,17 +2,24 @@ package com.senla.bulletin_board.mock;
 
 import com.senla.bulletin_board.dto.UserDto;
 import com.senla.bulletin_board.dto.UserRequestDto;
+import com.senla.bulletin_board.enumerated.AutoSubscribeStatus;
+import com.senla.bulletin_board.enumerated.PremiumStatus;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserMock {
 
     private static final Map<Long, UserRequestDto> userMap = new HashMap<Long, UserRequestDto>() {{
-        put(1L, new UserRequestDto(1L, "Иван", "Иванов", "ivan.ivanov@mail.ru", "+375331234567", "123456"));
-        put(2L, new UserRequestDto(2L, "Петр", "Петров", "petr.petrov@yandex.ru", "+375337654321", "654321"));
-        put(3L, new UserRequestDto(3L, "Алексей", "Алексеев", "alex.alexeev@gmail.com", "+375337654321", "password"));
-        put(4L, new UserRequestDto(4L, "Антон", "Антонов", "anton.antonov@mail.ru", "+375331234567", "anton"));
+        put(1L, new UserRequestDto(1L, "Иван", "Иванов", "ivan.ivanov@mail.ru", "+375331234567",
+                                   AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "123456"));
+        put(2L, new UserRequestDto(2L, "Петр", "Петров", "petr.petrov@yandex.ru", "+375337654321",
+                                   AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "654321"));
+        put(3L, new UserRequestDto(3L, "Алексей", "Алексеев", "alex.alexeev@gmail.com", "+375337654321",
+                                   AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "password"));
+        put(4L, new UserRequestDto(4L, "Антон", "Антонов", "anton.antonov@mail.ru", "+375331234567",
+                                   AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "anton"));
     }};
 
 

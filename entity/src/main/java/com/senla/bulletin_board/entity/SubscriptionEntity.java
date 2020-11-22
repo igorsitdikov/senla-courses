@@ -1,7 +1,9 @@
 package com.senla.bulletin_board.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,17 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "payment")
+@Table(name = "subscription")
 @EqualsAndHashCode(callSuper = true)
-public class PaymentEntity extends AbstractEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class SubscriptionEntity extends AbstractEntity {
 
-    @Column(name = "payed_at", insertable = false, updatable = false)
-    private LocalDateTime payedAt;
+    @Column(name = "subscribed_at", insertable = false, updatable = false)
+    private LocalDateTime subscribedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
@@ -28,6 +31,10 @@ public class PaymentEntity extends AbstractEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    private BigDecimal payment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tariff_id", insertable = false, updatable = false)
+    private TariffEntity tariff;
 
+    @Column(name = "tariff_id")
+    private Long tariffId;
 }

@@ -13,4 +13,8 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
                               final SellerVoteRepository repository) {
         super(dtoEntityMapper, repository);
     }
+
+    public Double averageSellerRating(final Long id) {
+        return repository.averageRatingByUserId(id);
+    }
 }

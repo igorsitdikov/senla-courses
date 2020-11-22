@@ -16,6 +16,7 @@ public class UserDtoEntityMapperImpl implements UserDtoEntityMapper {
         destination.setLastName(source.getLastName());
         destination.setEmail(source.getEmail());
         destination.setPhone(source.getPhone());
+        destination.setAutoSubscribe(source.getAutoSubscribe());
         return destination;
     }
 
@@ -27,6 +28,9 @@ public class UserDtoEntityMapperImpl implements UserDtoEntityMapper {
         source.setLastName(destination.getLastName());
         source.setEmail(destination.getEmail());
         source.setPhone(destination.getPhone());
+        source.setAutoSubscribe(destination.getAutoSubscribe());
+        source.setBalance(destination.getBalance());
+        source.setPremium(destination.getPremium());
         return source;
     }
 }

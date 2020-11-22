@@ -47,14 +47,14 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDtoEntityMapp
         source.setCreatedAt(destination.getCreatedAt());
         source.setPrice(destination.getPrice());
         source.setAuthor(userDtoEntityMapper.destinationToSource(destination.getSeller()));
-        if (destination.getComments() != null) {
-            source.setComments(destination.getComments()
-                                   .stream()
-                                   .map(commentDtoEntityMapper::destinationToSource)
-                                   .collect(Collectors.toList()));
-        } else {
+//        if (destination.getComments() != null) {
+//            source.setComments(destination.getComments()
+//                                   .stream()
+//                                   .map(commentDtoEntityMapper::destinationToSource)
+//                                   .collect(Collectors.toList()));
+//        } else {
             source.setComments(new ArrayList<>());
-        }
+//        }
         source.setStatus(destination.getStatus());
         return source;
     }

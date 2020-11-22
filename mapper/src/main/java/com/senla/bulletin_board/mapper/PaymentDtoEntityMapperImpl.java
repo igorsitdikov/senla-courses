@@ -15,7 +15,7 @@ public class PaymentDtoEntityMapperImpl implements PaymentDtoEntityMapper {
         final PaymentEntity destination = new PaymentEntity();
         destination.setPayedAt(source.getPayedAt());
         destination.setUserId(source.getUserId());
-        destination.setTariffId(source.getTariffId());
+        destination.setPayment(source.getPayment());
         return destination;
     }
 
@@ -24,7 +24,7 @@ public class PaymentDtoEntityMapperImpl implements PaymentDtoEntityMapper {
         final PaymentDto source = new PaymentDto();
         source.setPayedAt(destination.getPayedAt());
         source.setUserId(destination.getUserId());
-        source.setTariffId(destination.getTariffId());
+        source.setPayment(destination.getPayment());
         return source;
     }
 }

@@ -1,21 +1,21 @@
 package com.senla.bulletin_board.dto;
 
-import com.senla.bulletin_board.enumerated.PremiumStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentDto extends AbstractDto {
+public class SubscriptionDto extends AbstractDto {
 
-    private LocalDateTime payedAt;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime subscribedAt;
     private Long userId;
-    private BigDecimal payment;
+    private Long tariffId;
 }

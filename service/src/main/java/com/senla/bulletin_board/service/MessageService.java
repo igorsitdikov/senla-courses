@@ -54,7 +54,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
         final BulletinEntity bulletinEntity = bulletinRepository.getOne(dialogEntity.getBulletinId());
         if (!messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
             !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId())) {
-            final String message = String.format("Wrong recipent id %d", messageDto.getRecipientId());
+            final String message = String.format("Wrong recipient id %d", messageDto.getRecipientId());
             log.error(message);
             throw new WrongRecipientException(message);
         }

@@ -1,5 +1,6 @@
 package com.senla.bulletin_board.entity;
 
+import com.senla.bulletin_board.enumerated.AutoSubscribeStatus;
 import com.senla.bulletin_board.enumerated.PremiumStatus;
 import com.senla.bulletin_board.enumerated.UserRole;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
@@ -39,6 +41,13 @@ public class UserEntity extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "premium", insertable = false)
     private PremiumStatus premium;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auto_subscribe", insertable = false)
+    private AutoSubscribeStatus autoSubscribe;
+
+    @Column(name = "balance", insertable = false)
+    private BigDecimal balance;
     // mb not working
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private Set<PaymentEntity> payments;

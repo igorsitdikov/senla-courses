@@ -1,8 +1,12 @@
 package com.senla.bulletin_board.dto;
 
+import com.senla.bulletin_board.enumerated.AutoSubscribeStatus;
+import com.senla.bulletin_board.enumerated.PremiumStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -16,12 +20,15 @@ public class UserRequestDto extends UserDto {
     }
 
     public UserRequestDto(final Long id,
-                          final String firstName,
-                          final String lastName,
-                          final String email,
-                          final String phone,
-                          final String password) {
-        super(id, firstName, lastName, email, phone);
+                           final String firstName,
+                           final String lastName,
+                           final String email,
+                           final String phone,
+                           final AutoSubscribeStatus autoSubscribe,
+                           final PremiumStatus premium,
+                           final BigDecimal balance,
+                           final String password) {
+        super(id, firstName, lastName, email, phone, autoSubscribe, premium, balance);
         this.password = password;
     }
 }

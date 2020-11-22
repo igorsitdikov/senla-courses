@@ -1,9 +1,12 @@
 package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.IdDto;
+import com.senla.bulletin_board.dto.SubscriptionDto;
 import com.senla.bulletin_board.dto.TariffDto;
 import com.senla.bulletin_board.exception.EntityNotFoundException;
+import com.senla.bulletin_board.exception.InsufficientFundsException;
 import com.senla.bulletin_board.service.PaymentService;
+import com.senla.bulletin_board.service.SubscriptionService;
 import com.senla.bulletin_board.service.TariffService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -21,27 +24,14 @@ import java.util.List;
 
 @Data
 @RestController
-@RequestMapping(value = "/tariffs")
-public class TariffController {
+@RequestMapping(value = "/subscriptions")
+public class SubscriptionController {
 
-    private final TariffService tariffService;
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<TariffDto> showTariffs() {
-        return tariffService.findAllDto();
-    }
+    private final SubscriptionService subscriptionService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public IdDto addTariff(@RequestBody final TariffDto tariffDto) {
-        return tariffService.post(tariffDto);
-    }
-
-    @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TariffDto updateTariff(@PathVariable final Long id, @RequestBody final TariffDto tariffDto)
-        throws EntityNotFoundException {
-        return tariffService.updateTariff(id, tariffDto);
+    public void subscribe(@RequestBody final SubscriptionDto subscriptionDto) throws InsufficientFundsException {
+        subscriptionService.addPremium(subscriptionDto);
     }
 }
