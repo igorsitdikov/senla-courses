@@ -63,7 +63,6 @@ CREATE TABLE IF NOT EXISTS subscription
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     CONSTRAINT fk_subscription_tariff_tariff_id
         FOREIGN KEY (tariff_id) REFERENCES tariff (id) ON DELETE CASCADE,
-    UNIQUE (user_id),
     PRIMARY KEY (id)
 );
 

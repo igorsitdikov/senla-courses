@@ -3,6 +3,7 @@ package com.senla.bulletin_board.repository.specification;
 import com.senla.bulletin_board.dto.FilterDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
 import com.senla.bulletin_board.entity.UserEntity;
+import com.senla.bulletin_board.enumerated.BulletinStatus;
 import com.senla.bulletin_board.enumerated.SortBulletin;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,12 +15,12 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BulletinSpecification implements Specification<BulletinEntity> {
+public class BulletinFilterSortSpecification implements Specification<BulletinEntity> {
 
     private final FilterDto criteria;
     private final SortBulletin sortBulletin;
 
-    public BulletinSpecification(final FilterDto criteria, final SortBulletin sortBulletin) {
+    public BulletinFilterSortSpecification(final FilterDto criteria, final SortBulletin sortBulletin) {
         this.criteria = criteria;
         this.sortBulletin = sortBulletin;
     }
@@ -36,6 +37,7 @@ public class BulletinSpecification implements Specification<BulletinEntity> {
         if (criteria.getPriceLte() != null) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), criteria.getPriceLte()));
         }
+        predicates.add(criteriaBuilder.equal(root.get("status"), BulletinStatus.OPEN));
         Path<Object> path = getObjectPath(root, seller);
         criteriaQuery.orderBy(criteriaBuilder.asc(seller.get("premium")),
                               criteriaBuilder.desc(path));
