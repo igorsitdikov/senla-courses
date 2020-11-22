@@ -33,7 +33,6 @@
         <module>mapper</module>
         <module>integration-tests</module>
         <module>exception</module>
-        <module>html-parser</module>
     </modules>
 
     <dependencies>
