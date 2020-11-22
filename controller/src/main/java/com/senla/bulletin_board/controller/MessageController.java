@@ -2,6 +2,9 @@ package com.senla.bulletin_board.controller;
 
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.dto.MessageDto;
+import com.senla.bulletin_board.exception.WrongMessageRecipientException;
+import com.senla.bulletin_board.exception.WrongRecipientException;
+import com.senla.bulletin_board.exception.WrongSenderException;
 import com.senla.bulletin_board.service.MessageService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -20,8 +23,9 @@ public class MessageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto createMessage(@RequestBody final MessageDto messageDto) {
-        return messageService.post(messageDto);
+    public IdDto createMessage(@RequestBody final MessageDto messageDto)
+        throws WrongMessageRecipientException, WrongRecipientException, WrongSenderException {
+        return messageService.createMessage(messageDto);
     }
 
 }
