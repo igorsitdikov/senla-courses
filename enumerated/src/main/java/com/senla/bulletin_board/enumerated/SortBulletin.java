@@ -2,7 +2,7 @@ package com.senla.bulletin_board.enumerated;
 
 public enum SortBulletin {
 
-    DEFAULT("id"),
+    AVERAGE("averageVote"),
     DATE("createdAt"),
     AUTHOR("firstName"),
     PRICE("price");

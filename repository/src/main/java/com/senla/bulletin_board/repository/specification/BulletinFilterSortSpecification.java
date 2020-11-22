@@ -2,6 +2,7 @@ package com.senla.bulletin_board.repository.specification;
 
 import com.senla.bulletin_board.dto.FilterDto;
 import com.senla.bulletin_board.entity.BulletinEntity;
+import com.senla.bulletin_board.entity.SellerVoteEntity;
 import com.senla.bulletin_board.entity.UserEntity;
 import com.senla.bulletin_board.enumerated.BulletinStatus;
 import com.senla.bulletin_board.enumerated.SortBulletin;
@@ -9,6 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -29,7 +33,9 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
     public Predicate toPredicate(final Root<BulletinEntity> root,
                                  final CriteriaQuery<?> criteriaQuery,
                                  final CriteriaBuilder criteriaBuilder) {
-        final Path<UserEntity> seller = root.get("seller");
+        Join<BulletinEntity, UserEntity> entityUserEntityJoin = root.join("seller");
+        Join<SellerVoteEntity, BulletinEntity> sellerVoteEntityJoin = root.join("sellerVoteEntities");
+
         final List<Predicate> predicates = new ArrayList<>();
         if (criteria.getPriceGte() != null) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), criteria.getPriceGte()));
@@ -38,21 +44,26 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), criteria.getPriceLte()));
         }
         predicates.add(criteriaBuilder.equal(root.get("status"), BulletinStatus.OPEN));
-        Path<Object> path = getObjectPath(root, seller);
-        criteriaQuery.orderBy(criteriaBuilder.asc(seller.get("premium")),
-                              criteriaBuilder.desc(path));
-        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-    }
-
-    private Path<Object> getObjectPath(final Root<BulletinEntity> root, final Path<UserEntity> seller) {
-        Path<Object> path;
+        final Order orderByPremiumStatus = criteriaBuilder.asc(root.get("seller").get("premium"));
         switch (sortBulletin) {
             case AUTHOR:
-                path = seller.get(sortBulletin.getField());
+                Path<Object> path = entityUserEntityJoin.get(sortBulletin.getField());
+                criteriaQuery.orderBy(orderByPremiumStatus,
+                                      criteriaBuilder.desc(path));
+                break;
+            case AVERAGE:
+                final Expression<Double> avgVote = criteriaBuilder.avg(sellerVoteEntityJoin.get("vote"));
+                criteriaQuery.orderBy(orderByPremiumStatus,
+                                      criteriaBuilder.desc(avgVote));
                 break;
             default:
                 path = root.get(sortBulletin.getField());
+                criteriaQuery.orderBy(orderByPremiumStatus,
+                                      criteriaBuilder.desc(path));
         }
-        return path;
+
+        criteriaQuery.groupBy(root.get("id"));
+        final Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return predicate;
     }
 }

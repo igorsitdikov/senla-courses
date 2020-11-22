@@ -11,6 +11,7 @@ import com.senla.bulletin_board.exception.NoSuchUserException;
 import com.senla.bulletin_board.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.UserRepository;
+import com.senla.bulletin_board.repository.specification.BulletinFilterSortSpecification;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -74,17 +75,17 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
     }
 
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, final SortBulletin sort) {
-//        final FilterDto criteria = convertArrayToDto(filters);
-//        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
-//
-//        return repository.findAll(bulletinSpecification)
-//            .stream()
-//            .map(bulletinDtoEntityMapper::destinationToSource)
-//            .collect(Collectors.toList());
-        return repository.findAllSortedByRating()
+        final FilterDto criteria = convertArrayToDto(filters);
+        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
+
+        return repository.findAll(bulletinSpecification)
             .stream()
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
+//        return repository.findAllSortedByRating()
+//            .stream()
+//            .map(bulletinDtoEntityMapper::destinationToSource)
+//            .collect(Collectors.toList());
     }
 
     private FilterDto convertArrayToDto(String[] filters) {
