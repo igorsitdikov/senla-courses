@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -34,7 +35,7 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
                                  final CriteriaQuery<?> criteriaQuery,
                                  final CriteriaBuilder criteriaBuilder) {
         Join<BulletinEntity, UserEntity> entityUserEntityJoin = root.join("seller");
-        Join<SellerVoteEntity, BulletinEntity> sellerVoteEntityJoin = root.join("sellerVoteEntities");
+        Join<SellerVoteEntity, BulletinEntity> sellerVoteEntityJoin = root.join("sellerVoteEntities", JoinType.LEFT);
 
         final List<Predicate> predicates = new ArrayList<>();
         if (criteria.getPriceGte() != null) {
@@ -63,7 +64,6 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
         }
 
         criteriaQuery.groupBy(root.get("id"));
-        final Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        return predicate;
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }
