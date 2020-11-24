@@ -4,6 +4,7 @@ import com.senla.bulletin_board.dto.SubscriptionDto;
 import com.senla.bulletin_board.entity.SubscriptionEntity;
 import com.senla.bulletin_board.entity.TariffEntity;
 import com.senla.bulletin_board.entity.UserEntity;
+import com.senla.bulletin_board.enumerated.AutoSubscribeStatus;
 import com.senla.bulletin_board.enumerated.PremiumStatus;
 import com.senla.bulletin_board.exception.InsufficientFundsException;
 import com.senla.bulletin_board.mapper.interfaces.DtoEntityMapper;
@@ -24,9 +25,9 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     private final TariffRepository tariffRepository;
 
     public SubscriptionService(final DtoEntityMapper<SubscriptionDto, SubscriptionEntity> dtoEntityMapper,
-                                final SubscriptionRepository repository,
-                                final UserRepository userRepository,
-                                final TariffRepository tariffRepository) {
+                               final SubscriptionRepository repository,
+                               final UserRepository userRepository,
+                               final TariffRepository tariffRepository) {
         super(dtoEntityMapper, repository);
         this.userRepository = userRepository;
         this.tariffRepository = tariffRepository;
@@ -36,10 +37,18 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     public void addPremium(final SubscriptionDto subscriptionDto) throws InsufficientFundsException {
         final UserEntity userEntity = userRepository.getOne(subscriptionDto.getUserId());
         final TariffEntity tariffEntity = tariffRepository.getOne(subscriptionDto.getTariffId());
+        addPremium(userEntity, tariffEntity);
+    }
+
+    @Transactional
+    public void addPremium(final UserEntity userEntity, final TariffEntity tariffEntity)
+        throws InsufficientFundsException {
         if (userEntity.getBalance().compareTo(tariffEntity.getPrice()) < 0) {
             final String message = String.format("There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f",
                                                  userEntity.getBalance(),
                                                  tariffEntity.getPrice());
+            userEntity.setAutoSubscribe(AutoSubscribeStatus.DISABLE);
+            userRepository.save(userEntity);
             log.error(message);
             throw new InsufficientFundsException(message);
         }
@@ -48,7 +57,9 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
         userEntity.setPremium(PremiumStatus.ACTIVE);
         userRepository.save(userEntity);
 
+        SubscriptionDto subscriptionDto = new SubscriptionDto();
+        subscriptionDto.setUserId(userEntity.getId());
+        subscriptionDto.setTariffId(tariffEntity.getId());
         super.post(subscriptionDto);
     }
-
 }
