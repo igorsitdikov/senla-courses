@@ -4,7 +4,7 @@ import com.senla.bulletin_board.dto.SignInDto;
 import com.senla.bulletin_board.dto.TokenDto;
 import com.senla.bulletin_board.dto.UserRequestDto;
 import com.senla.bulletin_board.exception.NoSuchUserException;
-import com.senla.bulletin_board.exception.SuchUserAlreadyExistException;
+import com.senla.bulletin_board.exception.SuchUserAlreadyExistsException;
 import com.senla.bulletin_board.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class AuthController {
 
     @PostMapping(value = "/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenDto singUp(@RequestBody final UserRequestDto user) throws SuchUserAlreadyExistException {
+    public TokenDto singUp(@RequestBody final UserRequestDto user) throws SuchUserAlreadyExistsException {
         return authService.signUp(user);
     }
 }

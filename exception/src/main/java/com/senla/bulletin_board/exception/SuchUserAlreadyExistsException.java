@@ -2,9 +2,9 @@ package com.senla.bulletin_board.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class SuchUserAlreadyExistException extends BusinessLogicException {
+public class SuchUserAlreadyExistsException extends BusinessLogicException {
 
-    public SuchUserAlreadyExistException(final String message) {
+    public SuchUserAlreadyExistsException(final String message) {
         super(message);
     }
 
