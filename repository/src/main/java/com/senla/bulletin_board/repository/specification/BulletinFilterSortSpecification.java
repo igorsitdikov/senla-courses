@@ -14,7 +14,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -46,23 +45,19 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
         }
         predicates.add(criteriaBuilder.equal(root.get("status"), BulletinStatus.OPEN));
         final Order orderByPremiumStatus = criteriaBuilder.asc(root.get("seller").get("premium"));
+        Expression<?> path;
         switch (sortBulletin) {
             case AUTHOR:
-                Path<Object> path = entityUserEntityJoin.get(sortBulletin.getField());
-                criteriaQuery.orderBy(orderByPremiumStatus,
-                                      criteriaBuilder.desc(path));
+                path = entityUserEntityJoin.get(sortBulletin.getField());
                 break;
             case AVERAGE:
-                final Expression<Double> avgVote = criteriaBuilder.avg(sellerVoteEntityJoin.get("vote"));
-                criteriaQuery.orderBy(orderByPremiumStatus,
-                                      criteriaBuilder.desc(avgVote));
+                path = criteriaBuilder.avg(sellerVoteEntityJoin.get(sortBulletin.getField()));
                 break;
             default:
                 path = root.get(sortBulletin.getField());
-                criteriaQuery.orderBy(orderByPremiumStatus,
-                                      criteriaBuilder.desc(path));
         }
 
+        criteriaQuery.orderBy(orderByPremiumStatus, criteriaBuilder.desc(path));
         criteriaQuery.groupBy(root.get("id"));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
