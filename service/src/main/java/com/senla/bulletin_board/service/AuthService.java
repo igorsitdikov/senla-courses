@@ -16,14 +16,20 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
 @Log4j2
 @Data
 @Service
+@Transactional
 public class AuthService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -42,8 +48,10 @@ public class AuthService {
 
     private UserEntity saveUserWithEncodedPassword(final UserRequestDto userDto) {
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(userDto);
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        return userRepository.save(userEntity);
+        userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        final UserEntity createdUser = userRepository.save(userEntity);
+        entityManager.refresh(createdUser);
+        return createdUser;
     }
 
     public TokenDto signIn(final SignInDto signInDto) throws NoSuchUserException {
@@ -62,8 +70,9 @@ public class AuthService {
     private User getUserDetails(final UserEntity userEntity) {
         final String email = userEntity.getEmail();
         final String password = userEntity.getPassword();
+        final String name = userEntity.getRole().name();
         final List<SimpleGrantedAuthority> authorities =
-            Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().name()));
+            Collections.singletonList(new SimpleGrantedAuthority(name));
         return new User(email, password, authorities);
     }
 }
