@@ -4,6 +4,7 @@ import com.senla.bulletin_board.dto.BulletinBaseDto;
 import com.senla.bulletin_board.dto.DialogDto;
 import com.senla.bulletin_board.dto.PasswordDto;
 import com.senla.bulletin_board.dto.UserDto;
+import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.exception.NoSuchUserException;
 import com.senla.bulletin_board.service.BulletinService;
 import com.senla.bulletin_board.service.DialogService;
@@ -32,7 +33,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUser(@PathVariable final Long id) throws Exception {
+    public UserDto getUser(@PathVariable final Long id) throws EntityNotFoundException {
         return userService.findDtoById(id);
     }
 

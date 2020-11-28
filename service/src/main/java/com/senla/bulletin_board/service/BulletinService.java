@@ -51,11 +51,6 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
             .collect(Collectors.toList());
     }
 
-    public BulletinDto findBulletinById(final Long id) throws EntityNotFoundException {
-        checkBulletinExistence(id);
-        return super.findDtoById(id);
-    }
-
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
             final String message = String.format("Bulletin with such id %d does not exist", id);

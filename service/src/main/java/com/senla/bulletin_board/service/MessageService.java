@@ -46,7 +46,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
     public IdDto createMessage(final MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
-            final String message = "Can not send message to yourself";
+            final String message = "Forbidden send message to yourself";
             log.error(message);
             throw new WrongMessageRecipientException(message);
         }

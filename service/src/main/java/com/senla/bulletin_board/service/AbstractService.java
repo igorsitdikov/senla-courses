@@ -3,21 +3,30 @@ package com.senla.bulletin_board.service;
 import com.senla.bulletin_board.dto.AbstractDto;
 import com.senla.bulletin_board.dto.IdDto;
 import com.senla.bulletin_board.entity.AbstractEntity;
+import com.senla.bulletin_board.exception.EntityNotFoundException;
 import com.senla.bulletin_board.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletin_board.repository.CommonRepository;
 import com.senla.bulletin_board.service.interfaces.CommonService;
-import lombok.Data;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
 public abstract class AbstractService<D extends AbstractDto, E extends AbstractEntity, R extends CommonRepository<E, Long>>
     implements CommonService<D, E> {
 
     private final DtoEntityMapper<D, E> dtoEntityMapper;
     protected final R repository;
+    private final Class<E> persistentClass;
+
+    @SuppressWarnings("unchecked")
+    public AbstractService(final DtoEntityMapper<D, E> dtoEntityMapper, final R repository) {
+        this.dtoEntityMapper = dtoEntityMapper;
+        this.repository = repository;
+        this.persistentClass = (Class<E>)
+            ((ParameterizedType) getClass().getGenericSuperclass())
+                .getActualTypeArguments()[1];
+    }
 
     @Override
     public List<D> findAllDto() {
@@ -47,14 +56,15 @@ public abstract class AbstractService<D extends AbstractDto, E extends AbstractE
     }
 
     @Override
-    public D findDtoById(final Long id) {
+    public D findDtoById(final Long id) throws EntityNotFoundException {
         return dtoEntityMapper.destinationToSource(findEntityById(id));
     }
 
     @Override
-    public E findEntityById(final Long id) {
-        final Optional<E> entityById = repository.findById(id);
-        return entityById.get();
+    public E findEntityById(final Long id) throws EntityNotFoundException {
+        return repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(
+                String.format("Entity %s with id %d was not found", this.persistentClass.getSimpleName(), id)));
     }
 
     @Override

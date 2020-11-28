@@ -8,7 +8,8 @@ import java.util.List;
 @Repository
 public interface DialogRepository extends CommonRepository<DialogEntity, Long> {
 
-    List<DialogEntity> findAllByBulletin_SellerId(final Long id);
+    List<DialogEntity> findAllByBulletin_SellerIdOrCustomerId(final Long bulletin_seller_id,
+                                                              final Long customerId);
 
     boolean existsByBulletin_TitleAndCustomerId(final String title, final Long customerId);
 }

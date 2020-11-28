@@ -25,10 +25,14 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
     }
 
     public List<DialogDto> findDialogsByUserId(final Long id) {
-        return repository.findAllByBulletin_SellerId(id)
+        return findDialogsBySellerIdOrCustomerId(id)
             .stream()
             .map(dialogDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
+    }
+
+    private List<DialogEntity> findDialogsBySellerIdOrCustomerId(final Long id) {
+        return repository.findAllByBulletin_SellerIdOrCustomerId(id, id);
     }
 
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
