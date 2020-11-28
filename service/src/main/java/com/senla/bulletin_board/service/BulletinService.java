@@ -13,6 +13,7 @@ import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.UserRepository;
 import com.senla.bulletin_board.repository.specification.BulletinFilterSortSpecification;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -39,6 +40,7 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         this.userRepository = userRepository;
     }
 
+//    @PreAuthorize("authentication.principal.id == #id")
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
             final String message = String.format("User with such id %d does not exist", id);
@@ -51,6 +53,10 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
             .collect(Collectors.toList());
     }
 
+    public BulletinDto findBulletinById(final Long id) throws EntityNotFoundException {
+        return super.findDtoById(id);
+    }
+
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
             final String message = String.format("Bulletin with such id %d does not exist", id);
@@ -59,14 +65,21 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         }
     }
 
+    @PreAuthorize("authentication.principal.id == #id")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         checkBulletinExistence(id);
         return super.update(id, bulletinDto);
     }
 
+    @PreAuthorize("@bulletinService.checkOwner(#id, authentication.principal.id) or hasRole('ROLE_ADMIN')")
     public void deleteBulletin(final Long id) throws EntityNotFoundException {
         checkBulletinExistence(id);
         super.delete(id);
+    }
+
+    public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
+        BulletinEntity bulletinEntity = super.findEntityById(bulletinId);
+        return userId.equals(bulletinEntity.getSeller().getId());
     }
 
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, final SortBulletin sort) {

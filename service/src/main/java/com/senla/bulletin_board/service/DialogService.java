@@ -7,6 +7,7 @@ import com.senla.bulletin_board.exception.EntityAlreadyExistsException;
 import com.senla.bulletin_board.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletin_board.repository.DialogRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +19,13 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
 
     private final DialogDtoEntityMapper dialogDtoEntityMapper;
 
-    private DialogService(final DialogDtoEntityMapper dtoEntityMapper,
-                          final DialogRepository repository) {
+    public DialogService(final DialogDtoEntityMapper dtoEntityMapper,
+                         final DialogRepository repository) {
         super(dtoEntityMapper, repository);
         dialogDtoEntityMapper = dtoEntityMapper;
     }
 
+    @PreAuthorize("authentication.principal.id == #id")
     public List<DialogDto> findDialogsByUserId(final Long id) {
         return findDialogsBySellerIdOrCustomerId(id)
             .stream()

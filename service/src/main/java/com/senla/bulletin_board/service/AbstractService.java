@@ -52,6 +52,7 @@ public abstract class AbstractService<D extends AbstractDto, E extends AbstractE
     @Override
     public D update(final Long id, final D dto) {
         final E entity = dtoEntityMapper.sourceToDestination(dto);
+        entity.setId(id);
         return dtoEntityMapper.destinationToSource(save(entity));
     }
 

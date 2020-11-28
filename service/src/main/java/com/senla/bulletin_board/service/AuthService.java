@@ -8,11 +8,11 @@ import com.senla.bulletin_board.exception.NoSuchUserException;
 import com.senla.bulletin_board.exception.SuchUserAlreadyExistsException;
 import com.senla.bulletin_board.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletin_board.repository.UserRepository;
+import com.senla.bulletin_board.security.AuthUser;
 import com.senla.bulletin_board.security.JwtUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class AuthService {
             throw new SuchUserAlreadyExistsException(message);
         }
         final UserEntity userEntity = saveUserWithEncodedPassword(userDto);
-        final User user = getUserDetails(userEntity);
+        final AuthUser user = getUserDetails(userEntity);
         return new TokenDto(jwtUtil.generateToken(user));
     }
 
@@ -63,16 +63,17 @@ public class AuthService {
                     log.error(message);
                     return new NoSuchUserException(message);
                 });
-        final User user = getUserDetails(userEntity);
+        final AuthUser user = getUserDetails(userEntity);
         return new TokenDto(jwtUtil.generateToken(user));
     }
 
-    private User getUserDetails(final UserEntity userEntity) {
+    private AuthUser getUserDetails(final UserEntity userEntity) {
+        final Long id = userEntity.getId();
         final String email = userEntity.getEmail();
         final String password = userEntity.getPassword();
-        final String name = userEntity.getRole().name();
+        final String role = userEntity.getRole().name();
         final List<SimpleGrantedAuthority> authorities =
-            Collections.singletonList(new SimpleGrantedAuthority(name));
-        return new User(email, password, authorities);
+            Collections.singletonList(new SimpleGrantedAuthority(role));
+        return new AuthUser(email, password, authorities, id);
     }
 }

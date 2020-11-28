@@ -6,7 +6,6 @@ import com.senla.bulletin_board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +32,8 @@ public class LoadUserDetailService implements UserDetailsService {
         } else {
             final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
                 ROLE_PREFIX + userEntity.get().getRole().name());
-            return new User(email, userEntity.get().getPassword(), Collections.singleton(authority));
+            return new AuthUser(email, userEntity.get().getPassword(), Collections.singleton(authority),
+                                userEntity.get().getId());
         }
     }
 }

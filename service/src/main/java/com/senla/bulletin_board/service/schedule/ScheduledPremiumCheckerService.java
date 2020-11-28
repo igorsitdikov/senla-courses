@@ -15,11 +15,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.senla.bulletin_board.utils.DateTimeUtils.isExpired;
 
 @Data
 @Service
@@ -62,14 +63,10 @@ public class ScheduledPremiumCheckerService {
 
     private List<Long> findUsersWithExpiredSubscriptionPeriod(final List<SubscriptionEntity> subscriptions) {
         List<Long> userIds = new ArrayList<>();
-        final LocalDate now = LocalDate.now();
         for (SubscriptionEntity subscription : subscriptions) {
             final LocalDateTime subscribedAt = subscription.getSubscribedAt();
             final Integer tariffTerm = subscription.getTariff().getTerm();
-            final LocalDate expiryDate = subscribedAt
-                .plusDays(tariffTerm)
-                .toLocalDate();
-            if (expiryDate.equals(now)) {
+            if (isExpired(subscribedAt, tariffTerm)) {
                 userIds.add(subscription.getUserId());
             }
         }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SubscriptionRepository extends CommonRepository<SubscriptionEntity, Long> {
@@ -17,4 +18,5 @@ public interface SubscriptionRepository extends CommonRepository<SubscriptionEnt
         "ORDER BY subscribed_at DESC", nativeQuery = true)
     List<SubscriptionEntity> findLastSubscriptionsForUserIds(final List<Long> ids);
 
+    Optional<SubscriptionEntity> findTopByUserIdOrderBySubscribedAt(final Long id);
 }

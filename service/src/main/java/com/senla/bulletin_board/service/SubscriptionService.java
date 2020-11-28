@@ -11,11 +11,15 @@ import com.senla.bulletin_board.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletin_board.repository.SubscriptionRepository;
 import com.senla.bulletin_board.repository.TariffRepository;
 import com.senla.bulletin_board.repository.UserRepository;
+import com.senla.bulletin_board.utils.DateTimeUtils;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -34,6 +38,7 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     }
 
     @Transactional
+    @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
     public void addPremium(final SubscriptionDto subscriptionDto) throws InsufficientFundsException {
         final UserEntity userEntity = userRepository.getOne(subscriptionDto.getUserId());
         final TariffEntity tariffEntity = tariffRepository.getOne(subscriptionDto.getTariffId());
@@ -52,14 +57,29 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
             log.error(message);
             throw new InsufficientFundsException(message);
         }
+
         final BigDecimal updatedBalance = userEntity.getBalance().subtract(tariffEntity.getPrice());
         userEntity.setBalance(updatedBalance);
         userEntity.setPremium(PremiumStatus.ACTIVE);
         userRepository.save(userEntity);
 
-        SubscriptionDto subscriptionDto = new SubscriptionDto();
-        subscriptionDto.setUserId(userEntity.getId());
-        subscriptionDto.setTariffId(tariffEntity.getId());
-        super.post(subscriptionDto);
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity();
+        subscriptionEntity.setUserId(userEntity.getId());
+        subscriptionEntity.setTariffId(tariffEntity.getId());
+
+        if (userEntity.getPremium() == PremiumStatus.ACTIVE) {
+            final String message = String.format("User with id %d has already premium status.", userEntity.getId());
+            log.info(message);
+            final Optional<SubscriptionEntity> lastSubscription =
+                repository.findTopByUserIdOrderBySubscribedAt(userEntity.getId());
+
+            if (lastSubscription.isPresent()) {
+                final LocalDateTime subscribedAt = subscriptionEntity.getSubscribedAt();
+                final Integer tariffTerm = subscriptionEntity.getTariff().getTerm();
+                final LocalDateTime futureSubscription = DateTimeUtils.addDays(subscribedAt, tariffTerm);
+                subscriptionEntity.setSubscribedAt(futureSubscription);
+            }
+        }
+        super.save(subscriptionEntity);
     }
 }

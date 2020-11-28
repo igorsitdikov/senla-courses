@@ -39,7 +39,7 @@ public class BulletinController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BulletinDto showBulletinDetails(@PathVariable final Long id) throws EntityNotFoundException {
-        return bulletinService.findDtoById(id);
+        return bulletinService.findBulletinById(id);
     }
 
     @PostMapping

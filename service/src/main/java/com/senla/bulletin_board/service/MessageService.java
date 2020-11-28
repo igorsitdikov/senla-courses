@@ -13,8 +13,10 @@ import com.senla.bulletin_board.repository.BulletinRepository;
 import com.senla.bulletin_board.repository.DialogRepository;
 import com.senla.bulletin_board.repository.MessageRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,21 +28,26 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
     private final BulletinRepository bulletinRepository;
     private final DialogRepository dialogRepository;
 
-    private MessageService(final MessageDtoEntityMapper dtoEntityMapper,
-                           final MessageRepository repository,
-                           final BulletinRepository bulletinRepository,
-                           final DialogRepository dialogRepository) {
+    public MessageService(final MessageDtoEntityMapper dtoEntityMapper,
+                          final MessageRepository repository,
+                          final BulletinRepository bulletinRepository,
+                          final DialogRepository dialogRepository) {
         super(dtoEntityMapper, repository);
         this.dtoEntityMapper = dtoEntityMapper;
         this.bulletinRepository = bulletinRepository;
         this.dialogRepository = dialogRepository;
     }
 
+    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()
             .map(dtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
+    }
+
+    public boolean checkOwner(final Long userId, final Long dialogId) {
+        return dialogRepository.findByIdAndOwnerId(dialogId, userId).compareTo(BigInteger.ONE) == 0;
     }
 
     public IdDto createMessage(final MessageDto messageDto)
