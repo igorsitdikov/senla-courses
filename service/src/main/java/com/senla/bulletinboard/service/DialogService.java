@@ -25,7 +25,7 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
         dialogDtoEntityMapper = dtoEntityMapper;
     }
 
-    @PreAuthorize("authentication.principal.id == #id")
+//    @PreAuthorize("authentication.principal.id == #id")
     public List<DialogDto> findDialogsByUserId(final Long id) {
         return findDialogsBySellerIdOrCustomerId(id)
             .stream()

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DialogDtoEntityMapperImpl implements DialogDtoEntityMapper {
 
-    private final UserDtoEntityMapper userDtoEntityMapper;
-    private final BulletinDtoEntityMapper bulletinDtoEntityMapper;
-
     @Override
     public DialogEntity sourceToDestination(final DialogDto source) {
         DialogEntity destination = new DialogEntity();
@@ -30,8 +27,6 @@ public class DialogDtoEntityMapperImpl implements DialogDtoEntityMapper {
         source.setId(destination.getId());
         source.setTitle(destination.getBulletin().getTitle());
         source.setBulletinId(destination.getBulletinId());
-        source.setUser(userDtoEntityMapper.destinationToSource(destination.getCustomer()));
-        source.setBulletin(bulletinDtoEntityMapper.destinationToSource(destination.getBulletin()));
         source.setCustomerId(destination.getCustomerId());
         source.setCreatedAt(destination.getCreatedAt());
         return source;
