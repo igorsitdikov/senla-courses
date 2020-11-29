@@ -7,7 +7,6 @@ import com.senla.bulletinboard.entity.CommentEntity;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
-import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class CommentService extends AbstractService<CommentDto, CommentEntity, CommentRepository> {
 
     private final BulletinRepository bulletinRepository;
-    private final UserRepository userRepository;
 
     public CommentService(final CommentDtoEntityMapper commentDtoEntityMapper,
                           final CommentRepository commentRepository,
@@ -31,18 +29,12 @@ public class CommentService extends AbstractService<CommentDto, CommentEntity, C
                          ) {
         super(commentDtoEntityMapper, commentRepository);
         this.bulletinRepository = bulletinRepository;
-        this.userRepository = userRepository;
     }
 
+    //    @PreAuthorize("authentication.principal.id == #commentDto.getAuthorId()")
     public IdDto createComment(final CommentDto commentDto)
-        throws BulletinIsClosedException, NoSuchUserException, EntityNotFoundException {
+        throws BulletinIsClosedException, EntityNotFoundException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(commentDto.getBulletinId());
-        if (!userRepository.existsById(commentDto.getAuthorId())) {
-            final String message = String.format("User with id %d does not exist",
-                                                 commentDto.getAuthorId());
-            log.error(message);
-            throw new NoSuchUserException(message);
-        }
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
             final String message = String.format("Bulletin with id %d is closed",
                                                  bulletinEntity.get().getId());

@@ -4,7 +4,6 @@ import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
-import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.service.CommentService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class CommentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public IdDto createComment(@RequestBody final CommentDto commentDto)
-        throws BulletinIsClosedException, NoSuchUserException, EntityNotFoundException {
+        throws BulletinIsClosedException, EntityNotFoundException {
         return commentService.createComment(commentDto);
     }
 }

@@ -16,10 +16,12 @@ public class CommentDtoEntityMapperImpl implements CommentDtoEntityMapper {
     @Override
     public CommentEntity sourceToDestination(final CommentDto source) {
         CommentEntity destination = new CommentEntity();
+        destination.setId(source.getId());
         destination.setText(source.getComment());
         if (source.getAuthor() != null) {
             destination.setUser(userDtoEntityMapper.sourceToDestination(source.getAuthor()));
         }
+        destination.setAuthorId(source.getAuthorId());
         destination.setCreatedAt(source.getCreatedAt());
         destination.setAuthorId(source.getAuthorId());
         destination.setBulletinId(source.getBulletinId());
@@ -29,8 +31,10 @@ public class CommentDtoEntityMapperImpl implements CommentDtoEntityMapper {
     @Override
     public CommentDto destinationToSource(final CommentEntity destination) {
         CommentDto source = new CommentDto();
+        source.setId(destination.getId());
         source.setAuthor(userDtoEntityMapper.destinationToSource(destination.getUser()));
         source.setComment(destination.getText());
+        source.setAuthorId(destination.getAuthorId());
         source.setCreatedAt(destination.getCreatedAt());
         source.setBulletinId(destination.getBulletinId());
         return source;

@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class CommentDto extends AbstractDto {
 
+    private Long id;
     private UserDto author;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long authorId;
     private String comment;
     private Long bulletinId;

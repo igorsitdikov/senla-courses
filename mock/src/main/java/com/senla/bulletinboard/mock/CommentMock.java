@@ -11,7 +11,7 @@ import java.util.Map;
 public class CommentMock {
 
     private static final Map<Long, CommentDto> commentMap = new HashMap<Long, CommentDto>() {{
-        put(1L, new CommentDto(UserMock.getUserDtoById(3L), 1L, "Отличный картофель", 3L,
+        put(1L, new CommentDto(1L, UserMock.getUserDtoById(3L), 1L, "Отличный картофель", 4L,
                                LocalDateTime.parse("2020-09-14T11:30:45")));
     }};
 
