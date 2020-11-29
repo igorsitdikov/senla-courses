@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVoteEntity, SellerVoteRepository> {
 
-    private BulletinRepository bulletinRepository;
+    private final BulletinRepository bulletinRepository;
 
     public SellerVoteService(final DtoEntityMapper<SellerVoteDto, SellerVoteEntity> dtoEntityMapper,
                              final SellerVoteRepository repository,
@@ -32,7 +32,7 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
         this.bulletinRepository = bulletinRepository;
     }
 
-    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
+//    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
     public IdDto addVoteToBulletin(final SellerVoteDto sellerVoteDto)
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());

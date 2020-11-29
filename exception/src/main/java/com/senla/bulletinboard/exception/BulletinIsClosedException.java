@@ -10,6 +10,6 @@ public class BulletinIsClosedException extends BusinessLogicException {
 
     @Override
     public HttpStatus getHttpStatus() {
-        return HttpStatus.CONFLICT;
+        return HttpStatus.BAD_REQUEST;
     }
 }
