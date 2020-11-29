@@ -19,5 +19,5 @@ public interface DialogRepository extends CommonRepository<DialogEntity, Long> {
         nativeQuery = true)
     BigInteger findByIdAndOwnerId(final Long id, final Long ownerId);
 
-    boolean existsByBulletin_TitleAndCustomerId(final String title, final Long customerId);
+    boolean existsByBulletin_IdAndCustomerId(final Long bulletinId, final Long customerId);
 }

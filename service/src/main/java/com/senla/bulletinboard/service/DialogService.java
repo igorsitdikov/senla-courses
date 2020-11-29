@@ -40,8 +40,8 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
             final String message =
-                String.format("Dialog with title %s and customer id %d already exists",
-                              dialogDto.getTitle(),
+                String.format("Dialog with user id %s and customer id %d already exists",
+                              dialogDto.getBulletinId(),
                               dialogDto.getCustomerId());
             log.error(message);
             throw new EntityAlreadyExistsException(message);
@@ -50,6 +50,6 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
     }
 
     public boolean checkDialogExistence(final DialogDto dialogDto) {
-        return repository.existsByBulletin_TitleAndCustomerId(dialogDto.getTitle(), dialogDto.getCustomerId());
+        return repository.existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
     }
 }

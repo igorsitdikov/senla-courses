@@ -13,8 +13,6 @@ import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +30,7 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
         this.bulletinRepository = bulletinRepository;
     }
 
-//    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
+    //    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
     public IdDto addVoteToBulletin(final SellerVoteDto sellerVoteDto)
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());
@@ -51,9 +49,7 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
             final String message = "Forbidden to vote for yourself";
             throw new WrongVoterException(message);
         }
-        try {
-            return super.post(sellerVoteDto);
-        } catch (DataIntegrityViolationException e) {
+        if (checkVoteExistence(sellerVoteDto)) {
             final String message = String
                 .format("User with id %d already voted for bulletin with id %d",
                         sellerVoteDto.getVoterId(),
@@ -61,6 +57,11 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
             log.warn(message);
             throw new VoteAlreadyExistsException(message);
         }
+        return super.post(sellerVoteDto);
+    }
+
+    public boolean checkVoteExistence(final SellerVoteDto sellerVoteDto) {
+        return repository.existsByVoterIdAndBulletinId(sellerVoteDto.getVoterId(), sellerVoteDto.getBulletinId());
     }
 
     public Double averageSellerRating(final Long id) {

@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS dialog
         FOREIGN KEY (customer_id) REFERENCES user (id) ON DELETE CASCADE,
     CONSTRAINT fk_dialog_bulletin_bulletin_id
         FOREIGN KEY (bulletin_id) REFERENCES bulletin (id) ON DELETE CASCADE,
+    UNIQUE unique_index (customer_id, bulletin_id),
     PRIMARY KEY (id)
 );
 

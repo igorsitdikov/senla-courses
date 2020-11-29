@@ -150,7 +150,7 @@ public class StarControllerTest extends AbstractControllerTest {
         final BulletinEntity bulletinEntity =
             bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
-        when(sellerVoteRepository.save(any(SellerVoteEntity.class))).thenThrow(DataIntegrityViolationException.class);
+        willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(userId, bulletinId);
 
         mockMvc.perform(post("/api/stars/")
                             .with(user(authUser))
