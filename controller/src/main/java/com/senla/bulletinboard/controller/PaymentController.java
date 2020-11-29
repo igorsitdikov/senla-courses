@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.service.PaymentService;
@@ -23,9 +24,9 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void createPayment(@RequestBody final PaymentDto paymentDto) throws NoSuchUserException {
-        paymentService.createPayment(paymentDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public IdDto createPayment(@RequestBody final PaymentDto paymentDto) throws NoSuchUserException {
+        return paymentService.createPayment(paymentDto);
     }
 
     @GetMapping(value = "/{id}")

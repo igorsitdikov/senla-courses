@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.service;
 
+import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.entity.PaymentEntity;
 import com.senla.bulletinboard.entity.UserEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -23,25 +25,26 @@ public class PaymentService extends AbstractService<PaymentDto, PaymentEntity, P
     private final PaymentDtoEntityMapper paymentDtoEntityMapper;
 
     public PaymentService(final PaymentDtoEntityMapper dtoEntityMapper,
-                           final PaymentRepository repository,
-                           final UserRepository userRepository) {
+                          final PaymentRepository repository,
+                          final UserRepository userRepository) {
         super(dtoEntityMapper, repository);
         paymentDtoEntityMapper = dtoEntityMapper;
         this.userRepository = userRepository;
     }
 
     @Transactional
-    public void createPayment(final PaymentDto paymentDto) throws NoSuchUserException {
-        if (!userRepository.existsById(paymentDto.getUserId())) {
+    public IdDto createPayment(final PaymentDto paymentDto) throws NoSuchUserException {
+        final Optional<UserEntity> userEntity = userRepository.findById(paymentDto.getUserId());
+        if (!userEntity.isPresent()) {
             final String message = String.format("User with such id %d does not exist", paymentDto.getUserId());
             log.error(message);
             throw new NoSuchUserException(message);
         }
-        final UserEntity userEntity = userRepository.getOne(paymentDto.getUserId());
-        final BigDecimal updatedBalance = userEntity.getBalance().add(paymentDto.getPayment());
-        userEntity.setBalance(updatedBalance);
-        userRepository.save(userEntity);
-        super.post(paymentDto);
+        final UserEntity user = userEntity.get();
+        final BigDecimal updatedBalance = user.getBalance().add(paymentDto.getPayment());
+        user.setBalance(updatedBalance);
+        userRepository.save(user);
+        return super.post(paymentDto);
     }
 
     public List<PaymentDto> showAllPaymentsByUserId(final Long id) {
