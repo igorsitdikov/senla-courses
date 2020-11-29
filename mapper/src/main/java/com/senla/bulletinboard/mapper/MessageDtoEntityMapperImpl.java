@@ -17,6 +17,7 @@ public class MessageDtoEntityMapperImpl implements MessageDtoEntityMapper {
         MessageEntity destination = new MessageEntity();
         destination.setText(source.getMessage());
         destination.setDialogId(source.getDialogId());
+        destination.setCreatedAt(source.getCreatedAt());
         destination.setRecipientId(source.getRecipientId());
         destination.setSenderId(source.getSenderId());
         return destination;

@@ -18,6 +18,7 @@ public class DialogDtoEntityMapperImpl implements DialogDtoEntityMapper {
     @Override
     public DialogEntity sourceToDestination(final DialogDto source) {
         DialogEntity destination = new DialogEntity();
+        destination.setId(source.getId());
         destination.setBulletinId(source.getBulletinId());
         destination.setCustomerId(source.getCustomerId());
         return destination;

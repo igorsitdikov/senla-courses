@@ -40,7 +40,7 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
             final String message =
-                String.format("Dialog with user id %s and customer id %d already exists",
+                String.format("Dialog with bulletin id %s and customer id %d already exists",
                               dialogDto.getBulletinId(),
                               dialogDto.getCustomerId());
             log.error(message);

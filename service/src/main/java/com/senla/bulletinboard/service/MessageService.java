@@ -38,7 +38,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
         this.dialogRepository = dialogRepository;
     }
 
-    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
+//    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()
