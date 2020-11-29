@@ -1,12 +1,10 @@
 package com.senla.bulletinboard.controller;
 
-import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinDetailsMock;
-import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,6 +17,8 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,10 +66,11 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void createBulletinTest() throws Exception {
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(4L);
+        final long id = 4L;
+        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final String request = objectMapper.writeValueAsString(bulletinDto);
-        final String response = objectMapper.writeValueAsString(new IdDto(4L));
+        final String response = objectMapper.writeValueAsString(new IdDto(id));
 
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
@@ -83,21 +84,58 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void updateBulletinTest() throws Exception {
         final long id = 4L;
-        final BulletinBaseDto bulletinDto = BulletinMock.getById(id);
+        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
+        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
+        willReturn(true).given(bulletinRepository).existsById(id);
+        willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(put("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(bulletinDto)));
+    }
+
+    @Test
+    public void updateBulletinTest_BulletinNotFound() throws Exception {
+        final long id = 4L;
+        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final String request = objectMapper.writeValueAsString(bulletinDto);
+        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
+        willReturn(false).given(bulletinRepository).existsById(id);
+        willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
+
+        mockMvc.perform(put("/api/bulletins/" + id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
+            .andExpect(status().isNotFound())
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist\"}"));
     }
 
     @Test
     public void deleteBulletinTest() throws Exception {
         final long id = 4L;
+        willReturn(true).given(bulletinRepository).existsById(id);
 
         mockMvc.perform(delete("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
+
+        verify(bulletinRepository, times(1)).existsById(id);
+        verify(bulletinRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    public void deleteBulletinTest_BulletinNotFoundException() throws Exception {
+        final long id = 4L;
+        willReturn(false).given(bulletinRepository).existsById(id);
+
+        mockMvc.perform(delete("/api/bulletins/" + id)
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist\"}"));
+
+        verify(bulletinRepository, times(1)).existsById(id);
     }
 }

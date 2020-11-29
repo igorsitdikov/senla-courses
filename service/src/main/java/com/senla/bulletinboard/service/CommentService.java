@@ -24,9 +24,7 @@ public class CommentService extends AbstractService<CommentDto, CommentEntity, C
 
     public CommentService(final CommentDtoEntityMapper commentDtoEntityMapper,
                           final CommentRepository commentRepository,
-                          final BulletinRepository bulletinRepository,
-                          final UserRepository userRepository
-                         ) {
+                          final BulletinRepository bulletinRepository) {
         super(commentDtoEntityMapper, commentRepository);
         this.bulletinRepository = bulletinRepository;
     }

@@ -65,13 +65,13 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         }
     }
 
-    @PreAuthorize("authentication.principal.id == #id")
+//    @PreAuthorize("authentication.principal.id == #id")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         checkBulletinExistence(id);
         return super.update(id, bulletinDto);
     }
 
-    @PreAuthorize("@bulletinService.checkOwner(#id, authentication.principal.id) or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("@bulletinService.checkOwner(#id, authentication.principal.id) or hasRole('ROLE_ADMIN')")
     public void deleteBulletin(final Long id) throws EntityNotFoundException {
         checkBulletinExistence(id);
         super.delete(id);
