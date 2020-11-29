@@ -59,10 +59,9 @@ public class DialogControllerTest extends AbstractControllerTest {
     @Test
     public void createDialogTest() throws Exception {
         final DialogDto dialogDto = DialogMock.getById(1L);
+        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
         final String request = objectMapper.writeValueAsString(dialogDto);
         final String response = objectMapper.writeValueAsString(new IdDto(1L));
-
-        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
 
         willReturn(false).given(dialogRepository)
             .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());

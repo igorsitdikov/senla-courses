@@ -5,6 +5,7 @@ import com.senla.bulletinboard.dto.MessageDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.WrongMessageRecipientException;
 import com.senla.bulletinboard.exception.WrongRecipientException;
 import com.senla.bulletinboard.exception.WrongSenderException;
@@ -13,7 +14,6 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -38,7 +38,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
         this.dialogRepository = dialogRepository;
     }
 
-//    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
+    //    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()
@@ -51,14 +51,18 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
     }
 
     public IdDto createMessage(final MessageDto messageDto)
-        throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException {
+        throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
             final String message = "Forbidden send message to yourself";
             log.error(message);
             throw new WrongMessageRecipientException(message);
         }
-        final DialogEntity dialogEntity = dialogRepository.getOne(messageDto.getDialogId());
-        final BulletinEntity bulletinEntity = bulletinRepository.getOne(dialogEntity.getBulletinId());
+        final DialogEntity dialogEntity = dialogRepository.findById(messageDto.getDialogId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Dialog with id " + messageDto.getDialogId() + " not exists"));
+        final BulletinEntity bulletinEntity = bulletinRepository.findById(dialogEntity.getBulletinId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Bulletin with id " + dialogEntity.getBulletinId() + " not exists"));
         if (!messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
             !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId())) {
             final String message = String.format("Wrong recipient id %d", messageDto.getRecipientId());

@@ -10,6 +10,6 @@ public class WrongMessageRecipientException extends BusinessLogicException {
 
     @Override
     public HttpStatus getHttpStatus() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.FORBIDDEN;
     }
 }

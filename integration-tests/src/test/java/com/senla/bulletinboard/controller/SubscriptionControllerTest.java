@@ -123,4 +123,31 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
             .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " + tariffId + " does not exist\"}"));
     }
 
+    @Test
+    @WithMockUser(roles = "USER")
+    public void subscribeTest_InsufficientFundsException() throws Exception {
+        final Long userId = 1L;
+        final Long tariffId = 2L;
+        final SubscriptionDto subscriptionDto = new SubscriptionDto();
+        subscriptionDto.setUserId(userId);
+        subscriptionDto.setTariffId(tariffId);
+        final UserDto userDtoById = UserMock.getUserDtoById(userId);
+        final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(userDtoById);
+        final BigDecimal balance = BigDecimal.valueOf(12);
+        userEntity.setBalance(balance);
+        final TariffEntity tariffEntity = new TariffEntity();
+        final BigDecimal price = BigDecimal.valueOf(12.5);
+        tariffEntity.setPrice(price);
+        tariffEntity.setTerm(2);
+        tariffEntity.setDescription("12.5$ за 2 дня");
+
+        willReturn(Optional.of(userEntity)).given(userRepository).findById(userId);
+        willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
+
+        mockMvc.perform(post("/api/subscriptions")
+                            .content(objectMapper.writeValueAsString(subscriptionDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isPaymentRequired())
+            .andExpect(content().json(String.format("{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f\"}", balance,price)));
+    }
 }

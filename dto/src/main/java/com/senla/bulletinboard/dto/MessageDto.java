@@ -16,7 +16,7 @@ public class MessageDto extends AbstractDto {
 
     private Long senderId;
     private Long recipientId;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long dialogId;
     private String message;
     private LocalDateTime createdAt;

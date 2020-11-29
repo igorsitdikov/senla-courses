@@ -2,6 +2,7 @@ package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.MessageDto;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.WrongMessageRecipientException;
 import com.senla.bulletinboard.exception.WrongRecipientException;
 import com.senla.bulletinboard.exception.WrongSenderException;
@@ -24,7 +25,7 @@ public class MessageController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public IdDto createMessage(@RequestBody final MessageDto messageDto)
-        throws WrongMessageRecipientException, WrongRecipientException, WrongSenderException {
+        throws WrongMessageRecipientException, WrongRecipientException, WrongSenderException, EntityNotFoundException {
         return messageService.createMessage(messageDto);
     }
 
