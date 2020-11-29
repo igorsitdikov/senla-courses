@@ -1,12 +1,12 @@
 package com.senla.bulletinboard.service;
 
 import com.senla.bulletinboard.dto.SubscriptionDto;
-import com.senla.bulletinboard.entity.AbstractEntity;
 import com.senla.bulletinboard.entity.SubscriptionEntity;
 import com.senla.bulletinboard.entity.TariffEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
@@ -19,12 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -43,10 +39,15 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     }
 
     @Transactional
-    @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
-    public void addPremium(final SubscriptionDto subscriptionDto) throws InsufficientFundsException {
-        final UserEntity userEntity = userRepository.getOne(subscriptionDto.getUserId());
-        final TariffEntity tariffEntity = tariffRepository.getOne(subscriptionDto.getTariffId());
+//    @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
+    public void addPremium(final SubscriptionDto subscriptionDto)
+        throws InsufficientFundsException, EntityNotFoundException {
+        final UserEntity userEntity = userRepository.findById(subscriptionDto.getUserId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("User with such id " + subscriptionDto.getUserId() + " does not exist"));
+        final TariffEntity tariffEntity = tariffRepository.findById(subscriptionDto.getTariffId())
+            .orElseThrow(
+                () -> new EntityNotFoundException("Tariff with such id " + subscriptionDto.getTariffId() + " does not exist"));
         addPremium(userEntity, tariffEntity);
     }
 
