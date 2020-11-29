@@ -13,6 +13,7 @@ import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
         this.bulletinRepository = bulletinRepository;
     }
 
-    //    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
+    @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
     public IdDto addVoteToBulletin(final SellerVoteDto sellerVoteDto)
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());
@@ -62,9 +63,5 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
 
     public boolean checkVoteExistence(final SellerVoteDto sellerVoteDto) {
         return repository.existsByVoterIdAndBulletinId(sellerVoteDto.getVoterId(), sellerVoteDto.getBulletinId());
-    }
-
-    public Double averageSellerRating(final Long id) {
-        return repository.averageRatingByUserId(id);
     }
 }
