@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.service;
 
+import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.TariffDto;
 import com.senla.bulletinboard.entity.TariffEntity;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
@@ -25,5 +26,10 @@ public class TariffService extends AbstractService<TariffDto, TariffEntity, Tari
             throw new EntityNotFoundException(message);
         }
         return super.update(id, dto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public IdDto post(final TariffDto tariffDto) {
+        return super.post(tariffDto);
     }
 }

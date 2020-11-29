@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +48,7 @@ public class TariffControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser(roles="ADMIN")
     public void testAddTariff() throws Exception {
         final long id = 3L;
         final TariffDto tariffDto = TariffMock.getById(id);
@@ -60,12 +64,40 @@ public class TariffControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testSubscribe() throws Exception {
+    @WithMockUser(roles="ADMIN")
+    public void testUpdateTariff() throws Exception {
         final long id = 3L;
-        mockMvc.perform(get("/api/tariffs/" + id)
-                            .param("user_id", "4")
+        final TariffDto tariffDto = TariffMock.getById(id);
+        tariffDto.setPrice(BigDecimal.valueOf(3.4));
+        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(TariffMock.getById(id));
+        tariffEntity.setPrice(BigDecimal.valueOf(3.4));
+
+        willReturn(true).given(tariffRepository).existsById(id);
+        willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
+
+        mockMvc.perform(put("/api/tariffs/" + id)
+                            .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(tariffDto)));
     }
 
+    @Test
+    @WithMockUser(roles="ADMIN")
+    public void testUpdateTariff_NotExistsException() throws Exception {
+        final long id = 3L;
+        final TariffDto tariffDto = TariffMock.getById(id);
+        tariffDto.setPrice(BigDecimal.valueOf(3.4));
+        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(TariffMock.getById(id));
+        tariffEntity.setPrice(BigDecimal.valueOf(3.4));
+
+        willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
+
+        mockMvc.perform(put("/api/tariffs/" + id)
+                            .content(objectMapper.writeValueAsString(tariffDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+        .andExpect(content().json("{\"errorMessage\":\"Tariff with id " +
+                                  id + " was not found\"}"));
+    }
 }
