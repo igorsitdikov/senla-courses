@@ -6,11 +6,13 @@ import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinDetailsMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
+import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,13 +37,17 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void showBulletinsTest() throws Exception {
-        final List<BulletinDto> expected = BulletinDetailsMock.getAll();
+        final List<BulletinDto> expected = BulletinDetailsMock.getAll()
+            .stream()
+            .peek(bulletinDto -> bulletinDto.setComments(new ArrayList<>()))
+            .collect(Collectors.toList());
+
         final List<BulletinEntity> entities = expected
             .stream()
             .map(bulletinDtoEntityMapper::sourceToDestination)
             .collect(Collectors.toList());
 
-        willReturn(entities).given(bulletinRepository).findAll();
+        willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
                             .contentType(MediaType.APPLICATION_JSON))
