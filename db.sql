@@ -134,6 +134,7 @@ CREATE TABLE IF NOT EXISTS seller_vote
         FOREIGN KEY (bulletin_id) REFERENCES bulletin (id) ON DELETE CASCADE,
     CONSTRAINT fk_seller_vote_user_voter_id
         FOREIGN KEY (voter_id) REFERENCES user (id) ON DELETE CASCADE,
+        UNIQUE unique_index (voter_id, bulletin_id),
     PRIMARY KEY (id)
 );
 

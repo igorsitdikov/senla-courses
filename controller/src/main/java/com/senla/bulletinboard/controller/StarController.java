@@ -2,6 +2,10 @@ package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.SellerVoteDto;
+import com.senla.bulletinboard.exception.BulletinIsClosedException;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
+import com.senla.bulletinboard.exception.VoteAlreadyExistsException;
+import com.senla.bulletinboard.exception.WrongVoterException;
 import com.senla.bulletinboard.service.SellerVoteService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,8 @@ public class StarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdDto addStarToSeller(@RequestBody final SellerVoteDto sellerVoteDto) {
-        return sellerVoteService.post(sellerVoteDto);
+    public IdDto addStarToSeller(@RequestBody final SellerVoteDto sellerVoteDto)
+        throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
+        return sellerVoteService.addVoteToBulletin(sellerVoteDto);
     }
 }
