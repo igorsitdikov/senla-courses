@@ -67,7 +67,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isConflict())
-            .andExpect(content().json("{\"errorMessage\":\"User with email " + user.getEmail() + " already exists\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"User with email " + user.getEmail() + " already exists.\"}"));
     }
 
     @Test
@@ -81,6 +81,6 @@ public class AuthControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"No user with email = " + request.getEmail() + " was found.\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"No user with email " + request.getEmail() + " was found.\"}"));
     }
 }
