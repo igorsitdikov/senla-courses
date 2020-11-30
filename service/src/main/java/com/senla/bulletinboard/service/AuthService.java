@@ -28,8 +28,6 @@ import java.util.List;
 @Transactional
 public class AuthService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -49,9 +47,7 @@ public class AuthService {
     private UserEntity saveUserWithEncodedPassword(final UserRequestDto userDto) {
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(userDto);
         userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        final UserEntity createdUser = userRepository.save(userEntity);
-        entityManager.refresh(createdUser);
-        return createdUser;
+        return userRepository.save(userEntity);
     }
 
     public TokenDto signIn(final SignInDto signInDto) throws NoSuchUserException {

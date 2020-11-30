@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
@@ -32,21 +33,25 @@ public class UserEntity extends AbstractEntity {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", insertable = false)
+    @Column(name = "role")
     private UserRole role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "premium", insertable = false)
+    @Column(name = "premium")
     private PremiumStatus premium;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "auto_subscribe", insertable = false)
+    @Column(name = "auto_subscribe")
     private AutoSubscribeStatus autoSubscribe;
 
-    @Column(name = "balance", insertable = false)
+    @Column(name = "balance")
     private BigDecimal balance;
-    // mb not working
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private Set<PaymentEntity> payments;
 
+    @PrePersist
+    public void prePersist() {
+        role = UserRole.USER;
+        premium = PremiumStatus.DISABLE;
+        balance = BigDecimal.ZERO;
+        autoSubscribe = AutoSubscribeStatus.DISABLE;
+    }
 }

@@ -1,7 +1,6 @@
 package com.senla.bulletinboard.mock;
 
 import com.senla.bulletinboard.dto.DialogDto;
-import com.senla.bulletinboard.dto.DialogRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,16 +18,6 @@ public class DialogMock {
 
     public static DialogDto getById(final Long id) {
         return dialogMap.get(id);
-    }
-
-    public static DialogRequestDto getRequestById(final Long id) {
-        DialogDto dialogDto = dialogMap.get(id);
-        DialogRequestDto dialogRequestDto = new DialogRequestDto(
-            dialogDto.getSellerId(),
-            dialogDto.getCustomerId(),
-            dialogDto.getBulletinId(),
-            dialogDto.getCreatedAt());
-        return dialogRequestDto;
     }
 
     public static List<DialogDto> getAll() {
