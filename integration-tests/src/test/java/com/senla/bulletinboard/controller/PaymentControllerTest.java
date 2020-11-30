@@ -42,18 +42,6 @@ public class PaymentControllerTest extends AbstractControllerTest {
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
     @MockBean
-    private DialogRepository dialogRepository;
-    @MockBean
-    private BulletinRepository bulletinRepository;
-    @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
-    @MockBean
-    private SubscriptionRepository subscriptionRepository;
-    @MockBean
-    private TariffRepository tariffRepository;
-    @SpyBean
-    private SubscriptionDtoEntityMapper subscriptionDtoEntityMapper;
-    @MockBean
     private PaymentRepository paymentRepository;
     @SpyBean
     private PaymentDtoEntityMapper paymentDtoEntityMapper;

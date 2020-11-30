@@ -37,10 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MessageControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private UserRepository userRepository;
-    @SpyBean
-    private UserDtoEntityMapper userDtoEntityMapper;
-    @MockBean
     private DialogRepository dialogRepository;
     @SpyBean
     private DialogDtoEntityMapper dialogDtoEntityMapper;
@@ -48,12 +44,6 @@ public class MessageControllerTest extends AbstractControllerTest {
     private BulletinRepository bulletinRepository;
     @SpyBean
     private BulletinDtoEntityMapper bulletinDtoEntityMapper;
-    @MockBean
-    private SubscriptionRepository subscriptionRepository;
-    @MockBean
-    private TariffRepository tariffRepository;
-    @SpyBean
-    private SubscriptionDtoEntityMapper subscriptionDtoEntityMapper;
     @MockBean
     private MessageRepository messageRepository;
     @SpyBean

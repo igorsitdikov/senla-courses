@@ -16,7 +16,7 @@ public class UserService extends AbstractService<UserDto, UserEntity, UserReposi
     }
 
     @Override
-//    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("authentication.principal.id == #id")
     public UserDto update(final Long id, final UserDto dto) {
         return super.update(id, dto);
     }

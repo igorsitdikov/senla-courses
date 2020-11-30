@@ -40,7 +40,7 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         this.userRepository = userRepository;
     }
 
-//    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("authentication.principal.id == #id")
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
             final String message = String.format("User with such id %d does not exist", id);
@@ -65,13 +65,13 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         }
     }
 
-//    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("authentication.principal.id == #id")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         checkBulletinExistence(id);
         return super.update(id, bulletinDto);
     }
 
-//    @PreAuthorize("@bulletinService.checkOwner(#id, authentication.principal.id) or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @bulletinService.checkOwner(#id, authentication.principal.id)")
     public void deleteBulletin(final Long id) throws EntityNotFoundException {
         checkBulletinExistence(id);
         super.delete(id);
@@ -90,10 +90,6 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
             .stream()
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
-//        return repository.findAllSortedByRating()
-//            .stream()
-//            .map(bulletinDtoEntityMapper::destinationToSource)
-//            .collect(Collectors.toList());
     }
 
     private FilterDto convertArrayToDto(String[] filters) {

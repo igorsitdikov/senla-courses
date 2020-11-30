@@ -14,6 +14,7 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -38,7 +39,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
         this.dialogRepository = dialogRepository;
     }
 
-    //    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
+    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()

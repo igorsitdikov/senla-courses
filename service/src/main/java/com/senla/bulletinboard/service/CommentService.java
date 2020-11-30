@@ -12,6 +12,7 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class CommentService extends AbstractService<CommentDto, CommentEntity, C
         this.bulletinRepository = bulletinRepository;
     }
 
-    //    @PreAuthorize("authentication.principal.id == #commentDto.getAuthorId()")
+    @PreAuthorize("authentication.principal.id == #commentDto.getAuthorId()")
     public IdDto createComment(final CommentDto commentDto)
         throws BulletinIsClosedException, EntityNotFoundException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(commentDto.getBulletinId());

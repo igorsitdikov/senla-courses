@@ -39,7 +39,7 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     }
 
     @Transactional
-//    @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
+    @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
     public void addPremium(final SubscriptionDto subscriptionDto)
         throws InsufficientFundsException, EntityNotFoundException {
         final UserEntity userEntity = userRepository.findById(subscriptionDto.getUserId())
