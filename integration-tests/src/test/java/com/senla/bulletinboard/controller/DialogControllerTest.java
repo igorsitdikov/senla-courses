@@ -113,7 +113,7 @@ public class DialogControllerTest extends AbstractControllerTest {
             .andExpect(status().isConflict())
             .andExpect(content().json("{\n" +
                                       "    \"errorMessage\": \"Dialog with bulletin id " + dialogDto.getBulletinId() +
-                                      " and customer id " + dialogDto.getCustomerId() + " already exists\"\n" +
+                                      " and customer id " + dialogDto.getCustomerId() + " already exists.\"\n" +
                                       "}"));
     }
 

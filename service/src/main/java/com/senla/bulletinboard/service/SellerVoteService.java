@@ -12,6 +12,7 @@ import com.senla.bulletinboard.exception.WrongVoterException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -36,23 +37,20 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
-            final String message = String.format("Bulletin with id %d is closed",
-                                                 sellerVoteDto.getBulletinId());
+            final String message = Translator.toLocale("bulletin-closed", sellerVoteDto.getBulletinId());
             log.error(message);
             throw new BulletinIsClosedException(message);
         } else if (!bulletinEntity.isPresent()) {
-            final String message = String.format("Bulletin with id %d does not exist",
-                                                 sellerVoteDto.getBulletinId());
+            final String message = Translator.toLocale("bulletin-not-exists", sellerVoteDto.getBulletinId());
             log.error(message);
             throw new EntityNotFoundException(message);
         }
         if (bulletinEntity.get().getSeller().getId().equals(sellerVoteDto.getVoterId())) {
-            final String message = "Forbidden to vote for yourself";
+            final String message = Translator.toLocale("vote-forbidden");
             throw new WrongVoterException(message);
         }
         if (checkVoteExistence(sellerVoteDto)) {
-            final String message = String
-                .format("User with id %d already voted for bulletin with id %d",
+            final String message = Translator.toLocale("user-already-voted",
                         sellerVoteDto.getVoterId(),
                         sellerVoteDto.getBulletinId());
             log.warn(message);

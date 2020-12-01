@@ -13,12 +13,14 @@ import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -54,25 +56,25 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
     public IdDto createMessage(final MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
-            final String message = "Forbidden send message to yourself";
+            final String message = Translator.toLocale("send-message-forbidden");
             log.error(message);
             throw new WrongMessageRecipientException(message);
         }
         final DialogEntity dialogEntity = dialogRepository.findById(messageDto.getDialogId())
             .orElseThrow(
-                () -> new EntityNotFoundException("Dialog with id " + messageDto.getDialogId() + " not exists"));
+                () -> new EntityNotFoundException(Translator.toLocale("dialog-not-exists", messageDto.getDialogId())));
         final BulletinEntity bulletinEntity = bulletinRepository.findById(dialogEntity.getBulletinId())
             .orElseThrow(
-                () -> new EntityNotFoundException("Bulletin with id " + dialogEntity.getBulletinId() + " not exists"));
+                () -> new EntityNotFoundException(Translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
         if (!messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
             !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId())) {
-            final String message = String.format("Wrong recipient id %d", messageDto.getRecipientId());
+            final String message = Translator.toLocale("wrong-recipient", messageDto.getRecipientId());
             log.error(message);
             throw new WrongRecipientException(message);
         }
         if (!messageDto.getSenderId().equals(dialogEntity.getCustomerId()) &&
             !messageDto.getSenderId().equals(bulletinEntity.getSeller().getId())) {
-            final String message = String.format("Wrong sender id %d", messageDto.getSenderId());
+            final String message = Translator.toLocale("wrong-sender", messageDto.getSenderId());
             log.error(message);
             throw new WrongSenderException(message);
         }

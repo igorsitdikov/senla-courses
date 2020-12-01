@@ -8,11 +8,13 @@ import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
+import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.DateTimeUtils;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -41,13 +43,13 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     @Transactional
     @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
     public void addPremium(final SubscriptionDto subscriptionDto)
-        throws InsufficientFundsException, EntityNotFoundException {
+            throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
         final UserEntity userEntity = userRepository.findById(subscriptionDto.getUserId())
             .orElseThrow(
-                () -> new EntityNotFoundException("User with such id " + subscriptionDto.getUserId() + " does not exist"));
+                () -> new NoSuchUserException(Translator.toLocale("no-such-user-id", subscriptionDto.getUserId())));
         final TariffEntity tariffEntity = tariffRepository.findById(subscriptionDto.getTariffId())
             .orElseThrow(
-                () -> new EntityNotFoundException("Tariff with such id " + subscriptionDto.getTariffId() + " does not exist"));
+                () -> new EntityNotFoundException(Translator.toLocale("tariff-not-exists", subscriptionDto.getTariffId())));
         addPremium(userEntity, tariffEntity);
     }
 
@@ -55,9 +57,7 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
     public void addPremium(final UserEntity userEntity, final TariffEntity tariffEntity)
         throws InsufficientFundsException {
         if (userEntity.getBalance().compareTo(tariffEntity.getPrice()) < 0) {
-            final String message = String.format("There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f",
-                                                 userEntity.getBalance(),
-                                                 tariffEntity.getPrice());
+            final String message = Translator.toLocale("no-funds", userEntity.getBalance(), tariffEntity.getPrice());
             userEntity.setAutoSubscribe(AutoSubscribeStatus.DISABLE);
             userRepository.save(userEntity);
             log.error(message);
@@ -74,7 +74,7 @@ public class SubscriptionService extends AbstractService<SubscriptionDto, Subscr
         subscriptionEntity.setTariffId(tariffEntity.getId());
 
         if (userEntity.getPremium() == PremiumStatus.ACTIVE) {
-            final String message = String.format("User with id %d has already premium status.", userEntity.getId());
+            final String message = Translator.toLocale("user-has-premium", userEntity.getId());
             log.info(message);
             final Optional<SubscriptionEntity> lastSubscription =
                 repository.findTopByUserIdOrderBySubscribedAt(userEntity.getId());

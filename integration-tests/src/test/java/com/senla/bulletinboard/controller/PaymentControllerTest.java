@@ -91,7 +91,7 @@ public class PaymentControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(paymentDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"User with such id " + userId + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"No user with id " + userId + " was found.\"}"));
     }
 
     @Test

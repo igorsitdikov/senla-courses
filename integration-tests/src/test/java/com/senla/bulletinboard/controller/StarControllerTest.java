@@ -104,7 +104,7 @@ public class StarControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed.\"}"));
     }
 
     @Test
@@ -128,7 +128,7 @@ public class StarControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
     }
 
     @Test
@@ -159,7 +159,7 @@ public class StarControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Forbidden to vote for yourself\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Vote to yourself is forbidden.\"}"));
     }
 
     @Test
@@ -187,6 +187,6 @@ public class StarControllerTest extends AbstractControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().json(
                 "{\"errorMessage\":\"User with id " + userId + " already voted for bulletin with id " + bulletinId +
-                "\"}"));
+                ".\"}"));
     }
 }

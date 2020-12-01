@@ -100,7 +100,7 @@ public class CommentControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(content))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed.\"}"));
     }
 
     @Test
@@ -122,6 +122,6 @@ public class CommentControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(content))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
     }
 }

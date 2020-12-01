@@ -141,7 +141,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist.\"}"));
     }
 
     @Test
@@ -193,7 +193,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete("/api/bulletins/" + id)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist.\"}"));
 
         verify(bulletinRepository, times(1)).existsById(id);
     }
@@ -219,7 +219,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + id + " does not exist.\"}"));
 
         verify(bulletinRepository, times(1)).existsById(id);
     }

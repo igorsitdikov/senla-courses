@@ -11,6 +11,7 @@ import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -35,13 +36,11 @@ public class CommentService extends AbstractService<CommentDto, CommentEntity, C
         throws BulletinIsClosedException, EntityNotFoundException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(commentDto.getBulletinId());
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
-            final String message = String.format("Bulletin with id %d is closed",
-                                                 bulletinEntity.get().getId());
+            final String message = Translator.toLocale("bulletin-closed", bulletinEntity.get().getId());
             log.error(message);
             throw new BulletinIsClosedException(message);
         } else if (!bulletinEntity.isPresent()) {
-            final String message = String.format("Bulletin with id %d does not exist",
-                                                 commentDto.getBulletinId());
+            final String message = Translator.toLocale("bulletin-not-exists", commentDto.getBulletinId());
             log.error(message);
             throw new EntityNotFoundException(message);
         }

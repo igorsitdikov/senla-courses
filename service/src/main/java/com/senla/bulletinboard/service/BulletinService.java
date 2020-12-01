@@ -12,6 +12,7 @@ import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
     @PreAuthorize("authentication.principal.id == #id")
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
-            final String message = String.format("User with such id %d does not exist", id);
+            final String message = Translator.toLocale("no-such-user-id", id);
             log.error(message);
             throw new NoSuchUserException(message);
         }
@@ -59,7 +60,7 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
 
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
-            final String message = String.format("Bulletin with such id %d does not exist", id);
+            final String message = Translator.toLocale("bulletin-not-exists", id);
             log.error(message);
             throw new EntityNotFoundException(message);
         }

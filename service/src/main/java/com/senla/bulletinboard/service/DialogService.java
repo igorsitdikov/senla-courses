@@ -6,6 +6,7 @@ import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.exception.EntityAlreadyExistsException;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.repository.DialogRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,7 @@ public class DialogService extends AbstractService<DialogDto, DialogEntity, Dial
 
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
-            final String message =
-                String.format("Dialog with bulletin id %s and customer id %d already exists",
+            final String message = Translator.toLocale("dialog-already-exists",
                               dialogDto.getBulletinId(),
                               dialogDto.getCustomerId());
             log.error(message);

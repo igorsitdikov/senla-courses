@@ -3,6 +3,7 @@ package com.senla.bulletinboard.controller;
 import com.senla.bulletinboard.dto.SubscriptionDto;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
+import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.service.SubscriptionService;
@@ -29,7 +30,7 @@ public class SubscriptionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void subscribe(@RequestBody final SubscriptionDto subscriptionDto)
-        throws InsufficientFundsException, EntityNotFoundException {
+            throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
         subscriptionService.addPremium(subscriptionDto);
     }
 }

@@ -167,7 +167,7 @@ public class UserControllerTest extends AbstractControllerTest {
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"User with such id " + id + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"No user with id " + id + " was found.\"}"));
     }
 
     @Test

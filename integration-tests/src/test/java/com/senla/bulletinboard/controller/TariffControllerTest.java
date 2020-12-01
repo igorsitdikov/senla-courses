@@ -97,7 +97,7 @@ public class TariffControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-        .andExpect(content().json("{\"errorMessage\":\"Tariff with id " +
-                                  id + " was not found\"}"));
+        .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " +
+                                  id + " does not exist.\"}"));
     }
 }

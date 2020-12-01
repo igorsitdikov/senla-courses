@@ -8,6 +8,7 @@ import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
 import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class PaymentService extends AbstractService<PaymentDto, PaymentEntity, P
     public IdDto createPayment(final PaymentDto paymentDto) throws NoSuchUserException {
         final Optional<UserEntity> userEntity = userRepository.findById(paymentDto.getUserId());
         if (!userEntity.isPresent()) {
-            final String message = String.format("User with such id %d does not exist", paymentDto.getUserId());
+            final String message = Translator.toLocale("no-such-user-id", paymentDto.getUserId());
             log.error(message);
             throw new NoSuchUserException(message);
         }

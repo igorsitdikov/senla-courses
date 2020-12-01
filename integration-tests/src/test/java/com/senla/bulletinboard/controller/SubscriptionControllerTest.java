@@ -99,7 +99,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"User with such id " + userId + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"No user with id " + userId + " was found.\"}"));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " + tariffId + " does not exist\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " + tariffId + " does not exist.\"}"));
     }
 
     @Test
@@ -155,6 +155,6 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isPaymentRequired())
-            .andExpect(content().json(String.format("{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f\"}", balance,price)));
+            .andExpect(content().json(String.format("{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f.\"}", balance,price)));
     }
 }

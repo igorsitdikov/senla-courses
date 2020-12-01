@@ -64,7 +64,7 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(messageDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden())
-            .andExpect(content().json("{\"errorMessage\":\"Forbidden send message to yourself\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Send message to yourself is forbidden.\"}"));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(messageDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Wrong recipient id " + recipientId + "\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Wrong recipient id " + recipientId + ".\"}"));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(messageDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Wrong sender id " + senderId + "\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Wrong sender id " + senderId + ".\"}"));
     }
 
     @Test
@@ -192,7 +192,7 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(messageDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Dialog with id " + dialogId + " not exists\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Dialog with such id " + dialogId + " does not exist.\"}"));
     }
 
     @Test
@@ -228,6 +228,6 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andExpect(content()
-                           .json("{\"errorMessage\":\"Bulletin with id " + bulletinEntity.getId() + " not exists\"}"));
+                           .json("{\"errorMessage\":\"Bulletin with such id " + bulletinEntity.getId() + " does not exist.\"}"));
     }
 }
