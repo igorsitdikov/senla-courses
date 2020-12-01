@@ -17,11 +17,10 @@
 
     <groupId>com.senla</groupId>
     <artifactId>bulletin-board</artifactId>
-    <version>${project.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>application</module>
         <module>controller</module>
         <module>configuration</module>
         <module>dto</module>
@@ -31,10 +30,11 @@
         <module>repository</module>
         <module>service</module>
         <module>mapper</module>
-        <module>integration-tests</module>
         <module>exception</module>
         <module>security</module>
         <module>utils</module>
+        <module>integration-tests</module>
+        <module>application</module>
     </modules>
 
     <dependencies>
