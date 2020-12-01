@@ -71,6 +71,8 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
+                            .param("sort", "average")
+                            .param("filter", "price_gte:20")
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(response));
