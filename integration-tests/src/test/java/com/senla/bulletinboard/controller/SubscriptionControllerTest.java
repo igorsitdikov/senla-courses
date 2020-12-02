@@ -5,12 +5,8 @@ import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.TariffEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.SubscriptionDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
-import com.senla.bulletinboard.repository.BulletinRepository;
-import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
 import com.senla.bulletinboard.repository.UserRepository;
@@ -155,6 +151,8 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isPaymentRequired())
-            .andExpect(content().json(String.format("{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f.\"}", balance,price)));
+            .andExpect(content().json(String.format(
+                "{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f.\"}", balance,
+                price)));
     }
 }

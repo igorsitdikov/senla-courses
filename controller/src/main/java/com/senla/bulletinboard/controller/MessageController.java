@@ -6,7 +6,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.WrongMessageRecipientException;
 import com.senla.bulletinboard.exception.WrongRecipientException;
 import com.senla.bulletinboard.exception.WrongSenderException;
-import com.senla.bulletinboard.service.MessageService;
+import com.senla.bulletinboard.service.interfaces.MessageService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -2,9 +2,7 @@ package com.senla.bulletinboard.mapper;
 
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.entity.DialogEntity;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

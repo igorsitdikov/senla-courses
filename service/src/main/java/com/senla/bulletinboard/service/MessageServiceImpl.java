@@ -13,6 +13,7 @@ import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
+import com.senla.bulletinboard.service.interfaces.MessageService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,28 +21,29 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class MessageService extends AbstractService<MessageDto, MessageEntity, MessageRepository> {
+public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntity, MessageRepository> implements
+                                                                                                      MessageService {
 
     private final MessageDtoEntityMapper dtoEntityMapper;
     private final BulletinRepository bulletinRepository;
     private final DialogRepository dialogRepository;
 
-    public MessageService(final MessageDtoEntityMapper dtoEntityMapper,
-                          final MessageRepository repository,
-                          final BulletinRepository bulletinRepository,
-                          final DialogRepository dialogRepository) {
+    public MessageServiceImpl(final MessageDtoEntityMapper dtoEntityMapper,
+                              final MessageRepository repository,
+                              final BulletinRepository bulletinRepository,
+                              final DialogRepository dialogRepository) {
         super(dtoEntityMapper, repository);
         this.dtoEntityMapper = dtoEntityMapper;
         this.bulletinRepository = bulletinRepository;
         this.dialogRepository = dialogRepository;
     }
 
-    @PreAuthorize("@messageService.checkOwner(authentication.principal.id, #id)")
+    @Override
+    @PreAuthorize("@messageServiceImpl.checkOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()
@@ -53,6 +55,7 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
         return dialogRepository.findByIdAndOwnerId(dialogId, userId).compareTo(BigInteger.ONE) == 0;
     }
 
+    @Override
     public IdDto createMessage(final MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
@@ -65,7 +68,8 @@ public class MessageService extends AbstractService<MessageDto, MessageEntity, M
                 () -> new EntityNotFoundException(Translator.toLocale("dialog-not-exists", messageDto.getDialogId())));
         final BulletinEntity bulletinEntity = bulletinRepository.findById(dialogEntity.getBulletinId())
             .orElseThrow(
-                () -> new EntityNotFoundException(Translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
+                () -> new EntityNotFoundException(
+                    Translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
         if (!messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
             !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId())) {
             final String message = Translator.toLocale("wrong-recipient", messageDto.getRecipientId());

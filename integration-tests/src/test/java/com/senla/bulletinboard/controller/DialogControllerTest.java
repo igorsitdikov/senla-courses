@@ -21,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -58,9 +57,9 @@ public class DialogControllerTest extends AbstractControllerTest {
         final Long userId = 4L;
         final List<MessageDto> expected = MessageMock.getAll();
         final List<MessageEntity> entities = expected
-                .stream()
-                .map(messageDtoEntityMapper::sourceToDestination)
-                .collect(Collectors.toList());
+            .stream()
+            .map(messageDtoEntityMapper::sourceToDestination)
+            .collect(Collectors.toList());
         final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
         final String password = UserMock.getById(userId).getPassword();
         user.setPassword(passwordEncoder.encode(password));

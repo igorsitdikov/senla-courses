@@ -128,7 +128,8 @@ public class StarControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
+            .andExpect(
+                content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
     }
 
     @Test

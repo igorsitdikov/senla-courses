@@ -20,14 +20,14 @@ public class UserRequestDto extends UserDto {
     }
 
     public UserRequestDto(final Long id,
-                           final String firstName,
-                           final String lastName,
-                           final String email,
-                           final String phone,
-                           final AutoSubscribeStatus autoSubscribe,
-                           final PremiumStatus premium,
-                           final BigDecimal balance,
-                           final String password) {
+                          final String firstName,
+                          final String lastName,
+                          final String email,
+                          final String phone,
+                          final AutoSubscribeStatus autoSubscribe,
+                          final PremiumStatus premium,
+                          final BigDecimal balance,
+                          final String password) {
         super(id, firstName, lastName, email, phone, autoSubscribe, premium, balance);
         this.password = password;
     }

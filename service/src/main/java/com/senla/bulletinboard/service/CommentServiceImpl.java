@@ -10,7 +10,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
-import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.service.interfaces.CommentService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,17 +20,19 @@ import java.util.Optional;
 
 @Log4j2
 @Service
-public class CommentService extends AbstractService<CommentDto, CommentEntity, CommentRepository> {
+public class CommentServiceImpl extends AbstractService<CommentDto, CommentEntity, CommentRepository> implements
+                                                                                                      CommentService {
 
     private final BulletinRepository bulletinRepository;
 
-    public CommentService(final CommentDtoEntityMapper commentDtoEntityMapper,
-                          final CommentRepository commentRepository,
-                          final BulletinRepository bulletinRepository) {
+    public CommentServiceImpl(final CommentDtoEntityMapper commentDtoEntityMapper,
+                              final CommentRepository commentRepository,
+                              final BulletinRepository bulletinRepository) {
         super(commentDtoEntityMapper, commentRepository);
         this.bulletinRepository = bulletinRepository;
     }
 
+    @Override
     @PreAuthorize("authentication.principal.id == #commentDto.getAuthorId()")
     public IdDto createComment(final CommentDto commentDto)
         throws BulletinIsClosedException, EntityNotFoundException {

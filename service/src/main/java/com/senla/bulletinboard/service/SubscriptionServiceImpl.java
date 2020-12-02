@@ -13,6 +13,7 @@ import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.service.interfaces.SubscriptionService;
 import com.senla.bulletinboard.utils.DateTimeUtils;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
@@ -26,33 +27,38 @@ import java.util.Optional;
 
 @Log4j2
 @Service
-public class SubscriptionService extends AbstractService<SubscriptionDto, SubscriptionEntity, SubscriptionRepository> {
+public class SubscriptionServiceImpl
+    extends AbstractService<SubscriptionDto, SubscriptionEntity, SubscriptionRepository> implements
+                                                                                         SubscriptionService {
 
     private final UserRepository userRepository;
     private final TariffRepository tariffRepository;
 
-    public SubscriptionService(final DtoEntityMapper<SubscriptionDto, SubscriptionEntity> dtoEntityMapper,
-                               final SubscriptionRepository repository,
-                               final UserRepository userRepository,
-                               final TariffRepository tariffRepository) {
+    public SubscriptionServiceImpl(final DtoEntityMapper<SubscriptionDto, SubscriptionEntity> dtoEntityMapper,
+                                   final SubscriptionRepository repository,
+                                   final UserRepository userRepository,
+                                   final TariffRepository tariffRepository) {
         super(dtoEntityMapper, repository);
         this.userRepository = userRepository;
         this.tariffRepository = tariffRepository;
     }
 
+    @Override
     @Transactional
     @PreAuthorize("authentication.principal.id == #subscriptionDto.getUserId()")
     public void addPremium(final SubscriptionDto subscriptionDto)
-            throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
+        throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
         final UserEntity userEntity = userRepository.findById(subscriptionDto.getUserId())
             .orElseThrow(
                 () -> new NoSuchUserException(Translator.toLocale("no-such-user-id", subscriptionDto.getUserId())));
         final TariffEntity tariffEntity = tariffRepository.findById(subscriptionDto.getTariffId())
             .orElseThrow(
-                () -> new EntityNotFoundException(Translator.toLocale("tariff-not-exists", subscriptionDto.getTariffId())));
+                () -> new EntityNotFoundException(
+                    Translator.toLocale("tariff-not-exists", subscriptionDto.getTariffId())));
         addPremium(userEntity, tariffEntity);
     }
 
+    @Override
     @Transactional
     public void addPremium(final UserEntity userEntity, final TariffEntity tariffEntity)
         throws InsufficientFundsException {

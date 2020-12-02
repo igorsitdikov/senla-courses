@@ -12,7 +12,7 @@ public class MessageMock {
 
     private static final Map<Long, MessageDto> messageMap = new HashMap<Long, MessageDto>() {{
         put(1L, new MessageDto(3L, 1L, 4L, "Возможна ли доставка 22.02.2021?",
-                LocalDateTime.parse("2020-09-12T12:00:32")));
+                               LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 
     public static MessageDto getById(final Long id) {

@@ -48,7 +48,7 @@ public class TariffControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles="ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testAddTariff() throws Exception {
         final long id = 3L;
         final TariffDto tariffDto = TariffMock.getById(id);
@@ -64,7 +64,7 @@ public class TariffControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles="ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateTariff() throws Exception {
         final long id = 3L;
         final TariffDto tariffDto = TariffMock.getById(id);
@@ -83,7 +83,7 @@ public class TariffControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles="ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateTariff_NotExistsException() throws Exception {
         final long id = 3L;
         final TariffDto tariffDto = TariffMock.getById(id);
@@ -97,7 +97,7 @@ public class TariffControllerTest extends AbstractControllerTest {
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-        .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " +
-                                  id + " does not exist.\"}"));
+            .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " +
+                                      id + " does not exist.\"}"));
     }
 }

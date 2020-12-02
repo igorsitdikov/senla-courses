@@ -10,6 +10,7 @@ import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.security.AuthUser;
 import com.senla.bulletinboard.security.JwtUtil;
+import com.senla.bulletinboard.service.interfaces.AuthService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -27,7 +28,7 @@ import java.util.List;
 @Data
 @Service
 @Transactional
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
@@ -35,6 +36,7 @@ public class AuthService {
     private final UserDtoEntityMapper userDtoEntityMapper;
     private final AuthenticationManager authenticationManager;
 
+    @Override
     public TokenDto signUp(final UserRequestDto userDto) throws SuchUserAlreadyExistsException {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             final String message = Translator.toLocale("user-already-exists", userDto.getEmail());
@@ -52,6 +54,7 @@ public class AuthService {
         return userRepository.save(userEntity);
     }
 
+    @Override
     public TokenDto signIn(final SignInDto signInDto) throws NoSuchUserException {
         final UserEntity userEntity = userRepository
             .findByEmail(signInDto.getEmail())
@@ -63,7 +66,7 @@ public class AuthService {
                 });
 
         final UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(signInDto.getEmail(), signInDto.getPassword());
+            new UsernamePasswordAuthenticationToken(signInDto.getEmail(), signInDto.getPassword());
         authenticationManager.authenticate(authentication);
 
         final AuthUser user = getUserDetails(userEntity);

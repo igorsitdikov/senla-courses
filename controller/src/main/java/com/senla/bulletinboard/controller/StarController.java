@@ -6,7 +6,7 @@ import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.VoteAlreadyExistsException;
 import com.senla.bulletinboard.exception.WrongVoterException;
-import com.senla.bulletinboard.service.SellerVoteService;
+import com.senla.bulletinboard.service.interfaces.SellerVoteService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

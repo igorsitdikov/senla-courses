@@ -12,6 +12,7 @@ import com.senla.bulletinboard.exception.WrongVoterException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
+import com.senla.bulletinboard.service.interfaces.SellerVoteService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,17 +22,20 @@ import java.util.Optional;
 
 @Log4j2
 @Service
-public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVoteEntity, SellerVoteRepository> {
+public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, SellerVoteEntity, SellerVoteRepository>
+    implements
+    SellerVoteService {
 
     private final BulletinRepository bulletinRepository;
 
-    public SellerVoteService(final DtoEntityMapper<SellerVoteDto, SellerVoteEntity> dtoEntityMapper,
-                             final SellerVoteRepository repository,
-                             final BulletinRepository bulletinRepository) {
+    public SellerVoteServiceImpl(final DtoEntityMapper<SellerVoteDto, SellerVoteEntity> dtoEntityMapper,
+                                 final SellerVoteRepository repository,
+                                 final BulletinRepository bulletinRepository) {
         super(dtoEntityMapper, repository);
         this.bulletinRepository = bulletinRepository;
     }
 
+    @Override
     @PreAuthorize("authentication.principal.id == #sellerVoteDto.getVoterId()")
     public IdDto addVoteToBulletin(final SellerVoteDto sellerVoteDto)
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
@@ -51,8 +55,8 @@ public class SellerVoteService extends AbstractService<SellerVoteDto, SellerVote
         }
         if (checkVoteExistence(sellerVoteDto)) {
             final String message = Translator.toLocale("user-already-voted",
-                        sellerVoteDto.getVoterId(),
-                        sellerVoteDto.getBulletinId());
+                                                       sellerVoteDto.getVoterId(),
+                                                       sellerVoteDto.getBulletinId());
             log.warn(message);
             throw new VoteAlreadyExistsException(message);
         }

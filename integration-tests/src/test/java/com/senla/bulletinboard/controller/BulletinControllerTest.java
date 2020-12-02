@@ -149,9 +149,10 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void deleteBulletinTest() throws Exception {
         final long id = 4L;
+        final long bulletinId = 3L;
         String token = signInAsUser(id);
 
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final BulletinDto bulletinDto = BulletinDetailsMock.getById(bulletinId);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(id));
         final String password = UserMock.getById(id).getPassword();
@@ -159,16 +160,17 @@ public class BulletinControllerTest extends AbstractControllerTest {
         user.setRole(UserRole.USER);
         entity.setSeller(user);
 
-        willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
-        willReturn(true).given(bulletinRepository).existsById(id);
+        willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
+        willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
+        willReturn(true).given(bulletinRepository).existsById(bulletinId);
 
-        mockMvc.perform(delete("/api/bulletins/" + id)
+        mockMvc.perform(delete("/api/bulletins/" + bulletinId)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
-        verify(bulletinRepository, times(1)).existsById(id);
-        verify(bulletinRepository, times(1)).deleteById(id);
+        verify(bulletinRepository, times(1)).existsById(bulletinId);
+        verify(bulletinRepository, times(1)).deleteById(bulletinId);
     }
 
     @Test

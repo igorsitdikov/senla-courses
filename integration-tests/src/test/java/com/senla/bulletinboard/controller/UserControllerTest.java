@@ -58,7 +58,7 @@ public class UserControllerTest extends AbstractControllerTest {
         user.setRole(UserRole.USER);
         willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
         willReturn(Optional.of(user)).given(userRepository).findById(userId);
-}
+    }
 
     @Test
     public void testGetUser() throws Exception {

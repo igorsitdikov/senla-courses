@@ -9,7 +9,7 @@ import com.senla.bulletinboard.enumerated.PremiumStatus;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.SubscriptionService;
+import com.senla.bulletinboard.service.SubscriptionServiceImpl;
 import lombok.Data;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import static com.senla.bulletinboard.utils.DateTimeUtils.isExpired;
 public class ScheduledPremiumCheckerService {
 
     private final UserRepository userRepository;
-    private final SubscriptionService subscriptionService;
+    private final SubscriptionServiceImpl subscriptionService;
     private final SubscriptionRepository subscriptionRepository;
 
     @Scheduled(cron = "0 0 0 * * *")

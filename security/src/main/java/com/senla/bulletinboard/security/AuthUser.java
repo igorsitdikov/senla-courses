@@ -22,12 +22,12 @@ public class AuthUser extends User {
     }
 
     public AuthUser(final String username,
-                     final String password,
-                     final boolean enabled,
-                     final boolean accountNonExpired,
-                     final boolean credentialsNonExpired,
-                     final boolean accountNonLocked,
-                     final Collection<? extends GrantedAuthority> authorities, final Long id) {
+                    final String password,
+                    final boolean enabled,
+                    final boolean accountNonExpired,
+                    final boolean credentialsNonExpired,
+                    final boolean accountNonLocked,
+                    final Collection<? extends GrantedAuthority> authorities, final Long id) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
     }

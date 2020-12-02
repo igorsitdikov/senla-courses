@@ -3,7 +3,7 @@ package com.senla.bulletinboard.controller;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
-import com.senla.bulletinboard.service.PaymentService;
+import com.senla.bulletinboard.service.interfaces.PaymentService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

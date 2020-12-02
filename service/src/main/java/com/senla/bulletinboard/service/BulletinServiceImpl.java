@@ -12,6 +12,7 @@ import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
+import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,27 +21,30 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class BulletinService extends AbstractService<BulletinDto, BulletinEntity, BulletinRepository> {
+public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEntity, BulletinRepository> implements
+                                                                                                          BulletinService {
 
     private final ObjectMapper mapper;
     private final BulletinDtoEntityMapper bulletinDtoEntityMapper;
     private final UserRepository userRepository;
 
-    public BulletinService(final BulletinDtoEntityMapper bulletinDtoEntityMapper,
-                           final BulletinRepository bulletinRepository,
-                           final ObjectMapper mapper,
-                           final UserRepository userRepository
-                          ) {
+    public BulletinServiceImpl(final BulletinDtoEntityMapper bulletinDtoEntityMapper,
+                               final BulletinRepository bulletinRepository,
+                               final ObjectMapper mapper,
+                               final UserRepository userRepository
+                              ) {
         super(bulletinDtoEntityMapper, bulletinRepository);
         this.bulletinDtoEntityMapper = bulletinDtoEntityMapper;
         this.mapper = mapper;
         this.userRepository = userRepository;
     }
 
+    @Override
     @PreAuthorize("authentication.principal.id == #id")
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
@@ -66,13 +70,15 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         }
     }
 
+    @Override
     @PreAuthorize("authentication.principal.id == #id")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         checkBulletinExistence(id);
         return super.update(id, bulletinDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @bulletinService.checkOwner(#id, authentication.principal.id)")
+    @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @bulletinServiceImpl.checkOwner(authentication.principal.id, #id)")
     public void deleteBulletin(final Long id) throws EntityNotFoundException {
         checkBulletinExistence(id);
         super.delete(id);
@@ -83,6 +89,7 @@ public class BulletinService extends AbstractService<BulletinDto, BulletinEntity
         return userId.equals(bulletinEntity.getSeller().getId());
     }
 
+    @Override
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, final SortBulletin sort) {
         final FilterDto criteria = convertArrayToDto(filters);
         BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);

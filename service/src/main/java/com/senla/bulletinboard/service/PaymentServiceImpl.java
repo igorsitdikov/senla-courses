@@ -8,6 +8,7 @@ import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
 import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.service.interfaces.PaymentService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,21 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class PaymentService extends AbstractService<PaymentDto, PaymentEntity, PaymentRepository> {
+public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntity, PaymentRepository> implements
+                                                                                                      PaymentService {
 
     private final UserRepository userRepository;
     private final PaymentDtoEntityMapper paymentDtoEntityMapper;
 
-    public PaymentService(final PaymentDtoEntityMapper dtoEntityMapper,
-                          final PaymentRepository repository,
-                          final UserRepository userRepository) {
+    public PaymentServiceImpl(final PaymentDtoEntityMapper dtoEntityMapper,
+                              final PaymentRepository repository,
+                              final UserRepository userRepository) {
         super(dtoEntityMapper, repository);
         paymentDtoEntityMapper = dtoEntityMapper;
         this.userRepository = userRepository;
     }
 
+    @Override
     @Transactional
     public IdDto createPayment(final PaymentDto paymentDto) throws NoSuchUserException {
         final Optional<UserEntity> userEntity = userRepository.findById(paymentDto.getUserId());
@@ -48,6 +51,7 @@ public class PaymentService extends AbstractService<PaymentDto, PaymentEntity, P
         return super.post(paymentDto);
     }
 
+    @Override
     public List<PaymentDto> showAllPaymentsByUserId(final Long id) {
         return repository.findAllByUserId(id)
             .stream()

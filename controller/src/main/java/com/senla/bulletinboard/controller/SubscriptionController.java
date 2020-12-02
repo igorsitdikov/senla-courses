@@ -4,9 +4,7 @@ import com.senla.bulletinboard.dto.SubscriptionDto;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
-import com.senla.bulletinboard.repository.SubscriptionRepository;
-import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.SubscriptionService;
+import com.senla.bulletinboard.service.interfaces.SubscriptionService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,15 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/subscriptions")
 public class SubscriptionController {
 
-    private final UserRepository userRepository;
-    private final SubscriptionRepository subscriptionRepository;
-
     private final SubscriptionService subscriptionService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void subscribe(@RequestBody final SubscriptionDto subscriptionDto)
-            throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
+        throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
         subscriptionService.addPremium(subscriptionDto);
     }
 }

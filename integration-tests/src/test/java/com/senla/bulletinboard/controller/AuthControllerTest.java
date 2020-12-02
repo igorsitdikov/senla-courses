@@ -3,24 +3,18 @@ package com.senla.bulletinboard.controller;
 import com.senla.bulletinboard.dto.UserRequestDto;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
-import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 
-import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,7 +61,8 @@ public class AuthControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isConflict())
-            .andExpect(content().json("{\"errorMessage\":\"User with email " + user.getEmail() + " already exists.\"}"));
+            .andExpect(
+                content().json("{\"errorMessage\":\"User with email " + user.getEmail() + " already exists.\"}"));
     }
 
     @Test
@@ -81,6 +76,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"No user with email " + request.getEmail() + " was found.\"}"));
+            .andExpect(
+                content().json("{\"errorMessage\":\"No user with email " + request.getEmail() + " was found.\"}"));
     }
 }

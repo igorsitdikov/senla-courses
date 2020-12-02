@@ -5,7 +5,7 @@ import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.exception.SuchUserAlreadyExistsException;
-import com.senla.bulletinboard.service.AuthService;
+import com.senla.bulletinboard.service.interfaces.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

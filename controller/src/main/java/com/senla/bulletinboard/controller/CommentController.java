@@ -4,7 +4,7 @@ import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
-import com.senla.bulletinboard.service.CommentService;
+import com.senla.bulletinboard.service.interfaces.CommentService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

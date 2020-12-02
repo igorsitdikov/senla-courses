@@ -23,7 +23,7 @@ public class MessageEntity extends AbstractEntity {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sender_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "sender_id", nullable = false, insertable = false, updatable = false)
     private UserEntity sender;
 
     @Column(name = "sender_id")

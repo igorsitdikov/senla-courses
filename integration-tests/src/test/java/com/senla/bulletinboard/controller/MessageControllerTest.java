@@ -10,16 +10,11 @@ import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.SubscriptionDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinDetailsMock;
 import com.senla.bulletinboard.mock.DialogMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
-import com.senla.bulletinboard.repository.SubscriptionRepository;
-import com.senla.bulletinboard.repository.TariffRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -228,6 +223,7 @@ public class MessageControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andExpect(content()
-                           .json("{\"errorMessage\":\"Bulletin with such id " + bulletinEntity.getId() + " does not exist.\"}"));
+                           .json("{\"errorMessage\":\"Bulletin with such id " + bulletinEntity.getId() +
+                                 " does not exist.\"}"));
     }
 }

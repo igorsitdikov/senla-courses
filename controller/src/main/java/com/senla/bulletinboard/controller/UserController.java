@@ -6,9 +6,9 @@ import com.senla.bulletinboard.dto.PasswordDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
-import com.senla.bulletinboard.service.BulletinService;
-import com.senla.bulletinboard.service.DialogService;
-import com.senla.bulletinboard.service.UserService;
+import com.senla.bulletinboard.service.interfaces.BulletinService;
+import com.senla.bulletinboard.service.interfaces.DialogService;
+import com.senla.bulletinboard.service.interfaces.UserService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @Data
@@ -57,7 +58,8 @@ public class UserController {
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(@PathVariable final Long id, @RequestBody final PasswordDto passwordDto) throws NoSuchUserException {
+    public void changePassword(@PathVariable final Long id, @RequestBody final PasswordDto passwordDto, Principal principal)
+        throws NoSuchUserException {
         userService.changePassword(id, passwordDto);
     }
 }
