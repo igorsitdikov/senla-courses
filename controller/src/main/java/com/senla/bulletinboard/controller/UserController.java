@@ -51,16 +51,13 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser(@PathVariable final Long id, @RequestBody final UserDto user) throws Exception {
+    public UserDto updateUser(@PathVariable final Long id, @RequestBody final UserDto user) {
         return userService.update(id, user);
     }
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(@PathVariable final Long id, @RequestBody final PasswordDto passwordDto) {
-        PasswordDto password = new PasswordDto();
-        password.setOldPassword("123456");
-        password.setNewPassword("111111");
-        password.setConfirmPassword("111111");
+    public void changePassword(@PathVariable final Long id, @RequestBody final PasswordDto passwordDto) throws NoSuchUserException {
+        userService.changePassword(id, passwordDto);
     }
 }

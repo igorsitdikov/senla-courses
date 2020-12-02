@@ -25,6 +25,7 @@
     </dependencies>
 
     <build>
+        <finalName>bulletin-board</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>

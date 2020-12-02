@@ -13,6 +13,8 @@ import com.senla.bulletinboard.security.JwtUtil;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserDtoEntityMapper userDtoEntityMapper;
+    private final AuthenticationManager authenticationManager;
 
     public TokenDto signUp(final UserRequestDto userDto) throws SuchUserAlreadyExistsException {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
@@ -58,6 +61,11 @@ public class AuthService {
                     log.error(message);
                     return new NoSuchUserException(message);
                 });
+
+        final UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(signInDto.getEmail(), signInDto.getPassword());
+        authenticationManager.authenticate(authentication);
+
         final AuthUser user = getUserDetails(userEntity);
         return new TokenDto(jwtUtil.generateToken(user));
     }

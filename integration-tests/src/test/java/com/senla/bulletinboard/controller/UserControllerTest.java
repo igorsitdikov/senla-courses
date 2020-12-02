@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -56,7 +57,8 @@ public class UserControllerTest extends AbstractControllerTest {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(UserRole.USER);
         willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-    }
+        willReturn(Optional.of(user)).given(userRepository).findById(userId);
+}
 
     @Test
     public void testGetUser() throws Exception {
@@ -187,17 +189,39 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword() throws Exception {
-        final long id = 1L;
-        PasswordDto password = new PasswordDto();
-        password.setOldPassword("123456");
-        password.setNewPassword("111111");
-        password.setConfirmPassword("111111");
+        final long id = 4L;
+        String token = signInAsUser(id);
+        PasswordDto passwordDto = new PasswordDto();
+        passwordDto.setOldPassword("123456");
+        passwordDto.setNewPassword("111111");
+        passwordDto.setConfirmPassword("111111");
 
         mockMvc.perform(patch("/api/users/" + id)
+                            .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(password))
-                       )
+                            .content(objectMapper.writeValueAsString(passwordDto))                       )
             .andExpect(status().isOk());
     }
 
+    @Test
+    public void testChangePassword_NoSuchUserException() throws Exception {
+        final long id = 4L;
+        String token = signInAsUser(id);
+        PasswordDto passwordDto = new PasswordDto();
+        passwordDto.setOldPassword("123456");
+        passwordDto.setNewPassword("111111");
+        passwordDto.setConfirmPassword("111111");
+        final Long userId = 4L;
+        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
+        final String password = UserMock.getById(userId).getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(UserRole.USER);
+        willReturn(Optional.empty()).given(userRepository).findById(userId);
+
+        mockMvc.perform(patch("/api/users/" + id)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(passwordDto))                       )
+            .andExpect(status().isNotFound());
+    }
 }
