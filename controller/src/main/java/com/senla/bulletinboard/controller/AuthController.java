@@ -8,13 +8,17 @@ import com.senla.bulletinboard.exception.SuchUserAlreadyExistsException;
 import com.senla.bulletinboard.service.interfaces.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @AllArgsConstructor
 @RestController
+@Validated
 public class AuthController {
 
     private final AuthService authService;
@@ -27,7 +31,7 @@ public class AuthController {
 
     @PostMapping(value = "/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenDto singUp(@RequestBody final UserRequestDto user) throws SuchUserAlreadyExistsException {
+    public TokenDto singUp(@Valid @RequestBody final UserRequestDto user) throws SuchUserAlreadyExistsException {
         return authService.signUp(user);
     }
 }

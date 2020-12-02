@@ -11,6 +11,7 @@ import com.senla.bulletinboard.service.interfaces.DialogService;
 import com.senla.bulletinboard.service.interfaces.UserService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
 @Data
+@Validated
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
@@ -58,7 +61,7 @@ public class UserController {
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(@PathVariable final Long id, @RequestBody final PasswordDto passwordDto, Principal principal)
+    public void changePassword(@PathVariable final Long id, @Valid @RequestBody final PasswordDto passwordDto)
         throws NoSuchUserException {
         userService.changePassword(id, passwordDto);
     }

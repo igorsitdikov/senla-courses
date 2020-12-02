@@ -58,7 +58,7 @@ public class BulletinController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBulletin(@PathVariable final Long id, Principal principal) throws EntityNotFoundException {
+    public void deleteBulletin(@PathVariable final Long id) throws EntityNotFoundException {
         bulletinService.deleteBulletin(id);
     }
 }

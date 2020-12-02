@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Data
@@ -13,6 +15,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class UserRequestDto extends UserDto {
 
+    @Size(min = 6, message = "too short password")
+    @NotBlank(message = "password is blank")
     private String password;
 
     public UserRequestDto(final String password) {

@@ -30,7 +30,6 @@ public class DialogController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public IdDto createDialog(@RequestBody final DialogDto dialogDto) throws EntityAlreadyExistsException {
-        //  проверка на права, проверка на существование такого диалога уже, проверка на зарегистрированность, проверка на статус объявления, если закрыт не создавать,
         return dialogService.createDialog(dialogDto);
     }
 
@@ -44,6 +43,5 @@ public class DialogController {
     @ResponseStatus(HttpStatus.OK)
     public List<MessageDto> showMessages(@PathVariable final Long id) {
         return messageService.findAllMessagesByDialogId(id);
-//        return MessageMock.getAll();
     }
 }
