@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ExceptionType {
 
     BUSINESS_LOGIC("Business Logic Exception"),
+    ERROR_OCCURRED("Error occurred"),
     VALIDATION("Validation Errors");
 
     private String message;

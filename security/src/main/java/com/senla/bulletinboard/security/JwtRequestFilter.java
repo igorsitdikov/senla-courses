@@ -1,6 +1,5 @@
 package com.senla.bulletinboard.security;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,41 +30,32 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     final HttpServletResponse response,
                                     final FilterChain chain)
         throws ServletException, IOException {
-        try {
-            final String authorizationHeader = request.getHeader(HEADER_STRING);
+        final String authorizationHeader = request.getHeader(HEADER_STRING);
 
-            String username = null;
-            String jwt = null;
+        String username = null;
+        String jwt = null;
 
-            if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
-                jwt = authorizationHeader.replace(TOKEN_PREFIX, "");
+        if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
+            jwt = authorizationHeader.replace(TOKEN_PREFIX, "");
+            if (jwtUtil.compareUsersByName(jwt, request)) {
                 username = jwtUtil.extractUsername(jwt);
             }
-
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                final UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-                if (jwtUtil.validateToken(jwt, userDetails)) {
-
-                    final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                }
-            }
-            chain.doFilter(request, response);
-        } catch (ExpiredJwtException exception) {
-            final String message = String.format("Security exception for user %s - %s",
-                                                 exception.getClaims().getSubject(),
-                                                 exception.getMessage());
-            log.info(message);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.setHeader("Content-Type", "application/json");
-//            response.getOutputStream().print(String.format("{\"errorMessage\":\"%s\"}", message));
-//            response.flushBuffer();
         }
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            final UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+            if (jwtUtil.compareUsersByName(jwt, userDetails)) {
+
+                final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken
+                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        }
+        chain.doFilter(request, response);
     }
 }

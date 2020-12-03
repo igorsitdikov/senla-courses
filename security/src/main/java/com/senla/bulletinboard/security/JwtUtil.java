@@ -3,17 +3,24 @@ package com.senla.bulletinboard.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Data
+@Log4j2
 @Service
 public class JwtUtil {
 
@@ -40,8 +47,23 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(final String token) {
-        return extractExpiration(token).before(new Date());
+    public boolean compareUsersByName(String token, HttpServletRequest httpServletRequest) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+            log.debug("Invalid JWT Signature");
+        } catch (MalformedJwtException ex) {
+            log.debug("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            log.debug("Expired JWT token");
+            httpServletRequest.setAttribute("expired", ex.getMessage());
+        } catch (UnsupportedJwtException ex) {
+            log.debug("Unsupported JWT exception");
+        } catch (IllegalArgumentException ex) {
+            log.debug("Jwt claims string is empty");
+        }
+        return false;
     }
 
     public String generateToken(final UserDetails userDetails) {
@@ -50,14 +72,18 @@ public class JwtUtil {
     }
 
     private String createToken(final Map<String, Object> claims, final String subject) {
-
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        return Jwts
+                .builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
-    public Boolean validateToken(final String token, final UserDetails userDetails) {
+    public Boolean compareUsersByName(final String token, final UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()));
     }
 }

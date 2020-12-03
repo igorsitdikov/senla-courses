@@ -34,8 +34,8 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    private ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        List<String> details = ex.getBindingResult()
+    private ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        List<String> details = e.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(error -> error.getObjectName() + " : " + error.getDefaultMessage())
@@ -46,6 +46,21 @@ public class ExceptionControllerAdvice {
             HttpStatus.BAD_REQUEST,
             ExceptionType.VALIDATION.getMessage(),
             details);
+
+        return ResponseEntityBuilder.build(err);
+    }
+
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity<Object> handleAll(Exception e) {
+
+        List<String> details = new ArrayList<>();
+        details.add(e.getLocalizedMessage());
+
+        ApiErrorDto err = new ApiErrorDto(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                ExceptionType.ERROR_OCCURRED.getMessage(),
+                details);
 
         return ResponseEntityBuilder.build(err);
     }
