@@ -3,10 +3,12 @@ package com.senla.bulletinboard.service;
 import com.senla.bulletinboard.dto.SignInDto;
 import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
+import com.senla.bulletinboard.entity.TokenBlacklistEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.exception.SuchUserAlreadyExistsException;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
+import com.senla.bulletinboard.repository.TokenBlacklistRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.security.AuthUser;
 import com.senla.bulletinboard.security.JwtUtil;
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final UserDtoEntityMapper userDtoEntityMapper;
     private final AuthenticationManager authenticationManager;
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
     @Override
     public TokenDto signUp(final UserRequestDto userDto) throws SuchUserAlreadyExistsException {
@@ -81,5 +84,12 @@ public class AuthServiceImpl implements AuthService {
         final List<SimpleGrantedAuthority> authorities =
             Collections.singletonList(new SimpleGrantedAuthority(role));
         return new AuthUser(email, password, authorities, id);
+    }
+
+    @Override
+    public void logout(final String token) {
+        TokenBlacklistEntity tokenBlacklistEntity = new TokenBlacklistEntity();
+        tokenBlacklistEntity.setToken(token);
+        tokenBlacklistRepository.save(tokenBlacklistEntity);
     }
 }

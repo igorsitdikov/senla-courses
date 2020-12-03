@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @EnableWebSecurity
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LoadUserDetailService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final JwtLogoutTokenFilter jwtLogoutTokenFilter;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -33,6 +35,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .formLogin().disable();
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtLogoutTokenFilter, SecurityContextPersistenceFilter.class);
     }
 
 

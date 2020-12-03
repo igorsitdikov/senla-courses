@@ -9,10 +9,7 @@ import com.senla.bulletinboard.service.interfaces.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -33,5 +30,11 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public TokenDto singUp(@Valid @RequestBody final UserRequestDto user) throws SuchUserAlreadyExistsException {
         return authService.signUp(user);
+    }
+
+    @DeleteMapping(value = "/log-out")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(@RequestHeader(name = "Authorization") final String token) {
+        authService.logout(token);
     }
 }
