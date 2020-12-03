@@ -1,18 +1,24 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.TariffDto;
 import com.senla.bulletinboard.entity.TariffEntity;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mapper.interfaces.TariffDtoEntityMapper;
 import com.senla.bulletinboard.mock.TariffMock;
 import com.senla.bulletinboard.repository.TariffRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,11 +99,14 @@ public class TariffControllerTest extends AbstractControllerTest {
 
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
 
-        mockMvc.perform(put("/api/tariffs/" + id)
+        String message = Translator.toLocale("tariff-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(put("/api/tariffs/" + id)
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " +
-                                      id + " does not exist.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 }

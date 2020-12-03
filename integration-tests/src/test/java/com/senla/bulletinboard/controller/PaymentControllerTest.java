@@ -1,22 +1,27 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.PaymentEntity;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,11 +86,15 @@ public class PaymentControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(userRepository).findById(userId);
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
 
-        mockMvc.perform(post("/api/payments")
+        String message = Translator.toLocale("no-such-user-id", userId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/payments")
                             .content(objectMapper.writeValueAsString(paymentDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"No user with id " + userId + " was found.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test

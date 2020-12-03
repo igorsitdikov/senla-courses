@@ -1,11 +1,13 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.SellerVoteDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.SellerVoteEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
@@ -15,13 +17,18 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.security.AuthUser;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -99,12 +106,16 @@ public class StarControllerTest extends AbstractControllerTest {
         bulletinEntity.setStatus(BulletinStatus.CLOSE);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
-        mockMvc.perform(post("/api/stars/")
+        String message = Translator.toLocale("bulletin-closed", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/stars/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -123,14 +134,17 @@ public class StarControllerTest extends AbstractControllerTest {
 
         willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
-        mockMvc.perform(post("/api/stars/")
+        String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/stars/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isNotFound())
-            .andExpect(
-                content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
-    }
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError,response);
+   }
 
     @Test
     public void addStarToSellerTest_WrongVoterException() throws Exception {
@@ -155,12 +169,16 @@ public class StarControllerTest extends AbstractControllerTest {
             bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
-        mockMvc.perform(post("/api/stars/")
+        String message = Translator.toLocale("vote-forbidden");
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/stars/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Vote to yourself is forbidden.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -181,13 +199,15 @@ public class StarControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(userId, bulletinId);
 
-        mockMvc.perform(post("/api/stars/")
+        String message = Translator.toLocale("user-already-voted",userId, bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/stars/")
                             .with(user(authUser))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json(
-                "{\"errorMessage\":\"User with id " + userId + " already voted for bulletin with id " + bulletinId +
-                ".\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 }

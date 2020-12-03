@@ -1,11 +1,13 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.CommentEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
@@ -16,12 +18,17 @@ import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -95,12 +102,16 @@ public class CommentControllerTest extends AbstractControllerTest {
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
 
         final String content = objectMapper.writeValueAsString(commentDto);
-        mockMvc.perform(post("/api/comments/")
+        String message = Translator.toLocale("bulletin-closed", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/comments/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(content))
             .andExpect(status().isBadRequest())
-            .andExpect(content().json("{\"errorMessage\":\"Bulletin with id " + bulletinId + " is closed.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -117,12 +128,21 @@ public class CommentControllerTest extends AbstractControllerTest {
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
 
         final String content = objectMapper.writeValueAsString(commentDto);
-        mockMvc.perform(post("/api/comments/")
+        String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final List<String> errors = new ArrayList<>();
+        errors.add(message);
+        final ApiErrorDto expectedError = new ApiErrorDto(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
+                ExceptionType.BUSINESS_LOGIC.getMessage(),
+                errors);
+
+        final String response = mockMvc.perform(post("/api/comments/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(content))
             .andExpect(status().isNotFound())
-            .andExpect(
-                content().json("{\"errorMessage\":\"Bulletin with such id " + bulletinId + " does not exist.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 }

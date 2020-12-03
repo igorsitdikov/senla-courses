@@ -1,6 +1,7 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.exception.BusinessLogicException;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,10 @@ public class ExceptionControllerAdvice {
         List<String> details = new ArrayList<>();
         details.add(e.getLocalizedMessage());
 
-        ApiErrorDto err = new ApiErrorDto(
+        final ApiErrorDto err = new ApiErrorDto(
             LocalDateTime.now(),
             e.getHttpStatus(),
-            "Business Logic Exception",
+            ExceptionType.BUSINESS_LOGIC.getMessage(),
             details);
 
         return ResponseEntityBuilder.build(err);
@@ -40,10 +41,10 @@ public class ExceptionControllerAdvice {
             .map(error -> error.getObjectName() + " : " + error.getDefaultMessage())
             .collect(Collectors.toList());
 
-        ApiErrorDto err = new ApiErrorDto(
+        final ApiErrorDto err = new ApiErrorDto(
             LocalDateTime.now(),
             HttpStatus.BAD_REQUEST,
-            "Validation Errors",
+            ExceptionType.VALIDATION.getMessage(),
             details);
 
         return ResponseEntityBuilder.build(err);

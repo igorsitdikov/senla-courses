@@ -7,6 +7,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.CommonRepository;
 import com.senla.bulletinboard.service.interfaces.CommonService;
+import com.senla.bulletinboard.utils.Translator;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -65,7 +66,7 @@ public abstract class AbstractService<D extends AbstractDto, E extends AbstractE
     public E findEntityById(final Long id) throws EntityNotFoundException {
         return repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(
-                String.format("Entity %s with id %d was not found", this.persistentClass.getSimpleName(), id)));
+                    Translator.toLocale("entity-not-found", this.persistentClass.getSimpleName(), id)));
     }
 
     @Override

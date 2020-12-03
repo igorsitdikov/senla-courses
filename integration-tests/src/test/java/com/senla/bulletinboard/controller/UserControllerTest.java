@@ -1,12 +1,10 @@
 package com.senla.bulletinboard.controller;
 
-import com.senla.bulletinboard.dto.BulletinDto;
-import com.senla.bulletinboard.dto.DialogDto;
-import com.senla.bulletinboard.dto.PasswordDto;
-import com.senla.bulletinboard.dto.UserDto;
+import com.senla.bulletinboard.dto.*;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
@@ -16,12 +14,15 @@ import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,10 +82,14 @@ public class UserControllerTest extends AbstractControllerTest {
 
         willReturn(Optional.empty()).given(userRepository).findById(id);
 
-        mockMvc.perform(get("/api/users/" + id)
+        String message = Translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), id);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(get("/api/users/" + id)
                             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Entity UserEntity with id " + id + " was not found\"}"));
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -166,11 +171,15 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(false).given(userRepository).existsById(id);
         willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(id);
 
-        mockMvc.perform(get("/api/users/" + id + "/bulletins")
+        String message = Translator.toLocale("no-such-user-id", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(get("/api/users/" + id + "/bulletins")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"No user with id " + id + " was found.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test

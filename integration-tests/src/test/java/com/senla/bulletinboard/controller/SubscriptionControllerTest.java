@@ -1,22 +1,29 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.SubscriptionDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.TariffEntity;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.willReturn;
@@ -90,12 +97,16 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(userRepository).findById(userId);
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
 
-        mockMvc.perform(post("/api/subscriptions")
+        String message = Translator.toLocale("no-such-user-id", userId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/subscriptions")
                             .header("Authorization", token)
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"No user with id " + userId + " was found.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -117,12 +128,16 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(userEntity)).given(userRepository).findById(userId);
         willReturn(Optional.empty()).given(tariffRepository).findById(tariffId);
 
-        mockMvc.perform(post("/api/subscriptions")
+        String message = Translator.toLocale("tariff-not-exists", tariffId);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/subscriptions")
                             .header("Authorization", token)
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().json("{\"errorMessage\":\"Tariff with such id " + tariffId + " does not exist.\"}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
@@ -146,13 +161,15 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(userEntity)).given(userRepository).findById(userId);
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
 
-        mockMvc.perform(post("/api/subscriptions")
+        String message = Translator.toLocale("no-funds", balance, price);
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.PAYMENT_REQUIRED, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/subscriptions")
                             .header("Authorization", token)
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isPaymentRequired())
-            .andExpect(content().json(String.format(
-                "{\"errorMessage\":\"There are not sufficient funds! Balance: %.2f, Withdrawal: %.2f.\"}", balance,
-                price)));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 }

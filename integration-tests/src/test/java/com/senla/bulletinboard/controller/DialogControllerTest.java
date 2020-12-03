@@ -1,11 +1,13 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.MessageDto;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
@@ -16,12 +18,16 @@ import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,14 +112,15 @@ public class DialogControllerTest extends AbstractControllerTest {
             .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
-        mockMvc.perform(post("/api/dialogs")
+        String message = Translator.toLocale("dialog-already-exists", dialogDto.getBulletinId(), dialogDto.getCustomerId());
+        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.CONFLICT, ExceptionType.BUSINESS_LOGIC, message);
+
+        final String response = mockMvc.perform(post("/api/dialogs")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
             .andExpect(status().isConflict())
-            .andExpect(content().json("{\n" +
-                                      "    \"errorMessage\": \"Dialog with bulletin id " + dialogDto.getBulletinId() +
-                                      " and customer id " + dialogDto.getCustomerId() + " already exists.\"\n" +
-                                      "}"));
+                .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
     }
 
     @Test
