@@ -26,16 +26,11 @@ public class JwtUtil {
 
     @Value("${token.secret-key}")
     private String secretKey;
-
     @Value("${token.expiration}")
     private Integer expiration;
 
     public String extractUsername(final String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(final String token) {
-        return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(final String token, final Function<Claims, T> claimsResolver) {

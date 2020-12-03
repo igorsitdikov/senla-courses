@@ -3,6 +3,7 @@ package com.senla.bulletinboard.security;
 
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.repository.UserRepository;
+import com.senla.bulletinboard.utils.Translator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +27,7 @@ public class LoadUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if (!userEntity.isPresent()) {
-            final String message = String.format("User with email: %s not found", email);
+            final String message = Translator.toLocale("no-such-user", email);
             log.error(message);
             throw new UsernameNotFoundException(message);
         } else {
