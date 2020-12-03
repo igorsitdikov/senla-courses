@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -192,7 +193,7 @@ public class UserControllerTest extends AbstractControllerTest {
         final long id = 4L;
         String token = signInAsUser(id);
         PasswordDto passwordDto = new PasswordDto();
-        passwordDto.setOldPassword("123456");
+        passwordDto.setOldPassword("anton");
         passwordDto.setNewPassword("111111");
         passwordDto.setConfirmPassword("111111");
 
@@ -201,6 +202,24 @@ public class UserControllerTest extends AbstractControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(passwordDto))                       )
             .andExpect(status().isOk());
+        verify(userRepository, times(1)).save(any(UserEntity.class));
+    }
+
+    @Test
+    public void testChangePassword_WrongOldPassword() throws Exception {
+        final long id = 4L;
+        String token = signInAsUser(id);
+        PasswordDto passwordDto = new PasswordDto();
+        passwordDto.setOldPassword("222222");
+        passwordDto.setNewPassword("111111");
+        passwordDto.setConfirmPassword("111111");
+
+        mockMvc.perform(patch("/api/users/" + id)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(passwordDto))                       )
+            .andExpect(status().isOk());
+        verify(userRepository, times(0)).save(any(UserEntity.class));
     }
 
     @Test
