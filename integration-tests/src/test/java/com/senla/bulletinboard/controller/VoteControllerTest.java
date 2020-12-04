@@ -80,7 +80,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
 
         final String response = objectMapper.writeValueAsString(new IdDto(id));
-        mockMvc.perform(post("/api/stars/")
+        mockMvc.perform(post("/api/votes/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
@@ -109,7 +109,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         String message = Translator.toLocale("bulletin-closed", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(post("/api/stars/")
+        final String response = mockMvc.perform(post("/api/votes/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
@@ -137,7 +137,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         String message = Translator.toLocale("bulletin-not-exists", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(post("/api/stars/")
+        final String response = mockMvc.perform(post("/api/votes/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
@@ -172,7 +172,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         String message = Translator.toLocale("vote-forbidden");
         final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(post("/api/stars/")
+        final String response = mockMvc.perform(post("/api/votes/")
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
@@ -202,7 +202,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         String message = Translator.toLocale("user-already-voted",userId, bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(post("/api/stars/")
+        final String response = mockMvc.perform(post("/api/votes/")
                             .with(user(authUser))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))

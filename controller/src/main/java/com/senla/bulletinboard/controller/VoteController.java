@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Data
 @RestController
-@RequestMapping(value = "/stars")
+@RequestMapping(value = "/votes")
 @Tag(name = "Vote Management Controller")
 public class VoteController {
 
