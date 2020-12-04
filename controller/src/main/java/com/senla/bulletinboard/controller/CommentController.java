@@ -5,6 +5,8 @@ import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.service.interfaces.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Data
 @RestController
 @RequestMapping(value = "/comments")
+@Tag(name = "Comment Management Controller")
 public class CommentController {
 
     private final CommentService commentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create comment", description = "Add new comment to bulletin if bulletin status OPEN")
     public IdDto createComment(@RequestBody final CommentDto commentDto)
         throws BulletinIsClosedException, EntityNotFoundException {
         return commentService.createComment(commentDto);

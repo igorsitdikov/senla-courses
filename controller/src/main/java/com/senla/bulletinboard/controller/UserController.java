@@ -9,6 +9,8 @@ import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.service.interfaces.DialogService;
 import com.senla.bulletinboard.service.interfaces.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping(value = "/users")
+@Tag(name = "User Management Controller")
 public class UserController {
 
     private final DialogService dialogService;
@@ -37,30 +40,35 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "View user", description = "Show user's details")
     public UserDto getUser(@PathVariable final Long id) throws EntityNotFoundException {
         return userService.findDtoById(id);
     }
 
     @GetMapping(value = "/{id}/dialogs")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "View user's dialogs", description = "View user's dialogs")
     public List<DialogDto> showDialogs(@PathVariable final Long id) {
         return dialogService.findDialogsByUserId(id);
     }
 
     @GetMapping(value = "/{id}/bulletins")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "View user's bulletins", description = "View user's bulletins")
     public List<BulletinBaseDto> showBulletins(@PathVariable final Long id) throws NoSuchUserException {
         return bulletinService.findBulletinsByUserId(id);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update info about user", description = "Update info about user")
     public UserDto updateUser(@PathVariable final Long id, @RequestBody final UserDto user) throws NoSuchUserException {
         return userService.updateUser(id, user);
     }
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update user's password", description = "Update user's password")
     public void changePassword(@PathVariable final Long id, @Valid @RequestBody final PasswordDto passwordDto)
         throws NoSuchUserException {
         userService.changePassword(id, passwordDto);

@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StarControllerTest extends AbstractControllerTest {
+public class VoteControllerTest extends AbstractControllerTest {
 
     @MockBean
     private BulletinRepository bulletinRepository;

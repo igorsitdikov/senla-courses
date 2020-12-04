@@ -6,6 +6,10 @@ import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.enumerated.SortBulletin;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.service.interfaces.BulletinService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,12 +29,14 @@ import java.util.List;
 @Data
 @RestController
 @RequestMapping(value = "/bulletins")
+@Tag(name = "Bulletin Management Controller")
 public class BulletinController {
 
     private final BulletinService bulletinService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "View a list of available bulletins", description = "View a list of available bulletins")
     public List<BulletinBaseDto> showBulletins(
         @RequestParam(value = "filter", required = false) final String[] filters,
         @RequestParam(value = "sort", required = false) final SortBulletin sort) {
@@ -39,18 +45,21 @@ public class BulletinController {
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "View bulletin's details", description = "View bulletin's details")
     public BulletinDto showBulletinDetails(@PathVariable final Long id) throws EntityNotFoundException {
         return bulletinService.findBulletinById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create bulletin", description = "Bulletin object store in database")
     public IdDto createBulletin(@RequestBody final BulletinDto bulletinDto) {
         return bulletinService.post(bulletinDto);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update bulletin in database", description = "Update bulletin in database")
     public BulletinDto updateBulletin(@PathVariable final Long id, @RequestBody final BulletinDto bulletinDto)
         throws EntityNotFoundException {
         return bulletinService.updateBulletin(id, bulletinDto);
@@ -58,6 +67,7 @@ public class BulletinController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete bulletin from database", description = "Delete bulletin from database")
     public void deleteBulletin(@PathVariable final Long id) throws EntityNotFoundException {
         bulletinService.deleteBulletin(id);
     }
