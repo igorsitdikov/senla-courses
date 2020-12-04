@@ -9,5 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public interface UserService extends CommonService<UserDto, UserEntity> {
 
     @PreAuthorize("authentication.principal.id == #id")
+    UserDto updateUser(Long id, UserDto dto) throws NoSuchUserException;
+
+    @PreAuthorize("authentication.principal.id == #id")
     void changePassword(Long id, PasswordDto passwordDto) throws NoSuchUserException;
 }

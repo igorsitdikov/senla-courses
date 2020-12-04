@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractService<D extends AbstractDto, E extends AbstractEntity, R extends CommonRepository<E, Long>>
     implements CommonService<D, E> {
 
-    private final DtoEntityMapper<D, E> dtoEntityMapper;
+    protected final DtoEntityMapper<D, E> dtoEntityMapper;
     protected final R repository;
     private final Class<E> persistentClass;
 

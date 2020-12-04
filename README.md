@@ -12,11 +12,11 @@ Request: `POST /api/sign-up`
 
 ```
 {
-    "firstName": "Иван",
-    "secondName": "Иванов",
-    "email": "ivan.ivanov@mail.ru",
-    "password": "123456",
-    "phone": "+375331234567"
+    "firstName": "Сергей",
+    "lastName": "Сергеев",
+    "email": "serg.sergeev@example.com",
+    "password": "sergiy",
+    "phone": "+375295552311"
 }
 ```
 
@@ -24,7 +24,7 @@ Response: `201 CREATED`
 
 ```
 {
-    "id": 1
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXJnLnNlcmdlZXZAZXhhbXBsZS5jb20iLCJleHAiOjE2MDcxMjA1MzIsImlhdCI6MTYwNzA4NDUzMn0.nX1fXsh428XiiXDkw_NN1SlCy9yhm75CNEboEMZAi04"
 }
 ```
 
@@ -43,7 +43,7 @@ Response: `200 OK`
 
 ```
 {
-    token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI2ODA3MjgsImlhdCI6MTU4MjY0NDcyOH0.oxNyf3jOPRoTuywoe2-oibyVxcisvOaPTWCaX56v9-0"
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFuLml2YW5vdkBtYWlsLnJ1IiwiZXhwIjoxNjA3MTIwMzI4LCJpYXQiOjE2MDcwODQzMjh9.B-eQMy4tWTYvFusZyHBiQnjwHYxTOD6Z4p-EDXS6ycE"
 }
 ```
 
@@ -61,9 +61,12 @@ Response: `200 OK`
 {
     "id": 1,
     "firstName": "Иван",
-    "secondName": "Иванов",
+    "lastName": "Иванов",
     "email": "ivan.ivanov@mail.ru",
-    "phone": "+375331234567"
+    "phone": "+375331234567",
+    "autoSubscribe": "DISABLE",
+    "premium": "DISABLE",
+    "balance": 0.00
 }
 ```
   

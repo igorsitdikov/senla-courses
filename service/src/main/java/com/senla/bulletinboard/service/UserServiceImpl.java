@@ -28,8 +28,16 @@ public class UserServiceImpl extends AbstractService<UserDto, UserEntity, UserRe
 
     @Override
     @PreAuthorize("authentication.principal.id == #id")
-    public UserDto update(final Long id, final UserDto dto) {
-        return super.update(id, dto);
+    public UserDto updateUser(final Long id, final UserDto dto) throws NoSuchUserException {
+        UserEntity user = repository.findById(id)
+                .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
+        user.setAutoSubscribe(dto.getAutoSubscribe());
+        user.setEmail(dto.getEmail());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setPhone(dto.getPhone());
+        UserEntity save = repository.save(user);
+        return dtoEntityMapper.destinationToSource(save);
     }
 
     @Override

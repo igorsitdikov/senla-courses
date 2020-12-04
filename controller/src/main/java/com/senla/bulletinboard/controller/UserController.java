@@ -55,8 +55,8 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser(@PathVariable final Long id, @RequestBody final UserDto user) {
-        return userService.update(id, user);
+    public UserDto updateUser(@PathVariable final Long id, @RequestBody final UserDto user) throws NoSuchUserException {
+        return userService.updateUser(id, user);
     }
 
     @PatchMapping(value = "/{id}")
