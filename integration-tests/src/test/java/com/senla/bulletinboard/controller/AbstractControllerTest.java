@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public abstract class AbstractControllerTest {
 
+    protected final static String CONTEXT_PATH = "/api";
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
@@ -43,6 +44,7 @@ public abstract class AbstractControllerTest {
 
         final String response = mockMvc.perform(
             post("/api/sign-in")
+                .contextPath(CONTEXT_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
@@ -50,19 +52,22 @@ public abstract class AbstractControllerTest {
         return "Bearer " + objectMapper.readValue(response, TokenDto.class).getToken();
     }
 
-    protected void assertErrorResponse(final ApiErrorDto expectedError, final String response) throws JsonProcessingException {
+    protected void assertErrorResponse(final ApiErrorDto expectedError, final String response)
+        throws JsonProcessingException {
         final ApiErrorDto actual = objectMapper.readValue(response, ApiErrorDto.class);
         assertEquals(expectedError.getStatus(), actual.getStatus());
         assertEquals(expectedError.getErrors(), actual.getErrors());
         assertEquals(expectedError.getMessage(), actual.getMessage());
     }
 
-    protected ApiErrorDto expectedErrorCreator(final HttpStatus httpStatus, final ExceptionType exceptionType, final String ...message) {
+    protected ApiErrorDto expectedErrorCreator(final HttpStatus httpStatus,
+                                               final ExceptionType exceptionType,
+                                               final String... message) {
         final List<String> errors = new ArrayList<>(Arrays.asList(message));
         return new ApiErrorDto(
-                LocalDateTime.now(),
-                httpStatus,
-                exceptionType.getMessage(),
-                errors);
+            LocalDateTime.now(),
+            httpStatus,
+            exceptionType.getMessage(),
+            errors);
     }
 }

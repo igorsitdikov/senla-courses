@@ -25,10 +25,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +78,7 @@ public class VoteControllerTest extends AbstractControllerTest {
 
         final String response = objectMapper.writeValueAsString(new IdDto(id));
         mockMvc.perform(post("/api/votes/")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(sellerVoteDto)))
@@ -107,14 +105,16 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
         String message = Translator.toLocale("bulletin-closed", bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/votes/")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(sellerVoteDto)))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -135,16 +135,18 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
         String message = Translator.toLocale("bulletin-not-exists", bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/votes/")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(sellerVoteDto)))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
-        assertErrorResponse(expectedError,response);
-   }
+            .andReturn().getResponse().getContentAsString();
+        assertErrorResponse(expectedError, response);
+    }
 
     @Test
     public void addStarToSellerTest_WrongVoterException() throws Exception {
@@ -170,14 +172,16 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
         String message = Translator.toLocale("vote-forbidden");
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/votes/")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(sellerVoteDto)))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -199,15 +203,17 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(userId, bulletinId);
 
-        String message = Translator.toLocale("user-already-voted",userId, bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        String message = Translator.toLocale("user-already-voted", userId, bulletinId);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/votes/")
-                            .with(user(authUser))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(sellerVoteDto)))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .with(user(authUser))
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(objectMapper.writeValueAsString(sellerVoteDto)))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 }

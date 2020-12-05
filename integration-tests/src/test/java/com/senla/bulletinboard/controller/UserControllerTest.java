@@ -1,6 +1,10 @@
 package com.senla.bulletinboard.controller;
 
-import com.senla.bulletinboard.dto.*;
+import com.senla.bulletinboard.dto.ApiErrorDto;
+import com.senla.bulletinboard.dto.BulletinDto;
+import com.senla.bulletinboard.dto.DialogDto;
+import com.senla.bulletinboard.dto.PasswordDto;
+import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.UserEntity;
@@ -22,7 +26,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +33,8 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -71,6 +74,7 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(userEntity)).given(userRepository).findById(id);
 
         mockMvc.perform(get("/api/users/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(objectMapper.writeValueAsString(expected)));
@@ -83,12 +87,14 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(userRepository).findById(id);
 
         String message = Translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(get("/api/users/" + id)
-                            .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -126,6 +132,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
         final String content = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/users/" + id + "/dialogs")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -149,6 +156,7 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(id);
 
         mockMvc.perform(get("/api/users/" + id + "/bulletins")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -172,13 +180,15 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(id);
 
         String message = Translator.toLocale("no-such-user-id", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(get("/api/users/" + id + "/bulletins")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -190,6 +200,7 @@ public class UserControllerTest extends AbstractControllerTest {
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
         willReturn(userEntity).given(userRepository).save(any(UserEntity.class));
         mockMvc.perform(put("/api/users/" + userId)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(expected)))
@@ -207,9 +218,10 @@ public class UserControllerTest extends AbstractControllerTest {
         passwordDto.setConfirmPassword("111111");
 
         mockMvc.perform(patch("/api/users/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(passwordDto))                       )
+                            .content(objectMapper.writeValueAsString(passwordDto)))
             .andExpect(status().isOk());
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
@@ -224,9 +236,10 @@ public class UserControllerTest extends AbstractControllerTest {
         passwordDto.setConfirmPassword("111111");
 
         mockMvc.perform(patch("/api/users/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(passwordDto))                       )
+                            .content(objectMapper.writeValueAsString(passwordDto)))
             .andExpect(status().isOk());
         verify(userRepository, times(0)).save(any(UserEntity.class));
     }
@@ -247,9 +260,10 @@ public class UserControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(userRepository).findById(userId);
 
         mockMvc.perform(patch("/api/users/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(passwordDto))                       )
+                            .content(objectMapper.writeValueAsString(passwordDto)))
             .andExpect(status().isNotFound());
     }
 }

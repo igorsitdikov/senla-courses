@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +62,7 @@ public class PaymentControllerTest extends AbstractControllerTest {
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
 
         mockMvc.perform(post("/api/payments")
+                            .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(paymentDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
@@ -87,13 +87,15 @@ public class PaymentControllerTest extends AbstractControllerTest {
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
 
         String message = Translator.toLocale("no-such-user-id", userId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/payments")
-                            .content(objectMapper.writeValueAsString(paymentDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(paymentDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -119,6 +121,7 @@ public class PaymentControllerTest extends AbstractControllerTest {
         willReturn(payments).given(paymentRepository).findAllByUserId(userId);
 
         mockMvc.perform(get("/api/payments/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(objectMapper.writeValueAsString(paymentDtos)));

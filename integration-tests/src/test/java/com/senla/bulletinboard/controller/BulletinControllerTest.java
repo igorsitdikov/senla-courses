@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +75,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
+                            .contextPath(CONTEXT_PATH)
                             .param("sort", "average")
                             .param("filter", "price_gte:20")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -93,6 +93,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final String response = objectMapper.writeValueAsString(expected);
 
         mockMvc.perform(get("/api/bulletins/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(response));
@@ -109,6 +110,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(post("/api/bulletins/")
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
             .andExpect(status().isCreated())
@@ -122,10 +124,12 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
+
         willReturn(true).given(bulletinRepository).existsById(id);
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(put("/api/bulletins/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
@@ -144,14 +148,16 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(put("/api/bulletins/" + id)
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(request))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(request))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -174,6 +180,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(true).given(bulletinRepository).existsById(bulletinId);
 
         mockMvc.perform(delete("/api/bulletins/" + bulletinId)
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
@@ -190,6 +197,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(true).given(bulletinRepository).existsById(id);
 
         mockMvc.perform(delete("/api/bulletins/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
@@ -204,10 +212,12 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(false).given(bulletinRepository).existsById(id);
 
         String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
@@ -233,13 +243,15 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(false).given(bulletinRepository).existsById(id);
 
         String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
 
         verify(bulletinRepository, times(1)).existsById(id);

@@ -25,17 +25,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MessageControllerTest extends AbstractControllerTest {
@@ -65,13 +59,15 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setSenderId(senderId);
 
         String message = Translator.toLocale("send-message-forbidden");
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.FORBIDDEN, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.FORBIDDEN, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
-                            .content(objectMapper.writeValueAsString(messageDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(messageDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -98,13 +94,15 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinEntity.getId());
 
         String message = Translator.toLocale("wrong-recipient", recipientId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
-                            .content(objectMapper.writeValueAsString(messageDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(messageDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -132,13 +130,15 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinEntity.getId());
 
         String message = Translator.toLocale("wrong-sender", senderId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
-                            .content(objectMapper.writeValueAsString(messageDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(messageDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -171,6 +171,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(messageEntity).given(messageRepository).save(any(MessageEntity.class));
 
         mockMvc.perform(post("/api/messages")
+                            .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(messageDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
@@ -205,11 +206,13 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(messageEntity).given(messageRepository).save(any(MessageEntity.class));
 
         String message = Translator.toLocale("dialog-not-exists", dialogId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
-                            .content(objectMapper.writeValueAsString(messageDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(messageDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
@@ -245,13 +248,15 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(messageEntity).given(messageRepository).save(any(MessageEntity.class));
 
         String message = Translator.toLocale("bulletin-not-exists", bulletinEntity.getId());
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
-                            .content(objectMapper.writeValueAsString(messageDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(messageDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
-   }
+    }
 }

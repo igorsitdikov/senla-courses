@@ -21,14 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class SubscriptionControllerTest extends AbstractControllerTest {
@@ -72,6 +68,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
 
         mockMvc.perform(post("/api/subscriptions")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .content(objectMapper.writeValueAsString(subscriptionDto))
                             .contentType(MediaType.APPLICATION_JSON))
@@ -98,14 +95,16 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
 
         String message = Translator.toLocale("no-such-user-id", userId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/subscriptions")
-                            .header("Authorization", token)
-                            .content(objectMapper.writeValueAsString(subscriptionDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .content(objectMapper.writeValueAsString(subscriptionDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -129,14 +128,16 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(tariffRepository).findById(tariffId);
 
         String message = Translator.toLocale("tariff-not-exists", tariffId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/subscriptions")
-                            .header("Authorization", token)
-                            .content(objectMapper.writeValueAsString(subscriptionDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .content(objectMapper.writeValueAsString(subscriptionDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -162,14 +163,16 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
 
         String message = Translator.toLocale("no-funds", balance, price);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.PAYMENT_REQUIRED, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.PAYMENT_REQUIRED, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/subscriptions")
-                            .header("Authorization", token)
-                            .content(objectMapper.writeValueAsString(subscriptionDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .content(objectMapper.writeValueAsString(subscriptionDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isPaymentRequired())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 }

@@ -17,8 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +46,7 @@ public class TariffControllerTest extends AbstractControllerTest {
         willReturn(entities).given(tariffRepository).findAll();
 
         mockMvc.perform(get("/api/tariffs/")
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(objectMapper.writeValueAsString(expected)));
@@ -63,6 +62,7 @@ public class TariffControllerTest extends AbstractControllerTest {
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
         final IdDto idDto = new IdDto(id);
         mockMvc.perform(post("/api/tariffs/")
+                            .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
@@ -82,6 +82,7 @@ public class TariffControllerTest extends AbstractControllerTest {
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
 
         mockMvc.perform(put("/api/tariffs/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -100,13 +101,15 @@ public class TariffControllerTest extends AbstractControllerTest {
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
 
         String message = Translator.toLocale("tariff-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(put("/api/tariffs/" + id)
-                            .content(objectMapper.writeValueAsString(tariffDto))
-                            .contentType(MediaType.APPLICATION_JSON))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .content(objectMapper.writeValueAsString(tariffDto))
+                                                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 }

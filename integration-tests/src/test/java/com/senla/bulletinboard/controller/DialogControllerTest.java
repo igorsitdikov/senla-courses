@@ -26,8 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,6 +75,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         willReturn(entities).given(messageRepository).findAllByDialogId(id);
 
         mockMvc.perform(get("/api/dialogs/" + id + "/messages")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -95,6 +94,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
         mockMvc.perform(post("/api/dialogs")
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
             .andExpect(status().isCreated())
@@ -112,14 +112,17 @@ public class DialogControllerTest extends AbstractControllerTest {
             .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
-        String message = Translator.toLocale("dialog-already-exists", dialogDto.getBulletinId(), dialogDto.getCustomerId());
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.CONFLICT, ExceptionType.BUSINESS_LOGIC, message);
+        String message =
+            Translator.toLocale("dialog-already-exists", dialogDto.getBulletinId(), dialogDto.getCustomerId());
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.CONFLICT, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/dialogs")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(request))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(request))
             .andExpect(status().isConflict())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -128,6 +131,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         final long id = 3L;
 
         mockMvc.perform(delete("/api/dialogs/" + id)
+                            .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 

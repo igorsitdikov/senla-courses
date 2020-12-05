@@ -79,6 +79,7 @@ public class CommentControllerTest extends AbstractControllerTest {
 
         final String content = objectMapper.writeValueAsString(commentDto);
         mockMvc.perform(post("/api/comments/")
+                            .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(content))
@@ -103,14 +104,16 @@ public class CommentControllerTest extends AbstractControllerTest {
 
         final String content = objectMapper.writeValueAsString(commentDto);
         String message = Translator.toLocale("bulletin-closed", bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/comments/")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(content))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(content))
             .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 
@@ -129,20 +132,16 @@ public class CommentControllerTest extends AbstractControllerTest {
 
         final String content = objectMapper.writeValueAsString(commentDto);
         String message = Translator.toLocale("bulletin-not-exists", bulletinId);
-        final List<String> errors = new ArrayList<>();
-        errors.add(message);
-        final ApiErrorDto expectedError = new ApiErrorDto(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND,
-                ExceptionType.BUSINESS_LOGIC.getMessage(),
-                errors);
+        final ApiErrorDto expectedError =
+            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/comments/")
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(content))
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(content))
             .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+            .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);
     }
 }
