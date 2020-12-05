@@ -9,9 +9,9 @@ import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
-import com.senla.bulletinboard.mock.BulletinDetailsMock;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
@@ -42,7 +42,7 @@ public class VoteControllerTest extends AbstractControllerTest {
     @MockBean
     private SellerVoteRepository sellerVoteRepository;
     @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
+    private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
     @MockBean
     private UserRepository userRepository;
     @SpyBean
@@ -72,7 +72,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         sellerVoteEntity.setId(id);
         final SellerVoteDto sellerVoteDto = new SellerVoteDto(1L, userId, bulletinId, stars);
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
 
@@ -100,7 +100,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         sellerVoteEntity.setId(id);
         final SellerVoteDto sellerVoteDto = new SellerVoteDto(1L, userId, bulletinId, stars);
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         bulletinEntity.setStatus(BulletinStatus.CLOSE);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
@@ -168,7 +168,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         final SellerVoteDto sellerVoteDto = new SellerVoteDto(1L, userId, bulletinId, stars);
 
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
         String message = Translator.toLocale("vote-forbidden");
@@ -199,7 +199,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         sellerVoteEntity.setId(id);
         final SellerVoteDto sellerVoteDto = new SellerVoteDto(1L, userId, bulletinId, stars);
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(userId, bulletinId);
 

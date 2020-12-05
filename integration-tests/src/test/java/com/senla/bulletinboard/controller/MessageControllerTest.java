@@ -9,10 +9,10 @@ import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
-import com.senla.bulletinboard.mock.BulletinDetailsMock;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
@@ -41,7 +41,7 @@ public class MessageControllerTest extends AbstractControllerTest {
     @MockBean
     private BulletinRepository bulletinRepository;
     @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
+    private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
     @MockBean
     private MessageRepository messageRepository;
     @SpyBean
@@ -82,7 +82,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinDetailsMock.getById(1L);
+        final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
 
         final DialogDto dialogDto = DialogMock.getById(1L);
@@ -117,7 +117,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinDetailsMock.getById(1L);
+        final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
 
         final DialogDto dialogDto = DialogMock.getById(1L);
@@ -153,7 +153,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinDetailsMock.getById(1L);
+        final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
         final UserEntity seller = bulletinEntity.getSeller();
         seller.setId(senderId);
@@ -188,7 +188,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinDetailsMock.getById(1L);
+        final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
         final UserEntity seller = bulletinEntity.getSeller();
         seller.setId(senderId);
@@ -230,7 +230,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinDetailsMock.getById(1L);
+        final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
         final UserEntity seller = bulletinEntity.getSeller();
         seller.setId(senderId);

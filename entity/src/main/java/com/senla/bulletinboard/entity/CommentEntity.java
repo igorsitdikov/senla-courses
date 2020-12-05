@@ -2,6 +2,7 @@ package com.senla.bulletinboard.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class CommentEntity extends AbstractEntity {
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinColumn(name = "bulletin_id", insertable = false, updatable = false)
     private BulletinEntity bulletin;
 

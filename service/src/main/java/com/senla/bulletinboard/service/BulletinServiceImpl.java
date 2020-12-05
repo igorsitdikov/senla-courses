@@ -8,6 +8,7 @@ import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.enumerated.SortBulletin;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -30,15 +30,18 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
                                                                                                           BulletinService {
 
     private final ObjectMapper mapper;
+    private final BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper;
     private final BulletinDtoEntityMapper bulletinDtoEntityMapper;
     private final UserRepository userRepository;
 
-    public BulletinServiceImpl(final BulletinDtoEntityMapper bulletinDtoEntityMapper,
+    public BulletinServiceImpl(final BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper,
+                               final BulletinDtoEntityMapper bulletinDtoEntityMapper,
                                final BulletinRepository bulletinRepository,
                                final ObjectMapper mapper,
                                final UserRepository userRepository
                               ) {
-        super(bulletinDtoEntityMapper, bulletinRepository);
+        super(bulletinDetailsDtoEntityMapper, bulletinRepository);
+        this.bulletinDetailsDtoEntityMapper = bulletinDetailsDtoEntityMapper;
         this.bulletinDtoEntityMapper = bulletinDtoEntityMapper;
         this.mapper = mapper;
         this.userRepository = userRepository;
@@ -54,7 +57,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
         }
         return repository.findAllBySellerId(id)
             .stream()
-            .map(bulletinDtoEntityMapper::destinationToSource)
+            .map(bulletinDetailsDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
     }
 

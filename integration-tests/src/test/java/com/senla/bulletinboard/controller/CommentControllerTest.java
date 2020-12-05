@@ -9,10 +9,10 @@ import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
-import com.senla.bulletinboard.mock.BulletinDetailsMock;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.CommentMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
@@ -26,9 +26,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -44,7 +41,7 @@ public class CommentControllerTest extends AbstractControllerTest {
     @MockBean
     private CommentRepository commentRepository;
     @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
+    private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
     @SpyBean
     private CommentDtoEntityMapper commentDtoEntityMapper;
     @MockBean
@@ -73,7 +70,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         commentDto.setAuthorId(userId);
         final CommentEntity commentEntity = commentDtoEntityMapper.sourceToDestination(commentDto);
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
 
@@ -97,7 +94,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         commentDto.setAuthorId(userId);
         final CommentEntity commentEntity = commentDtoEntityMapper.sourceToDestination(commentDto);
         final BulletinEntity bulletinEntity =
-            bulletinDtoEntityMapper.sourceToDestination(BulletinDetailsMock.getById(bulletinId));
+            bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
         bulletinEntity.setStatus(BulletinStatus.CLOSE);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));

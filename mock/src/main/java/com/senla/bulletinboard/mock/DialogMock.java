@@ -12,7 +12,7 @@ public class DialogMock {
 
     private static final Map<Long, DialogDto> dialogMap = new HashMap<Long, DialogDto>() {{
         put(1L, new DialogDto(1L, "Продам свадебный сервиз", 3L, 1L, 4L, UserMock.getUserDtoById(1L),
-                              BulletinDetailsMock.getById(1L),
+                              BulletinMock.getById(1L),
                               LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 

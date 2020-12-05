@@ -10,9 +10,9 @@ import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
-import com.senla.bulletinboard.mock.BulletinDetailsMock;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
@@ -52,7 +52,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @MockBean
     private BulletinRepository bulletinRepository;
     @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
+    private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
 
     @BeforeEach
     public void initAuthorizedUser() {
@@ -143,7 +143,7 @@ public class UserControllerTest extends AbstractControllerTest {
     public void testShowBulletins() throws Exception {
         final long id = 4L;
         String token = signInAsUser(id);
-        final List<BulletinDto> expected = BulletinDetailsMock.getAll()
+        final List<BulletinDto> expected = BulletinMock.getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
             .collect(Collectors.toList());
@@ -167,7 +167,7 @@ public class UserControllerTest extends AbstractControllerTest {
     public void testShowBulletins_UserNotFoundException() throws Exception {
         final long id = 4L;
         String token = signInAsUser(id);
-        final List<BulletinDto> expected = BulletinDetailsMock.getAll()
+        final List<BulletinDto> expected = BulletinMock.getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
             .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.senla.bulletinboard.annotation.PhoneNumber;
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class UserDto extends AbstractDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected Long id;
     @NotBlank(message = "first name is blank")
     protected String firstName;
@@ -28,7 +30,10 @@ public class UserDto extends AbstractDto {
     protected String email;
     @PhoneNumber(message = "phone number should be +375(25|29|33|44)xxxxxxx")
     protected String phone;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected AutoSubscribeStatus autoSubscribe;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected PremiumStatus premium;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected BigDecimal balance;
 }

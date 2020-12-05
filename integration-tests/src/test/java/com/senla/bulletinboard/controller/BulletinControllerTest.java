@@ -1,6 +1,7 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
+import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
@@ -9,7 +10,7 @@ import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
-import com.senla.bulletinboard.mock.BulletinDetailsMock;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
@@ -23,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,10 +62,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void showBulletinsTest() throws Exception {
-        final List<BulletinDto> expected = BulletinDetailsMock.getAll()
-            .stream()
-            .peek(bulletinDto -> bulletinDto.setComments(new ArrayList<>()))
-            .collect(Collectors.toList());
+        final List<BulletinBaseDto> expected = BulletinMock.getAllBase();
 
         final List<BulletinEntity> entities = expected
             .stream()
@@ -86,7 +83,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void showBulletinDetailsTest() throws Exception {
         final long id = 4;
-        final BulletinDto expected = BulletinDetailsMock.getById(id);
+        final BulletinBaseDto expected = BulletinMock.getBaseById(id);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(expected);
 
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
@@ -102,7 +99,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void createBulletinTest() throws Exception {
         final long id = 4L;
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final BulletinDto bulletinDto = BulletinMock.getById(id);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final String response = objectMapper.writeValueAsString(new IdDto(id));
@@ -121,7 +118,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void updateBulletinTest() throws Exception {
         final long id = 4L;
         String token = signInAsUser(id);
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final BulletinBaseDto bulletinDto = BulletinMock.getBaseById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
 
@@ -141,7 +138,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void updateBulletinTest_BulletinNotFound() throws Exception {
         final long id = 4L;
         String token = signInAsUser(id);
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final BulletinDto bulletinDto = BulletinMock.getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         willReturn(false).given(bulletinRepository).existsById(id);
@@ -167,7 +164,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final long bulletinId = 3L;
         String token = signInAsUser(id);
 
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(bulletinId);
+        final BulletinDto bulletinDto = BulletinMock.getById(bulletinId);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(id));
         final String password = UserMock.getById(id).getPassword();
@@ -231,7 +228,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final long id = 4L;
         String token = signInAsUser(id);
 
-        final BulletinDto bulletinDto = BulletinDetailsMock.getById(id);
+        final BulletinDto bulletinDto = BulletinMock.getById(id);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(id));
         final String password = UserMock.getById(id).getPassword();
