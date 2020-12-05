@@ -1,10 +1,15 @@
 package com.senla.bulletinboard.controller;
 
+import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.service.interfaces.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -29,6 +34,17 @@ public class PaymentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create payment", description = "Payment emulation")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Successful operation", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = IdDto.class))
+        }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "User not found", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
+        })
+    })
     public IdDto createPayment(@RequestBody final PaymentDto paymentDto) throws NoSuchUserException {
         return paymentService.createPayment(paymentDto);
     }
@@ -36,6 +52,14 @@ public class PaymentController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "View a list of payments", description = "View a list of payments")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful operation", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = List.class))
+        }),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
+        })
+    })
     public List<PaymentDto> showPayments(@PathVariable final Long id) {
         return paymentService.showAllPaymentsByUserId(id);
     }
