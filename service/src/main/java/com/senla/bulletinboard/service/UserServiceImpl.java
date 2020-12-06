@@ -3,6 +3,7 @@ package com.senla.bulletinboard.service;
 import com.senla.bulletinboard.dto.PasswordDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
@@ -13,6 +14,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Log4j2
 @Service
@@ -57,6 +60,22 @@ public class UserServiceImpl extends AbstractService<UserDto, UserEntity, UserRe
             userEntity.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
             repository.save(userEntity);
         }
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<UserDto> findAllDto() {
+        return super.findAllDto();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public UserDto updateUserRole(final Long id, final UserRole role) throws NoSuchUserException {
+        UserEntity user = repository.findById(id)
+            .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
+        user.setRole(role);
+        UserEntity save = repository.saveAndFlush(user);
+        return dtoEntityMapper.destinationToSource(save);
     }
 
     private boolean isPasswordsEquals(PasswordDto passwordDto) {

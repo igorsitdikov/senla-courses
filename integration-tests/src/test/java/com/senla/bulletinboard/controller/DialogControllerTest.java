@@ -1,20 +1,25 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
+import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.MessageDto;
+import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
+import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
 import com.senla.bulletinboard.mock.MessageMock;
 import com.senla.bulletinboard.mock.UserMock;
+import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
 import com.senla.bulletinboard.repository.UserRepository;
@@ -55,6 +60,10 @@ public class DialogControllerTest extends AbstractControllerTest {
     private UserRepository userRepository;
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
+    @MockBean
+    private BulletinRepository bulletinRepository;
+    @SpyBean
+    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
 
     @BeforeEach
     public void initAuthorizedUser() {
@@ -147,11 +156,24 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteDialogTest() throws Exception {
-        final long id = 3L;
+        final long id = 4L;
+        final long bulletinId = 2L;
+        String token = signInAsUser(id);
+        final DialogDto dialogDto = DialogMock.getById(1L);
+        dialogDto.setCustomerId(id);
+        dialogDto.setBulletinId(bulletinId);
+
+        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
+        willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(id);
+        final BulletinBaseDto bulletinBaseDto = BulletinMock.getBaseById(id);
+        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinBaseDto);
+
+        willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
 
         mockMvc.perform(delete("/api/dialogs/" + id)
                             .contextPath(CONTEXT_PATH)
-                            .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token))
             .andExpect(status().isOk());
 
         verify(dialogRepository, times(1)).deleteById(id);

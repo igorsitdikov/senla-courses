@@ -9,15 +9,20 @@ import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
+import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
+import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
+import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -46,11 +51,25 @@ public class MessageControllerTest extends AbstractControllerTest {
     private MessageRepository messageRepository;
     @SpyBean
     private MessageDtoEntityMapper messageDtoEntityMapper;
+    @MockBean
+    private UserRepository userRepository;
+    @SpyBean
+    private UserDtoEntityMapper userDtoEntityMapper;
+
+    @BeforeEach
+    public void initAuthorizedUser() {
+        final Long userId = 1L;
+        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
+        final String password = UserMock.getById(userId).getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(UserRole.USER);
+        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
+    }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest_WrongMessageRecipientException() throws Exception {
         final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
         final Long recipientId = 1L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
@@ -65,6 +84,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
+                                                    .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden())
             .andReturn().getResponse().getContentAsString();
@@ -72,9 +92,9 @@ public class MessageControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest_WrongRecipientException() throws Exception {
         final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
         final Long recipientId = 2L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
@@ -100,6 +120,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
+                                                    .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
@@ -107,10 +128,10 @@ public class MessageControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest_WrongSenderException() throws Exception {
-        final Long senderId = 5L;
-        final Long recipientId = 2L;
+        final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
+        final Long recipientId = 3L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
         messageDto.setDialogId(dialogId);
@@ -119,7 +140,9 @@ public class MessageControllerTest extends AbstractControllerTest {
 
         final BulletinDto expected = BulletinMock.getById(1L);
         final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
-
+        final UserEntity seller = bulletinEntity.getSeller();
+        seller.setId(4L);
+        bulletinEntity.setSeller(seller);
         final DialogDto dialogDto = DialogMock.getById(1L);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
         dialogEntity.setCustomerId(recipientId);
@@ -136,6 +159,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
+                                                    .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
@@ -143,9 +167,9 @@ public class MessageControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest() throws Exception {
-        final Long senderId = 5L;
+        final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
         final Long recipientId = 2L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
@@ -173,14 +197,15 @@ public class MessageControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/messages")
                             .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(messageDto))
+                            .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest_DialogNotFoundException() throws Exception {
-        final Long senderId = 5L;
+        final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
         final Long recipientId = 2L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
@@ -212,6 +237,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
+                                                    .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
@@ -220,9 +246,9 @@ public class MessageControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     public void createMessageTest_BulletinNotFoundException() throws Exception {
-        final Long senderId = 5L;
+        final Long senderId = 1L;
+        final String token = signInAsUser(senderId);
         final Long recipientId = 2L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
@@ -254,6 +280,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
+                                                    .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();

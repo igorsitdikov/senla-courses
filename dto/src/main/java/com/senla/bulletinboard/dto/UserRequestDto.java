@@ -2,6 +2,7 @@ package com.senla.bulletinboard.dto;
 
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
+import com.senla.bulletinboard.enumerated.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,11 +29,12 @@ public class UserRequestDto extends UserDto {
                           final String lastName,
                           final String email,
                           final String phone,
+                          final UserRole role,
                           final AutoSubscribeStatus autoSubscribe,
                           final PremiumStatus premium,
                           final BigDecimal balance,
                           final String password) {
-        super(id, firstName, lastName, email, phone, autoSubscribe, premium, balance);
+        super(id, firstName, lastName, email, phone, role, autoSubscribe, premium, balance);
         this.password = password;
     }
 }

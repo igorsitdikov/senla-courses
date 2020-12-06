@@ -64,6 +64,7 @@ Response: `200 OK`
     "lastName": "Сергеев",
     "email": "serg.sergeev@example.com",
     "phone": "+375295552311",
+    "role": "USER",
     "autoSubscribe": "DISABLE",
     "premium": "DISABLE",
     "balance": 0.00
@@ -97,6 +98,7 @@ Response: `200 OK`
     "lastName": "Сергеев",
     "email": "serg.sergeev@example.com",
     "phone": "+37529111111",
+    "role": "USER",
     "autoSubscribe": "ACTIVE",
     "premium": "DISABLE",
     "balance": 0.00
@@ -160,6 +162,7 @@ Response: `200 OK`
             "lastName": "Иванов",
             "email": "ivan.ivanov@mail.ru",
             "phone": "+375331234567",
+            "role": "USER",
             "autoSubscribe": "ACTIVE",
             "premium": "DISABLE",
             "balance": 0.00
@@ -176,6 +179,7 @@ Response: `200 OK`
             "lastName": "Петров",
             "email": "petr.petrov@yandex.ru",
             "phone": "+375337654321",
+            "role": "USER",
             "autoSubscribe": "DISABLE",
             "premium": "DISABLE",
             "balance": 24.00
@@ -192,6 +196,7 @@ Response: `200 OK`
             "lastName": "Иванов",
             "email": "ivan.ivanov@mail.ru",
             "phone": "+375331234567",
+            "role": "USER",
             "autoSubscribe": "ACTIVE",
             "premium": "DISABLE",
             "balance": 0.00
@@ -255,6 +260,7 @@ Response: `200 OK`
         "lastName": "Сергеев",
         "email": "serg.sergeev@example.com",
         "phone": "+375295552311",
+        "role": "USER",
         "autoSubscribe": "DISABLE",
         "premium": "DISABLE",
         "balance": 0.00
@@ -312,6 +318,7 @@ Response: `200 OK`
         "lastName": "Сергеев",
         "email": "serg.sergeev@example.com",
         "phone": "+375295552311",
+        "role": "USER",
         "autoSubscribe": "DISABLE",
         "premium": "DISABLE",
         "balance": 0.00
@@ -327,6 +334,7 @@ Response: `200 OK`
                 "lastName": "Иванов",
                 "email": "ivan.ivanov@mail.ru",
                 "phone": "+375331234567",
+                "role": "USER",
                 "autoSubscribe": "DISABLE",
                 "premium": "DISABLE",
                 "balance": 0.00
@@ -490,6 +498,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
             "lastName": "Сергеев",
             "email": "serg.sergeev@example.com",
             "phone": "+375295552311",
+            "role": "USER",
             "autoSubscribe": "DISABLE",
             "premium": "DISABLE",
             "balance": 0.00
@@ -505,6 +514,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
                     "lastName": "Иванов",
                     "email": "ivan.ivanov@mail.ru",
                     "phone": "+375331234567",
+                    "role": "USER",
                     "autoSubscribe": "DISABLE",
                     "premium": "DISABLE",
                     "balance": 0.00
@@ -535,7 +545,7 @@ Response: `200 OK`
 
 ### BB-21 Как "Администратор", я хочу добавить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
 
-Request: `POST /api/tariffs`
+Request: `POST /api/admin/tariffs`
 
 ```
 {
@@ -549,13 +559,15 @@ Response: `201 CREATED`
 
 ```
 {
-    "id": 3
+    "id": 1
 }
 ```
 
 ### BB-22 Как "Администратор", я хочу обновить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
 
-Request: `PUT /api/tariffs`
+Request: `PUT /api/admin/tariffs/${id}`
+
+Где: `id=1`
 
 ```
 {
@@ -610,3 +622,81 @@ Request: `GET /api/tariffs/${id}?user_id={userId}`
 Где: `id=3, userId=4`
 
 Response: `200 OK`
+
+### BB-25 Как "Администратор", я хочу просмотреть список всех пользователей, и если авторизуюсь, получаю список пользователей.
+
+Request: `GET /api/admin/users`
+
+Response: `200 OK`
+
+```
+[
+    {
+        "id": 1,
+        "firstName": "Иван",
+        "lastName": "Иванов",
+        "email": "ivan.ivanov@mail.ru",
+        "phone": "+375331234567",
+        "role": "USER",
+        "autoSubscribe": "DISABLE",
+        "premium": "DISABLE",
+        "balance": 0.00
+    },
+    {
+        "id": 2,
+        "firstName": "Петр",
+        "lastName": "Петров",
+        "email": "petr.petrov@yandex.ru",
+        "phone": "+375337654321",
+        "role": "USER",
+        "autoSubscribe": "DISABLE",
+        "premium": "DISABLE",
+        "balance": 0.00
+    },
+    {
+        "id": 3,
+        "firstName": "Алексей",
+        "lastName": "Алексеев",
+        "email": "alex.alexeev@gmail.com",
+        "phone": "+375333021232",
+        "role": "ADMIN",
+        "autoSubscribe": "DISABLE",
+        "premium": "DISABLE",
+        "balance": 0.00
+    },
+    {
+        "id": 4,
+        "firstName": "Сергей",
+        "lastName": "Сергеев",
+        "email": "serg.sergeev@example.com",
+        "phone": "+37529111111",
+        "role": "USER",
+        "autoSubscribe": "ACTIVE",
+        "premium": "DISABLE",
+        "balance": 0.00
+    }
+]
+```
+
+
+### BB-25 Как "Администратор", я хочу изменить роль пользователя, и если авторизуюсь, меняю роль пользователя на "Администратор".
+
+Request: `PATCH /api/admin/users/${id}?role=ADMIN`
+
+Где: `id=2`
+
+Response: `200 OK`
+
+```
+{
+    "id": 2,
+    "firstName": "Петр",
+    "lastName": "Петров",
+    "email": "petr.petrov@yandex.ru",
+    "phone": "+375337654321",
+    "role": "ADMIN",
+    "autoSubscribe": "DISABLE",
+    "premium": "DISABLE",
+    "balance": 0.00
+}
+```

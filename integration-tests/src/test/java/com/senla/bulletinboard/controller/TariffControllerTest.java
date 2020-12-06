@@ -61,7 +61,7 @@ public class TariffControllerTest extends AbstractControllerTest {
 
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
         final IdDto idDto = new IdDto(id);
-        mockMvc.perform(post("/api/tariffs/")
+        mockMvc.perform(post("/api/admin/tariffs/")
                             .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +81,7 @@ public class TariffControllerTest extends AbstractControllerTest {
         willReturn(true).given(tariffRepository).existsById(id);
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
 
-        mockMvc.perform(put("/api/tariffs/" + id)
+        mockMvc.perform(put("/api/admin/tariffs/" + id)
                             .contextPath(CONTEXT_PATH)
                             .content(objectMapper.writeValueAsString(tariffDto))
                             .contentType(MediaType.APPLICATION_JSON))
@@ -104,7 +104,7 @@ public class TariffControllerTest extends AbstractControllerTest {
         final ApiErrorDto expectedError =
             expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(put("/api/tariffs/" + id)
+        final String response = mockMvc.perform(put("/api/admin/tariffs/" + id)
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(tariffDto))
                                                     .contentType(MediaType.APPLICATION_JSON))

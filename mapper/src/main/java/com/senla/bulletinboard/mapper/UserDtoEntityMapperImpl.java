@@ -31,6 +31,7 @@ public class UserDtoEntityMapperImpl implements UserDtoEntityMapper {
         source.setAutoSubscribe(destination.getAutoSubscribe());
         source.setBalance(destination.getBalance());
         source.setPremium(destination.getPremium());
+        source.setRole(destination.getRole());
         return source;
     }
 }

@@ -67,7 +67,8 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetUser() throws Exception {
-        final long id = 1L;
+        final long id = 4L;
+        String token = signInAsUser(id);
         final UserDto expected = UserMock.getUserDtoById(id);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
 
@@ -75,14 +76,16 @@ public class UserControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(get("/api/users/" + id)
                             .contextPath(CONTEXT_PATH)
-                            .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token))
             .andExpect(status().isOk())
             .andExpect(content().json(objectMapper.writeValueAsString(expected)));
     }
 
     @Test
     public void testGetUser_UserNotFoundException() throws Exception {
-        final long id = 1L;
+        final long id = 4L;
+        String token = signInAsUser(id);
 
         willReturn(Optional.empty()).given(userRepository).findById(id);
 
@@ -92,7 +95,8 @@ public class UserControllerTest extends AbstractControllerTest {
 
         final String response = mockMvc.perform(get("/api/users/" + id)
                                                     .contextPath(CONTEXT_PATH)
-                                                    .contentType(MediaType.APPLICATION_JSON))
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .header("Authorization", token))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
         assertErrorResponse(expectedError, response);

@@ -10,7 +10,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <artifactId>application</artifactId>
     <version>1.0.0</version>
 
@@ -31,6 +31,19 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <mainClass>com.senla.bulletinboard.BulletinBoardApplication</mainClass>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                            <configuration>
+                                <classifier>exec</classifier>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

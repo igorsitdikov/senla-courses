@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.senla.bulletinboard.annotation.PhoneNumber;
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
+import com.senla.bulletinboard.enumerated.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,8 @@ public class UserDto extends AbstractDto {
     protected String email;
     @PhoneNumber(message = "phone number should be +375(25|29|33|44)xxxxxxx")
     protected String phone;
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    protected UserRole role;
     protected AutoSubscribeStatus autoSubscribe;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected PremiumStatus premium;

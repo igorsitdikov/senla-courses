@@ -47,37 +47,4 @@ public class TariffController {
         return tariffService.findAllDto();
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create tariff", description = "Store new tariff to database")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successful operation", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = IdDto.class))
-        }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
-        })
-    })
-    public IdDto addTariff(@RequestBody final TariffDto tariffDto) {
-        return tariffService.post(tariffDto);
-    }
-
-    @PutMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Update tariff", description = "Update tariff")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successful operation", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = TariffDto.class))
-        }),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
-        }),
-        @ApiResponse(responseCode = "404", description = "User not found", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
-        })
-    })
-    public TariffDto updateTariff(@PathVariable final Long id, @RequestBody final TariffDto tariffDto)
-        throws EntityNotFoundException {
-        return tariffService.updateTariff(id, tariffDto);
-    }
 }

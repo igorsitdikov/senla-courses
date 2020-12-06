@@ -33,8 +33,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/api/sign-up", "/api/sign-in").permitAll()
             .antMatchers(HttpMethod.GET, "/api/bulletins", "/api/comments", "/api/tariffs").permitAll()
-            .antMatchers("/api/bulletins", "/api/comments", "/api/subscriptions", "/api/votes", "/api/users")
+            .antMatchers("/api/bulletins", "/api/comments", "/api/subscriptions", "/api/votes", "/api/users",
+                         "/api/messages", "/api/payments", "/api/tariffs", "/api/dialogs", "/api/log-out")
             .hasAnyRole(UserRole.USER.name(), UserRole.ADMIN.name())
+            .antMatchers("/api/admin/**").hasRole(UserRole.ADMIN.name())
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()

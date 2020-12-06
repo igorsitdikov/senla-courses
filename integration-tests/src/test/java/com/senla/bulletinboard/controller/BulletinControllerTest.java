@@ -65,7 +65,10 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void showBulletinsTest() throws Exception {
-        final List<BulletinBaseDto> expected = BulletinMock.getAllBase();
+        final List<BulletinBaseDto> expected = BulletinMock.getAllBase()
+            .stream()
+            .peek(el -> el.setSeller(null))
+            .collect(Collectors.toList());
 
         final List<BulletinEntity> entities = expected
             .stream()
