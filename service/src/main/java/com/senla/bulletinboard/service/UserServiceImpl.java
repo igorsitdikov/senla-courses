@@ -3,6 +3,7 @@ package com.senla.bulletinboard.service;
 import com.senla.bulletinboard.dto.PasswordDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.UserEntity;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.repository.UserRepository;
@@ -24,6 +25,12 @@ public class UserServiceImpl extends AbstractService<UserDto, UserEntity, UserRe
                            final PasswordEncoder passwordEncoder) {
         super(dtoEntityMapper, repository);
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    @PreAuthorize("authentication.principal.id == #id")
+    public UserDto findDtoById(final Long id) throws EntityNotFoundException {
+        return super.findDtoById(id);
     }
 
     @Override

@@ -34,8 +34,8 @@ Request: `POST /api/sign-in`
     
 ```    
 {
-    "email": "ivan.ivanov@mail.ru",
-    "password": "123456"
+    "email": "serg.sergeev@example.com",
+    "password": "sergiy"
 }
 ```
 
@@ -43,7 +43,7 @@ Response: `200 OK`
 
 ```
 {
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFuLml2YW5vdkBtYWlsLnJ1IiwiZXhwIjoxNjA3MTIwMzI4LCJpYXQiOjE2MDcwODQzMjh9.B-eQMy4tWTYvFusZyHBiQnjwHYxTOD6Z4p-EDXS6ycE"
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXJnLnNlcmdlZXZAZXhhbXBsZS5jb20iLCJleHAiOjE2MDcyOTgxOTMsImlhdCI6MTYwNzI2MjE5M30.qDVtUCoFKckdNCvAnEqvN5teCXyLyieDF92oGMIPWLc"
 }
 ```
 
@@ -51,7 +51,7 @@ Response: `200 OK`
 
 Request: `GET /api/users/${id}`
 
-Где: `id=1`
+Где: `id=4`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
   
@@ -59,11 +59,11 @@ Response: `200 OK`
 
 ```
 {
-    "id": 1,
-    "firstName": "Иван",
-    "lastName": "Иванов",
-    "email": "ivan.ivanov@mail.ru",
-    "phone": "+375331234567",
+    "id": 4,
+    "firstName": "Сергей",
+    "lastName": "Сергеев",
+    "email": "serg.sergeev@example.com",
+    "phone": "+375295552311",
     "autoSubscribe": "DISABLE",
     "premium": "DISABLE",
     "balance": 0.00
@@ -80,10 +80,11 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
   
 ```
 {
-    "firstName": "Иван",
-    "secondName": "Иванов",
-    "email": "ivan.ivanov@yandex.ru",
-    "phone": "+375337654321"
+    "email": "serg.sergeev@example.com",
+    "firstName": "Сергей",
+    "lastName": "Сергеев",
+    "phone": "+37529111111",
+    "autoSubscribe": "ACTIVE"
 }
 ```
   
@@ -91,11 +92,14 @@ Response: `200 OK`
   
 ```
 {
-    "id": 1,
-    "firstName": "Иван",
-    "secondName": "Иванов",
-    "email": "ivan.ivanov@yandex.ru",
-    "phone": "+375337654321"
+    "id": 4,
+    "firstName": "Сергей",
+    "lastName": "Сергеев",
+    "email": "serg.sergeev@example.com",
+    "phone": "+37529111111",
+    "autoSubscribe": "ACTIVE",
+    "premium": "DISABLE",
+    "balance": 0.00
 }
 ```
   
@@ -103,15 +107,15 @@ Response: `200 OK`
 
 Request: `PATCH /api/users/${id}`
 
-Где: `id=1`
+Где: `id=4`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
   
 ```
 {
-    "oldPassword": "123456",
-    "newPassword": "111111",
-    "confirmPassword": "111111"
+    "confirmPassword": "sergej",
+    "newPassword": "sergej",
+    "oldPassword": "sergiy"
 }
 ```
   
@@ -128,42 +132,11 @@ Response: `200 OK`
 [
     {
         "id": 1,
-        "title": "Продам свадебный сервиз",
-        "price": 34.12,
-        "createdAt": "2020-09-12 12:00:32",
-        "author": {
-            "id": 2,
-            "firstName": "Антон",
-            "secondName": "Антонов",
-            "email": "anton.antonov@yandex.ru",
-            "phone": "+375332223344"
-        }
-    },
-    {
-        "id": 2,
-        "title": "Продам соковыжималку "Журавинка" СВСП 102П",
-        "price": 25,
-        "createdAt": "2020-09-12 12:00:32",
-        "author": {
-            "id": 3,
-            "firstName": "Петр",
-            "secondName": "Петров",
-            "email": "petr.petrov@yandex.ru",
-            "phone": "+375337654321"
-        },
-    },
-    {
-        "id": 3,
-        "title": "Продам хомяка",
-        "price": 12,
-        "createdAt": "2020-09-12 12:00:32",
-        "author": {
-            "id": 4,
-            "firstName": "Сергей",
-            "secondName": "Сергеев",
-            "email": "sergei.sergeev@yandex.ru",
-            "phone": "+375331111111"
-        }
+        "title": "Продам отборный картофель, сорт «Вектор»",
+        "price": 0.45,
+        "createdAt": "06-12-2020 19:49",
+        "seller": null,
+        "sellerId": 4
     }
 ]
 ```
@@ -246,7 +219,7 @@ Response: `201 CREATED`
 
 ```
 {
-    "id": 4
+    "id": 1
 }
 ```
 
@@ -262,9 +235,9 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 {
     "title": "Продам отборный картофель, сорт «Вектор»",
     "price": 0.45,
-    "sellerId": 27,
+    "sellerId": 4,
     "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
-    "status": "CLOSE"
+    "status": "OPEN"
 }
 ```
 
@@ -272,12 +245,12 @@ Response: `200 OK`
 
 ```
 {
-    "id": 42,
+    "id": 1,
     "title": "Продам отборный картофель, сорт «Вектор»",
     "price": 0.45,
-    "createdAt": "06-12-2020 03:01",
+    "createdAt": "06-12-2020 19:44",
     "seller": {
-        "id": 27,
+        "id": 4,
         "firstName": "Сергей",
         "lastName": "Сергеев",
         "email": "serg.sergeev@example.com",
@@ -286,10 +259,10 @@ Response: `200 OK`
         "premium": "DISABLE",
         "balance": 0.00
     },
-    "sellerId": 27,
+    "sellerId": 4,
     "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
     "comments": [],
-    "status": "CLOSE"
+    "status": "OPEN"
 }
 ```
 
@@ -297,7 +270,7 @@ Response: `200 OK`
 
 Request: `DELETE /api/bulletins/${id}`
 
-Где: `id=4`
+Где: `id=1`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
@@ -323,38 +296,48 @@ Response: `201 CREATED`
 
 Request: `GET /api/bulletins/${id}`
 
-Где: `id=4`
+Где: `id=1`
 
 Response: `200 OK`
 
 ```
 {
-    "id": 4,
+    "id": 1,
     "title": "Продам отборный картофель, сорт «Вектор»",
     "price": 0.45,
-    "createdAt": "2020-09-12 12:00:32",
-    "author": {
-        "id": 1,
-        "firstName": "Иван",
-        "secondName": "Иванов",
-        "email": "ivan.ivanov@yandex.ru",
-        "phone": "+375337654321"
+    "createdAt": "06-12-2020 19:49",
+    "seller": {
+        "id": 4,
+        "firstName": "Сергей",
+        "lastName": "Сергеев",
+        "email": "serg.sergeev@example.com",
+        "phone": "+375295552311",
+        "autoSubscribe": "DISABLE",
+        "premium": "DISABLE",
+        "balance": 0.00
     },
-    "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району.",
+    "sellerId": 4,
+    "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
     "comments": [
         {
             "id": 1,
             "author": {
-                "id": 3,
-                "firstName": "Петр",
-                "secondName": "Петров",
-                "email": "petr.petrov@yandex.ru",
-                "phone": "+375337654321"
+                "id": 1,
+                "firstName": "Иван",
+                "lastName": "Иванов",
+                "email": "ivan.ivanov@mail.ru",
+                "phone": "+375331234567",
+                "autoSubscribe": "DISABLE",
+                "premium": "DISABLE",
+                "balance": 0.00
             },
-            "comment": "Отличный картофель",
-            "createdAt": "2020-09-14 11:30:45"
+            "authorId": 1,
+            "comment": "Отличный картофель. Разваристый.",
+            "bulletinId": 1,
+            "createdAt": "06-12-2020 19:55"
         }
-    ]
+    ],
+    "status": "OPEN"
 }
 ```
 
@@ -366,11 +349,10 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 
 ```
 {
-    "senderId": 3,
-    "recipientId": 1,
-    "dialogId": 4,
-    "message": "Возможна ли доставка 22.02.2021?",
-    "createdAt": "2020-09-12 12:00:32"
+    "dialogId": 1,
+    "recipientId": 4,
+    "senderId": 1,
+    "message": "Возможна ли доставка 22.02.2021?"
 }
 ```
 
@@ -400,10 +382,8 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 
 ```
 {
-    "sellerId": 3,
     "customerId": 1,
-    "bulletinId": 4,
-    "createdAt": "2020-09-12 12:00:32"
+    "bulletinId": 1
 }
 ```
 
@@ -442,7 +422,7 @@ Response: `200 OK`
 
 Request: `GET /api/dialogs/${id}/messages`
 
-Где: `id=4`
+Где: `id=1`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
@@ -451,26 +431,33 @@ Response: `200 OK`
 ```
 [
     {
-        "senderId": 3,
-        "recipientId": 1,
-        "dialogId": 4,
+        "senderId": 1,
+        "recipientId": 4,
+        "dialogId": 1,
         "message": "Возможна ли доставка 22.02.2021?",
-        "createdAt": "2020-09-12 12:00:32"
+        "createdAt": "06-12-2020 20:02"
+    },
+    {
+        "senderId": 4,
+        "recipientId": 1,
+        "dialogId": 1,
+        "message": "Да.",
+        "createdAt": "06-12-2020 20:05"
     }
 ]
 ```
 
 ### BB-18 Как "Пользователь", я хочу оценить продавца, и если пользователь зарегистрирован, ставлю оценку.
 
-Request: `POST /api/stars`
+Request: `POST /api/votes`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
 ```
 {
-    "userId": 3,
-    "bulletinId": 4,
-    "stars": 5,
+    "bulletinId": 1,
+    "vote": 5,
+    "voterId": 1
 }
 ```
 
@@ -493,17 +480,42 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 ```
 [
     {
-        "id": 4,
+        "id": 1,
         "title": "Продам отборный картофель, сорт «Вектор»",
         "price": 0.45,
-        "author": {
-            "id": 1,
-            "firstName": "Иван",
-            "secondName": "Иванов",
-            "email": "ivan.ivanov@yandex.ru",
-            "phone": "+375337654321"
+        "createdAt": "06-12-2020 19:49",
+        "seller": {
+            "id": 4,
+            "firstName": "Сергей",
+            "lastName": "Сергеев",
+            "email": "serg.sergeev@example.com",
+            "phone": "+375295552311",
+            "autoSubscribe": "DISABLE",
+            "premium": "DISABLE",
+            "balance": 0.00
         },
-        "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости."
+        "sellerId": 4,
+        "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
+        "comments": [
+            {
+                "id": 1,
+                "author": {
+                    "id": 1,
+                    "firstName": "Иван",
+                    "lastName": "Иванов",
+                    "email": "ivan.ivanov@mail.ru",
+                    "phone": "+375331234567",
+                    "autoSubscribe": "DISABLE",
+                    "premium": "DISABLE",
+                    "balance": 0.00
+                },
+                "authorId": 1,
+                "comment": "Отличный картофель. Разваристый.",
+                "bulletinId": 1,
+                "createdAt": "06-12-2020 19:55"
+            }
+        ],
+        "status": "OPEN"
     }
 ]
 ```
@@ -514,7 +526,7 @@ Response: `200 OK`
 
 Request: `DELETE /api/bulletins/${id}`
 
-Где: `id=4`
+Где: `id=1`
 
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
@@ -541,7 +553,30 @@ Response: `201 CREATED`
 }
 ```
 
-### BB-22 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
+### BB-22 Как "Администратор", я хочу обновить тариф на премиум подписку, и если авторизуюсь, добавляю новый тариф.
+
+Request: `PUT /api/tariffs`
+
+```
+{
+    "price": 14.5,
+    "term": 7,
+    "description": "14.5$ за 7 дней"
+}
+```
+
+Response: `200 OK`
+
+```
+{
+    "id": 1,
+    "price": 14.5,
+    "term": 7,
+    "description": "14.5$ за 7 дней"
+}
+```
+
+### BB-23 Как "Пользователь", я хочу просмотреть возможные тарифы на премиум подписку, получаю список.
 
 Request: `GET /api/tariffs`
 
@@ -568,7 +603,7 @@ Request: `GET /api/tariffs`
 ]
 ```
 
-### BB-23 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
+### BB-24 Как "Пользователь", я хочу купить премиум подписку на 7 дней, подписываюсь.
 
 Request: `GET /api/tariffs/${id}?user_id={userId}`
 

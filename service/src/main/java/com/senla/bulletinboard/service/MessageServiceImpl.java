@@ -56,6 +56,7 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
     }
 
     @Override
+    @PreAuthorize("authentication.principal.id == #messageDto.getSenderId()")
     public IdDto createMessage(final MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {

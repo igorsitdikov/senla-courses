@@ -43,6 +43,12 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             .collect(Collectors.toList());
     }
 
+    @Override
+    @PreAuthorize("@dialogServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
+    public void delete(final Long id) {
+        super.delete(id);
+    }
+
     private List<DialogEntity> findDialogsBySellerIdOrCustomerId(final Long id) {
         return repository.findAllByBulletin_SellerIdOrCustomerId(id, id);
     }
@@ -68,6 +74,18 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             return new EntityNotFoundException(message);
         });
         return userId.equals(entity.getSeller().getId());
+    }
+
+    public boolean checkDialogOwner(final Long userId, final Long dialogId) throws EntityNotFoundException {
+        DialogEntity entity = repository.findById(dialogId).orElseThrow(() -> {
+            final String message = Translator.toLocale("dialog-not-exists", dialogId);
+            log.error(message);
+            return new EntityNotFoundException(message);
+        });
+        if (checkOwner(userId, entity.getBulletinId())) {
+            return true;
+        }
+        return userId.equals(entity.getCustomerId());
     }
 
     public boolean checkDialogExistence(final DialogDto dialogDto) {
