@@ -21,7 +21,7 @@ public class BulletinMock {
         put(3L, new BulletinDto(3L, "Продам хомяка", BigDecimal.valueOf(12), LocalDateTime.parse("2020-09-12T12:00:32"),
                                 UserMock.getUserDtoById(3L), 3L));
         put(4L, new BulletinDto(4L, "Продам свадебный сервиз", BigDecimal.valueOf(34.12),
-                                LocalDateTime.parse("2020-09-12T12:00:32"), UserMock.getUserDtoById(1L), 1L,
+                                LocalDateTime.parse("2020-09-12T12:00:32"), UserMock.getUserDtoById(4L), 4L,
                                 "БЕСПЛАТНАЯ доставка по г.Пружаны и району.", CommentMock.getAll(),
                                 BulletinStatus.OPEN));
     }};
@@ -35,7 +35,7 @@ public class BulletinMock {
                                 UserMock.getUserDtoById(3L), 3L));
         put(4L, new BulletinBaseDto(4L, "БЕСПЛАТНАЯ доставка по г.Пружаны и району.", BigDecimal.valueOf(34.12),
                                     LocalDateTime.parse("2020-09-12T12:00:32"),
-                                    UserMock.getUserDtoById(1L) , 1L));
+                                    UserMock.getUserDtoById(4L) , 4L));
     }};
 
     public static BulletinBaseDto getBaseById(final Long id) {

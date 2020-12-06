@@ -166,9 +166,10 @@ public class VoteControllerTest extends AbstractControllerTest {
         sellerVoteEntity.setVote(5);
         sellerVoteEntity.setId(id);
         final SellerVoteDto sellerVoteDto = new SellerVoteDto(1L, userId, bulletinId, stars);
-
         final BulletinEntity bulletinEntity =
             bulletinDtoEntityMapper.sourceToDestination(BulletinMock.getById(bulletinId));
+
+        bulletinEntity.setSeller(user);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
         String message = Translator.toLocale("vote-forbidden");

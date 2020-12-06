@@ -19,6 +19,7 @@ import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -55,6 +56,16 @@ public class DialogControllerTest extends AbstractControllerTest {
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
 
+    @BeforeEach
+    public void initAuthorizedUser() {
+        final Long userId = 4L;
+        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
+        final String password = UserMock.getById(userId).getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(UserRole.USER);
+        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
+    }
+
     @Test
     public void showMessagesTest() throws Exception {
         final long id = 3L;
@@ -84,7 +95,10 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void createDialogTest() throws Exception {
+        final long id = 4L;
+        String token = signInAsUser(id);
         final DialogDto dialogDto = DialogMock.getById(1L);
+        dialogDto.setCustomerId(id);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
         final String request = objectMapper.writeValueAsString(dialogDto);
         final String response = objectMapper.writeValueAsString(new IdDto(1L));
@@ -96,6 +110,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/dialogs")
                             .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token)
                             .content(request))
             .andExpect(status().isCreated())
             .andExpect(content().json(response));
@@ -103,7 +118,10 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void createDialogTest_DialogAlreadyExists() throws Exception {
+        final long id = 4L;
+        String token = signInAsUser(id);
         final DialogDto dialogDto = DialogMock.getById(1L);
+        dialogDto.setCustomerId(id);
         final String request = objectMapper.writeValueAsString(dialogDto);
 
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
@@ -120,6 +138,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         final String response = mockMvc.perform(post("/api/dialogs")
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON)
+                                                    .header("Authorization", token)
                                                     .content(request))
             .andExpect(status().isConflict())
             .andReturn().getResponse().getContentAsString();

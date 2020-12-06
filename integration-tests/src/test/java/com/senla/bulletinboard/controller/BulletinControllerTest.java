@@ -102,6 +102,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void createBulletinTest() throws Exception {
         final long id = 4L;
+        String token = signInAsUser(id);
         final BulletinDto bulletinDto = BulletinMock.getById(id);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         final String request = objectMapper.writeValueAsString(bulletinDto);
@@ -112,6 +113,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/bulletins/")
                             .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token)
                             .content(request))
             .andExpect(status().isCreated())
             .andExpect(content().json(response));
@@ -125,7 +127,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
 
-        willReturn(true).given(bulletinRepository).existsById(id);
+        willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(put("/api/bulletins/" + id)
