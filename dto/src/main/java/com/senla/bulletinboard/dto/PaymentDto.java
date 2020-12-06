@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class PaymentDto extends AbstractDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime payedAt;
     @NotNull(message = "user id is null")
     private Long userId;

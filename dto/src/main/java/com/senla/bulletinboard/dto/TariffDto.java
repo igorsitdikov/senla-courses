@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class TariffDto extends AbstractDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private BigDecimal price;
     private Integer term;
