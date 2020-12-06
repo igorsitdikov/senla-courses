@@ -573,6 +573,8 @@ Request: `PUT /api/admin/tariffs/${id}`
 
 Где: `id=1`
 
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
 ```
 {
     "price": 14.5,
@@ -625,11 +627,15 @@ Request: `GET /api/tariffs/${id}?user_id={userId}`
 
 Где: `id=3, userId=4`
 
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
+
 Response: `200 OK`
 
 ### BB-25 Как "Администратор", я хочу просмотреть список всех пользователей, и если авторизуюсь, получаю список пользователей.
 
 Request: `GET /api/admin/users`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
 Response: `200 OK`
 
@@ -688,6 +694,8 @@ Response: `200 OK`
 Request: `PATCH /api/admin/users/${id}?role=ADMIN`
 
 Где: `id=2`
+
+Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
 Response: `200 OK`
 
