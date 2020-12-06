@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS payment
     payed_at  DATETIME                   NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_payment_user_user_id
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
-    UNIQUE (user_id),
     PRIMARY KEY (id)
 );
 
