@@ -90,7 +90,7 @@ public class BulletinController {
         })
     })
     public IdDto createBulletin(@RequestBody final BulletinDto bulletinDto) {
-        return bulletinService.post(bulletinDto);
+        return bulletinService.createBulletin(bulletinDto);
     }
 
     @PutMapping(value = "/{id}")

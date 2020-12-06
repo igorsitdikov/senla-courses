@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.FilterDto;
+import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.enumerated.SortBulletin;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
@@ -18,10 +19,14 @@ import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -74,10 +79,26 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     }
 
     @Override
-    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("authentication.principal.id == #bulletinDto.getSellerId()")
+    public IdDto createBulletin(final BulletinDto bulletinDto) {
+        return super.post(bulletinDto);
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("authentication.principal.id == #bulletinDto.getSellerId()")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
-        checkBulletinExistence(id);
-        return super.update(id, bulletinDto);
+        BulletinEntity entity = repository.findById(id).orElseThrow(() -> {
+            final String message = Translator.toLocale("bulletin-not-exists", id);
+            log.error(message);
+            return new EntityNotFoundException(message);
+        });
+        entity.setStatus(bulletinDto.getStatus());
+        entity.setPrice(bulletinDto.getPrice());
+        entity.setText(bulletinDto.getDescription());
+        entity.setTitle(bulletinDto.getTitle());
+        final BulletinEntity savedBulletin = repository.save(entity);
+        return bulletinDetailsDtoEntityMapper.destinationToSource(savedBulletin);
     }
 
     @Override
@@ -93,8 +114,11 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     }
 
     @Override
-    public List<BulletinBaseDto> findAllBulletins(final String[] filters, final SortBulletin sort) {
+    public List<BulletinBaseDto> findAllBulletins(final String[] filters, SortBulletin sort) {
         final FilterDto criteria = convertArrayToDto(filters);
+        if (sort == null) {
+            sort = SortBulletin.AVERAGE;
+        }
         BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
 
         return repository.findAll(bulletinSpecification)

@@ -13,5 +13,7 @@ public interface DialogService extends CommonService<DialogDto, DialogEntity> {
     @PreAuthorize("authentication.principal.id == #id")
     List<DialogDto> findDialogsByUserId(Long id);
 
+    @PreAuthorize(
+        "authentication.principal.id == #dialogDto.getCustomerId() and !dialogServiceImpl.checkOwner(authentication.principal.id, #dialogDto.getBulletinId())")
     IdDto createDialog(DialogDto dialogDto) throws EntityAlreadyExistsException;
 }

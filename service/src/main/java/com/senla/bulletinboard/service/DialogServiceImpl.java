@@ -2,9 +2,12 @@ package com.senla.bulletinboard.service;
 
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.IdDto;
+import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.exception.EntityAlreadyExistsException;
+import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
+import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.service.interfaces.DialogService;
 import com.senla.bulletinboard.utils.Translator;
@@ -21,11 +24,14 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
                                                                                                   DialogService {
 
     private final DialogDtoEntityMapper dialogDtoEntityMapper;
+    private final BulletinRepository bulletinRepository;
 
     public DialogServiceImpl(final DialogDtoEntityMapper dtoEntityMapper,
-                             final DialogRepository repository) {
+                             final DialogRepository repository,
+                             final BulletinRepository bulletinRepository) {
         super(dtoEntityMapper, repository);
         dialogDtoEntityMapper = dtoEntityMapper;
+        this.bulletinRepository = bulletinRepository;
     }
 
     @Override
@@ -42,6 +48,8 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     }
 
     @Override
+    @PreAuthorize(
+        "authentication.principal.id == #dialogDto.getCustomerId() and !@dialogServiceImpl.checkOwner(authentication.principal.id, #dialogDto.getBulletinId())")
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
             final String message = Translator.toLocale("dialog-already-exists",
@@ -51,6 +59,15 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             throw new EntityAlreadyExistsException(message);
         }
         return super.post(dialogDto);
+    }
+
+    public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
+        BulletinEntity entity = bulletinRepository.findById(bulletinId).orElseThrow(() -> {
+            final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+            log.error(message);
+            return new EntityNotFoundException(message);
+        });
+        return userId.equals(entity.getSeller().getId());
     }
 
     public boolean checkDialogExistence(final DialogDto dialogDto) {

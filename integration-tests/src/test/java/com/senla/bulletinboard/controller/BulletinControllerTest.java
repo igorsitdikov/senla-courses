@@ -8,6 +8,7 @@ import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.enumerated.UserRole;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
@@ -45,6 +46,8 @@ public class BulletinControllerTest extends AbstractControllerTest {
     private BulletinRepository bulletinRepository;
     @SpyBean
     private BulletinDtoEntityMapper bulletinDtoEntityMapper;
+    @SpyBean
+    private BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper;
     @MockBean
     private UserRepository userRepository;
     @SpyBean

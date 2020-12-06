@@ -177,30 +177,52 @@ Response: `200 OK`
 ```
 [
     {
-        "id": 1,
-        "title": "Продам свадебный сервиз",
-        "price": 34.12,
-        "createdAt": "2020-09-12 12:00:32",
+        "id": 25,
+        "title": "Eos ratione magni molestias non. Facilis perspiciatis rerum cumque velit necessitatibus voluptatem ea. Perferendis est deserunt veniam rem occaecati facilis iure.",
+        "price": 39.81,
+        "createdAt": "04-03-2018 06:22",
         "author": {
-            "id": 2,
-            "firstName": "Антон",
-            "secondName": "Антонов",
-            "email": "anton.antonov@yandex.ru",
-            "phone": "+375332223344"
+            "id": 1,
+            "firstName": "Иван",
+            "lastName": "Иванов",
+            "email": "ivan.ivanov@mail.ru",
+            "phone": "+375331234567",
+            "autoSubscribe": "ACTIVE",
+            "premium": "DISABLE",
+            "balance": 0.00
         }
     },
     {
         "id": 2,
-        "title": "Продам соковыжималку "Журавинка" СВСП 102П",
-        "price": 25,
-        "createdAt": "2020-09-12 12:00:32",
+        "title": "Продам соковыжималку \"Журавинка\" СВСП 102П",
+        "price": 25.00,
+        "createdAt": "29-11-2020 18:59",
         "author": {
-            "id": 3,
+            "id": 2,
             "firstName": "Петр",
-            "secondName": "Петров",
+            "lastName": "Петров",
             "email": "petr.petrov@yandex.ru",
-            "phone": "+375337654321"
-        },
+            "phone": "+375337654321",
+            "autoSubscribe": "DISABLE",
+            "premium": "DISABLE",
+            "balance": 24.00
+        }
+    },
+    {
+        "id": 1,
+        "title": "Продам свадебный сервиз",
+        "price": 34.12,
+        "createdAt": "29-11-2020 18:59",
+        "author": {
+            "id": 1,
+            "firstName": "Иван",
+            "lastName": "Иванов",
+            "email": "ivan.ivanov@mail.ru",
+            "phone": "+375331234567",
+            "autoSubscribe": "ACTIVE",
+            "premium": "DISABLE",
+            "balance": 0.00
+        }
     }
 ]
 ```
@@ -215,13 +237,7 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 {
     "title": "Продам отборный картофель, сорт «Вектор»",
     "price": 0.45,
-    "author": {
-        "id": 1,
-        "firstName": "Иван",
-        "secondName": "Иванов",
-        "email": "ivan.ivanov@yandex.ru",
-        "phone": "+375337654321"
-    },
+    "sellerId": 1,
     "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району."
 }
 ```
@@ -246,12 +262,36 @@ Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZ
 {
     "title": "Продам отборный картофель, сорт «Вектор»",
     "price": 0.45,
-    "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости."
+    "sellerId": 27,
+    "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
     "status": "CLOSE"
 }
 ```
 
 Response: `200 OK`
+
+```
+{
+    "id": 42,
+    "title": "Продам отборный картофель, сорт «Вектор»",
+    "price": 0.45,
+    "createdAt": "06-12-2020 03:01",
+    "seller": {
+        "id": 27,
+        "firstName": "Сергей",
+        "lastName": "Сергеев",
+        "email": "serg.sergeev@example.com",
+        "phone": "+375295552311",
+        "autoSubscribe": "DISABLE",
+        "premium": "DISABLE",
+        "balance": 0.00
+    },
+    "sellerId": 27,
+    "description": "БЕСПЛАТНАЯ доставка по г.Пружаны и району. Доставка по Брестской области – по договорённости.",
+    "comments": [],
+    "status": "CLOSE"
+}
+```
 
 ### BB-10 Как "Пользователь", я хочу удалить объявление, и если авторизация пройдена успешно, удаляю его.
 
@@ -262,7 +302,6 @@ Request: `DELETE /api/bulletins/${id}`
 Headers: `Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGV4LmFsZXhlZXZvdkB5YW5kZXgucnUiLCJleHAiOjE1ODI3NDEyMTAsImlhdCI6MTU4MjcwNTIxMH0.yfCxFB_f7U7-YTF6npRWAgZK5O_M1alWbq63gq2diuk`
 
 Response: `200 OK`
-
 
 ### BB-11 Как "Пользователь", я хочу оставить комментарий под объявлением, и если пользователь зарегистрирован, оставляю комментарий.
 

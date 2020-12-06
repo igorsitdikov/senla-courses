@@ -1,17 +1,11 @@
 package com.senla.bulletinboard.mapper;
 
 import com.senla.bulletinboard.dto.BulletinBaseDto;
-import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @Data
 @Component
@@ -26,7 +20,10 @@ public class BulletinDtoEntityMapperImpl implements BulletinDtoEntityMapper {
         destination.setTitle(source.getTitle());
         destination.setCreatedAt(source.getCreatedAt());
         destination.setPrice(source.getPrice());
-        destination.setSeller(userDtoEntityMapper.sourceToDestination(source.getAuthor()));
+        destination.setSellerId(source.getSellerId());
+        if (source.getSeller() != null) {
+            destination.setSeller(userDtoEntityMapper.sourceToDestination(source.getSeller()));
+        }
         return destination;
     }
 
@@ -38,7 +35,10 @@ public class BulletinDtoEntityMapperImpl implements BulletinDtoEntityMapper {
         source.setTitle(destination.getTitle());
         source.setCreatedAt(destination.getCreatedAt());
         source.setPrice(destination.getPrice());
-        source.setAuthor(userDtoEntityMapper.destinationToSource(destination.getSeller()));
+        source.setSellerId(destination.getSellerId());
+        if (source.getSeller() != null) {
+            source.setSeller(userDtoEntityMapper.destinationToSource(destination.getSeller()));
+        }
         return source;
     }
 }

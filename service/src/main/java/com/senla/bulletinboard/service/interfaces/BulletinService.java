@@ -2,6 +2,7 @@ package com.senla.bulletinboard.service.interfaces;
 
 import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.BulletinDto;
+import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.enumerated.SortBulletin;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
@@ -17,7 +18,10 @@ public interface BulletinService extends CommonService<BulletinDto, BulletinEnti
 
     BulletinDto findBulletinById(Long id) throws EntityNotFoundException;
 
-    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("authentication.principal.id == #bulletinDto.getSellerId()")
+    IdDto createBulletin(BulletinDto bulletinDto);
+
+    @PreAuthorize("authentication.principal.id == #bulletinDto.getSellerId()")
     BulletinDto updateBulletin(Long id, BulletinDto bulletinDto) throws EntityNotFoundException;
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or @bulletinServiceImpl.checkOwner(authentication.principal.id, #id)")

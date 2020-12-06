@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.senla.bulletinboard.enumerated.BulletinStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 public class BulletinDto extends BulletinBaseDto {
 
     private String description;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<CommentDto> comments;
     private BulletinStatus status;
 
@@ -22,11 +24,11 @@ public class BulletinDto extends BulletinBaseDto {
     }
 
     public BulletinDto(final Long id,
-                       final String title,
-                       final BigDecimal price,
-                       final LocalDateTime createdAt,
-                       final UserDto author) {
-        super(id, title, price, createdAt, author);
+                        final String title,
+                        final BigDecimal price,
+                        final LocalDateTime createdAt,
+                        final UserDto author, final Long authorId) {
+        super(id, title, price, createdAt, author, authorId);
     }
 
     public BulletinDto(final Long id,
@@ -34,10 +36,10 @@ public class BulletinDto extends BulletinBaseDto {
                        final BigDecimal price,
                        final LocalDateTime createdAt,
                        final UserDto author,
+                       final Long authorId,
                        final String description,
-                       final List<CommentDto> comments,
-                       final BulletinStatus status) {
-        super(id, title, price, createdAt, author);
+                       final List<CommentDto> comments, final BulletinStatus status) {
+        super(id, title, price, createdAt, author, authorId);
         this.description = description;
         this.comments = comments;
         this.status = status;

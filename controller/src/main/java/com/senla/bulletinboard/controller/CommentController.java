@@ -34,7 +34,7 @@ public class CommentController {
     @Operation(summary = "Create comment", description = "Add new comment to bulletin if bulletin status OPEN")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful operation", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = BulletinDto.class))
+            @Content(mediaType = "application/json", schema = @Schema(implementation = IdDto.class))
         }),
         @ApiResponse(responseCode = "400", description = "Bad request", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))

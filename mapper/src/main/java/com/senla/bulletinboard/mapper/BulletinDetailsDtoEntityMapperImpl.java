@@ -26,6 +26,7 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDetailsDtoEnt
         destination.setText(source.getDescription());
         destination.setCreatedAt(source.getCreatedAt());
         destination.setPrice(source.getPrice());
+        destination.setSellerId(source.getSellerId());
         if (source.getComments() != null) {
             destination.setComments(source.getComments()
                                         .stream()
@@ -33,7 +34,9 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDetailsDtoEnt
                                         .collect(Collectors.toSet()));
         }
         destination.setStatus(source.getStatus());
-        destination.setSeller(userDtoEntityMapper.sourceToDestination(source.getAuthor()));
+        if (source.getSeller() != null) {
+            destination.setSeller(userDtoEntityMapper.sourceToDestination(source.getSeller()));
+        }
         return destination;
     }
 
@@ -46,7 +49,8 @@ public class BulletinDetailsDtoEntityMapperImpl implements BulletinDetailsDtoEnt
         source.setDescription(destination.getText());
         source.setCreatedAt(destination.getCreatedAt());
         source.setPrice(destination.getPrice());
-        source.setAuthor(userDtoEntityMapper.destinationToSource(destination.getSeller()));
+        source.setSeller(userDtoEntityMapper.destinationToSource(destination.getSeller()));
+        source.setSellerId(destination.getSellerId());
         if (destination.getComments() != null) {
             source.setComments(destination.getComments()
                                    .stream()
