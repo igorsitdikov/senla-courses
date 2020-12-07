@@ -8,7 +8,8 @@ import com.senla.bulletinboard.service.interfaces.TokenBlacklistService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TokenBlacklistServiceImpl extends AbstractService<TokenDto, TokenBlacklistEntity, TokenBlacklistRepository> implements TokenBlacklistService {
+public class TokenBlacklistServiceImpl extends AbstractService<TokenDto, TokenBlacklistEntity, TokenBlacklistRepository>
+    implements TokenBlacklistService {
 
     public TokenBlacklistServiceImpl(TokenDtoEntityMapper dtoEntityMapper, TokenBlacklistRepository repository) {
         super(dtoEntityMapper, repository);

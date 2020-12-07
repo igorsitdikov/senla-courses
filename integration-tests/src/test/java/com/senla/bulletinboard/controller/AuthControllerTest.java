@@ -43,18 +43,19 @@ public class AuthControllerTest extends AbstractControllerTest {
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.of(user)).given(userRepository).findByEmail(request.getEmail());
 
-        String message = Translator.toLocale("user-already-exists", user.getEmail());
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.CONFLICT,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
-
         final String response = mockMvc.perform(post("/api/sign-up")
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON)
                                                     .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isConflict())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("user-already-exists", user.getEmail());
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.CONFLICT,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
@@ -64,18 +65,19 @@ public class AuthControllerTest extends AbstractControllerTest {
 
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
 
-        String message = Translator.toLocale("no-such-user", request.getEmail());
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                    HttpStatus.NOT_FOUND,
-                    ExceptionType.BUSINESS_LOGIC,
-                    message);
-
         final String response = mockMvc.perform(post("/api/sign-in")
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON)
                                                     .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("no-such-user", request.getEmail());
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 }

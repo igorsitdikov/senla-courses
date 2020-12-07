@@ -32,7 +32,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +53,7 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void showMessagesTest() throws Exception {
-        final long id = 3L;
+        final Long id = 3L;
         final List<MessageDto> expected = MessageMock.getAll();
         final List<MessageEntity> entities = expected
             .stream()
@@ -73,7 +75,7 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void createDialogTest() throws Exception {
-        final long bulletinId = 4L;
+        final Long bulletinId = 4L;
         final String token = signInAsUser(USER_ANTON);
         final DialogDto dialogDto = DialogMock.getById(1L);
         dialogDto.setCustomerId(USER_ANTON);
@@ -99,11 +101,10 @@ public class DialogControllerTest extends AbstractControllerTest {
 
     @Test
     public void createDialogTest_DialogAlreadyExists() throws Exception {
-        final long id = 4L;
-        final long bulletinId = 4L;
-        String token = signInAsUser(id);
+        final Long bulletinId = 4L;
+        final String token = signInAsUser(USER_ANTON);
         final DialogDto dialogDto = DialogMock.getById(1L);
-        dialogDto.setCustomerId(id);
+        dialogDto.setCustomerId(USER_ANTON);
         final String request = objectMapper.writeValueAsString(dialogDto);
 
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
@@ -114,15 +115,6 @@ public class DialogControllerTest extends AbstractControllerTest {
             .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
-        final String message = Translator.toLocale(
-                "dialog-already-exists",
-                dialogDto.getBulletinId(),
-                dialogDto.getCustomerId());
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.CONFLICT,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
-
         final String response = mockMvc.perform(post("/api/dialogs")
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON)
@@ -130,13 +122,23 @@ public class DialogControllerTest extends AbstractControllerTest {
                                                     .content(request))
             .andExpect(status().isConflict())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale(
+            "dialog-already-exists",
+            dialogDto.getBulletinId(),
+            dialogDto.getCustomerId());
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.CONFLICT,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
     @Test
     public void deleteDialogTest() throws Exception {
-        final long bulletinId = 4L;
-        final long dialogId = 1L;
+        final Long bulletinId = 4L;
+        final Long dialogId = 1L;
         final String token = signInAsUser(USER_PETR);
         final DialogDto dialogDto = new DialogDto();
         dialogDto.setCustomerId(USER_PETR);

@@ -38,7 +38,8 @@ public class DialogController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create dialog", description = "Add new dialog between seller and customer /*if bulletin status OPEN*/")
+    @Operation(summary = "Create dialog",
+        description = "Add new dialog between seller and customer /*if bulletin status OPEN*/")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successful operation", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = IdDto.class))

@@ -40,7 +40,7 @@ public class UserServiceImpl extends AbstractService<UserDto, UserEntity, UserRe
     @PreAuthorize("authentication.principal.id == #id")
     public UserDto updateUser(final Long id, final UserDto dto) throws NoSuchUserException {
         UserEntity user = repository.findById(id)
-                .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
+            .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
         user.setAutoSubscribe(dto.getAutoSubscribe());
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
@@ -54,7 +54,7 @@ public class UserServiceImpl extends AbstractService<UserDto, UserEntity, UserRe
     @PreAuthorize("authentication.principal.id == #id")
     public void changePassword(final Long id, final PasswordDto passwordDto) throws NoSuchUserException {
         UserEntity userEntity = repository.findById(id)
-                .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
+            .orElseThrow(() -> new NoSuchUserException(Translator.toLocale("no-such-user-id", id)));
         String userPassword = userEntity.getPassword();
         if (isPasswordsEquals(passwordDto) && isPasswordsMatches(passwordDto, userPassword)) {
             userEntity.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));

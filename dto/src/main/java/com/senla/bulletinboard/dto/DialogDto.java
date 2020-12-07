@@ -23,9 +23,9 @@ public class DialogDto extends AbstractDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonIgnore
     private Long sellerId;
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long customerId;
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long bulletinId;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 //    @JsonIgnore

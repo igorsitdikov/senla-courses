@@ -4,7 +4,6 @@ import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.PasswordDto;
-import com.senla.bulletinboard.dto.TariffDto;
 import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @Data

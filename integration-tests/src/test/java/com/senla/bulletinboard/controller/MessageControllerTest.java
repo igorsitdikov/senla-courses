@@ -1,15 +1,12 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
-import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.MessageDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
-import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
@@ -39,8 +36,6 @@ public class MessageControllerTest extends AbstractControllerTest {
     private DialogDtoEntityMapper dialogDtoEntityMapper;
     @MockBean
     private BulletinRepository bulletinRepository;
-    @SpyBean
-    private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
     @MockBean
     private MessageRepository messageRepository;
     @SpyBean
@@ -57,10 +52,6 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        String message = Translator.toLocale("send-message-forbidden");
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.FORBIDDEN, ExceptionType.BUSINESS_LOGIC, message);
-
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
@@ -68,6 +59,13 @@ public class MessageControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("send-message-forbidden");
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.FORBIDDEN,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
@@ -92,10 +90,6 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinEntity.getId());
 
-        String message = Translator.toLocale("wrong-recipient", recipientId);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
-
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
@@ -103,6 +97,13 @@ public class MessageControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("wrong-recipient", recipientId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.BAD_REQUEST,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
@@ -117,11 +118,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinMock.getById(1L);
-        final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
-        final UserEntity seller = bulletinEntity.getSeller();
-        seller.setId(4L);
-        bulletinEntity.setSeller(seller);
+        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
         final DialogDto dialogDto = DialogMock.getById(1L);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
         dialogEntity.setCustomerId(recipientId);
@@ -131,10 +128,6 @@ public class MessageControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinEntity.getId());
 
-        String message = Translator.toLocale("wrong-sender", senderId);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.BAD_REQUEST, ExceptionType.BUSINESS_LOGIC, message);
-
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
                                                     .content(objectMapper.writeValueAsString(messageDto))
@@ -142,6 +135,13 @@ public class MessageControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("wrong-sender", senderId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.BAD_REQUEST,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
@@ -156,11 +156,7 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinMock.getById(1L);
-        final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
-        final UserEntity seller = bulletinEntity.getSeller();
-        seller.setId(senderId);
-        bulletinEntity.setSeller(seller);
+        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(4L);
 
         final DialogDto dialogDto = DialogMock.getById(1L);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
@@ -192,26 +188,10 @@ public class MessageControllerTest extends AbstractControllerTest {
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinMock.getById(1L);
-        final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
-        final UserEntity seller = bulletinEntity.getSeller();
-        seller.setId(senderId);
-        bulletinEntity.setSeller(seller);
-
-        final DialogDto dialogDto = DialogMock.getById(1L);
-        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
-        dialogEntity.setCustomerId(recipientId);
-        dialogEntity.setBulletinId(bulletinEntity.getId());
-        dialogEntity.setBulletin(bulletinEntity);
-        final MessageEntity messageEntity = messageDtoEntityMapper.sourceToDestination(messageDto);
+        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
 
         willReturn(Optional.empty()).given(dialogRepository).findById(dialogId);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinEntity.getId());
-        willReturn(messageEntity).given(messageRepository).save(any(MessageEntity.class));
-
-        String message = Translator.toLocale("dialog-not-exists", dialogId);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
@@ -220,6 +200,12 @@ public class MessageControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("dialog-not-exists", dialogId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
 
         assertErrorResponse(expectedError, response);
     }
@@ -229,32 +215,17 @@ public class MessageControllerTest extends AbstractControllerTest {
         final Long senderId = 1L;
         final String token = signInAsUser(senderId);
         final Long recipientId = 2L;
-        final Long dialogId = 3L;
+        final Long dialogId = 1L;
+        final Long bulletinId = 4L;
         final MessageDto messageDto = new MessageDto();
         messageDto.setDialogId(dialogId);
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinMock.getById(1L);
-        final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
-        final UserEntity seller = bulletinEntity.getSeller();
-        seller.setId(senderId);
-        bulletinEntity.setSeller(seller);
-
-        final DialogDto dialogDto = DialogMock.getById(1L);
-        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
-        dialogEntity.setCustomerId(recipientId);
-        dialogEntity.setBulletinId(bulletinEntity.getId());
-        dialogEntity.setBulletin(bulletinEntity);
-        final MessageEntity messageEntity = messageDtoEntityMapper.sourceToDestination(messageDto);
+        final DialogEntity dialogEntity = DialogMock.getEntityById(dialogId);
 
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
-        willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinEntity.getId());
-        willReturn(messageEntity).given(messageRepository).save(any(MessageEntity.class));
-
-        String message = Translator.toLocale("bulletin-not-exists", bulletinEntity.getId());
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);
 
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
@@ -263,6 +234,13 @@ public class MessageControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 }

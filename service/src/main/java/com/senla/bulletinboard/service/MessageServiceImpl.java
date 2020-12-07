@@ -86,13 +86,17 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
         return super.post(messageDto);
     }
 
-    private boolean checkRecipient(final MessageDto messageDto, final DialogEntity dialogEntity, final BulletinEntity bulletinEntity) {
+    private boolean checkRecipient(final MessageDto messageDto,
+                                   final DialogEntity dialogEntity,
+                                   final BulletinEntity bulletinEntity) {
         return !messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
-                !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId());
+               !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId());
     }
 
-    private boolean checkSender(final MessageDto messageDto, final DialogEntity dialogEntity, final BulletinEntity bulletinEntity) {
+    private boolean checkSender(final MessageDto messageDto,
+                                final DialogEntity dialogEntity,
+                                final BulletinEntity bulletinEntity) {
         return !messageDto.getSenderId().equals(dialogEntity.getCustomerId()) &&
-                !messageDto.getSenderId().equals(bulletinEntity.getSeller().getId());
+               !messageDto.getSenderId().equals(bulletinEntity.getSeller().getId());
     }
 }

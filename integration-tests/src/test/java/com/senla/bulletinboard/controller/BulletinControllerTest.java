@@ -7,7 +7,6 @@ import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
@@ -27,7 +26,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,16 +38,14 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @MockBean
     private BulletinRepository bulletinRepository;
     @SpyBean
-    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
-    @SpyBean
     private BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper;
 
     @Test
     public void showBulletinsTest() throws Exception {
         final List<BulletinBaseDto> expected = BulletinMock.getAllBase()
-                .stream()
-                .peek(el -> el.setSeller(null))
-                .collect(Collectors.toList());
+            .stream()
+            .peek(el -> el.setSeller(null))
+            .collect(Collectors.toList());
 
         final List<BulletinEntity> entities = BulletinMock.getAllEntities();
 
@@ -78,7 +78,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void createBulletinTest() throws Exception {
-        final long bulletinId = 1L;
+        final Long bulletinId = 1L;
         final String token = signInAsUser(USER_PETR);
         final BulletinDto bulletinDto = BulletinMock.getById(bulletinId);
         final BulletinEntity entity = BulletinMock.getEntityById(bulletinId);
@@ -88,12 +88,12 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(post("/api/bulletins/")
-                .contextPath(CONTEXT_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", token)
-                .content(request))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(response));
+                            .contextPath(CONTEXT_PATH)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token)
+                            .content(request))
+            .andExpect(status().isCreated())
+            .andExpect(content().json(response));
     }
 
     @Test
@@ -108,29 +108,23 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(put("/api/bulletins/" + id)
-                .contextPath(CONTEXT_PATH)
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(bulletinDto)));
+                            .contextPath(CONTEXT_PATH)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(request))
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(bulletinDto)));
 
         verify(bulletinRepository, times(1)).save(any(BulletinEntity.class));
     }
 
     @Test
     public void updateBulletinTest_BulletinNotFound() throws Exception {
-        final long id = 1L;
+        final Long id = 1L;
         final String token = signInAsUser(USER_PETR);
         final BulletinDto bulletinDto = BulletinMock.getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         willReturn(false).given(bulletinRepository).existsById(id);
-
-        final String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.NOT_FOUND,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
 
         final String response = mockMvc.perform(put("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)
@@ -139,6 +133,13 @@ public class BulletinControllerTest extends AbstractControllerTest {
                                                     .content(request))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
@@ -182,17 +183,18 @@ public class BulletinControllerTest extends AbstractControllerTest {
         final Long id = 4L;
         willReturn(false).given(bulletinRepository).existsById(id);
 
-        final String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.NOT_FOUND,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
-
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
 
         verify(bulletinRepository, times(1)).existsById(id);
@@ -207,18 +209,19 @@ public class BulletinControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(id);
         willReturn(false).given(bulletinRepository).existsById(id);
 
-        final String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.NOT_FOUND,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
-
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)
                                                     .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
 
         verify(bulletinRepository, times(1)).existsById(id);

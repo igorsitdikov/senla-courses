@@ -24,10 +24,10 @@ public class BulletinDto extends BulletinBaseDto {
     }
 
     public BulletinDto(final Long id,
-                        final String title,
-                        final BigDecimal price,
-                        final LocalDateTime createdAt,
-                        final UserDto author, final Long authorId) {
+                       final String title,
+                       final BigDecimal price,
+                       final LocalDateTime createdAt,
+                       final UserDto author, final Long authorId) {
         super(id, title, price, createdAt, author, authorId);
     }
 

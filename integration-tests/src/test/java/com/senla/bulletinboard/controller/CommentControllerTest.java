@@ -37,8 +37,8 @@ public class CommentControllerTest extends AbstractControllerTest {
 
     @Test
     public void createCommentTest() throws Exception {
-        final long id = 1L;
-        final long bulletinId = 4L;
+        final Long id = 1L;
+        final Long bulletinId = 4L;
         final String token = signInAsUser(USER_PETR);
         final IdDto response = new IdDto(1L);
         final CommentDto commentDto = CommentMock.getById(id);
@@ -51,18 +51,18 @@ public class CommentControllerTest extends AbstractControllerTest {
 
         final String content = objectMapper.writeValueAsString(commentDto);
         mockMvc.perform(post("/api/comments/")
-                .contextPath(CONTEXT_PATH)
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+                            .contextPath(CONTEXT_PATH)
+                            .header("Authorization", token)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(content))
+            .andExpect(status().isCreated())
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 
     @Test
     public void createCommentTest_BulletinIsClosedException() throws Exception {
-        final long id = 2L;
-        final long bulletinId = 3L;
+        final Long id = 2L;
+        final Long bulletinId = 3L;
         final String token = signInAsUser(USER_ANTON);
         final CommentDto commentDto = CommentMock.getById(id);
         final CommentEntity commentEntity = CommentMock.getEntityById(id);
@@ -72,26 +72,28 @@ public class CommentControllerTest extends AbstractControllerTest {
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
 
         final String content = objectMapper.writeValueAsString(commentDto);
-        final String message = Translator.toLocale("bulletin-closed", bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.BAD_REQUEST,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
 
         final String response = mockMvc.perform(post("/api/comments/")
-                .contextPath(CONTEXT_PATH)
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
-                .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(content))
+            .andExpect(status().isBadRequest())
+            .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-closed", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.BAD_REQUEST,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 
     @Test
     public void createCommentTest_BulletinNotFoundException() throws Exception {
-        final long id = 1L;
-        final long bulletinId = 4L;
+        final Long id = 1L;
+        final Long bulletinId = 4L;
         final String token = signInAsUser(USER_PETR);
         final CommentDto commentDto = CommentMock.getById(id);
         final CommentEntity commentEntity = commentDtoEntityMapper.sourceToDestination(commentDto);
@@ -100,19 +102,21 @@ public class CommentControllerTest extends AbstractControllerTest {
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
 
         final String content = objectMapper.writeValueAsString(commentDto);
-        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
-        final ApiErrorDto expectedError = expectedErrorCreator(
-                HttpStatus.NOT_FOUND,
-                ExceptionType.BUSINESS_LOGIC,
-                message);
 
         final String response = mockMvc.perform(post("/api/comments/")
-                .contextPath(CONTEXT_PATH)
-                .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
-                .andExpect(status().isNotFound())
-                .andReturn().getResponse().getContentAsString();
+                                                    .contextPath(CONTEXT_PATH)
+                                                    .header("Authorization", token)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(content))
+            .andExpect(status().isNotFound())
+            .andReturn().getResponse().getContentAsString();
+
+        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 }

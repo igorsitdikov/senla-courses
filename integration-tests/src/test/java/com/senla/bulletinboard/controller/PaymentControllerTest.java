@@ -3,12 +3,10 @@ package com.senla.bulletinboard.controller;
 import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
-import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.PaymentEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.utils.Translator;
@@ -34,8 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PaymentControllerTest extends AbstractControllerTest {
 
-    @SpyBean
-    private UserDtoEntityMapper userDtoEntityMapper;
     @MockBean
     private PaymentRepository paymentRepository;
     @SpyBean
@@ -45,17 +41,14 @@ public class PaymentControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "USER")
     public void createPaymentTest() throws Exception {
         final Long id = 1L;
-        final Long userId = 1L;
         final PaymentDto paymentDto = new PaymentDto();
         paymentDto.setPayment(BigDecimal.valueOf(13));
-        paymentDto.setUserId(userId);
+        paymentDto.setUserId(USER_IVAN);
         final PaymentEntity paymentEntity = paymentDtoEntityMapper.sourceToDestination(paymentDto);
         paymentEntity.setId(id);
-        final UserDto userDtoById = UserMock.getUserDtoById(userId);
-        final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(userDtoById);
-        userEntity.setBalance(BigDecimal.ZERO);
+        final UserEntity userEntity = UserMock.getEntityById(USER_IVAN);
 
-        willReturn(Optional.of(userEntity)).given(userRepository).findById(userId);
+        willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_IVAN);
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
 
         mockMvc.perform(post("/api/payments")
@@ -70,22 +63,14 @@ public class PaymentControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "USER")
     public void createPaymentTest_NoSuchUserException() throws Exception {
         final Long id = 1L;
-        final Long userId = 1L;
         final PaymentDto paymentDto = new PaymentDto();
         paymentDto.setPayment(BigDecimal.valueOf(13));
-        paymentDto.setUserId(userId);
+        paymentDto.setUserId(USER_IVAN);
         final PaymentEntity paymentEntity = paymentDtoEntityMapper.sourceToDestination(paymentDto);
         paymentEntity.setId(id);
-        final UserDto userDtoById = UserMock.getUserDtoById(userId);
-        final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(userDtoById);
-        userEntity.setBalance(BigDecimal.ZERO);
 
-        willReturn(Optional.empty()).given(userRepository).findById(userId);
+        willReturn(Optional.empty()).given(userRepository).findById(USER_IVAN);
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
-
-        String message = Translator.toLocale("no-such-user-id", userId);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
         final String response = mockMvc.perform(post("/api/payments")
                                                     .contextPath(CONTEXT_PATH)
@@ -93,6 +78,13 @@ public class PaymentControllerTest extends AbstractControllerTest {
                                                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
+
+        String message = Translator.toLocale("no-such-user-id", USER_IVAN);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+            HttpStatus.NOT_FOUND,
+            ExceptionType.BUSINESS_LOGIC,
+            message);
+
         assertErrorResponse(expectedError, response);
     }
 

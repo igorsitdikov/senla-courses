@@ -27,7 +27,7 @@ public class JwtLogoutTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain chain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader(HEADER_STRING);
 

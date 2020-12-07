@@ -50,17 +50,17 @@ public class ExceptionControllerAdvice {
         return ResponseEntityBuilder.build(err);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(Exception e) {
 
         List<String> details = new ArrayList<>();
         details.add(e.getLocalizedMessage());
 
         ApiErrorDto err = new ApiErrorDto(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
-                ExceptionType.ERROR_OCCURRED.getMessage(),
-                details);
+            LocalDateTime.now(),
+            HttpStatus.BAD_REQUEST,
+            ExceptionType.ERROR_OCCURRED.getMessage(),
+            details);
 
         return ResponseEntityBuilder.build(err);
     }

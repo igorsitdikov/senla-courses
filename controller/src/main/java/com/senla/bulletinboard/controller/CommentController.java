@@ -1,7 +1,6 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
-import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;

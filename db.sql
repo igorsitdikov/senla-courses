@@ -4,15 +4,15 @@ USE bulletin_board;
 
 CREATE TABLE IF NOT EXISTS user
 (
-    id         BIGINT AUTO_INCREMENT,
-    first_name VARCHAR(255)           NOT NULL,
-    last_name  VARCHAR(255)           NOT NULL,
-    email      VARCHAR(255)           NOT NULL,
-    password   VARCHAR(255)           NOT NULL,
-    phone      VARCHAR(15)            NOT NULL,
-    role       ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
-    balance    DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    premium    ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
+    id             BIGINT AUTO_INCREMENT,
+    first_name     VARCHAR(255)               NOT NULL,
+    last_name      VARCHAR(255)               NOT NULL,
+    email          VARCHAR(255)               NOT NULL,
+    password       VARCHAR(255)               NOT NULL,
+    phone          VARCHAR(15)                NOT NULL,
+    role           ENUM ('USER', 'ADMIN')     NOT NULL DEFAULT 'USER',
+    balance        DECIMAL(10, 2)             NOT NULL DEFAULT 0,
+    premium        ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
     auto_subscribe ENUM ('ACTIVE', 'DISABLE') NOT NULL DEFAULT 'DISABLE',
     UNIQUE (email),
     PRIMARY KEY (id)
@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS tariff
 
 CREATE TABLE IF NOT EXISTS payment
 (
-    id        BIGINT AUTO_INCREMENT,
-    user_id   BIGINT                     NOT NULL,
-    payment DECIMAL(10, 2) NOT NULL,
-    payed_at  DATETIME                   NOT NULL DEFAULT NOW(),
+    id       BIGINT AUTO_INCREMENT,
+    user_id  BIGINT         NOT NULL,
+    payment  DECIMAL(10, 2) NOT NULL,
+    payed_at DATETIME       NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_payment_user_user_id
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     PRIMARY KEY (id)
@@ -40,10 +40,10 @@ CREATE TABLE IF NOT EXISTS payment
 
 CREATE TABLE IF NOT EXISTS subscription
 (
-    id        BIGINT AUTO_INCREMENT,
-    user_id   BIGINT                     NOT NULL,
-    tariff_id   BIGINT                     NOT NULL,
-    subscribed_at  DATETIME                   NOT NULL DEFAULT NOW(),
+    id            BIGINT AUTO_INCREMENT,
+    user_id       BIGINT   NOT NULL,
+    tariff_id     BIGINT   NOT NULL,
+    subscribed_at DATETIME NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_subscription_user_user_id
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     CONSTRAINT fk_subscription_tariff_tariff_id
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS seller_vote
         FOREIGN KEY (bulletin_id) REFERENCES bulletin (id) ON DELETE CASCADE,
     CONSTRAINT fk_seller_vote_user_voter_id
         FOREIGN KEY (voter_id) REFERENCES user (id) ON DELETE CASCADE,
-        UNIQUE unique_index (voter_id, bulletin_id),
+    UNIQUE unique_index (voter_id, bulletin_id),
     PRIMARY KEY (id)
 );
 

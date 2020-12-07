@@ -28,8 +28,8 @@ public class BulletinBoardApplication {
     public ObjectMapper objectMapper() {
         JavaTimeModule module = new JavaTimeModule();
         return Jackson2ObjectMapperBuilder.json()
-                .modules(module)
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .build();
+            .modules(module)
+            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .build();
     }
 }
