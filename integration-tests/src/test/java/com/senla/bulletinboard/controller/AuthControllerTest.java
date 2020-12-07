@@ -4,14 +4,9 @@ import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.enumerated.UserRole;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -24,19 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthControllerTest extends AbstractControllerTest {
 
-    @MockBean
-    private UserRepository userRepository;
-    @SpyBean
-    private UserDtoEntityMapper userDtoEntityMapper;
-
     @Test
     public void signUpTest() throws Exception {
-        final long userId = 1L;
-        final UserRequestDto request = UserMock.getById(userId);
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
+        final UserRequestDto request = UserMock.getById(USER_IVAN);
+        final UserEntity user = UserMock.getEntityById(USER_IVAN);
 
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
@@ -51,19 +37,17 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     public void signUpTest_SuchUserAlreadyExistsException() throws Exception {
-        final long userId = 1L;
-        final UserRequestDto request = UserMock.getById(userId);
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
+        final UserRequestDto request = UserMock.getById(USER_IVAN);
+        final UserEntity user = UserMock.getEntityById(USER_IVAN);
 
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.of(user)).given(userRepository).findByEmail(request.getEmail());
 
         String message = Translator.toLocale("user-already-exists", user.getEmail());
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.CONFLICT, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+                HttpStatus.CONFLICT,
+                ExceptionType.BUSINESS_LOGIC,
+                message);
 
         final String response = mockMvc.perform(post("/api/sign-up")
                                                     .contextPath(CONTEXT_PATH)
@@ -76,14 +60,15 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     public void signInTest_NoSuchUserException() throws Exception {
-        final long userId = 1L;
-        final UserRequestDto request = UserMock.getById(userId);
+        final UserRequestDto request = UserMock.getById(USER_IVAN);
 
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
 
         String message = Translator.toLocale("no-such-user", request.getEmail());
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+                    HttpStatus.NOT_FOUND,
+                    ExceptionType.BUSINESS_LOGIC,
+                    message);
 
         final String response = mockMvc.perform(post("/api/sign-in")
                                                     .contextPath(CONTEXT_PATH)

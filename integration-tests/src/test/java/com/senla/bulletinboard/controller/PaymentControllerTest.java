@@ -11,7 +11,6 @@ import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.PaymentRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,8 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PaymentControllerTest extends AbstractControllerTest {
 
-    @MockBean
-    private UserRepository userRepository;
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
     @MockBean

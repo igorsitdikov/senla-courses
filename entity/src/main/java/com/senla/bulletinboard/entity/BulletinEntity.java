@@ -2,6 +2,7 @@ package com.senla.bulletinboard.entity;
 
 
 import com.senla.bulletinboard.enumerated.BulletinStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Entity
 @Table(name = "bulletin")
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BulletinEntity extends AbstractEntity {
 

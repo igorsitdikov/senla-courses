@@ -3,8 +3,10 @@ package com.senla.bulletinboard.entity;
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
 import com.senla.bulletinboard.enumerated.UserRole;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @Table(name = "user")
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserEntity extends AbstractEntity {
 

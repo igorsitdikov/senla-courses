@@ -1,7 +1,9 @@
 package com.senla.bulletinboard.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "dialog")
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class DialogEntity extends AbstractEntity {
 

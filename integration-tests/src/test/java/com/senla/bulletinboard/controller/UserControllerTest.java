@@ -17,7 +17,6 @@ import com.senla.bulletinboard.mock.DialogMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,16 +34,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserControllerTest extends AbstractControllerTest {
 
-    @MockBean
-    private UserRepository userRepository;
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
     @MockBean
@@ -56,25 +51,23 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @BeforeEach
     public void initAuthorizedUser() {
-        final Long userId = 4L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
+        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(USER_ANTON));
+        final String password = UserMock.getById(USER_ANTON).getPassword();
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(UserRole.USER);
         willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-        willReturn(Optional.of(user)).given(userRepository).findById(userId);
+        willReturn(Optional.of(user)).given(userRepository).findById(USER_ANTON);
     }
 
     @Test
     public void testGetUser() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
-        final UserDto expected = UserMock.getUserDtoById(id);
+        String token = signInAsUser(USER_ANTON);
+        final UserDto expected = UserMock.getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
 
-        willReturn(Optional.of(userEntity)).given(userRepository).findById(id);
+        willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_ANTON);
 
-        mockMvc.perform(get("/api/users/" + id)
+        mockMvc.perform(get("/api/users/" + USER_ANTON)
                             .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", token))
@@ -84,16 +77,15 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetUser_UserNotFoundException() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
 
-        willReturn(Optional.empty()).given(userRepository).findById(id);
+        willReturn(Optional.empty()).given(userRepository).findById(USER_ANTON);
 
-        String message = Translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), id);
+        String message = Translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), USER_ANTON);
         final ApiErrorDto expectedError =
             expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(get("/api/users/" + id)
+        final String response = mockMvc.perform(get("/api/users/" + USER_ANTON)
                                                     .contextPath(CONTEXT_PATH)
                                                     .contentType(MediaType.APPLICATION_JSON)
                                                     .header("Authorization", token))
@@ -105,8 +97,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testShowDialogs() throws Exception {
         final long id = 4L;
-        final long userId = 4L;
-        String token = signInAsUser(userId);
+        String token = signInAsUser(USER_ANTON);
         final List<DialogDto> dialogDtos = DialogMock.getAll();
         final List<DialogEntity> dialogEntities = dialogDtos
             .stream()
@@ -145,8 +136,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testShowBulletins() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
         final List<BulletinDto> expected = BulletinMock.getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
@@ -156,10 +146,10 @@ public class UserControllerTest extends AbstractControllerTest {
             .map(bulletinDtoEntityMapper::sourceToDestination)
             .collect(Collectors.toList());
 
-        willReturn(true).given(userRepository).existsById(id);
-        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(id);
+        willReturn(true).given(userRepository).existsById(USER_ANTON);
+        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON);
 
-        mockMvc.perform(get("/api/users/" + id + "/bulletins")
+        mockMvc.perform(get("/api/users/" + USER_ANTON + "/bulletins")
                             .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON))
@@ -169,8 +159,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testShowBulletins_UserNotFoundException() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
         final List<BulletinDto> expected = BulletinMock.getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
@@ -180,14 +169,14 @@ public class UserControllerTest extends AbstractControllerTest {
             .map(bulletinDtoEntityMapper::sourceToDestination)
             .collect(Collectors.toList());
 
-        willReturn(false).given(userRepository).existsById(id);
-        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(id);
+        willReturn(false).given(userRepository).existsById(USER_ANTON);
+        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON);
 
-        String message = Translator.toLocale("no-such-user-id", id);
+        String message = Translator.toLocale("no-such-user-id", USER_ANTON);
         final ApiErrorDto expectedError =
             expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
 
-        final String response = mockMvc.perform(get("/api/users/" + id + "/bulletins")
+        final String response = mockMvc.perform(get("/api/users/" + USER_ANTON + "/bulletins")
                                                     .contextPath(CONTEXT_PATH)
                                                     .header("Authorization", token)
                                                     .contentType(MediaType.APPLICATION_JSON))
@@ -198,12 +187,11 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdateUser() throws Exception {
-        final long userId = 4L;
-        String token = signInAsUser(userId);
-        final UserDto expected = UserMock.getUserDtoById(userId);
+        String token = signInAsUser(USER_ANTON);
+        final UserDto expected = UserMock.getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
         willReturn(userEntity).given(userRepository).save(any(UserEntity.class));
-        mockMvc.perform(put("/api/users/" + userId)
+        mockMvc.perform(put("/api/users/" + USER_ANTON)
                             .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -214,14 +202,13 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("anton");
         passwordDto.setNewPassword("111111");
         passwordDto.setConfirmPassword("111111");
 
-        mockMvc.perform(patch("/api/users/" + id)
+        mockMvc.perform(patch("/api/users/" + USER_ANTON)
                             .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -232,14 +219,13 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword_WrongOldPassword() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("222222");
         passwordDto.setNewPassword("111111");
         passwordDto.setConfirmPassword("111111");
 
-        mockMvc.perform(patch("/api/users/" + id)
+        mockMvc.perform(patch("/api/users/" + USER_ANTON)
                             .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -250,20 +236,15 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword_NoSuchUserException() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("123456");
         passwordDto.setNewPassword("111111");
         passwordDto.setConfirmPassword("111111");
-        final Long userId = 4L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        willReturn(Optional.empty()).given(userRepository).findById(userId);
 
-        mockMvc.perform(patch("/api/users/" + id)
+        willReturn(Optional.empty()).given(userRepository).findById(USER_ANTON);
+
+        mockMvc.perform(patch("/api/users/" + USER_ANTON)
                             .contextPath(CONTEXT_PATH)
                             .header("Authorization", token)
                             .contentType(MediaType.APPLICATION_JSON)

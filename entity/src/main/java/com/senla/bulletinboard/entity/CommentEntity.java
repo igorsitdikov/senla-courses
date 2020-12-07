@@ -1,8 +1,6 @@
 package com.senla.bulletinboard.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "comment")
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CommentEntity extends AbstractEntity {
 

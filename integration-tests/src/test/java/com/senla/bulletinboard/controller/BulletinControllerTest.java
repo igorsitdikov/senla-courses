@@ -5,19 +5,13 @@ import com.senla.bulletinboard.dto.BulletinBaseDto;
 import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
-import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
-import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
 import com.senla.bulletinboard.utils.Translator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -33,10 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,32 +39,15 @@ public class BulletinControllerTest extends AbstractControllerTest {
     private BulletinDtoEntityMapper bulletinDtoEntityMapper;
     @SpyBean
     private BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper;
-    @MockBean
-    private UserRepository userRepository;
-    @SpyBean
-    private UserDtoEntityMapper userDtoEntityMapper;
-
-    @BeforeEach
-    public void initAuthorizedUser() {
-        final Long userId = 4L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-    }
 
     @Test
     public void showBulletinsTest() throws Exception {
         final List<BulletinBaseDto> expected = BulletinMock.getAllBase()
-            .stream()
-            .peek(el -> el.setSeller(null))
-            .collect(Collectors.toList());
+                .stream()
+                .peek(el -> el.setSeller(null))
+                .collect(Collectors.toList());
 
-        final List<BulletinEntity> entities = expected
-            .stream()
-            .map(bulletinDtoEntityMapper::sourceToDestination)
-            .collect(Collectors.toList());
+        final List<BulletinEntity> entities = BulletinMock.getAllEntities();
 
         willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
@@ -88,9 +62,9 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void showBulletinDetailsTest() throws Exception {
-        final long id = 4;
-        final BulletinBaseDto expected = BulletinMock.getBaseById(id);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(expected);
+        final Long id = 1L;
+        final BulletinEntity entity = BulletinMock.getEntityById(id);
+        final BulletinDto expected = bulletinDetailsDtoEntityMapper.destinationToSource(entity);
 
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
         final String response = objectMapper.writeValueAsString(expected);
@@ -104,57 +78,59 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void createBulletinTest() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
-        final BulletinDto bulletinDto = BulletinMock.getById(id);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
+        final long bulletinId = 1L;
+        final String token = signInAsUser(USER_PETR);
+        final BulletinDto bulletinDto = BulletinMock.getById(bulletinId);
+        final BulletinEntity entity = BulletinMock.getEntityById(bulletinId);
         final String request = objectMapper.writeValueAsString(bulletinDto);
-        final String response = objectMapper.writeValueAsString(new IdDto(id));
+        final String response = objectMapper.writeValueAsString(new IdDto(bulletinId));
 
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(post("/api/bulletins/")
-                            .contextPath(CONTEXT_PATH)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .header("Authorization", token)
-                            .content(request))
-            .andExpect(status().isCreated())
-            .andExpect(content().json(response));
+                .contextPath(CONTEXT_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content(request))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(response));
     }
 
     @Test
     public void updateBulletinTest() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
-        final BulletinBaseDto bulletinDto = BulletinMock.getBaseById(id);
+        final Long id = 1L;
+        final String token = signInAsUser(USER_PETR);
+        final BulletinEntity entity = BulletinMock.getEntityById(id);
+        final BulletinDto bulletinDto = bulletinDetailsDtoEntityMapper.destinationToSource(entity);
         final String request = objectMapper.writeValueAsString(bulletinDto);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
 
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
         willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
         mockMvc.perform(put("/api/bulletins/" + id)
-                            .contextPath(CONTEXT_PATH)
-                            .header("Authorization", token)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(request))
-            .andExpect(status().isOk())
-            .andExpect(content().json(objectMapper.writeValueAsString(bulletinDto)));
+                .contextPath(CONTEXT_PATH)
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(bulletinDto)));
+
+        verify(bulletinRepository, times(1)).save(any(BulletinEntity.class));
     }
 
     @Test
     public void updateBulletinTest_BulletinNotFound() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        final long id = 1L;
+        final String token = signInAsUser(USER_PETR);
         final BulletinDto bulletinDto = BulletinMock.getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
         willReturn(false).given(bulletinRepository).existsById(id);
-        willReturn(entity).given(bulletinRepository).save(any(BulletinEntity.class));
 
-        String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+                HttpStatus.NOT_FOUND,
+                ExceptionType.BUSINESS_LOGIC,
+                message);
 
         final String response = mockMvc.perform(put("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)
@@ -168,19 +144,10 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void deleteBulletinTest() throws Exception {
-        final long id = 4L;
-        final long bulletinId = 3L;
-        String token = signInAsUser(id);
+        final Long bulletinId = 1L;
+        final String token = signInAsUser(USER_PETR);
+        final BulletinEntity entity = BulletinMock.getEntityById(bulletinId);
 
-        final BulletinDto bulletinDto = BulletinMock.getById(bulletinId);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(id));
-        final String password = UserMock.getById(id).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        entity.setSeller(user);
-
-        willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(bulletinRepository).existsById(bulletinId);
 
@@ -197,28 +164,29 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void deleteBulletinTest_AsAdmin() throws Exception {
-        final long id = 4L;
+        final Long bulletinId = 4L;
+        willReturn(true).given(bulletinRepository).existsById(bulletinId);
 
-        willReturn(true).given(bulletinRepository).existsById(id);
-
-        mockMvc.perform(delete("/api/bulletins/" + id)
+        mockMvc.perform(delete("/api/bulletins/" + bulletinId)
                             .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 
-        verify(bulletinRepository, times(1)).existsById(id);
-        verify(bulletinRepository, times(1)).deleteById(id);
+        verify(bulletinRepository, times(1)).existsById(bulletinId);
+        verify(bulletinRepository, times(1)).deleteById(bulletinId);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void deleteBulletinTest_BulletinNotFoundException() throws Exception {
-        final long id = 4L;
+        final Long id = 4L;
         willReturn(false).given(bulletinRepository).existsById(id);
 
-        String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+                HttpStatus.NOT_FOUND,
+                ExceptionType.BUSINESS_LOGIC,
+                message);
 
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)
@@ -231,25 +199,19 @@ public class BulletinControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
     public void deleteBulletinTest_BulletinNotFoundException_AsAdmin() throws Exception {
-        final long id = 4L;
-        String token = signInAsUser(id);
+        final Long id = 1L;
+        final String token = signInAsUser(USER_PETR);
+        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(id);
 
-        final BulletinDto bulletinDto = BulletinMock.getById(id);
-        final BulletinEntity entity = bulletinDtoEntityMapper.sourceToDestination(bulletinDto);
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(id));
-        final String password = UserMock.getById(id).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        entity.setSeller(user);
-
-        willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
+        willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(id);
         willReturn(false).given(bulletinRepository).existsById(id);
 
-        String message = Translator.toLocale("bulletin-not-exists", id);
-        final ApiErrorDto expectedError =
-            expectedErrorCreator(HttpStatus.NOT_FOUND, ExceptionType.BUSINESS_LOGIC, message);
+        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final ApiErrorDto expectedError = expectedErrorCreator(
+                HttpStatus.NOT_FOUND,
+                ExceptionType.BUSINESS_LOGIC,
+                message);
 
         final String response = mockMvc.perform(delete("/api/bulletins/" + id)
                                                     .contextPath(CONTEXT_PATH)

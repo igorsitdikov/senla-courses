@@ -1,6 +1,7 @@
 package com.senla.bulletinboard.mock;
 
 import com.senla.bulletinboard.dto.TariffDto;
+import com.senla.bulletinboard.entity.TariffEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +15,20 @@ public class TariffMock {
         put(1L, new TariffDto(1L, BigDecimal.valueOf(5), 1, "5$ за 1 день"));
         put(2L, new TariffDto(2L, BigDecimal.valueOf(12), 3, "12$ за 3 дня"));
         put(3L, new TariffDto(3L, BigDecimal.valueOf(19.5), 7, "19.5$ за 7 дней"));
+    }};
+    private static final Map<Long, TariffEntity> tariffEntityMap = new HashMap<Long, TariffEntity>() {{
+        put(1L, new TariffEntity(
+                BigDecimal.valueOf(5),
+                1,
+                "5$ за 1 день"));
+        put(2L, new TariffEntity(
+                BigDecimal.valueOf(12),
+                3,
+                "12$ за 3 дня"));
+        put(3L, new TariffEntity(
+                BigDecimal.valueOf(19.5),
+                7,
+                "19.5$ за 7 дней"));
     }};
 
     public static TariffDto getById(final Long id) {

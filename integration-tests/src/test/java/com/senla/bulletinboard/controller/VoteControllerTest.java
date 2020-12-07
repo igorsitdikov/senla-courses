@@ -15,10 +15,8 @@ import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.security.AuthUser;
 import com.senla.bulletinboard.utils.Translator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -43,23 +41,11 @@ public class VoteControllerTest extends AbstractControllerTest {
     private SellerVoteRepository sellerVoteRepository;
     @SpyBean
     private BulletinDetailsDtoEntityMapper bulletinDtoEntityMapper;
-    @MockBean
-    private UserRepository userRepository;
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
 
-    @BeforeEach
-    public void initAuthorizedUser() {
-        final Long userId = 3L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-    }
-
     @Test
-    public void addStarToSellerTest() throws Exception {
+    public void addVoteToSellerTest() throws Exception {
         final long userId = 3L;
         final String token = signInAsUser(userId);
         final long id = 1L;
@@ -87,7 +73,7 @@ public class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void addStarToSellerTest_BulletinIsClosedException() throws Exception {
+    public void addVoteToSellerTest_BulletinIsClosedException() throws Exception {
         final long userId = 3L;
         final String token = signInAsUser(userId);
         final long id = 1L;
@@ -119,7 +105,7 @@ public class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void addStarToSellerTest_BulletinNotExists() throws Exception {
+    public void addVoteToSellerTest_BulletinNotExists() throws Exception {
         final long userId = 3L;
         final String token = signInAsUser(userId);
         final long id = 1L;
@@ -149,7 +135,7 @@ public class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void addStarToSellerTest_WrongVoterException() throws Exception {
+    public void addVoteToSellerTest_WrongVoterException() throws Exception {
         final long userId = 1L;
         final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
         final String password = UserMock.getById(userId).getPassword();
@@ -187,7 +173,7 @@ public class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void addStarToSellerTest_VoteAlreadyExistsException() throws Exception {
+    public void addVoteToSellerTest_VoteAlreadyExistsException() throws Exception {
         final long id = 1L;
         final long userId = 3L;
         final long bulletinId = 4L;

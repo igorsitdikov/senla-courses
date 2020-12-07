@@ -6,14 +6,11 @@ import com.senla.bulletinboard.dto.UserDto;
 import com.senla.bulletinboard.entity.TariffEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -29,24 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class SubscriptionControllerTest extends AbstractControllerTest {
 
-    @MockBean
-    private UserRepository userRepository;
     @SpyBean
     private UserDtoEntityMapper userDtoEntityMapper;
     @MockBean
     private SubscriptionRepository subscriptionRepository;
     @MockBean
     private TariffRepository tariffRepository;
-
-    @BeforeEach
-    public void initAuthorizedUser() {
-        final Long userId = 1L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-    }
 
     @Test
     public void subscribeTest() throws Exception {

@@ -9,26 +9,20 @@ import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.entity.MessageEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
-import com.senla.bulletinboard.enumerated.UserRole;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
-import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
-import com.senla.bulletinboard.mock.UserMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
-import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Optional;
 
@@ -51,20 +45,6 @@ public class MessageControllerTest extends AbstractControllerTest {
     private MessageRepository messageRepository;
     @SpyBean
     private MessageDtoEntityMapper messageDtoEntityMapper;
-    @MockBean
-    private UserRepository userRepository;
-    @SpyBean
-    private UserDtoEntityMapper userDtoEntityMapper;
-
-    @BeforeEach
-    public void initAuthorizedUser() {
-        final Long userId = 1L;
-        final UserEntity user = userDtoEntityMapper.sourceToDestination(UserMock.getById(userId));
-        final String password = UserMock.getById(userId).getPassword();
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.USER);
-        willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());
-    }
 
     @Test
     public void createMessageTest_WrongMessageRecipientException() throws Exception {
@@ -95,15 +75,14 @@ public class MessageControllerTest extends AbstractControllerTest {
     public void createMessageTest_WrongRecipientException() throws Exception {
         final Long senderId = 1L;
         final String token = signInAsUser(senderId);
-        final Long recipientId = 2L;
+        final Long recipientId = 3L;
         final Long dialogId = 3L;
         final MessageDto messageDto = new MessageDto();
         messageDto.setDialogId(dialogId);
         messageDto.setRecipientId(recipientId);
         messageDto.setSenderId(senderId);
 
-        final BulletinDto expected = BulletinMock.getById(1L);
-        final BulletinEntity bulletinEntity = bulletinDtoEntityMapper.sourceToDestination(expected);
+        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
 
         final DialogDto dialogDto = DialogMock.getById(1L);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);

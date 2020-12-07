@@ -71,18 +71,28 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
             .orElseThrow(
                 () -> new EntityNotFoundException(
                     Translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
-        if (!messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
-            !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId())) {
+        boolean checkRecipient = checkRecipient(messageDto, dialogEntity, bulletinEntity);
+        if (checkRecipient) {
             final String message = Translator.toLocale("wrong-recipient", messageDto.getRecipientId());
             log.error(message);
             throw new WrongRecipientException(message);
         }
-        if (!messageDto.getSenderId().equals(dialogEntity.getCustomerId()) &&
-            !messageDto.getSenderId().equals(bulletinEntity.getSeller().getId())) {
+        boolean checkSender = checkSender(messageDto, dialogEntity, bulletinEntity);
+        if (checkSender) {
             final String message = Translator.toLocale("wrong-sender", messageDto.getSenderId());
             log.error(message);
             throw new WrongSenderException(message);
         }
         return super.post(messageDto);
+    }
+
+    private boolean checkRecipient(final MessageDto messageDto, final DialogEntity dialogEntity, final BulletinEntity bulletinEntity) {
+        return !messageDto.getRecipientId().equals(dialogEntity.getCustomerId()) &&
+                !messageDto.getRecipientId().equals(bulletinEntity.getSeller().getId());
+    }
+
+    private boolean checkSender(final MessageDto messageDto, final DialogEntity dialogEntity, final BulletinEntity bulletinEntity) {
+        return !messageDto.getSenderId().equals(dialogEntity.getCustomerId()) &&
+                !messageDto.getSenderId().equals(bulletinEntity.getSeller().getId());
     }
 }
