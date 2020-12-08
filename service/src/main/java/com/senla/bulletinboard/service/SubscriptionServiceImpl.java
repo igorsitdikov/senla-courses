@@ -70,28 +70,31 @@ public class SubscriptionServiceImpl
             throw new InsufficientFundsException(message);
         }
 
-        final BigDecimal updatedBalance = userEntity.getBalance().subtract(tariffEntity.getPrice());
-        userEntity.setBalance(updatedBalance);
-        userEntity.setPremium(PremiumStatus.ACTIVE);
-        userRepository.save(userEntity);
-
         SubscriptionEntity subscriptionEntity = new SubscriptionEntity();
-        subscriptionEntity.setUserId(userEntity.getId());
-        subscriptionEntity.setTariffId(tariffEntity.getId());
 
-        if (userEntity.getPremium() == PremiumStatus.ACTIVE) {
+        if (userEntity.getPremium().equals(PremiumStatus.ACTIVE)) {
             final String message = Translator.toLocale("user-has-premium", userEntity.getId());
             log.info(message);
             final Optional<SubscriptionEntity> lastSubscription =
                 repository.findTopByUserIdOrderBySubscribedAt(userEntity.getId());
 
             if (lastSubscription.isPresent()) {
-                final LocalDateTime subscribedAt = subscriptionEntity.getSubscribedAt();
-                final Integer tariffTerm = subscriptionEntity.getTariff().getTerm();
+                final LocalDateTime subscribedAt = lastSubscription.get().getSubscribedAt();
+                final Integer tariffTerm = lastSubscription.get().getTariff().getTerm();
                 final LocalDateTime futureSubscription = DateTimeUtils.addDays(subscribedAt, tariffTerm);
                 subscriptionEntity.setSubscribedAt(futureSubscription);
             }
         }
+
+        subscriptionEntity.setUserId(userEntity.getId());
+        subscriptionEntity.setTariffId(tariffEntity.getId());
+
+        final BigDecimal updatedBalance = userEntity
+            .getBalance()
+            .subtract(tariffEntity.getPrice());
+        userEntity.setBalance(updatedBalance);
+        userEntity.setPremium(PremiumStatus.ACTIVE);
+        userRepository.save(userEntity);
         super.save(subscriptionEntity);
     }
 }

@@ -11,6 +11,8 @@ import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.service.SubscriptionServiceImpl;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 import static com.senla.bulletinboard.utils.DateTimeUtils.isExpired;
 
 @Data
+@Log4j2
+@EnableScheduling
 @Service
 public class ScheduledPremiumCheckerService {
 
@@ -32,7 +36,7 @@ public class ScheduledPremiumCheckerService {
 
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
-    public void performDailyChecker() throws InsufficientFundsException {
+    public void performDailyChecker() {
         List<UserEntity> usersWithActivePremium = userRepository.findAllByPremium(PremiumStatus.ACTIVE);
         List<Long> idUsersWithActivePremium = entitiesToIds(usersWithActivePremium);
 
@@ -73,12 +77,15 @@ public class ScheduledPremiumCheckerService {
         return userIds;
     }
 
-    private void addPremiumForUsersWithPositiveBalance(final List<SubscriptionEntity> subscriptions)
-        throws InsufficientFundsException {
+    private void addPremiumForUsersWithPositiveBalance(final List<SubscriptionEntity> subscriptions) {
         for (SubscriptionEntity subscriptionEntity : subscriptions) {
             final UserEntity userEntity = subscriptionEntity.getUser();
             final TariffEntity tariffEntity = subscriptionEntity.getTariff();
-            subscriptionService.addPremium(userEntity, tariffEntity);
+            try {
+                subscriptionService.addPremium(userEntity, tariffEntity);
+            } catch (InsufficientFundsException e) {
+                log.error(e.getMessage());
+            }
         }
     }
 }
