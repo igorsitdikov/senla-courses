@@ -16,6 +16,7 @@ import com.senla.bulletinboard.mock.MessageMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
+import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,10 +59,10 @@ public class DialogControllerTest extends AbstractControllerTest {
             .stream()
             .map(messageDtoEntityMapper::sourceToDestination)
             .collect(Collectors.toList());
-
         final String token = signInAsUser(USER_ANTON);
 
-        willReturn(BigInteger.ONE).given(dialogRepository).findByIdAndOwnerId(id, USER_ANTON);
+        final DialogEntity dialogEntity = new DialogMock().getEntityById(3L);
+        willReturn(Optional.of(dialogEntity)).given(dialogRepository).findOne(any(DialogExistsSpecification.class));
         willReturn(entities).given(messageRepository).findAllByDialogId(id);
 
         mockMvc.perform(get("/api/dialogs/" + id + "/messages")
@@ -87,7 +87,7 @@ public class DialogControllerTest extends AbstractControllerTest {
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(false).given(dialogRepository)
-            .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
+            .existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
         mockMvc.perform(post("/api/dialogs")
@@ -112,7 +112,7 @@ public class DialogControllerTest extends AbstractControllerTest {
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(dialogRepository)
-            .existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
+            .existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
         willReturn(dialogEntity).given(dialogRepository).save(any(DialogEntity.class));
 
         final String response = mockMvc.perform(post("/api/dialogs")

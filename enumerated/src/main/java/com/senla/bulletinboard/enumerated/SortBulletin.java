@@ -16,5 +16,4 @@ public enum SortBulletin {
     public String getField() {
         return field;
     }
-
 }

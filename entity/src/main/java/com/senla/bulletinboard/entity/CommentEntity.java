@@ -42,5 +42,4 @@ public class CommentEntity extends AbstractEntity {
 
     @Column(name = "author_id")
     private Long authorId;
-
 }

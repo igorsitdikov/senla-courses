@@ -133,5 +133,4 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
             .collect(Collectors.toMap(a -> a[0], a -> a[1]));
         return mapper.convertValue(map, FilterDto.class);
     }
-
 }

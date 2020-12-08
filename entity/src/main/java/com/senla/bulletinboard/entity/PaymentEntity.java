@@ -29,5 +29,4 @@ public class PaymentEntity extends AbstractEntity {
     private Long userId;
 
     private BigDecimal payment;
-
 }

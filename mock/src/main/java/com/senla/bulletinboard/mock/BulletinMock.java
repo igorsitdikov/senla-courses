@@ -156,5 +156,4 @@ public class BulletinMock {
     public List<BulletinDto> getAll() {
         return new ArrayList<>(bulletinMap.values());
     }
-
 }

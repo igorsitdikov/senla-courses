@@ -15,12 +15,12 @@ public interface UserRepository extends CommonRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
 
-    List<UserEntity> findAllByPremium(final PremiumStatus status);
+    List<UserEntity> findAllByPremium(PremiumStatus status);
 
-    List<UserEntity> findAllByPremiumAndAutoSubscribe(final PremiumStatus premium,
-                                                      final AutoSubscribeStatus autoSubscribe);
+    List<UserEntity> findAllByPremiumAndAutoSubscribe(PremiumStatus premium,
+                                                      AutoSubscribeStatus autoSubscribe);
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE user SET user.premium = :#{#status.name()} WHERE user.id IN :ids", nativeQuery = true)
-    void updatePremiumStatusForIds(final PremiumStatus status, final List<Long> ids);
+    void updatePremiumStatusForIds(PremiumStatus status, List<Long> ids);
 }

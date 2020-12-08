@@ -8,6 +8,5 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends CommonRepository<PaymentEntity, Long> {
 
-    List<PaymentEntity> findAllByUserId(final Long id);
-
+    List<PaymentEntity> findAllByUserId(Long id);
 }

@@ -24,5 +24,4 @@ public class DateTimeUtils {
         final LocalDate localDate = dateTimeToDate(addDays(localDateTime, days));
         return localDate.equals(yesterday) || localDate.isBefore(yesterday);
     }
-
 }

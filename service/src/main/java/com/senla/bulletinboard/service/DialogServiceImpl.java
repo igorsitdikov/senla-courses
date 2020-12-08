@@ -50,7 +50,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     }
 
     private List<DialogEntity> findDialogsBySellerIdOrCustomerId(final Long id) {
-        return repository.findAllByBulletin_SellerIdOrCustomerId(id, id);
+        return repository.findAllByBulletinSellerIdOrCustomerId(id, id);
     }
 
     @Override
@@ -89,6 +89,6 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     }
 
     public boolean checkDialogExistence(final DialogDto dialogDto) {
-        return repository.existsByBulletin_IdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
+        return repository.existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface BulletinRepository extends CommonRepository<BulletinEntity, Long>,
                                             JpaSpecificationExecutor<BulletinEntity> {
 
-    List<BulletinEntity> findAllBySellerId(final Long id);
+    List<BulletinEntity> findAllBySellerId(Long id);
 
     @Query(value =
         "SELECT bulletin.*, AVG(sv.vote) AS avg_vote FROM bulletin " +

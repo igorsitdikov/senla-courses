@@ -54,5 +54,4 @@ public class MessageController {
         throws WrongMessageRecipientException, WrongRecipientException, WrongSenderException, EntityNotFoundException {
         return messageService.createMessage(messageDto);
     }
-
 }

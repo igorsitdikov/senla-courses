@@ -40,5 +40,4 @@ public class TariffController {
     public List<TariffDto> showTariffs() {
         return tariffService.findAllDto();
     }
-
 }

@@ -18,5 +18,4 @@ public class TokenBlacklistEntity extends AbstractEntity {
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
-
 }

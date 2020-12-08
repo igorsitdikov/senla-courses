@@ -54,5 +54,4 @@ public class BulletinEntity extends AbstractEntity {
 
     @OneToMany(mappedBy = "bulletin", fetch = FetchType.LAZY)
     private Set<SellerVoteEntity> sellerVoteEntities;
-
 }

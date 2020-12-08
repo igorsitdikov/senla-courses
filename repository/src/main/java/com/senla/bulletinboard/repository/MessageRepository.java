@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends CommonRepository<MessageEntity, Long> {
 
-    List<MessageEntity> findAllByDialogId(final Long id);
+    List<MessageEntity> findAllByDialogId(Long id);
 }

@@ -58,5 +58,4 @@ public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntit
             .map(paymentDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
     }
-
 }

@@ -16,7 +16,7 @@ public interface SubscriptionRepository extends CommonRepository<SubscriptionEnt
         "WHERE user_id IN :ids " +
         "GROUP BY user_id " +
         "ORDER BY subscribed_at DESC", nativeQuery = true)
-    List<SubscriptionEntity> findLastSubscriptionsForUserIds(final List<Long> ids);
+    List<SubscriptionEntity> findLastSubscriptionsForUserIds(List<Long> ids);
 
-    Optional<SubscriptionEntity> findTopByUserIdOrderBySubscribedAt(final Long id);
+    Optional<SubscriptionEntity> findTopByUserIdOrderBySubscribedAt(Long id);
 }

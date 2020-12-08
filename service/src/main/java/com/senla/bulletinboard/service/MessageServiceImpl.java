@@ -13,13 +13,13 @@ import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
+import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.service.interfaces.MessageService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,8 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
     }
 
     public boolean checkOwner(final Long userId, final Long dialogId) {
-        return dialogRepository.findByIdAndOwnerId(dialogId, userId).compareTo(BigInteger.ONE) == 0;
+        DialogExistsSpecification specification = new DialogExistsSpecification(dialogId, userId);
+        return dialogRepository.findOne(specification).isPresent();
     }
 
     @Override

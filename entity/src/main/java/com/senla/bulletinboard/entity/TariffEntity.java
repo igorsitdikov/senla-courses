@@ -22,5 +22,4 @@ public class TariffEntity extends AbstractEntity {
     private Integer term;
 
     private String description;
-
 }

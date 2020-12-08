@@ -124,7 +124,7 @@ public class UserControllerTest extends AbstractControllerTest {
             })
             .collect(Collectors.toList());
 
-        willReturn(dialogEntities).given(dialogRepository).findAllByBulletin_SellerIdOrCustomerId(id, id);
+        willReturn(dialogEntities).given(dialogRepository).findAllByBulletinSellerIdOrCustomerId(id, id);
 
         final String content = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/users/" + id + "/dialogs")

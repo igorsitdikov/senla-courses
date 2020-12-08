@@ -8,5 +8,5 @@ import java.util.Optional;
 @Repository
 public interface TokenBlacklistRepository extends CommonRepository<TokenBlacklistEntity, Long> {
 
-    Optional<TokenBlacklistEntity> findByToken(final String token);
+    Optional<TokenBlacklistEntity> findByToken(String token);
 }
