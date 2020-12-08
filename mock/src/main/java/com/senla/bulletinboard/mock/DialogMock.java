@@ -56,6 +56,18 @@ public class DialogMock {
                 BigDecimal.ZERO),
             2L,
             LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(2L, new DialogEntity(
+            new BulletinEntity(),
+            1L,
+            new UserEntity(),
+            3L,
+            LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(3L, new DialogEntity(
+            new BulletinEntity(),
+            1L,
+            new UserEntity(),
+            2L,
+            LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 
     public static DialogEntity getEntityById(final Long id) {

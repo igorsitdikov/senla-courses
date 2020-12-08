@@ -11,6 +11,7 @@ import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.mapper.interfaces.MessageDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.mock.DialogMock;
+import com.senla.bulletinboard.mock.MessageMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.MessageRepository;
@@ -43,14 +44,8 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest_WrongMessageRecipientException() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
-        final Long recipientId = 1L;
-        final Long dialogId = 3L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final String token = signInAsUser(USER_IVAN);
+        final MessageDto messageDto = MessageMock.getById(2L);
 
         final String response = mockMvc.perform(post("/api/messages")
                                                     .contextPath(CONTEXT_PATH)
@@ -71,14 +66,10 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest_WrongRecipientException() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
+        final String token = signInAsUser(USER_IVAN);
         final Long recipientId = 3L;
         final Long dialogId = 3L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final MessageDto messageDto = MessageMock.getById(3L);
 
         final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
 
@@ -109,20 +100,12 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest_WrongSenderException() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
-        final Long recipientId = 3L;
+        final String token = signInAsUser(USER_IVAN);
         final Long dialogId = 3L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final MessageDto messageDto = MessageMock.getById(3L);
 
         final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
-        final DialogDto dialogDto = DialogMock.getById(1L);
-        final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
-        dialogEntity.setCustomerId(recipientId);
-        dialogEntity.setBulletinId(bulletinEntity.getId());
+        final DialogEntity dialogEntity = DialogMock.getEntityById(2L);
         dialogEntity.setBulletin(bulletinEntity);
 
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
@@ -136,7 +119,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("wrong-sender", senderId);
+        final String message = Translator.toLocale("wrong-sender", USER_IVAN);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -147,14 +130,10 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
+        final String token = signInAsUser(USER_IVAN);
         final Long recipientId = 2L;
         final Long dialogId = 3L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final MessageDto messageDto = MessageMock.getById(4L);
 
         final BulletinEntity bulletinEntity = BulletinMock.getEntityById(4L);
 
@@ -179,14 +158,9 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest_DialogNotFoundException() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
-        final Long recipientId = 2L;
+        final String token = signInAsUser(USER_IVAN);
         final Long dialogId = 3L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final MessageDto messageDto = MessageMock.getById(4L);
 
         final BulletinEntity bulletinEntity = BulletinMock.getEntityById(1L);
 
@@ -212,15 +186,10 @@ public class MessageControllerTest extends AbstractControllerTest {
 
     @Test
     public void createMessageTest_BulletinNotFoundException() throws Exception {
-        final Long senderId = 1L;
-        final String token = signInAsUser(senderId);
-        final Long recipientId = 2L;
+        final String token = signInAsUser(USER_IVAN);
         final Long dialogId = 1L;
         final Long bulletinId = 4L;
-        final MessageDto messageDto = new MessageDto();
-        messageDto.setDialogId(dialogId);
-        messageDto.setRecipientId(recipientId);
-        messageDto.setSenderId(senderId);
+        final MessageDto messageDto = MessageMock.getById(1L);
 
         final DialogEntity dialogEntity = DialogMock.getEntityById(dialogId);
 

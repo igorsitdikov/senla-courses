@@ -20,6 +20,24 @@ public class MessageMock {
             1L,
             "Возможна ли доставка 22.02.2021?",
             LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(2L, new MessageDto(
+            1L,
+            1L,
+            3L,
+            "Возможна ли доставка 22.02.2021?",
+            LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(3L, new MessageDto(
+            1L,
+            3L,
+            3L,
+            "Возможна ли доставка 22.02.2021?",
+            LocalDateTime.parse("2020-09-12T12:00:32")));
+        put(4L, new MessageDto(
+            1L,
+            2L,
+            3L,
+            "Возможна ли доставка 22.02.2021?",
+            LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
     private static final Map<Long, MessageEntity> messageEntityMap = new HashMap<Long, MessageEntity>() {{
         put(1L, new MessageEntity(
