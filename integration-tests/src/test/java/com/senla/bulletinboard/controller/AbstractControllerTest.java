@@ -53,10 +53,10 @@ public abstract class AbstractControllerTest {
     protected TokenBlacklistRepository tokenBlacklistRepository;
 
     protected String signInAsUser(final Long userId) throws Exception {
-        final UserEntity user = UserMock.getEntityById(userId);
-        final String password = UserMock.getById(userId).getPassword();
+        final UserEntity user = new UserMock().getEntityById(userId);
+        final String password = new UserMock().getById(userId).getPassword();
         final SignInDto request = new SignInDto();
-        request.setEmail(UserMock.getById(userId).getEmail());
+        request.setEmail(new UserMock().getById(userId).getEmail());
         request.setPassword(password);
 
         willReturn(Optional.of(user)).given(userRepository).findByEmail(user.getEmail());

@@ -40,8 +40,8 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         final SubscriptionDto subscriptionDto = new SubscriptionDto();
         subscriptionDto.setUserId(USER_IVAN);
         subscriptionDto.setTariffId(tariffId);
-        final UserEntity userEntity = UserMock.getEntityById(USER_IVAN);
-        final TariffEntity tariffEntity = TariffMock.getEntityById(tariffId);
+        final UserEntity userEntity = new UserMock().getEntityById(USER_IVAN);
+        final TariffEntity tariffEntity = new TariffMock().getEntityById(tariffId);
 
         willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_IVAN);
         willReturn(Optional.of(tariffEntity)).given(tariffRepository).findById(tariffId);
@@ -92,7 +92,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         final SubscriptionDto subscriptionDto = new SubscriptionDto();
         subscriptionDto.setUserId(USER_IVAN);
         subscriptionDto.setTariffId(tariffId);
-        final UserEntity userEntity = UserMock.getEntityById(USER_IVAN);
+        final UserEntity userEntity = new UserMock().getEntityById(USER_IVAN);
 
         willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_IVAN);
         willReturn(Optional.empty()).given(tariffRepository).findById(tariffId);
@@ -122,8 +122,8 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
         final SubscriptionDto subscriptionDto = new SubscriptionDto();
         subscriptionDto.setUserId(USER_PETR);
         subscriptionDto.setTariffId(tariffId);
-        final UserEntity userEntity = UserMock.getEntityById(USER_PETR);
-        final TariffEntity tariffEntity = TariffMock.getEntityById(tariffId);
+        final UserEntity userEntity = new UserMock().getEntityById(USER_PETR);
+        final TariffEntity tariffEntity = new TariffMock().getEntityById(tariffId);
         final BigDecimal price = tariffEntity.getPrice();
 
         willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_PETR);

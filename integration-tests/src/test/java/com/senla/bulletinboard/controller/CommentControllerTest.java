@@ -41,10 +41,10 @@ public class CommentControllerTest extends AbstractControllerTest {
         final Long bulletinId = 4L;
         final String token = signInAsUser(USER_PETR);
         final IdDto response = new IdDto(1L);
-        final CommentDto commentDto = CommentMock.getById(id);
+        final CommentDto commentDto = new CommentMock().getById(id);
 
-        final CommentEntity commentEntity = CommentMock.getEntityById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final CommentEntity commentEntity = new CommentMock().getEntityById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
@@ -64,9 +64,9 @@ public class CommentControllerTest extends AbstractControllerTest {
         final Long id = 2L;
         final Long bulletinId = 3L;
         final String token = signInAsUser(USER_ANTON);
-        final CommentDto commentDto = CommentMock.getById(id);
-        final CommentEntity commentEntity = CommentMock.getEntityById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final CommentDto commentDto = new CommentMock().getById(id);
+        final CommentEntity commentEntity = new CommentMock().getEntityById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(commentEntity).given(commentRepository).save(any(CommentEntity.class));
@@ -95,7 +95,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         final Long id = 1L;
         final Long bulletinId = 4L;
         final String token = signInAsUser(USER_PETR);
-        final CommentDto commentDto = CommentMock.getById(id);
+        final CommentDto commentDto = new CommentMock().getById(id);
         final CommentEntity commentEntity = commentDtoEntityMapper.sourceToDestination(commentDto);
 
         willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);

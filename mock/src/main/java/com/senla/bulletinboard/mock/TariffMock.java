@@ -11,12 +11,13 @@ import java.util.Map;
 
 public class TariffMock {
 
-    private static final Map<Long, TariffDto> tariffMap = new HashMap<Long, TariffDto>() {{
+    private final Map<Long, TariffDto> tariffMap = new HashMap<Long, TariffDto>() {{
         put(1L, new TariffDto(1L, BigDecimal.valueOf(5), 1, "5$ за 1 день"));
         put(2L, new TariffDto(2L, BigDecimal.valueOf(12), 3, "12$ за 3 дня"));
         put(3L, new TariffDto(3L, BigDecimal.valueOf(19.5), 7, "19.5$ за 7 дней"));
     }};
-    private static final Map<Long, TariffEntity> tariffEntityMap = new HashMap<Long, TariffEntity>() {{
+
+    private final Map<Long, TariffEntity> tariffEntityMap = new HashMap<Long, TariffEntity>() {{
         put(1L, new TariffEntity(
             BigDecimal.valueOf(5),
             1,
@@ -31,17 +32,17 @@ public class TariffMock {
             "19.5$ за 7 дней"));
     }};
 
-    public static TariffEntity getEntityById(final Long id) {
+    public TariffEntity getEntityById(final Long id) {
         final TariffEntity tariffEntity = tariffEntityMap.get(id);
         tariffEntity.setId(id);
         return tariffEntity;
     }
 
-    public static TariffDto getById(final Long id) {
+    public TariffDto getById(final Long id) {
         return tariffMap.get(id);
     }
 
-    public static List<TariffDto> getAll() {
+    public List<TariffDto> getAll() {
         return new ArrayList<>(tariffMap.values());
     }
 }

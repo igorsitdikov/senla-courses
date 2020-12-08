@@ -36,9 +36,9 @@ public class VoteControllerTest extends AbstractControllerTest {
         final Long id = 1L;
         final Long bulletinId = 4L;
         final String token = signInAsUser(ADMIN_ALEX);
-        final SellerVoteEntity sellerVoteEntity = VoteMock.getEntityById(id);
-        final SellerVoteDto sellerVoteDto = VoteMock.getById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final SellerVoteEntity sellerVoteEntity = new VoteMock().getEntityById(id);
+        final SellerVoteDto sellerVoteDto = new VoteMock().getById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
@@ -58,9 +58,9 @@ public class VoteControllerTest extends AbstractControllerTest {
         final Long id = 3L;
         final Long bulletinId = 3L;
         final String token = signInAsUser(ADMIN_ALEX);
-        final SellerVoteEntity sellerVoteEntity = VoteMock.getEntityById(id);
-        final SellerVoteDto sellerVoteDto = VoteMock.getById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final SellerVoteEntity sellerVoteEntity = new VoteMock().getEntityById(id);
+        final SellerVoteDto sellerVoteDto = new VoteMock().getById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
@@ -86,8 +86,8 @@ public class VoteControllerTest extends AbstractControllerTest {
         final Long id = 1L;
         final Long bulletinId = 4L;
         final String token = signInAsUser(ADMIN_ALEX);
-        final SellerVoteEntity sellerVoteEntity = VoteMock.getEntityById(id);
-        final SellerVoteDto sellerVoteDto = VoteMock.getById(id);
+        final SellerVoteEntity sellerVoteEntity = new VoteMock().getEntityById(id);
+        final SellerVoteDto sellerVoteDto = new VoteMock().getById(id);
 
         willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
@@ -113,9 +113,9 @@ public class VoteControllerTest extends AbstractControllerTest {
         final Long id = 2L;
         final Long bulletinId = 4L;
         final String token = signInAsUser(USER_IVAN);
-        final SellerVoteEntity sellerVoteEntity = VoteMock.getEntityById(id);
-        final SellerVoteDto sellerVoteDto = VoteMock.getById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final SellerVoteEntity sellerVoteEntity = new VoteMock().getEntityById(id);
+        final SellerVoteDto sellerVoteDto = new VoteMock().getById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
@@ -141,8 +141,8 @@ public class VoteControllerTest extends AbstractControllerTest {
         final Long id = 1L;
         final Long bulletinId = 4L;
         final String token = signInAsUser(ADMIN_ALEX);
-        final SellerVoteDto sellerVoteDto = VoteMock.getById(id);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final SellerVoteDto sellerVoteDto = new VoteMock().getById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(ADMIN_ALEX, bulletinId);

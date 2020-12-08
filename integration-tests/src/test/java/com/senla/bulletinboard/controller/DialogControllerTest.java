@@ -54,7 +54,7 @@ public class DialogControllerTest extends AbstractControllerTest {
     @Test
     public void showMessagesTest() throws Exception {
         final Long id = 3L;
-        final List<MessageDto> expected = MessageMock.getAll();
+        final List<MessageDto> expected = new MessageMock().getAll();
         final List<MessageEntity> entities = expected
             .stream()
             .map(messageDtoEntityMapper::sourceToDestination)
@@ -77,13 +77,13 @@ public class DialogControllerTest extends AbstractControllerTest {
     public void createDialogTest() throws Exception {
         final Long bulletinId = 4L;
         final String token = signInAsUser(USER_ANTON);
-        final DialogDto dialogDto = DialogMock.getById(1L);
+        final DialogDto dialogDto = new DialogMock().getById(1L);
         dialogDto.setCustomerId(USER_ANTON);
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
         final String request = objectMapper.writeValueAsString(dialogDto);
         final String response = objectMapper.writeValueAsString(new IdDto(1L));
 
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(false).given(dialogRepository)
@@ -103,12 +103,12 @@ public class DialogControllerTest extends AbstractControllerTest {
     public void createDialogTest_DialogAlreadyExists() throws Exception {
         final Long bulletinId = 4L;
         final String token = signInAsUser(USER_ANTON);
-        final DialogDto dialogDto = DialogMock.getById(1L);
+        final DialogDto dialogDto = new DialogMock().getById(1L);
         dialogDto.setCustomerId(USER_ANTON);
         final String request = objectMapper.writeValueAsString(dialogDto);
 
         final DialogEntity dialogEntity = dialogDtoEntityMapper.sourceToDestination(dialogDto);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(dialogRepository)
@@ -144,8 +144,8 @@ public class DialogControllerTest extends AbstractControllerTest {
         dialogDto.setCustomerId(USER_PETR);
         dialogDto.setBulletinId(bulletinId);
 
-        final DialogEntity dialogEntity = DialogMock.getEntityById(dialogId);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(bulletinId);
+        final DialogEntity dialogEntity = new DialogMock().getEntityById(dialogId);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);

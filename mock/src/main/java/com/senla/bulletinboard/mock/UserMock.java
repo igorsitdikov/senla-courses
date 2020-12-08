@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class UserMock {
 
-    private static final Map<Long, UserRequestDto> userMap = new HashMap<Long, UserRequestDto>() {{
+    private final Map<Long, UserRequestDto> userMap = new HashMap<Long, UserRequestDto>() {{
         put(1L, new UserRequestDto(1L, "Иван", "Иванов", "ivan.ivanov@mail.ru", "+375331234567", UserRole.USER,
                                    AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "123456"));
         put(2L, new UserRequestDto(2L, "Петр", "Петров", "petr.petrov@yandex.ru", "+375337654321", UserRole.USER,
@@ -23,7 +23,8 @@ public class UserMock {
         put(4L, new UserRequestDto(4L, "Антон", "Антонов", "anton.antonov@mail.ru", "+375331234567", UserRole.USER,
                                    AutoSubscribeStatus.ACTIVE, PremiumStatus.ACTIVE, BigDecimal.ZERO, "anton12"));
     }};
-    private static final Map<Long, UserEntity> userEntityMap = new HashMap<Long, UserEntity>() {{
+
+    private final Map<Long, UserEntity> userEntityMap = new HashMap<Long, UserEntity>() {{
         put(1L, new UserEntity(
             "Иван",
             "Иванов",
@@ -66,27 +67,17 @@ public class UserMock {
             BigDecimal.ZERO));
     }};
 
-    public static UserEntity getEntityById(final Long id) {
-        final UserEntity entity = userEntityMap.get(id);
-        UserEntity userEntity = new UserEntity();
+    public UserEntity getEntityById(final Long id) {
+        final UserEntity userEntity = userEntityMap.get(id);
         userEntity.setId(id);
-        userEntity.setFirstName(entity.getFirstName());
-        userEntity.setLastName(entity.getLastName());
-        userEntity.setEmail(entity.getEmail());
-        userEntity.setPassword(entity.getPassword());
-        userEntity.setPhone(entity.getPhone());
-        userEntity.setRole(entity.getRole());
-        userEntity.setPremium(entity.getPremium());
-        userEntity.setAutoSubscribe(entity.getAutoSubscribe());
-        userEntity.setBalance(entity.getBalance());
         return userEntity;
     }
 
-    public static UserRequestDto getById(final Long id) {
+    public UserRequestDto getById(final Long id) {
         return userMap.get(id);
     }
 
-    public static UserDto getUserDtoById(final Long id) {
+    public UserDto getUserDtoById(final Long id) {
         final UserRequestDto userRequestDto = userMap.get(id);
         UserDto userDto = new UserDto();
         userDto.setId(userRequestDto.getId());

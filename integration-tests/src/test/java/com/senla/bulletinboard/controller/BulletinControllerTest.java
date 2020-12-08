@@ -42,12 +42,12 @@ public class BulletinControllerTest extends AbstractControllerTest {
 
     @Test
     public void showBulletinsTest() throws Exception {
-        final List<BulletinBaseDto> expected = BulletinMock.getAllBase()
+        final List<BulletinBaseDto> expected = new BulletinMock().getAllBase()
             .stream()
             .peek(el -> el.setSeller(null))
             .collect(Collectors.toList());
 
-        final List<BulletinEntity> entities = BulletinMock.getAllEntities();
+        final List<BulletinEntity> entities = new BulletinMock().getAllEntities();
 
         willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
@@ -63,7 +63,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     @Test
     public void showBulletinDetailsTest() throws Exception {
         final Long id = 1L;
-        final BulletinEntity entity = BulletinMock.getEntityById(id);
+        final BulletinEntity entity = new BulletinMock().getEntityById(id);
         final BulletinDto expected = bulletinDetailsDtoEntityMapper.destinationToSource(entity);
 
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(id);
@@ -80,8 +80,8 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void createBulletinTest() throws Exception {
         final Long bulletinId = 1L;
         final String token = signInAsUser(USER_PETR);
-        final BulletinDto bulletinDto = BulletinMock.getById(bulletinId);
-        final BulletinEntity entity = BulletinMock.getEntityById(bulletinId);
+        final BulletinDto bulletinDto = new BulletinMock().getById(bulletinId);
+        final BulletinEntity entity = new BulletinMock().getEntityById(bulletinId);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         final String response = objectMapper.writeValueAsString(new IdDto(bulletinId));
 
@@ -100,7 +100,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void updateBulletinTest() throws Exception {
         final Long id = 1L;
         final String token = signInAsUser(USER_PETR);
-        final BulletinEntity entity = BulletinMock.getEntityById(id);
+        final BulletinEntity entity = new BulletinMock().getEntityById(id);
         final BulletinDto bulletinDto = bulletinDetailsDtoEntityMapper.destinationToSource(entity);
         final String request = objectMapper.writeValueAsString(bulletinDto);
 
@@ -122,7 +122,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void updateBulletinTest_BulletinNotFound() throws Exception {
         final Long id = 1L;
         final String token = signInAsUser(USER_PETR);
-        final BulletinDto bulletinDto = BulletinMock.getById(id);
+        final BulletinDto bulletinDto = new BulletinMock().getById(id);
         final String request = objectMapper.writeValueAsString(bulletinDto);
         willReturn(false).given(bulletinRepository).existsById(id);
 
@@ -147,7 +147,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void deleteBulletinTest() throws Exception {
         final Long bulletinId = 1L;
         final String token = signInAsUser(USER_PETR);
-        final BulletinEntity entity = BulletinMock.getEntityById(bulletinId);
+        final BulletinEntity entity = new BulletinMock().getEntityById(bulletinId);
 
         willReturn(Optional.of(entity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(bulletinRepository).existsById(bulletinId);
@@ -204,7 +204,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
     public void deleteBulletinTest_BulletinNotFoundException_AsAdmin() throws Exception {
         final Long id = 1L;
         final String token = signInAsUser(USER_PETR);
-        final BulletinEntity bulletinEntity = BulletinMock.getEntityById(id);
+        final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(id);
 
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(id);
         willReturn(false).given(bulletinRepository).existsById(id);

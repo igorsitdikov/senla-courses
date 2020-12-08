@@ -37,7 +37,7 @@ public class TariffControllerTest extends AbstractControllerTest {
 
     @Test
     public void testShowTariffs() throws Exception {
-        final List<TariffDto> expected = TariffMock.getAll();
+        final List<TariffDto> expected = new TariffMock().getAll();
         final List<TariffEntity> entities = expected
             .stream()
             .map(tariffDtoEntityMapper::sourceToDestination)
@@ -56,8 +56,8 @@ public class TariffControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "ADMIN")
     public void testAddTariff() throws Exception {
         final Long id = 3L;
-        final TariffDto tariffDto = TariffMock.getById(id);
-        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(TariffMock.getById(id));
+        final TariffDto tariffDto = new TariffMock().getById(id);
+        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(new TariffMock().getById(id));
 
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));
         final IdDto idDto = new IdDto(id);
@@ -73,9 +73,9 @@ public class TariffControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateTariff() throws Exception {
         final Long id = 3L;
-        final TariffDto tariffDto = TariffMock.getById(id);
+        final TariffDto tariffDto = new TariffMock().getById(id);
         tariffDto.setPrice(BigDecimal.valueOf(3.4));
-        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(TariffMock.getById(id));
+        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(new TariffMock().getById(id));
         tariffEntity.setPrice(BigDecimal.valueOf(3.4));
 
         willReturn(true).given(tariffRepository).existsById(id);
@@ -93,9 +93,9 @@ public class TariffControllerTest extends AbstractControllerTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateTariff_NotExistsException() throws Exception {
         final Long id = 3L;
-        final TariffDto tariffDto = TariffMock.getById(id);
+        final TariffDto tariffDto = new TariffMock().getById(id);
         tariffDto.setPrice(BigDecimal.valueOf(3.4));
-        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(TariffMock.getById(id));
+        final TariffEntity tariffEntity = tariffDtoEntityMapper.sourceToDestination(new TariffMock().getById(id));
         tariffEntity.setPrice(BigDecimal.valueOf(3.4));
 
         willReturn(tariffEntity).given(tariffRepository).save(any(TariffEntity.class));

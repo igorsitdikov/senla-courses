@@ -19,19 +19,19 @@ import java.util.Map;
 
 public class DialogMock {
 
-    private static final Map<Long, DialogDto> dialogMap = new HashMap<Long, DialogDto>() {{
+    private final Map<Long, DialogDto> dialogMap = new HashMap<Long, DialogDto>() {{
         put(1L, new DialogDto(
             1L,
             "Продам отборный картофель, сорт «Вектор»",
             1L,
             2L,
             4L,
-            UserMock.getUserDtoById(2L),
-            BulletinMock.getById(4L),
+                new UserMock().getUserDtoById(2L),
+            new BulletinMock().getById(4L),
             LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 
-    private static final Map<Long, DialogEntity> dialogEntityMap = new HashMap<Long, DialogEntity>() {{
+    private final Map<Long, DialogEntity> dialogEntityMap = new HashMap<Long, DialogEntity>() {{
         put(1L, new DialogEntity(
             new BulletinEntity(
                 LocalDateTime.parse("2020-09-12T12:00:32"),
@@ -40,7 +40,7 @@ public class DialogMock {
                 "БЕСПЛАТНАЯ доставка по г.Пружаны и району.",
                 BulletinStatus.OPEN,
                 new HashSet<>(),
-                UserMock.getEntityById(1L),
+                    new UserMock().getEntityById(1L),
                 1L,
                 new HashSet<>()),
             4L,
@@ -70,17 +70,17 @@ public class DialogMock {
             LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
 
-    public static DialogEntity getEntityById(final Long id) {
+    public DialogEntity getEntityById(final Long id) {
         DialogEntity dialogEntity = dialogEntityMap.get(id);
         dialogEntity.setId(id);
         return dialogEntity;
     }
 
-    public static DialogDto getById(final Long id) {
+    public DialogDto getById(final Long id) {
         return dialogMap.get(id);
     }
 
-    public static List<DialogDto> getAll() {
+    public List<DialogDto> getAll() {
         return new ArrayList<>(dialogMap.values());
     }
 }

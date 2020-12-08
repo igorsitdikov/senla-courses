@@ -52,14 +52,14 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @BeforeEach
     public void initAuthorizedUser() {
-        final UserEntity user = UserMock.getEntityById(USER_ANTON);
+        final UserEntity user = new UserMock().getEntityById(USER_ANTON);
         willReturn(Optional.of(user)).given(userRepository).findById(USER_ANTON);
     }
 
     @Test
     public void testGetUser() throws Exception {
         String token = signInAsUser(USER_ANTON);
-        final UserDto expected = UserMock.getUserDtoById(USER_ANTON);
+        final UserDto expected = new UserMock().getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
 
         willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_ANTON);
@@ -98,7 +98,7 @@ public class UserControllerTest extends AbstractControllerTest {
     public void testShowDialogs() throws Exception {
         final Long id = 4L;
         String token = signInAsUser(USER_ANTON);
-        final List<DialogDto> dialogDtos = DialogMock.getAll();
+        final List<DialogDto> dialogDtos = new DialogMock().getAll();
         final List<DialogEntity> dialogEntities = dialogDtos
             .stream()
             .map(dialogDto -> {
@@ -138,7 +138,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testShowBulletins() throws Exception {
         String token = signInAsUser(USER_ANTON);
-        final List<BulletinDto> expected = BulletinMock.getAll()
+        final List<BulletinDto> expected = new BulletinMock().getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
             .collect(Collectors.toList());
@@ -161,7 +161,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testShowBulletins_UserNotFoundException() throws Exception {
         String token = signInAsUser(USER_ANTON);
-        final List<BulletinDto> expected = BulletinMock.getAll()
+        final List<BulletinDto> expected = new BulletinMock().getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
             .collect(Collectors.toList());
@@ -192,7 +192,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testUpdateUser() throws Exception {
         String token = signInAsUser(USER_ANTON);
-        final UserDto expected = UserMock.getUserDtoById(USER_ANTON);
+        final UserDto expected = new UserMock().getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
         willReturn(userEntity).given(userRepository).save(any(UserEntity.class));
         mockMvc.perform(put("/api/users/" + USER_ANTON)

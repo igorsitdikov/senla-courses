@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class MessageMock {
 
-    private static final Map<Long, MessageDto> messageMap = new HashMap<Long, MessageDto>() {{
+    private final Map<Long, MessageDto> messageMap = new HashMap<Long, MessageDto>() {{
         put(1L, new MessageDto(
             1L,
             2L,
@@ -39,7 +39,7 @@ public class MessageMock {
             "Возможна ли доставка 22.02.2021?",
             LocalDateTime.parse("2020-09-12T12:00:32")));
     }};
-    private static final Map<Long, MessageEntity> messageEntityMap = new HashMap<Long, MessageEntity>() {{
+    private final Map<Long, MessageEntity> messageEntityMap = new HashMap<Long, MessageEntity>() {{
         put(1L, new MessageEntity(
             "Возможна ли доставка 22.02.2021?",
             LocalDateTime.parse("2020-09-12T12:00:32"),
@@ -51,11 +51,11 @@ public class MessageMock {
             1L));
     }};
 
-    public static MessageDto getById(final Long id) {
+    public MessageDto getById(final Long id) {
         return messageMap.get(id);
     }
 
-    public static List<MessageDto> getAll() {
+    public List<MessageDto> getAll() {
         return new ArrayList<>(messageMap.values());
     }
 }

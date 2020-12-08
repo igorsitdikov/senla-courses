@@ -21,8 +21,8 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     public void signUpTest() throws Exception {
-        final UserRequestDto request = UserMock.getById(USER_IVAN);
-        final UserEntity user = UserMock.getEntityById(USER_IVAN);
+        final UserRequestDto request = new UserMock().getById(USER_IVAN);
+        final UserEntity user = new UserMock().getEntityById(USER_IVAN);
 
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
@@ -37,8 +37,8 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     public void signUpTest_SuchUserAlreadyExistsException() throws Exception {
-        final UserRequestDto request = UserMock.getById(USER_IVAN);
-        final UserEntity user = UserMock.getEntityById(USER_IVAN);
+        final UserRequestDto request = new UserMock().getById(USER_IVAN);
+        final UserEntity user = new UserMock().getEntityById(USER_IVAN);
 
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.of(user)).given(userRepository).findByEmail(request.getEmail());
@@ -61,7 +61,7 @@ public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     public void signInTest_NoSuchUserException() throws Exception {
-        final UserRequestDto request = UserMock.getById(USER_IVAN);
+        final UserRequestDto request = new UserMock().getById(USER_IVAN);
 
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
 

@@ -19,24 +19,24 @@ import java.util.Map;
 
 public class CommentMock {
 
-    private static final Map<Long, CommentDto> commentMap = new HashMap<Long, CommentDto>() {{
+    private final Map<Long, CommentDto> commentMap = new HashMap<Long, CommentDto>() {{
         put(1L, new CommentDto(
             1L,
-            UserMock.getUserDtoById(2L),
+                new UserMock().getUserDtoById(2L),
             2L,
             "Отличный картофель",
             4L,
             LocalDateTime.parse("2020-09-14T11:30:45")));
         put(2L, new CommentDto(
             1L,
-            UserMock.getUserDtoById(3L),
+                new UserMock().getUserDtoById(3L),
             4L,
             "Отличный картофель",
             3L,
             LocalDateTime.parse("2020-09-14T11:30:45")));
     }};
 
-    private static final Map<Long, CommentEntity> commentEntityMap = new HashMap<Long, CommentEntity>() {{
+    private final Map<Long, CommentEntity> commentEntityMap = new HashMap<Long, CommentEntity>() {{
         put(1L, new CommentEntity(
             LocalDateTime.parse("2020-09-14T11:30:45"),
             "Отличный картофель",
@@ -47,7 +47,7 @@ public class CommentMock {
                 "БЕСПЛАТНАЯ доставка по г.Пружаны и району.",
                 BulletinStatus.OPEN,
                 new HashSet<>(),
-                UserMock.getEntityById(1L),
+                    new UserMock().getEntityById(1L),
                 1L,
                 new HashSet<>()),
             4L,
@@ -72,7 +72,7 @@ public class CommentMock {
                 "",
                 BulletinStatus.CLOSE,
                 new HashSet<>(),
-                UserMock.getEntityById(4L),
+                    new UserMock().getEntityById(4L),
                 4L,
                 new HashSet<>()),
             3L,
@@ -89,17 +89,17 @@ public class CommentMock {
             4L));
     }};
 
-    public static CommentEntity getEntityById(final Long id) {
+    public CommentEntity getEntityById(final Long id) {
         final CommentEntity commentEntity = commentEntityMap.get(id);
         commentEntity.setId(id);
         return commentEntity;
     }
 
-    public static CommentDto getById(final Long id) {
+    public CommentDto getById(final Long id) {
         return commentMap.get(id);
     }
 
-    public static List<CommentDto> getAll() {
+    public List<CommentDto> getAll() {
         return new ArrayList<>(commentMap.values());
     }
 }

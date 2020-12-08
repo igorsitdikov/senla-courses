@@ -46,7 +46,7 @@ public class PaymentControllerTest extends AbstractControllerTest {
         paymentDto.setUserId(USER_IVAN);
         final PaymentEntity paymentEntity = paymentDtoEntityMapper.sourceToDestination(paymentDto);
         paymentEntity.setId(id);
-        final UserEntity userEntity = UserMock.getEntityById(USER_IVAN);
+        final UserEntity userEntity = new UserMock().getEntityById(USER_IVAN);
 
         willReturn(Optional.of(userEntity)).given(userRepository).findById(USER_IVAN);
         willReturn(paymentEntity).given(paymentRepository).save(any(PaymentEntity.class));
