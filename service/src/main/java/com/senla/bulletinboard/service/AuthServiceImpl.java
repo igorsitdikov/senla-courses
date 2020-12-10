@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         }
         final UserEntity userEntity = saveUserWithEncodedPassword(userDto);
         final AuthUser user = getUserDetails(userEntity);
-        return new TokenDto(jwtUtil.generateToken(user));
+        return new TokenDto(user.getId(), jwtUtil.generateToken(user));
     }
 
     private UserEntity saveUserWithEncodedPassword(final UserRequestDto userDto) {
@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(authentication);
 
         final AuthUser user = getUserDetails(userEntity);
-        return new TokenDto(jwtUtil.generateToken(user));
+        return new TokenDto(user.getId(), jwtUtil.generateToken(user));
     }
 
     private AuthUser getUserDetails(final UserEntity userEntity) {

@@ -1,6 +1,7 @@
 package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
+import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,12 +29,15 @@ public class AuthControllerTest extends AbstractControllerTest {
         willReturn(user).given(userRepository).save(any(UserEntity.class));
         willReturn(Optional.empty()).given(userRepository).findByEmail(request.getEmail());
 
-        mockMvc.perform(post("/api/sign-up")
+        final String response = mockMvc.perform(post("/api/sign-up")
                             .contextPath(CONTEXT_PATH)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated())
             .andReturn().getResponse().getContentAsString();
+
+        TokenDto tokenDto = objectMapper.readValue(response, TokenDto.class);
+        assertEquals(USER_IVAN, tokenDto.getUserId());
     }
 
     @Test

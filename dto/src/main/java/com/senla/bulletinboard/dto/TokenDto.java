@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class TokenDto extends AbstractDto {
 
+    private Long userId;
     private String token;
 }

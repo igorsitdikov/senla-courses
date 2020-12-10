@@ -69,7 +69,9 @@ public abstract class AbstractControllerTest {
             .andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
-        String token = TOKEN_PREFIX + objectMapper.readValue(response, TokenDto.class).getToken();
+        TokenDto tokenDto = objectMapper.readValue(response, TokenDto.class);
+        String token = TOKEN_PREFIX + tokenDto.getToken();
+        assertEquals(userId, tokenDto.getUserId());
         TokenBlacklistEntity tokenBlacklistEntity = new TokenBlacklistEntity();
         tokenBlacklistEntity.setToken(token);
 
