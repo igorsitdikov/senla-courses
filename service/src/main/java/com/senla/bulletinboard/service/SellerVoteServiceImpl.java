@@ -30,8 +30,9 @@ public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, Seller
 
     public SellerVoteServiceImpl(final DtoEntityMapper<SellerVoteDto, SellerVoteEntity> dtoEntityMapper,
                                  final SellerVoteRepository repository,
-                                 final BulletinRepository bulletinRepository) {
-        super(dtoEntityMapper, repository);
+                                 final BulletinRepository bulletinRepository,
+                                 final Translator translator) {
+        super(dtoEntityMapper, repository, translator);
         this.bulletinRepository = bulletinRepository;
     }
 
@@ -41,20 +42,20 @@ public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, Seller
         throws WrongVoterException, EntityNotFoundException, BulletinIsClosedException, VoteAlreadyExistsException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
-            final String message = Translator.toLocale("bulletin-closed", sellerVoteDto.getBulletinId());
+            final String message = translator.toLocale("bulletin-closed", sellerVoteDto.getBulletinId());
             log.error(message);
             throw new BulletinIsClosedException(message);
         } else if (!bulletinEntity.isPresent()) {
-            final String message = Translator.toLocale("bulletin-not-exists", sellerVoteDto.getBulletinId());
+            final String message = translator.toLocale("bulletin-not-exists", sellerVoteDto.getBulletinId());
             log.error(message);
             throw new EntityNotFoundException(message);
         }
         if (bulletinEntity.get().getSeller().getId().equals(sellerVoteDto.getVoterId())) {
-            final String message = Translator.toLocale("vote-forbidden");
+            final String message = translator.toLocale("vote-forbidden");
             throw new WrongVoterException(message);
         }
         if (checkVoteExistence(sellerVoteDto)) {
-            final String message = Translator.toLocale("user-already-voted",
+            final String message = translator.toLocale("user-already-voted",
                                                        sellerVoteDto.getVoterId(),
                                                        sellerVoteDto.getBulletinId());
             log.warn(message);

@@ -3,7 +3,6 @@ package com.senla.bulletinboard.service;
 import com.senla.bulletinboard.dto.SignInDto;
 import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
-import com.senla.bulletinboard.entity.TokenBlacklistEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.exception.SuchUserAlreadyExistsException;
@@ -32,6 +31,7 @@ import java.util.List;
 @Transactional
 public class AuthServiceImpl implements AuthService {
 
+    private final Translator translator;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenDto signUp(final UserRequestDto userDto) throws SuchUserAlreadyExistsException {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            final String message = Translator.toLocale("user-already-exists", userDto.getEmail());
+            final String message = translator.toLocale("user-already-exists", userDto.getEmail());
             log.error(message);
             throw new SuchUserAlreadyExistsException(message);
         }
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
             .findByEmail(signInDto.getEmail())
             .orElseThrow(
                 () -> {
-                    final String message = Translator.toLocale("no-such-user", signInDto.getEmail());
+                    final String message = translator.toLocale("no-such-user", signInDto.getEmail());
                     log.error(message);
                     return new NoSuchUserException(message);
                 });
@@ -84,12 +84,5 @@ public class AuthServiceImpl implements AuthService {
         final List<SimpleGrantedAuthority> authorities =
             Collections.singletonList(new SimpleGrantedAuthority(role));
         return new AuthUser(email, password, authorities, id);
-    }
-
-    @Override
-    public void logout(final String token) {
-        TokenBlacklistEntity tokenBlacklistEntity = new TokenBlacklistEntity();
-        tokenBlacklistEntity.setToken(token);
-        tokenBlacklistRepository.save(tokenBlacklistEntity);
     }
 }

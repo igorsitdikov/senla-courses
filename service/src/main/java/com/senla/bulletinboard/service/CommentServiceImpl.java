@@ -27,8 +27,9 @@ public class CommentServiceImpl extends AbstractService<CommentDto, CommentEntit
 
     public CommentServiceImpl(final CommentDtoEntityMapper commentDtoEntityMapper,
                               final CommentRepository commentRepository,
-                              final BulletinRepository bulletinRepository) {
-        super(commentDtoEntityMapper, commentRepository);
+                              final BulletinRepository bulletinRepository,
+                              final Translator translator) {
+        super(commentDtoEntityMapper, commentRepository, translator);
         this.bulletinRepository = bulletinRepository;
     }
 
@@ -38,11 +39,11 @@ public class CommentServiceImpl extends AbstractService<CommentDto, CommentEntit
         throws BulletinIsClosedException, EntityNotFoundException {
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(commentDto.getBulletinId());
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
-            final String message = Translator.toLocale("bulletin-closed", bulletinEntity.get().getId());
+            final String message = translator.toLocale("bulletin-closed", bulletinEntity.get().getId());
             log.error(message);
             throw new BulletinIsClosedException(message);
         } else if (!bulletinEntity.isPresent()) {
-            final String message = Translator.toLocale("bulletin-not-exists", commentDto.getBulletinId());
+            final String message = translator.toLocale("bulletin-not-exists", commentDto.getBulletinId());
             log.error(message);
             throw new EntityNotFoundException(message);
         }

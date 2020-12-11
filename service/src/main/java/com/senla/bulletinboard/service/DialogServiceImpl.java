@@ -28,8 +28,9 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
 
     public DialogServiceImpl(final DialogDtoEntityMapper dtoEntityMapper,
                              final DialogRepository repository,
-                             final BulletinRepository bulletinRepository) {
-        super(dtoEntityMapper, repository);
+                             final BulletinRepository bulletinRepository,
+                             final Translator translator) {
+        super(dtoEntityMapper, repository, translator);
         dialogDtoEntityMapper = dtoEntityMapper;
         this.bulletinRepository = bulletinRepository;
     }
@@ -58,7 +59,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
         "authentication.principal.id == #dialogDto.getCustomerId() and !@dialogServiceImpl.checkOwner(authentication.principal.id, #dialogDto.getBulletinId())")
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
-            final String message = Translator.toLocale("dialog-already-exists",
+            final String message = translator.toLocale("dialog-already-exists",
                                                        dialogDto.getBulletinId(),
                                                        dialogDto.getCustomerId());
             log.error(message);
@@ -69,7 +70,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
 
     public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
         BulletinEntity entity = bulletinRepository.findById(bulletinId).orElseThrow(() -> {
-            final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+            final String message = translator.toLocale("bulletin-not-exists", bulletinId);
             log.error(message);
             return new EntityNotFoundException(message);
         });
@@ -78,14 +79,14 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
 
     public boolean checkDialogOwner(final Long userId, final Long dialogId) throws EntityNotFoundException {
         DialogEntity entity = repository.findById(dialogId).orElseThrow(() -> {
-            final String message = Translator.toLocale("dialog-not-exists", dialogId);
+            final String message = translator.toLocale("dialog-not-exists", dialogId);
             log.error(message);
             return new EntityNotFoundException(message);
         });
-        if (checkOwner(userId, entity.getBulletinId())) {
+        if (userId.equals(entity.getCustomerId())) {
             return true;
         }
-        return userId.equals(entity.getCustomerId());
+        return checkOwner(userId, entity.getBulletinId());
     }
 
     public boolean checkDialogExistence(final DialogDto dialogDto) {

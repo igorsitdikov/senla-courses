@@ -35,8 +35,9 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
     public MessageServiceImpl(final MessageDtoEntityMapper dtoEntityMapper,
                               final MessageRepository repository,
                               final BulletinRepository bulletinRepository,
-                              final DialogRepository dialogRepository) {
-        super(dtoEntityMapper, repository);
+                              final DialogRepository dialogRepository,
+                              final Translator translator) {
+        super(dtoEntityMapper, repository, translator);
         this.dtoEntityMapper = dtoEntityMapper;
         this.bulletinRepository = bulletinRepository;
         this.dialogRepository = dialogRepository;
@@ -61,26 +62,26 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
     public IdDto createMessage(final MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
-            final String message = Translator.toLocale("send-message-forbidden");
+            final String message = translator.toLocale("send-message-forbidden");
             log.error(message);
             throw new WrongMessageRecipientException(message);
         }
         final DialogEntity dialogEntity = dialogRepository.findById(messageDto.getDialogId())
             .orElseThrow(
-                () -> new EntityNotFoundException(Translator.toLocale("dialog-not-exists", messageDto.getDialogId())));
+                () -> new EntityNotFoundException(translator.toLocale("dialog-not-exists", messageDto.getDialogId())));
         final BulletinEntity bulletinEntity = bulletinRepository.findById(dialogEntity.getBulletinId())
             .orElseThrow(
                 () -> new EntityNotFoundException(
-                    Translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
+                    translator.toLocale("bulletin-not-exists", dialogEntity.getBulletinId())));
         boolean checkRecipient = checkRecipient(messageDto, dialogEntity, bulletinEntity);
         if (checkRecipient) {
-            final String message = Translator.toLocale("wrong-recipient", messageDto.getRecipientId());
+            final String message = translator.toLocale("wrong-recipient", messageDto.getRecipientId());
             log.error(message);
             throw new WrongRecipientException(message);
         }
         boolean checkSender = checkSender(messageDto, dialogEntity, bulletinEntity);
         if (checkSender) {
-            final String message = Translator.toLocale("wrong-sender", messageDto.getSenderId());
+            final String message = translator.toLocale("wrong-sender", messageDto.getSenderId());
             log.error(message);
             throw new WrongSenderException(message);
         }

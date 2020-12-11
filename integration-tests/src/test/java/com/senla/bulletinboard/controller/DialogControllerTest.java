@@ -123,7 +123,7 @@ public class DialogControllerTest extends AbstractControllerTest {
             .andExpect(status().isConflict())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale(
+        final String message = translator.toLocale(
             "dialog-already-exists",
             dialogDto.getBulletinId(),
             dialogDto.getCustomerId());

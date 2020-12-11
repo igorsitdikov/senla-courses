@@ -29,8 +29,9 @@ public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntit
 
     public PaymentServiceImpl(final PaymentDtoEntityMapper dtoEntityMapper,
                               final PaymentRepository repository,
-                              final UserRepository userRepository) {
-        super(dtoEntityMapper, repository);
+                              final UserRepository userRepository,
+                              final Translator translator) {
+        super(dtoEntityMapper, repository,translator);
         paymentDtoEntityMapper = dtoEntityMapper;
         this.userRepository = userRepository;
     }
@@ -40,7 +41,7 @@ public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntit
     public IdDto createPayment(final PaymentDto paymentDto) throws NoSuchUserException {
         final Optional<UserEntity> userEntity = userRepository.findById(paymentDto.getUserId());
         if (!userEntity.isPresent()) {
-            final String message = Translator.toLocale("no-such-user-id", paymentDto.getUserId());
+            final String message = translator.toLocale("no-such-user-id", paymentDto.getUserId());
             log.error(message);
             throw new NoSuchUserException(message);
         }

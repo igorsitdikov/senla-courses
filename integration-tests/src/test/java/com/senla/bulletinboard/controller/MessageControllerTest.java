@@ -55,7 +55,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isForbidden())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("send-message-forbidden");
+        final String message = translator.toLocale("send-message-forbidden");
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.FORBIDDEN,
             ExceptionType.BUSINESS_LOGIC,
@@ -89,7 +89,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("wrong-recipient", recipientId);
+        final String message = translator.toLocale("wrong-recipient", recipientId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -119,7 +119,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("wrong-sender", USER_IVAN);
+        final String message = translator.toLocale("wrong-sender", USER_IVAN);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -175,7 +175,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("dialog-not-exists", dialogId);
+        final String message = translator.toLocale("dialog-not-exists", dialogId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -204,7 +204,7 @@ public class MessageControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final String message = translator.toLocale("bulletin-not-exists", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,

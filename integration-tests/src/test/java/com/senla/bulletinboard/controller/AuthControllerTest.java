@@ -3,6 +3,7 @@ package com.senla.bulletinboard.controller;
 import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.dto.UserRequestDto;
+import com.senla.bulletinboard.entity.TokenBlacklistEntity;
 import com.senla.bulletinboard.entity.UserEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mock.UserMock;
@@ -16,6 +17,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +59,7 @@ public class AuthControllerTest extends AbstractControllerTest {
             .andExpect(status().isConflict())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("user-already-exists", user.getEmail());
+        final String message = translator.toLocale("user-already-exists", user.getEmail());
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.CONFLICT,
             ExceptionType.BUSINESS_LOGIC,
@@ -77,12 +81,23 @@ public class AuthControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("no-such-user", request.getEmail());
+        final String message = translator.toLocale("no-such-user", request.getEmail());
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
             message);
 
         assertErrorResponse(expectedError, response);
+    }
+
+    @Test
+    public void logoutTest() throws Exception {
+        final String token = signInAsUser(USER_PETR);
+        mockMvc.perform(delete("/api/log-out")
+                            .contextPath(CONTEXT_PATH)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", token))
+            .andExpect(status().isOk());
+        verify(tokenBlacklistRepository, times(1)).save(any(TokenBlacklistEntity.class));
     }
 }

@@ -37,8 +37,9 @@ public class SubscriptionServiceImpl
     public SubscriptionServiceImpl(final DtoEntityMapper<SubscriptionDto, SubscriptionEntity> dtoEntityMapper,
                                    final SubscriptionRepository repository,
                                    final UserRepository userRepository,
-                                   final TariffRepository tariffRepository) {
-        super(dtoEntityMapper, repository);
+                                   final TariffRepository tariffRepository,
+                                   final Translator translator) {
+        super(dtoEntityMapper, repository, translator);
         this.userRepository = userRepository;
         this.tariffRepository = tariffRepository;
     }
@@ -50,11 +51,11 @@ public class SubscriptionServiceImpl
         throws InsufficientFundsException, EntityNotFoundException, NoSuchUserException {
         final UserEntity userEntity = userRepository.findById(subscriptionDto.getUserId())
             .orElseThrow(
-                () -> new NoSuchUserException(Translator.toLocale("no-such-user-id", subscriptionDto.getUserId())));
+                () -> new NoSuchUserException(translator.toLocale("no-such-user-id", subscriptionDto.getUserId())));
         final TariffEntity tariffEntity = tariffRepository.findById(subscriptionDto.getTariffId())
             .orElseThrow(
                 () -> new EntityNotFoundException(
-                    Translator.toLocale("tariff-not-exists", subscriptionDto.getTariffId())));
+                    translator.toLocale("tariff-not-exists", subscriptionDto.getTariffId())));
         addPremium(userEntity, tariffEntity);
     }
 
@@ -63,7 +64,7 @@ public class SubscriptionServiceImpl
     public void addPremium(final UserEntity userEntity, final TariffEntity tariffEntity)
         throws InsufficientFundsException {
         if (userEntity.getBalance().compareTo(tariffEntity.getPrice()) < 0) {
-            final String message = Translator.toLocale("no-funds", userEntity.getBalance(), tariffEntity.getPrice());
+            final String message = translator.toLocale("no-funds", userEntity.getBalance(), tariffEntity.getPrice());
             userEntity.setAutoSubscribe(AutoSubscribeStatus.DISABLE);
             userRepository.save(userEntity);
             log.error(message);
@@ -73,7 +74,7 @@ public class SubscriptionServiceImpl
         SubscriptionEntity subscriptionEntity = new SubscriptionEntity();
 
         if (userEntity.getPremium().equals(PremiumStatus.ACTIVE)) {
-            final String message = Translator.toLocale("user-has-premium", userEntity.getId());
+            final String message = translator.toLocale("user-has-premium", userEntity.getId());
             log.info(message);
             final Optional<SubscriptionEntity> lastSubscription =
                 repository.findTopByUserIdOrderBySubscribedAt(userEntity.getId());

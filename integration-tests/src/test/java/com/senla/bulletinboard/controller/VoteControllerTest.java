@@ -65,7 +65,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
 
-        final String message = Translator.toLocale("bulletin-closed", bulletinId);
+        final String message = translator.toLocale("bulletin-closed", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -92,7 +92,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.empty()).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
 
-        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final String message = translator.toLocale("bulletin-not-exists", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -120,7 +120,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(sellerVoteEntity).given(sellerVoteRepository).save(any(SellerVoteEntity.class));
 
-        final String message = Translator.toLocale("vote-forbidden");
+        final String message = translator.toLocale("vote-forbidden");
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -147,7 +147,7 @@ public class VoteControllerTest extends AbstractControllerTest {
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
         willReturn(true).given(sellerVoteRepository).existsByVoterIdAndBulletinId(ADMIN_ALEX, bulletinId);
 
-        final String message = Translator.toLocale("user-already-voted", ADMIN_ALEX, bulletinId);
+        final String message = translator.toLocale("user-already-voted", ADMIN_ALEX, bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,

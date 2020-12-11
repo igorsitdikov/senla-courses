@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoadUserDetailService implements UserDetailsService {
 
+    private final Translator translator;
     private final UserRepository userRepository;
     private final static String ROLE_PREFIX = "ROLE_";
 
@@ -27,7 +28,7 @@ public class LoadUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if (!userEntity.isPresent()) {
-            final String message = Translator.toLocale("no-such-user", email);
+            final String message = translator.toLocale("no-such-user", email);
             log.error(message);
             throw new UsernameNotFoundException(message);
         } else {

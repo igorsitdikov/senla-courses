@@ -17,15 +17,17 @@ import org.springframework.stereotype.Service;
 public class TariffServiceImpl extends AbstractService<TariffDto, TariffEntity, TariffRepository> implements
                                                                                                   TariffService {
 
-    public TariffServiceImpl(TariffDtoEntityMapper tariffDtoEntityMapper, TariffRepository repository) {
-        super(tariffDtoEntityMapper, repository);
+    public TariffServiceImpl(final TariffDtoEntityMapper tariffDtoEntityMapper,
+                             final TariffRepository repository,
+                             final Translator translator) {
+        super(tariffDtoEntityMapper, repository, translator);
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public TariffDto updateTariff(final Long id, final TariffDto dto) throws EntityNotFoundException {
         if (!super.isExists(id)) {
-            final String message = Translator.toLocale("tariff-not-exists", id);
+            final String message = translator.toLocale("tariff-not-exists", id);
             log.error(message);
             throw new EntityNotFoundException(message);
         }

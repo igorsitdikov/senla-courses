@@ -7,6 +7,7 @@ import com.senla.bulletinboard.dto.UserRequestDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.exception.SuchUserAlreadyExistsException;
 import com.senla.bulletinboard.service.interfaces.AuthService;
+import com.senla.bulletinboard.service.interfaces.TokenBlacklistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +33,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @PostMapping(value = "/sign-in")
     @ResponseStatus(HttpStatus.OK)
@@ -78,6 +80,6 @@ public class AuthController {
     })
     @Operation(summary = "Logout user", description = "Logout user")
     public void logout(@RequestHeader(name = "Authorization") final String token) {
-        authService.logout(token);
+        tokenBlacklistService.post(token);
     }
 }

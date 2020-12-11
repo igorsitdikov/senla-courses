@@ -79,7 +79,7 @@ public class PaymentControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        String message = Translator.toLocale("no-such-user-id", USER_IVAN);
+        String message = translator.toLocale("no-such-user-id", USER_IVAN);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,

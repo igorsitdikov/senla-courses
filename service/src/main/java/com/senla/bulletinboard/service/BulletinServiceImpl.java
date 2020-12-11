@@ -40,9 +40,9 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
                                final BulletinDtoEntityMapper bulletinDtoEntityMapper,
                                final BulletinRepository bulletinRepository,
                                final ObjectMapper mapper,
-                               final UserRepository userRepository
-                              ) {
-        super(bulletinDetailsDtoEntityMapper, bulletinRepository);
+                               final UserRepository userRepository,
+                               final Translator translator) {
+        super(bulletinDetailsDtoEntityMapper, bulletinRepository, translator);
         this.bulletinDetailsDtoEntityMapper = bulletinDetailsDtoEntityMapper;
         this.bulletinDtoEntityMapper = bulletinDtoEntityMapper;
         this.mapper = mapper;
@@ -53,7 +53,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     @PreAuthorize("authentication.principal.id == #id")
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
-            final String message = Translator.toLocale("no-such-user-id", id);
+            final String message = translator.toLocale("no-such-user-id", id);
             log.error(message);
             throw new NoSuchUserException(message);
         }
@@ -69,7 +69,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
 
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
-            final String message = Translator.toLocale("bulletin-not-exists", id);
+            final String message = translator.toLocale("bulletin-not-exists", id);
             log.error(message);
             throw new EntityNotFoundException(message);
         }
@@ -86,7 +86,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     @PreAuthorize("authentication.principal.id == #bulletinDto.getSellerId()")
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         BulletinEntity entity = repository.findById(id).orElseThrow(() -> {
-            final String message = Translator.toLocale("bulletin-not-exists", id);
+            final String message = translator.toLocale("bulletin-not-exists", id);
             log.error(message);
             return new EntityNotFoundException(message);
         });

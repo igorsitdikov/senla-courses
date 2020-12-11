@@ -16,14 +16,16 @@ import java.util.stream.Collectors;
 public abstract class AbstractService<D extends AbstractDto, E extends AbstractEntity, R extends CommonRepository<E, Long>>
     implements CommonService<D, E> {
 
+    protected final Translator translator;
     protected final DtoEntityMapper<D, E> dtoEntityMapper;
     protected final R repository;
     private final Class<E> persistentClass;
 
     @SuppressWarnings("unchecked")
-    public AbstractService(final DtoEntityMapper<D, E> dtoEntityMapper, final R repository) {
+    public AbstractService(final DtoEntityMapper<D, E> dtoEntityMapper, final R repository, final Translator translator) {
         this.dtoEntityMapper = dtoEntityMapper;
         this.repository = repository;
+        this.translator = translator;
         this.persistentClass = (Class<E>)
             ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[1];
@@ -66,7 +68,7 @@ public abstract class AbstractService<D extends AbstractDto, E extends AbstractE
     public E findEntityById(final Long id) throws EntityNotFoundException {
         return repository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(
-                Translator.toLocale("entity-not-found", this.persistentClass.getSimpleName(), id)));
+                translator.toLocale("entity-not-found", this.persistentClass.getSimpleName(), id)));
     }
 
     @Override

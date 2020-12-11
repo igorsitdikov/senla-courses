@@ -11,6 +11,4 @@ public interface AuthService {
     TokenDto signUp(UserRequestDto userDto) throws SuchUserAlreadyExistsException;
 
     TokenDto signIn(SignInDto signInDto) throws NoSuchUserException;
-
-    void logout(String token);
 }

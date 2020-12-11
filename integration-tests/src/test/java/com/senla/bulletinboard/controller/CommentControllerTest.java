@@ -81,7 +81,7 @@ public class CommentControllerTest extends AbstractControllerTest {
             .andExpect(status().isBadRequest())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-closed", bulletinId);
+        final String message = translator.toLocale("bulletin-closed", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.BAD_REQUEST,
             ExceptionType.BUSINESS_LOGIC,
@@ -111,7 +111,7 @@ public class CommentControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-not-exists", bulletinId);
+        final String message = translator.toLocale("bulletin-not-exists", bulletinId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,

@@ -134,7 +134,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final String message = translator.toLocale("bulletin-not-exists", id);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -189,7 +189,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final String message = translator.toLocale("bulletin-not-exists", id);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -216,7 +216,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("bulletin-not-exists", id);
+        final String message = translator.toLocale("bulletin-not-exists", id);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,

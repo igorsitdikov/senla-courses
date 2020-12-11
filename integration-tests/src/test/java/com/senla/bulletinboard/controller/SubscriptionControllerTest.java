@@ -74,7 +74,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("no-such-user-id", USER_IVAN);
+        final String message = translator.toLocale("no-such-user-id", USER_IVAN);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -104,7 +104,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("tariff-not-exists", tariffId);
+        final String message = translator.toLocale("tariff-not-exists", tariffId);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -137,7 +137,7 @@ public class SubscriptionControllerTest extends AbstractControllerTest {
             .andExpect(status().isPaymentRequired())
             .andReturn().getResponse().getContentAsString();
 
-        final String message = Translator.toLocale("no-funds", userEntity.getBalance(), price);
+        final String message = translator.toLocale("no-funds", userEntity.getBalance(), price);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.PAYMENT_REQUIRED,
             ExceptionType.BUSINESS_LOGIC,

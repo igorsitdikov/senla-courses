@@ -85,7 +85,7 @@ public class UserControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        String message = Translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), USER_ANTON);
+        String message = translator.toLocale("entity-not-found", UserEntity.class.getSimpleName(), USER_ANTON);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
@@ -180,7 +180,7 @@ public class UserControllerTest extends AbstractControllerTest {
             .andExpect(status().isNotFound())
             .andReturn().getResponse().getContentAsString();
 
-        String message = Translator.toLocale("no-such-user-id", USER_ANTON);
+        String message = translator.toLocale("no-such-user-id", USER_ANTON);
         final ApiErrorDto expectedError = expectedErrorCreator(
             HttpStatus.NOT_FOUND,
             ExceptionType.BUSINESS_LOGIC,
