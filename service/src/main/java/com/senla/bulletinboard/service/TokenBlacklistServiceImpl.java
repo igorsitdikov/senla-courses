@@ -1,19 +1,16 @@
 package com.senla.bulletinboard.service;
 
-import com.senla.bulletinboard.dto.TokenDto;
 import com.senla.bulletinboard.entity.TokenBlacklistEntity;
-import com.senla.bulletinboard.mapper.interfaces.TokenDtoEntityMapper;
 import com.senla.bulletinboard.repository.TokenBlacklistRepository;
 import com.senla.bulletinboard.service.interfaces.TokenBlacklistService;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
+@Data
 @Service
-public class TokenBlacklistServiceImpl extends AbstractService<TokenDto, TokenBlacklistEntity, TokenBlacklistRepository>
-    implements TokenBlacklistService {
+public class TokenBlacklistServiceImpl implements TokenBlacklistService {
 
-    public TokenBlacklistServiceImpl(TokenDtoEntityMapper dtoEntityMapper, TokenBlacklistRepository repository) {
-        super(dtoEntityMapper, repository);
-    }
+    private final TokenBlacklistRepository repository;
 
     @Override
     public void post(final String token) {

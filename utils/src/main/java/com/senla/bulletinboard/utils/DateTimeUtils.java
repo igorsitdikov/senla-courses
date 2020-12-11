@@ -14,14 +14,13 @@ public class DateTimeUtils {
     }
 
     public static boolean isExpired(LocalDateTime localDateTime) {
-        LocalDate now = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
         final LocalDate localDate = dateTimeToDate(localDateTime);
-        return localDate.equals(now) || localDate.isAfter(now);
+        return localDate.equals(yesterday) || localDate.isBefore(yesterday);
     }
 
     public static boolean isExpired(LocalDateTime localDateTime, Integer days) {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        final LocalDate localDate = dateTimeToDate(addDays(localDateTime, days));
-        return localDate.equals(yesterday) || localDate.isBefore(yesterday);
+        LocalDateTime addedDays = addDays(localDateTime, days);
+        return isExpired(addedDays);
     }
 }
