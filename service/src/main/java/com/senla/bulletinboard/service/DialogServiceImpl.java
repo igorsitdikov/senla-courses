@@ -11,14 +11,12 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.service.interfaces.DialogService;
 import com.senla.bulletinboard.utils.Translator;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
 public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, DialogRepository> implements
                                                                                                   DialogService {
@@ -62,7 +60,6 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             final String message = translator.toLocale("dialog-already-exists",
                                                        dialogDto.getBulletinId(),
                                                        dialogDto.getCustomerId());
-            log.error(message);
             throw new EntityAlreadyExistsException(message);
         }
         return super.post(dialogDto);
@@ -71,7 +68,6 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
         BulletinEntity entity = bulletinRepository.findById(bulletinId).orElseThrow(() -> {
             final String message = translator.toLocale("bulletin-not-exists", bulletinId);
-            log.error(message);
             return new EntityNotFoundException(message);
         });
         return userId.equals(entity.getSeller().getId());
@@ -80,7 +76,6 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     public boolean checkDialogOwner(final Long userId, final Long dialogId) throws EntityNotFoundException {
         DialogEntity entity = repository.findById(dialogId).orElseThrow(() -> {
             final String message = translator.toLocale("dialog-not-exists", dialogId);
-            log.error(message);
             return new EntityNotFoundException(message);
         });
         if (userId.equals(entity.getCustomerId())) {

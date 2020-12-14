@@ -16,14 +16,12 @@ import com.senla.bulletinboard.repository.MessageRepository;
 import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.service.interfaces.MessageService;
 import com.senla.bulletinboard.utils.Translator;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
 public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntity, MessageRepository> implements
                                                                                                       MessageService {
@@ -63,7 +61,6 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException {
         if (messageDto.getRecipientId().equals(messageDto.getSenderId())) {
             final String message = translator.toLocale("send-message-forbidden");
-            log.error(message);
             throw new WrongMessageRecipientException(message);
         }
         final DialogEntity dialogEntity = dialogRepository.findById(messageDto.getDialogId())
@@ -76,13 +73,11 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
         boolean checkRecipient = checkRecipient(messageDto, dialogEntity, bulletinEntity);
         if (checkRecipient) {
             final String message = translator.toLocale("wrong-recipient", messageDto.getRecipientId());
-            log.error(message);
             throw new WrongRecipientException(message);
         }
         boolean checkSender = checkSender(messageDto, dialogEntity, bulletinEntity);
         if (checkSender) {
             final String message = translator.toLocale("wrong-sender", messageDto.getSenderId());
-            log.error(message);
             throw new WrongSenderException(message);
         }
         return super.post(messageDto);

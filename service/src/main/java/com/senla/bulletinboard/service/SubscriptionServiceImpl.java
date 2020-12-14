@@ -67,7 +67,6 @@ public class SubscriptionServiceImpl
             final String message = translator.toLocale("no-funds", userEntity.getBalance(), tariffEntity.getPrice());
             userEntity.setAutoSubscribe(AutoSubscribeStatus.DISABLE);
             userRepository.save(userEntity);
-            log.error(message);
             throw new InsufficientFundsException(message);
         }
 

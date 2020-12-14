@@ -16,7 +16,6 @@ import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
 import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
 public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEntity, BulletinRepository> implements
                                                                                                           BulletinService {
@@ -54,7 +52,6 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
             final String message = translator.toLocale("no-such-user-id", id);
-            log.error(message);
             throw new NoSuchUserException(message);
         }
         return repository.findAllBySellerId(id)
@@ -70,7 +67,6 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
         if (!super.isExists(id)) {
             final String message = translator.toLocale("bulletin-not-exists", id);
-            log.error(message);
             throw new EntityNotFoundException(message);
         }
     }
@@ -87,7 +83,6 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     public BulletinDto updateBulletin(final Long id, final BulletinDto bulletinDto) throws EntityNotFoundException {
         BulletinEntity entity = repository.findById(id).orElseThrow(() -> {
             final String message = translator.toLocale("bulletin-not-exists", id);
-            log.error(message);
             return new EntityNotFoundException(message);
         });
         entity.setStatus(bulletinDto.getStatus());

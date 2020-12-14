@@ -14,13 +14,11 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
 import com.senla.bulletinboard.service.interfaces.SellerVoteService;
 import com.senla.bulletinboard.utils.Translator;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Log4j2
 @Service
 public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, SellerVoteEntity, SellerVoteRepository>
     implements
@@ -43,11 +41,9 @@ public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, Seller
         final Optional<BulletinEntity> bulletinEntity = bulletinRepository.findById(sellerVoteDto.getBulletinId());
         if (bulletinEntity.isPresent() && bulletinEntity.get().getStatus() == BulletinStatus.CLOSE) {
             final String message = translator.toLocale("bulletin-closed", sellerVoteDto.getBulletinId());
-            log.error(message);
             throw new BulletinIsClosedException(message);
         } else if (!bulletinEntity.isPresent()) {
             final String message = translator.toLocale("bulletin-not-exists", sellerVoteDto.getBulletinId());
-            log.error(message);
             throw new EntityNotFoundException(message);
         }
         if (bulletinEntity.get().getSeller().getId().equals(sellerVoteDto.getVoterId())) {
@@ -58,7 +54,6 @@ public class SellerVoteServiceImpl extends AbstractService<SellerVoteDto, Seller
             final String message = translator.toLocale("user-already-voted",
                                                        sellerVoteDto.getVoterId(),
                                                        sellerVoteDto.getBulletinId());
-            log.warn(message);
             throw new VoteAlreadyExistsException(message);
         }
         return super.post(sellerVoteDto);

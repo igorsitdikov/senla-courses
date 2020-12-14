@@ -10,7 +10,6 @@ import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.service.interfaces.PaymentService;
 import com.senla.bulletinboard.utils.Translator;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
 public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntity, PaymentRepository> implements
                                                                                                       PaymentService {
@@ -31,7 +29,7 @@ public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntit
                               final PaymentRepository repository,
                               final UserRepository userRepository,
                               final Translator translator) {
-        super(dtoEntityMapper, repository,translator);
+        super(dtoEntityMapper, repository, translator);
         paymentDtoEntityMapper = dtoEntityMapper;
         this.userRepository = userRepository;
     }
@@ -42,7 +40,6 @@ public class PaymentServiceImpl extends AbstractService<PaymentDto, PaymentEntit
         final Optional<UserEntity> userEntity = userRepository.findById(paymentDto.getUserId());
         if (!userEntity.isPresent()) {
             final String message = translator.toLocale("no-such-user-id", paymentDto.getUserId());
-            log.error(message);
             throw new NoSuchUserException(message);
         }
         final UserEntity user = userEntity.get();

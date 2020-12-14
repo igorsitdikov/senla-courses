@@ -37,6 +37,7 @@
         <module>integration-tests</module>
         <module>application</module>
         <module>validator</module>
+        <module>aspect</module>
     </modules>
 
     <dependencies>

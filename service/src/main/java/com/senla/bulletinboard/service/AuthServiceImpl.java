@@ -14,7 +14,6 @@ import com.senla.bulletinboard.security.JwtUtil;
 import com.senla.bulletinboard.service.interfaces.AuthService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +24,6 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
-@Log4j2
 @Data
 @Service
 @Transactional
@@ -43,7 +41,6 @@ public class AuthServiceImpl implements AuthService {
     public TokenDto signUp(final UserRequestDto userDto) throws SuchUserAlreadyExistsException {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             final String message = translator.toLocale("user-already-exists", userDto.getEmail());
-            log.error(message);
             throw new SuchUserAlreadyExistsException(message);
         }
         final UserEntity userEntity = saveUserWithEncodedPassword(userDto);
@@ -64,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
             .orElseThrow(
                 () -> {
                     final String message = translator.toLocale("no-such-user", signInDto.getEmail());
-                    log.error(message);
                     return new NoSuchUserException(message);
                 });
 

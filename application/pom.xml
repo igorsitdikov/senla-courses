@@ -21,10 +21,17 @@
             <artifactId>controller</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.senla</groupId>
+            <artifactId>aspect</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
     <build>
+        <pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -44,6 +51,7 @@
                 </executions>
             </plugin>
         </plugins>
+        </pluginManagement>
     </build>
 
 </project>
