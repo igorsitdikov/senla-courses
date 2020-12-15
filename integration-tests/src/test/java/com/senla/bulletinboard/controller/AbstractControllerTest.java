@@ -2,6 +2,7 @@ package com.senla.bulletinboard.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.senla.bulletinboard.BulletinBoardApplicationTest;
 import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.SignInDto;
 import com.senla.bulletinboard.dto.TokenDto;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public abstract class AbstractControllerTest {
+public abstract class AbstractControllerTest extends BulletinBoardApplicationTest {
 
     private final static String TOKEN_PREFIX = "Bearer ";
     protected final static Long USER_IVAN = 1L;

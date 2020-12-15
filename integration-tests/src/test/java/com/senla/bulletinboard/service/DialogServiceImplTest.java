@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.service;
 
+import com.senla.bulletinboard.BulletinBoardApplicationTest;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
@@ -15,12 +16,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest
-public class DialogServiceImplTest {
+public class DialogServiceImplTest extends BulletinBoardApplicationTest {
 
     @SpyBean
     private DialogServiceImpl dialogService;

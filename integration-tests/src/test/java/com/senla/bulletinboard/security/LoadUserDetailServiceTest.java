@@ -1,6 +1,6 @@
 package com.senla.bulletinboard.security;
 
-import com.senla.bulletinboard.exception.EntityNotFoundException;
+import com.senla.bulletinboard.BulletinBoardApplicationTest;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest
-public class LoadUserDetailServiceTest {
+public class LoadUserDetailServiceTest extends BulletinBoardApplicationTest {
 
     @SpyBean
     private LoadUserDetailService loadUserDetailService;
