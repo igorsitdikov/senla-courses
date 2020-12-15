@@ -102,7 +102,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
         }
     }
 
-    @Cacheable("bulletinOwner")
+    @Cacheable(value = "bulletinOwner", key = "#bulletinId")
     public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
         BulletinEntity bulletinEntity = super.findEntityById(bulletinId);
         return userId.equals(bulletinEntity.getSeller().getId());

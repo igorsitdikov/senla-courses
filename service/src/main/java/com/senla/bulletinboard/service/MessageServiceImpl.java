@@ -51,7 +51,7 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
             .collect(Collectors.toList());
     }
 
-    @Cacheable("dialogOwner")
+    @Cacheable(value = "dialogOwner", key = "{#userId, #dialogId}")
     public boolean checkDialogOwner(final Long userId, final Long dialogId) {
         DialogExistsSpecification specification = new DialogExistsSpecification(dialogId, userId);
         return dialogRepository.findOne(specification).isPresent();

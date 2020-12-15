@@ -54,7 +54,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
         super.delete(id);
     }
 
-    @Cacheable("dialogOwner")
+    @Cacheable(value = "dialogOwner", key = "{#userId, #dialogId}")
     public boolean checkDialogOwner(final Long userId, final Long dialogId) {
         DialogExistsSpecification specification = new DialogExistsSpecification(dialogId, userId);
         return repository.findOne(specification).isPresent();
@@ -76,7 +76,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
         return repository.existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
     }
 
-    @Cacheable("bulletinOwner")
+    @Cacheable(value = "bulletinOwner", key = "#bulletinId")
     public boolean checkOwner(final Long userId, final DialogDto dialogDto) throws EntityNotFoundException {
         final BulletinEntity entity = bulletinRepository.findById(dialogDto.getBulletinId()).orElseThrow(() -> {
             final String message = translator.toLocale("bulletin-not-exists", dialogDto.getBulletinId());
