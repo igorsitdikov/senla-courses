@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.configuration;
+package com.senla.bulletinboard.converter;
 
 import com.senla.bulletinboard.enumerated.UserRole;
 import org.springframework.core.convert.converter.Converter;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface MessageService extends CommonService<MessageDto, MessageEntity> {
 
-    @PreAuthorize("@messageServiceImpl.checkOwner(authentication.principal.id, #id)")
+    @PreAuthorize("@messageServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
     List<MessageDto> findAllMessagesByDialogId(Long id);
 
     IdDto createMessage(MessageDto messageDto)

@@ -60,7 +60,7 @@ public class SubscriptionServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void addPremium(final UserEntity userEntity, final TariffEntity tariffEntity)
         throws InsufficientFundsException {
         if (userEntity.getBalance().compareTo(tariffEntity.getPrice()) < 0) {

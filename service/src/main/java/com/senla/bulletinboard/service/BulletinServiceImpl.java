@@ -16,6 +16,7 @@ import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
 import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,15 +61,9 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
             .collect(Collectors.toList());
     }
 
+    @Override
     public BulletinDto findBulletinById(final Long id) throws EntityNotFoundException {
         return super.findDtoById(id);
-    }
-
-    private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
-        if (!super.isExists(id)) {
-            final String message = translator.toLocale("bulletin-not-exists", id);
-            throw new EntityNotFoundException(message);
-        }
     }
 
     @Override
@@ -100,6 +95,14 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
         super.delete(id);
     }
 
+    private void checkBulletinExistence(final Long id) throws EntityNotFoundException {
+        if (!super.isExists(id)) {
+            final String message = translator.toLocale("bulletin-not-exists", id);
+            throw new EntityNotFoundException(message);
+        }
+    }
+
+    @Cacheable("bulletinOwner")
     public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
         BulletinEntity bulletinEntity = super.findEntityById(bulletinId);
         return userId.equals(bulletinEntity.getSeller().getId());

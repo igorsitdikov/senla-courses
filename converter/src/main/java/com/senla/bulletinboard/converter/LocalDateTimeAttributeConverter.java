@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.configuration;
+package com.senla.bulletinboard.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

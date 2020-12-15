@@ -16,6 +16,7 @@ import com.senla.bulletinboard.repository.MessageRepository;
 import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.service.interfaces.MessageService;
 import com.senla.bulletinboard.utils.Translator;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
     }
 
     @Override
-    @PreAuthorize("@messageServiceImpl.checkOwner(authentication.principal.id, #id)")
+    @PreAuthorize("@messageServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
     public List<MessageDto> findAllMessagesByDialogId(final Long id) {
         return repository.findAllByDialogId(id)
             .stream()
@@ -50,7 +51,8 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
             .collect(Collectors.toList());
     }
 
-    public boolean checkOwner(final Long userId, final Long dialogId) {
+    @Cacheable("dialogOwner")
+    public boolean checkDialogOwner(final Long userId, final Long dialogId) {
         DialogExistsSpecification specification = new DialogExistsSpecification(dialogId, userId);
         return dialogRepository.findOne(specification).isPresent();
     }

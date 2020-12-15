@@ -9,8 +9,10 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
+import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.service.interfaces.DialogService;
 import com.senla.bulletinboard.utils.Translator;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -42,14 +44,20 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             .collect(Collectors.toList());
     }
 
+    private List<DialogEntity> findDialogsBySellerIdOrCustomerId(final Long id) {
+        return repository.findAllByBulletinSellerIdOrCustomerId(id, id);
+    }
+
     @Override
     @PreAuthorize("@dialogServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
     public void delete(final Long id) {
         super.delete(id);
     }
 
-    private List<DialogEntity> findDialogsBySellerIdOrCustomerId(final Long id) {
-        return repository.findAllByBulletinSellerIdOrCustomerId(id, id);
+    @Cacheable("dialogOwner")
+    public boolean checkDialogOwner(final Long userId, final Long dialogId) {
+        DialogExistsSpecification specification = new DialogExistsSpecification(dialogId, userId);
+        return repository.findOne(specification).isPresent();
     }
 
     @Override
@@ -65,26 +73,16 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
         return super.post(dialogDto);
     }
 
+    private boolean checkDialogExistence(final DialogDto dialogDto) {
+        return repository.existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
+    }
+
+    @Cacheable("bulletinOwner")
     public boolean checkOwner(final Long userId, final Long bulletinId) throws EntityNotFoundException {
         BulletinEntity entity = bulletinRepository.findById(bulletinId).orElseThrow(() -> {
             final String message = translator.toLocale("bulletin-not-exists", bulletinId);
             return new EntityNotFoundException(message);
         });
         return userId.equals(entity.getSeller().getId());
-    }
-
-    public boolean checkDialogOwner(final Long userId, final Long dialogId) throws EntityNotFoundException {
-        DialogEntity entity = repository.findById(dialogId).orElseThrow(() -> {
-            final String message = translator.toLocale("dialog-not-exists", dialogId);
-            return new EntityNotFoundException(message);
-        });
-        if (userId.equals(entity.getCustomerId())) {
-            return true;
-        }
-        return checkOwner(userId, entity.getBulletinId());
-    }
-
-    public boolean checkDialogExistence(final DialogDto dialogDto) {
-        return repository.existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
     }
 }
