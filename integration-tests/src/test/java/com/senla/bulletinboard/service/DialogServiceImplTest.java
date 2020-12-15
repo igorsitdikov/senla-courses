@@ -1,5 +1,6 @@
 package com.senla.bulletinboard.service;
 
+import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mock.DialogMock;
@@ -7,6 +8,7 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.utils.Translator;
+import liquibase.pro.packaged.D;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,11 +34,15 @@ public class DialogServiceImplTest {
 
     @Test
     public void checkOwner_BulletinNotExistsTest() {
+        final Long userId = 1L;
         final Long bulletinId = 2L;
+        DialogDto dialogDto = new DialogDto();
+        dialogDto.setBulletinId(bulletinId);
+        dialogDto.setCustomerId(userId);
         doReturn(Optional.empty()).when(bulletinRepository).findById(bulletinId);
         final EntityNotFoundException exception = assertThrows(
             EntityNotFoundException.class,
-            () -> dialogService.checkOwner(1L, bulletinId));
+            () -> dialogService.checkOwner(userId, dialogDto));
         assertEquals(exception.getMessage(), translator.toLocale("bulletin-not-exists", bulletinId));
     }
 
