@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -147,6 +146,7 @@ public class DialogControllerTest extends AbstractControllerTest {
         final DialogEntity dialogEntity = new DialogMock().getEntityById(dialogId);
         final BulletinEntity bulletinEntity = new BulletinMock().getEntityById(bulletinId);
 
+        doReturn(Optional.of(dialogEntity)).when(dialogRepository).findOne(any(DialogExistsSpecification.class));
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findById(dialogId);
         willReturn(Optional.of(bulletinEntity)).given(bulletinRepository).findById(bulletinId);
 
