@@ -61,7 +61,7 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
     }
 
     @Override
-    @PreAuthorize("@dialogServiceImpl.checkOwner(authentication.principal.id, #dialogDto)")
+    @PreAuthorize("@dialogServiceImpl.checkBulletinOwner(authentication.principal.id, #dialogDto)")
     public IdDto createDialog(final DialogDto dialogDto) throws EntityAlreadyExistsException {
         if (checkDialogExistence(dialogDto)) {
             final String message = translator.toLocale("dialog-already-exists",
@@ -76,8 +76,8 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
         return repository.existsByBulletinIdAndCustomerId(dialogDto.getBulletinId(), dialogDto.getCustomerId());
     }
 
-    @Cacheable(value = "bulletinOwner", key = "#bulletinId")
-    public boolean checkOwner(final Long userId, final DialogDto dialogDto) throws EntityNotFoundException {
+    @Cacheable(value = "bulletinOwner", key = "#dialogDto.getBulletinId()")
+    public boolean checkBulletinOwner(final Long userId, final DialogDto dialogDto) throws EntityNotFoundException {
         final BulletinEntity entity = bulletinRepository.findById(dialogDto.getBulletinId()).orElseThrow(() -> {
             final String message = translator.toLocale("bulletin-not-exists", dialogDto.getBulletinId());
             return new EntityNotFoundException(message);

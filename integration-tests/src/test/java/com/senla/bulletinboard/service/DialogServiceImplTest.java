@@ -8,7 +8,6 @@ import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
 import com.senla.bulletinboard.utils.Translator;
-import liquibase.pro.packaged.D;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,7 +41,7 @@ public class DialogServiceImplTest {
         doReturn(Optional.empty()).when(bulletinRepository).findById(bulletinId);
         final EntityNotFoundException exception = assertThrows(
             EntityNotFoundException.class,
-            () -> dialogService.checkOwner(userId, dialogDto));
+            () -> dialogService.checkBulletinOwner(userId, dialogDto));
         assertEquals(exception.getMessage(), translator.toLocale("bulletin-not-exists", bulletinId));
     }
 
