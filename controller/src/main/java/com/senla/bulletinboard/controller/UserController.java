@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -89,8 +90,11 @@ public class UserController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
         })
     })
-    public List<BulletinBaseDto> showBulletins(@PathVariable final Long id) throws NoSuchUserException {
-        return bulletinService.findBulletinsByUserId(id);
+    public List<BulletinBaseDto> showBulletins(@PathVariable final Long id,
+                                               @RequestParam(defaultValue = "0", required = false) final Integer page,
+                                               @RequestParam(defaultValue = "10", required = false) final Integer size)
+            throws NoSuchUserException {
+        return bulletinService.findBulletinsByUserId(id, page, size);
     }
 
     @PutMapping(value = "/{id}")

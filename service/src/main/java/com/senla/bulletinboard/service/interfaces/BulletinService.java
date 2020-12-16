@@ -14,7 +14,7 @@ import java.util.List;
 public interface BulletinService extends CommonService<BulletinDto, BulletinEntity> {
 
     @PreAuthorize("authentication.principal.id == #id")
-    List<BulletinBaseDto> findBulletinsByUserId(Long id) throws NoSuchUserException;
+    List<BulletinBaseDto> findBulletinsByUserId(Long id, Integer page, Integer size) throws NoSuchUserException;
 
     BulletinDto findBulletinById(Long id) throws EntityNotFoundException;
 
@@ -27,5 +27,5 @@ public interface BulletinService extends CommonService<BulletinDto, BulletinEnti
     @PreAuthorize("hasRole('ROLE_ADMIN') or @bulletinServiceImpl.checkOwner(authentication.principal.id, #id)")
     void deleteBulletin(Long id) throws EntityNotFoundException;
 
-    List<BulletinBaseDto> findAllBulletins(String[] filters, SortBulletin sort);
+    List<BulletinBaseDto> findAllBulletins(String[] filters, SortBulletin sort, Integer page, Integer size);
 }

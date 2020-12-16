@@ -17,6 +17,8 @@ import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecif
 import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,12 +52,13 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
 
     @Override
     @PreAuthorize("authentication.principal.id == #id")
-    public List<BulletinBaseDto> findBulletinsByUserId(final Long id) throws NoSuchUserException {
+    public List<BulletinBaseDto> findBulletinsByUserId(final Long id, final Integer page, final Integer size) throws NoSuchUserException {
         if (!userRepository.existsById(id)) {
             final String message = translator.toLocale("no-such-user-id", id);
             throw new NoSuchUserException(message);
         }
-        return repository.findAllBySellerId(id)
+        Pageable pageWithSize = PageRequest.of(page, size);
+        return repository.findAllBySellerId(id, pageWithSize)
             .stream()
             .map(bulletinDetailsDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
@@ -109,14 +112,15 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     }
 
     @Override
-    public List<BulletinBaseDto> findAllBulletins(final String[] filters, SortBulletin sort) {
+    public List<BulletinBaseDto> findAllBulletins(final String[] filters, SortBulletin sort, Integer page, Integer size) {
         final FilterDto criteria = convertArrayToDto(filters);
         if (sort == null) {
             sort = SortBulletin.AVERAGE;
         }
         BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
 
-        return repository.findAll(bulletinSpecification)
+        Pageable pageWithSize = PageRequest.of(page, size);
+        return repository.findAll(bulletinSpecification, pageWithSize)
             .stream()
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());

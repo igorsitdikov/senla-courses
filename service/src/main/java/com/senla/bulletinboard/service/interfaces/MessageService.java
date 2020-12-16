@@ -14,7 +14,7 @@ import java.util.List;
 public interface MessageService extends CommonService<MessageDto, MessageEntity> {
 
     @PreAuthorize("@messageServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
-    List<MessageDto> findAllMessagesByDialogId(Long id);
+    List<MessageDto> findAllMessagesByDialogId(Long id, Integer page, Integer size);
 
     IdDto createMessage(MessageDto messageDto)
         throws WrongRecipientException, WrongSenderException, WrongMessageRecipientException, EntityNotFoundException;

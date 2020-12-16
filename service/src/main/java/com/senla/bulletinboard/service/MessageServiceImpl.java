@@ -17,6 +17,8 @@ import com.senla.bulletinboard.repository.specification.DialogExistsSpecificatio
 import com.senla.bulletinboard.service.interfaces.MessageService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +46,9 @@ public class MessageServiceImpl extends AbstractService<MessageDto, MessageEntit
 
     @Override
     @PreAuthorize("@messageServiceImpl.checkDialogOwner(authentication.principal.id, #id)")
-    public List<MessageDto> findAllMessagesByDialogId(final Long id) {
-        return repository.findAllByDialogId(id)
+    public List<MessageDto> findAllMessagesByDialogId(final Long id, final Integer page, final Integer size) {
+        Pageable pageWithSize = PageRequest.of(page, size);
+        return repository.findAllByDialogId(id, pageWithSize)
             .stream()
             .map(dtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());

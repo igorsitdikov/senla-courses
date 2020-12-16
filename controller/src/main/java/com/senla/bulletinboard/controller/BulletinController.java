@@ -52,8 +52,10 @@ public class BulletinController {
     })
     public List<BulletinBaseDto> showBulletins(
         @RequestParam(value = "filter", required = false) final String[] filters,
-        @RequestParam(value = "sort", required = false) final SortBulletin sort) {
-        return bulletinService.findAllBulletins(filters, sort);
+        @RequestParam(value = "sort", required = false) final SortBulletin sort,
+        @RequestParam(defaultValue = "0", required = false) final Integer page,
+        @RequestParam(defaultValue = "10", required = false) final Integer size) {
+        return bulletinService.findAllBulletins(filters, sort, page, size);
     }
 
     @GetMapping(value = "/{id}")

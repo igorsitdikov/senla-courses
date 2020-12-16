@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -84,7 +85,9 @@ public class DialogController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDto.class))
         })
     })
-    public List<MessageDto> showMessages(@PathVariable final Long id) {
-        return messageService.findAllMessagesByDialogId(id);
+    public List<MessageDto> showMessages(@PathVariable final Long id,
+                                         @RequestParam(defaultValue = "0", required = false) final Integer page,
+                                         @RequestParam(defaultValue = "10", required = false) final Integer size) {
+        return messageService.findAllMessagesByDialogId(id, page, size);
     }
 }
