@@ -21,6 +21,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -58,7 +60,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetUser() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         final UserDto expected = new UserMock().getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
 
@@ -74,7 +76,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetUser_UserNotFoundException() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
 
         willReturn(Optional.empty()).given(userRepository).findById(USER_ANTON);
 
@@ -97,7 +99,7 @@ public class UserControllerTest extends AbstractControllerTest {
     @Test
     public void testShowDialogs() throws Exception {
         final Long id = 4L;
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         final List<DialogDto> dialogDtos = new DialogMock().getAll();
         final List<DialogEntity> dialogEntities = dialogDtos
             .stream()
@@ -137,7 +139,10 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testShowBulletins() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
+        final int page = 0;
+        final int size = 10;
+        final Pageable pageWithSize = PageRequest.of(page, size);
         final List<BulletinDto> expected = new BulletinMock().getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
@@ -146,9 +151,8 @@ public class UserControllerTest extends AbstractControllerTest {
             .stream()
             .map(bulletinDtoEntityMapper::sourceToDestination)
             .collect(Collectors.toList());
-
         willReturn(true).given(userRepository).existsById(USER_ANTON);
-        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON);
+        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON, pageWithSize);
 
         mockMvc.perform(get("/api/users/" + USER_ANTON + "/bulletins")
                             .contextPath(CONTEXT_PATH)
@@ -160,7 +164,10 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testShowBulletins_UserNotFoundException() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
+        final int page = 0;
+        final int size = 2;
+        final Pageable pageWithSize = PageRequest.of(page, size);
         final List<BulletinDto> expected = new BulletinMock().getAll()
             .stream()
             .peek(el -> el.setComments(new ArrayList<>()))
@@ -171,7 +178,7 @@ public class UserControllerTest extends AbstractControllerTest {
             .collect(Collectors.toList());
 
         willReturn(false).given(userRepository).existsById(USER_ANTON);
-        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON);
+        willReturn(bulletinEntities).given(bulletinRepository).findAllBySellerId(USER_ANTON, pageWithSize);
 
         final String response = mockMvc.perform(get("/api/users/" + USER_ANTON + "/bulletins")
                                                     .contextPath(CONTEXT_PATH)
@@ -191,7 +198,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdateUser() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         final UserDto expected = new UserMock().getUserDtoById(USER_ANTON);
         final UserEntity userEntity = userDtoEntityMapper.sourceToDestination(expected);
         willReturn(userEntity).given(userRepository).save(any(UserEntity.class));
@@ -206,7 +213,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("anton12");
         passwordDto.setNewPassword("111111");
@@ -223,7 +230,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword_WrongOldPassword() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("222222");
         passwordDto.setNewPassword("111111");
@@ -240,7 +247,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testChangePassword_NoSuchUserException() throws Exception {
-        String token = signInAsUser(USER_ANTON);
+        final String token = signInAsUser(USER_ANTON);
         PasswordDto passwordDto = new PasswordDto();
         passwordDto.setOldPassword("123456");
         passwordDto.setNewPassword("111111");

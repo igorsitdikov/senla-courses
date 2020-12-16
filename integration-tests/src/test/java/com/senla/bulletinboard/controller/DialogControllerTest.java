@@ -21,6 +21,8 @@ import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -53,6 +55,9 @@ public class DialogControllerTest extends AbstractControllerTest {
     @Test
     public void showMessagesTest() throws Exception {
         final Long id = 3L;
+        final int page = 0;
+        final int size = 10;
+        final Pageable pageWithSize = PageRequest.of(page, size);
         final List<MessageDto> expected = new MessageMock().getAll();
         final List<MessageEntity> entities = expected
             .stream()
@@ -62,7 +67,7 @@ public class DialogControllerTest extends AbstractControllerTest {
 
         final DialogEntity dialogEntity = new DialogMock().getEntityById(3L);
         willReturn(Optional.of(dialogEntity)).given(dialogRepository).findOne(any(DialogExistsSpecification.class));
-        willReturn(entities).given(messageRepository).findAllByDialogId(id);
+        willReturn(entities).given(messageRepository).findAllByDialogId(id, pageWithSize);
 
         mockMvc.perform(get("/api/dialogs/" + id + "/messages")
                             .contextPath(CONTEXT_PATH)

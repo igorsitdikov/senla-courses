@@ -10,10 +10,13 @@ import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
-import com.senla.bulletinboard.utils.Translator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -48,8 +51,8 @@ public class BulletinControllerTest extends AbstractControllerTest {
             .collect(Collectors.toList());
 
         final List<BulletinEntity> entities = new BulletinMock().getAllEntities();
-
-        willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
+        Page<BulletinEntity> pages = new PageImpl<>(entities);
+        willReturn(pages).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class), any(Pageable.class));
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
                             .contextPath(CONTEXT_PATH)
