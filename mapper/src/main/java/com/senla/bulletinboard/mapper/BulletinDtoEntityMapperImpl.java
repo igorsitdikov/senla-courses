@@ -36,9 +36,7 @@ public class BulletinDtoEntityMapperImpl implements BulletinDtoEntityMapper {
         source.setCreatedAt(destination.getCreatedAt());
         source.setPrice(destination.getPrice());
         source.setSellerId(destination.getSellerId());
-        if (source.getSeller() != null) {
-            source.setSeller(userDtoEntityMapper.destinationToSource(destination.getSeller()));
-        }
+        source.setSeller(userDtoEntityMapper.destinationToSource(destination.getSeller()));
         return source;
     }
 }

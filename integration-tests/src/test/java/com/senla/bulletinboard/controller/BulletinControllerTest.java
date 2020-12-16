@@ -7,6 +7,7 @@ import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.BulletinEntity;
 import com.senla.bulletinboard.enumerated.ExceptionType;
 import com.senla.bulletinboard.mapper.interfaces.BulletinDetailsDtoEntityMapper;
+import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.mock.BulletinMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,13 +42,16 @@ public class BulletinControllerTest extends AbstractControllerTest {
     private BulletinRepository bulletinRepository;
     @SpyBean
     private BulletinDetailsDtoEntityMapper bulletinDetailsDtoEntityMapper;
+    @SpyBean
+    private BulletinDtoEntityMapper bulletinDtoEntityMapper;
 
     @Test
     public void showBulletinsTest() throws Exception {
-        final List<BulletinBaseDto> expected = new BulletinMock().getAllBase()
-            .stream()
-            .peek(el -> el.setSeller(null))
-            .collect(Collectors.toList());
+        final List<BulletinBaseDto> expected = new BulletinMock()
+                .getAllEntities()
+                .stream()
+                .map(bulletinDtoEntityMapper::destinationToSource)
+                .collect(Collectors.toList());
 
         final List<BulletinEntity> entities = new BulletinMock().getAllEntities();
         Page<BulletinEntity> pages = new PageImpl<>(entities);

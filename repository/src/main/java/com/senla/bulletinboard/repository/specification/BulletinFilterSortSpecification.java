@@ -34,6 +34,7 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
                                  final CriteriaQuery<?> criteriaQuery,
                                  final CriteriaBuilder criteriaBuilder) {
         Join<BulletinEntity, UserEntity> entityUserEntityJoin = root.join("seller");
+        root.fetch("seller");
         Join<SellerVoteEntity, BulletinEntity> sellerVoteEntityJoin = root.join("sellerVoteEntities", JoinType.LEFT);
 
         final List<Predicate> predicates = new ArrayList<>();
