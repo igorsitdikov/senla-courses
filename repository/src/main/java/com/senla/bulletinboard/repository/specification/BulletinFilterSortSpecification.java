@@ -23,10 +23,17 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
 
     private final FilterDto criteria;
     private final SortBulletin sortBulletin;
+    private final Integer page;
+    private final Integer size;
 
-    public BulletinFilterSortSpecification(final FilterDto criteria, final SortBulletin sortBulletin) {
+    public BulletinFilterSortSpecification(final FilterDto criteria,
+                                           final SortBulletin sortBulletin,
+                                           final Integer page,
+                                           final Integer size) {
         this.criteria = criteria;
         this.sortBulletin = sortBulletin;
+        this.page = page;
+        this.size = size;
     }
 
     @Override
@@ -58,8 +65,20 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
                 path = root.get(sortBulletin.getField());
         }
 
+        Integer firstElement = calculateFirstElement(page, size);
+        Integer lastElement = calculateLastElement(page, size);
+        predicates.add(criteriaBuilder.between(root.get("id"), firstElement, lastElement));
+
         criteriaQuery.orderBy(orderByPremiumStatus, criteriaBuilder.desc(path));
         criteriaQuery.groupBy(root.get("id"));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    }
+
+    private Integer calculateFirstElement(Integer page, Integer size) {
+        return page * size;
+    }
+
+    private Integer calculateLastElement(Integer page, Integer size) {
+        return calculateFirstElement(page, size) + size;
     }
 }

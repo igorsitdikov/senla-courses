@@ -54,8 +54,7 @@ public class BulletinControllerTest extends AbstractControllerTest {
                 .collect(Collectors.toList());
 
         final List<BulletinEntity> entities = new BulletinMock().getAllEntities();
-        Page<BulletinEntity> pages = new PageImpl<>(entities);
-        willReturn(pages).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class), any(Pageable.class));
+        willReturn(entities).given(bulletinRepository).findAll(any(BulletinFilterSortSpecification.class));
         final String response = objectMapper.writeValueAsString(expected);
         mockMvc.perform(get("/api/bulletins/")
                             .contextPath(CONTEXT_PATH)

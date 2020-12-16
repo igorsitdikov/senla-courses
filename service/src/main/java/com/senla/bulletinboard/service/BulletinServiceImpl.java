@@ -117,10 +117,8 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
         if (sort == null) {
             sort = SortBulletin.AVERAGE;
         }
-        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort);
-
-        Pageable pageWithSize = PageRequest.of(page, size);
-        return repository.findAll(bulletinSpecification, pageWithSize)
+        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort, page,size);
+        return repository.findAll(bulletinSpecification)
             .stream()
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
