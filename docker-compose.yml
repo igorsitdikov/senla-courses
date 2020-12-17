@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:8.0.20
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bulletin_board
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: password
+    healthcheck:
+      test: "/usr/bin/mysql --user=app_user --password=password --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ~/bulletin_board:/var/lib/mysql
+  app:
+    build: ./
+    container_name: bulletin-board
+    restart: on-failure
+    volumes:
+      - ~/log:/home/user/logs
+    ports:
+      - "8090:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bulletin_board?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: app_user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
