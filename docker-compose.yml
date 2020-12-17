@@ -17,7 +17,12 @@ services:
     volumes:
       - ~/bulletin_board:/var/lib/mysql
   app:
-    build: ./
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        - LOGIN=<login>
+        - PASSWORD=<password>
     container_name: bulletin-board
     restart: on-failure
     volumes:

@@ -129,5 +129,5 @@ CREATE TABLE IF NOT EXISTS token_blacklist
 );
 
 INSERT INTO user (first_name, last_name, password, email, phone, role)
-VALUES ('Алексей', 'Алексеев', '$2a$10$A4HOZGs7d65Nqd1Wz2T/kO8Zt4GZOI6CTn/Vo0Ug3OLjJsVGafwM.', 'alex.alexeev@gmail.com',
+VALUES ('Admin', 'Admin', '$2a$10$fCL8gaKWollUJsiE2JrNT.Yi48w.xhsamC05ppDJv/ABDGWgOJ7Ai', 'admin',
         '+375333021232', 'ADMIN');

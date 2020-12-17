@@ -10,24 +10,6 @@
         cd sitdzikau_ihar
     ```
 
-1. enter to mysql 
-
-    ```
-        mysql -u <user> -p
-        Enter password: <password>
-    ```
-
-1. run sql script `db.sql` for database init
-
-    ```
-        source db.sql
-    ```
-1. exit from mysql terminal
-    
-   ```
-        mysql> exit
-        Bye
-   ```
 1. build project 
 
     ```
@@ -46,9 +28,17 @@
         java -jar bulletin-board.jar
     ```
    
-1. instead of steps 6-8 run script `run.sh`
+1. instead of steps 3-5 run script `run.sh`
 
    ```
         chmod +x run.sh
         ./run.sh
    ```
+   
+1. or use docker-compose, set in docker-compose.yml LOGIN and PASSWORD in args, after that start command
+
+   ```
+        docker-compose up --build
+   ```
+
+1. 
