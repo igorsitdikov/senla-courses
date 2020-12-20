@@ -82,6 +82,6 @@ public class DialogServiceImpl extends AbstractService<DialogDto, DialogEntity, 
             final String message = translator.toLocale("bulletin-not-exists", dialogDto.getBulletinId());
             return new EntityNotFoundException(message);
         });
-        return dialogDto.getCustomerId().equals(userId) && !userId.equals(entity.getSeller().getId());
+        return dialogDto.getCustomerId().equals(userId) && !userId.equals(entity.getSellerId());
     }
 }
