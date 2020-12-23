@@ -4,7 +4,7 @@ import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
 import com.senla.bulletinboard.exception.NoSuchUserException;
-import com.senla.bulletinboard.service.interfaces.PaymentService;
+import com.senla.bulletinboard.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

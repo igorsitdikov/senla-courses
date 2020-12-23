@@ -4,6 +4,7 @@ import com.senla.bulletinboard.BulletinBoardApplicationTest;
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.entity.DialogEntity;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
+import com.senla.bulletinboard.service.impl.DialogServiceImpl;
 import mock.DialogMock;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;

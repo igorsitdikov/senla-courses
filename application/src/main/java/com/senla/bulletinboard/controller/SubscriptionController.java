@@ -6,7 +6,7 @@ import com.senla.bulletinboard.dto.SubscriptionDto;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
-import com.senla.bulletinboard.service.interfaces.SubscriptionService;
+import com.senla.bulletinboard.service.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

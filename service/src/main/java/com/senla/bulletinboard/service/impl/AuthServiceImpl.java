@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.SignInDto;
 import com.senla.bulletinboard.dto.TokenDto;
@@ -11,7 +11,7 @@ import com.senla.bulletinboard.repository.TokenBlacklistRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.security.AuthUser;
 import com.senla.bulletinboard.security.JwtUtil;
-import com.senla.bulletinboard.service.interfaces.AuthService;
+import com.senla.bulletinboard.service.AuthService;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.Data;
 import org.springframework.security.authentication.AuthenticationManager;

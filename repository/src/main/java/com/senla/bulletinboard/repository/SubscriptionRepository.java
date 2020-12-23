@@ -1,6 +1,7 @@
 package com.senla.bulletinboard.repository;
 
 import com.senla.bulletinboard.entity.SubscriptionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SubscriptionRepository extends CommonRepository<SubscriptionEntity, Long> {
+public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity, Long> {
 
     @Query(value =
         "SELECT subscription.id, subscription.user_id, subscription.tariff_id, MAX(subscription.subscribed_at) AS subscribed_at " +

@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.SubscriptionDto;
 import com.senla.bulletinboard.entity.SubscriptionEntity;
@@ -13,7 +13,7 @@ import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.TariffRepository;
 import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.interfaces.SubscriptionService;
+import com.senla.bulletinboard.service.SubscriptionService;
 import com.senla.bulletinboard.utils.DateTimeUtils;
 import com.senla.bulletinboard.utils.Translator;
 import lombok.extern.log4j.Log4j2;

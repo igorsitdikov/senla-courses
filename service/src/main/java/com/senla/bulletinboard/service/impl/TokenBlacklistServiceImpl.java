@@ -1,8 +1,8 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.entity.TokenBlacklistEntity;
 import com.senla.bulletinboard.repository.TokenBlacklistRepository;
-import com.senla.bulletinboard.service.interfaces.TokenBlacklistService;
+import com.senla.bulletinboard.service.TokenBlacklistService;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 

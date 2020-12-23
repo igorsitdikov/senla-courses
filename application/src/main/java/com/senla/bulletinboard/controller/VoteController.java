@@ -8,7 +8,7 @@ import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.VoteAlreadyExistsException;
 import com.senla.bulletinboard.exception.WrongVoterException;
-import com.senla.bulletinboard.service.interfaces.SellerVoteService;
+import com.senla.bulletinboard.service.SellerVoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.SellerVoteDto;
@@ -12,7 +12,7 @@ import com.senla.bulletinboard.exception.WrongVoterException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.SellerVoteRepository;
-import com.senla.bulletinboard.service.interfaces.SellerVoteService;
+import com.senla.bulletinboard.service.SellerVoteService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

@@ -1,19 +1,19 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.AbstractDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.entity.AbstractEntity;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.DtoEntityMapper;
-import com.senla.bulletinboard.repository.CommonRepository;
-import com.senla.bulletinboard.service.interfaces.CommonService;
+import com.senla.bulletinboard.service.CommonService;
 import com.senla.bulletinboard.utils.Translator;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractService<D extends AbstractDto, E extends AbstractEntity, R extends CommonRepository<E, Long>>
+public abstract class AbstractService<D extends AbstractDto, E extends AbstractEntity, R extends JpaRepository<E, Long>>
     implements CommonService<D, E> {
 
     protected final Translator translator;

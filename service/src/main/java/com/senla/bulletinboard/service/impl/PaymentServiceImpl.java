@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.dto.PaymentDto;
@@ -8,7 +8,7 @@ import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.PaymentDtoEntityMapper;
 import com.senla.bulletinboard.repository.PaymentRepository;
 import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.interfaces.PaymentService;
+import com.senla.bulletinboard.service.PaymentService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.entity.AbstractEntity;
 import com.senla.bulletinboard.entity.SubscriptionEntity;
@@ -9,7 +9,7 @@ import com.senla.bulletinboard.enumerated.PremiumStatus;
 import com.senla.bulletinboard.exception.InsufficientFundsException;
 import com.senla.bulletinboard.repository.SubscriptionRepository;
 import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.interfaces.ScheduledService;
+import com.senla.bulletinboard.service.ScheduledService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.EnableScheduling;

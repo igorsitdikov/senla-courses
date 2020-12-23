@@ -7,7 +7,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.WrongMessageRecipientException;
 import com.senla.bulletinboard.exception.WrongRecipientException;
 import com.senla.bulletinboard.exception.WrongSenderException;
-import com.senla.bulletinboard.service.interfaces.MessageService;
+import com.senla.bulletinboard.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

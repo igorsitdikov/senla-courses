@@ -2,7 +2,7 @@ package com.senla.bulletinboard.controller;
 
 import com.senla.bulletinboard.dto.ApiErrorDto;
 import com.senla.bulletinboard.dto.TariffDto;
-import com.senla.bulletinboard.service.interfaces.TariffService;
+import com.senla.bulletinboard.service.TariffService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

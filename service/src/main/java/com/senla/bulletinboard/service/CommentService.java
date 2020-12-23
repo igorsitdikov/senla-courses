@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service.interfaces;
+package com.senla.bulletinboard.service;
 
 import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;

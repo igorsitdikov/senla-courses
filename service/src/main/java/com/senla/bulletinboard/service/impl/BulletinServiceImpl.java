@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.senla.bulletinboard.dto.BulletinBaseDto;
@@ -14,7 +14,7 @@ import com.senla.bulletinboard.mapper.interfaces.BulletinDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
-import com.senla.bulletinboard.service.interfaces.BulletinService;
+import com.senla.bulletinboard.service.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
 import com.senla.bulletinboard.utils.comparator.BulletinRatingAndDateTimeComparator;
 import com.senla.bulletinboard.utils.comparator.BulletinPriceComparator;

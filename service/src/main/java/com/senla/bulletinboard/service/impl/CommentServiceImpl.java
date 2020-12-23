@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
@@ -10,7 +10,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.mapper.interfaces.CommentDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.CommentRepository;
-import com.senla.bulletinboard.service.interfaces.CommentService;
+import com.senla.bulletinboard.service.CommentService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

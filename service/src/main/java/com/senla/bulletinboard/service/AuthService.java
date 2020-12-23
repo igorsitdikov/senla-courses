@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service.interfaces;
+package com.senla.bulletinboard.service;
 
 import com.senla.bulletinboard.dto.SignInDto;
 import com.senla.bulletinboard.dto.TokenDto;

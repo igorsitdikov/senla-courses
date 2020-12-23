@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.PasswordDto;
 import com.senla.bulletinboard.dto.UserDto;
@@ -8,7 +8,7 @@ import com.senla.bulletinboard.exception.EntityNotFoundException;
 import com.senla.bulletinboard.exception.NoSuchUserException;
 import com.senla.bulletinboard.mapper.interfaces.UserDtoEntityMapper;
 import com.senla.bulletinboard.repository.UserRepository;
-import com.senla.bulletinboard.service.interfaces.UserService;
+import com.senla.bulletinboard.service.UserService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;

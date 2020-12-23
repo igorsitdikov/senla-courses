@@ -1,4 +1,4 @@
-package com.senla.bulletinboard.service;
+package com.senla.bulletinboard.service.impl;
 
 import com.senla.bulletinboard.dto.DialogDto;
 import com.senla.bulletinboard.dto.IdDto;
@@ -10,7 +10,7 @@ import com.senla.bulletinboard.mapper.interfaces.DialogDtoEntityMapper;
 import com.senla.bulletinboard.repository.BulletinRepository;
 import com.senla.bulletinboard.repository.DialogRepository;
 import com.senla.bulletinboard.repository.specification.DialogExistsSpecification;
-import com.senla.bulletinboard.service.interfaces.DialogService;
+import com.senla.bulletinboard.service.DialogService;
 import com.senla.bulletinboard.utils.Translator;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;

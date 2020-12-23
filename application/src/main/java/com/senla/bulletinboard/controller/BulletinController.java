@@ -6,7 +6,7 @@ import com.senla.bulletinboard.dto.BulletinDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.enumerated.SortBulletin;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
-import com.senla.bulletinboard.service.interfaces.BulletinService;
+import com.senla.bulletinboard.service.BulletinService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -5,7 +5,7 @@ import com.senla.bulletinboard.dto.CommentDto;
 import com.senla.bulletinboard.dto.IdDto;
 import com.senla.bulletinboard.exception.BulletinIsClosedException;
 import com.senla.bulletinboard.exception.EntityNotFoundException;
-import com.senla.bulletinboard.service.interfaces.CommentService;
+import com.senla.bulletinboard.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
