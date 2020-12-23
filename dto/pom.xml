@@ -14,13 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.senla</groupId>
-            <artifactId>enumerated</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.senla</groupId>
-            <artifactId>validator</artifactId>
+            <artifactId>utils</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

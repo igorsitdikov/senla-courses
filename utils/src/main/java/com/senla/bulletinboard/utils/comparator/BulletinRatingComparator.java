@@ -1,7 +1,6 @@
 package com.senla.bulletinboard.utils.comparator;
 
 import com.senla.bulletinboard.entity.BulletinEntity;
-import com.senla.bulletinboard.enumerated.PremiumStatus;
 
 import java.util.Comparator;
 

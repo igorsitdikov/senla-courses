@@ -22,10 +22,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>controller</module>
-        <module>configuration</module>
         <module>dto</module>
-        <module>mock</module>
         <module>entity</module>
         <module>enumerated</module>
         <module>repository</module>
@@ -34,11 +31,8 @@
         <module>exception</module>
         <module>security</module>
         <module>utils</module>
-        <module>integration-tests</module>
         <module>application</module>
-        <module>validator</module>
         <module>aspect</module>
-        <module>converter</module>
     </modules>
 
     <dependencies>
@@ -94,6 +88,24 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.2.32</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

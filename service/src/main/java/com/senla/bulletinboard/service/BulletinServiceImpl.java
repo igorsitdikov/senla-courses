@@ -118,7 +118,7 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     @Override
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, SortBulletin sort, Integer page, Integer size) {
         final FilterDto criteria = convertArrayToDto(filters);
-        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort, page, size);
+        BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, page, size);
         return repository.findAll(bulletinSpecification)
             .stream()
             .sorted(selectComparator(sort))

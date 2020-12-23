@@ -1,10 +1,10 @@
 package com.senla.bulletinboard.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.senla.bulletinboard.annotation.PhoneNumber;
 import com.senla.bulletinboard.enumerated.AutoSubscribeStatus;
 import com.senla.bulletinboard.enumerated.PremiumStatus;
 import com.senla.bulletinboard.enumerated.UserRole;
+import com.senla.bulletinboard.utils.validator.annotation.PhoneNumber;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
