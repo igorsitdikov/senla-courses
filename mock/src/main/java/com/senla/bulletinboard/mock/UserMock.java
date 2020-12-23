@@ -37,7 +37,7 @@ public class UserMock {
             UserRole.USER,
             PremiumStatus.ACTIVE,
             AutoSubscribeStatus.ACTIVE,
-            BigDecimal.valueOf(13)));
+            BigDecimal.valueOf(13), 0.0));
         put(2L, new UserEntity(
             "Петр",
             "Петров",
@@ -47,7 +47,7 @@ public class UserMock {
             UserRole.USER,
             PremiumStatus.ACTIVE,
             AutoSubscribeStatus.ACTIVE,
-            BigDecimal.ZERO));
+            BigDecimal.ZERO, 0.0));
         put(3L, new UserEntity(
             "Алексей",
             "Алексеев",
@@ -57,7 +57,7 @@ public class UserMock {
             UserRole.ADMIN,
             PremiumStatus.ACTIVE,
             AutoSubscribeStatus.ACTIVE,
-            BigDecimal.ZERO));
+            BigDecimal.ZERO, 0.0));
         put(4L, new UserEntity(
             "Антон",
             "Антонов",
@@ -67,7 +67,7 @@ public class UserMock {
             UserRole.USER,
             PremiumStatus.ACTIVE,
             AutoSubscribeStatus.ACTIVE,
-            BigDecimal.ZERO));
+            BigDecimal.ZERO, 0.0));
     }};
 
     public UserEntity getEntityById(final Long id) {

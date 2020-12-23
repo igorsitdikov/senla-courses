@@ -16,6 +16,9 @@ import com.senla.bulletinboard.repository.UserRepository;
 import com.senla.bulletinboard.repository.specification.BulletinFilterSortSpecification;
 import com.senla.bulletinboard.service.interfaces.BulletinService;
 import com.senla.bulletinboard.utils.Translator;
+import com.senla.bulletinboard.utils.comparator.BulletinRatingAndDateTimeComparator;
+import com.senla.bulletinboard.utils.comparator.BulletinPriceComparator;
+import com.senla.bulletinboard.utils.comparator.BulletinSellerNameComparator;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -114,14 +118,26 @@ public class BulletinServiceImpl extends AbstractService<BulletinDto, BulletinEn
     @Override
     public List<BulletinBaseDto> findAllBulletins(final String[] filters, SortBulletin sort, Integer page, Integer size) {
         final FilterDto criteria = convertArrayToDto(filters);
-        if (sort == null) {
-            sort = SortBulletin.AVERAGE;
-        }
         BulletinFilterSortSpecification bulletinSpecification = new BulletinFilterSortSpecification(criteria, sort, page, size);
         return repository.findAll(bulletinSpecification)
             .stream()
+            .sorted(selectComparator(sort))
             .map(bulletinDtoEntityMapper::destinationToSource)
             .collect(Collectors.toList());
+    }
+
+    private Comparator<BulletinEntity> selectComparator(SortBulletin sort) {
+        if (sort == null) {
+            sort = SortBulletin.DEFAULT;
+        }
+        switch (sort) {
+            case PRICE:
+                return new BulletinPriceComparator();
+            case AUTHOR:
+                return new BulletinSellerNameComparator();
+            default:
+                return new BulletinRatingAndDateTimeComparator();
+        }
     }
 
     private FilterDto convertArrayToDto(String[] filters) {

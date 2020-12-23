@@ -40,9 +40,7 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
     public Predicate toPredicate(final Root<BulletinEntity> root,
                                  final CriteriaQuery<?> criteriaQuery,
                                  final CriteriaBuilder criteriaBuilder) {
-        Join<BulletinEntity, UserEntity> entityUserEntityJoin = root.join("seller");
         root.fetch("seller");
-        Join<SellerVoteEntity, BulletinEntity> sellerVoteEntityJoin = root.join("sellerVoteEntities", JoinType.LEFT);
 
         final List<Predicate> predicates = new ArrayList<>();
         if (criteria.getPriceGte() != null) {
@@ -52,24 +50,10 @@ public class BulletinFilterSortSpecification implements Specification<BulletinEn
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), criteria.getPriceLte()));
         }
         predicates.add(criteriaBuilder.equal(root.get("status"), BulletinStatus.OPEN));
-        final Order orderByPremiumStatus = criteriaBuilder.asc(root.get("seller").get("premium"));
-        Expression<?> path;
-        switch (sortBulletin) {
-            case AUTHOR:
-                path = entityUserEntityJoin.get(sortBulletin.getField());
-                break;
-            case AVERAGE:
-                path = criteriaBuilder.avg(sellerVoteEntityJoin.get(sortBulletin.getField()));
-                break;
-            default:
-                path = root.get(sortBulletin.getField());
-        }
-
         Integer firstElement = calculateFirstElement(page, size);
         Integer lastElement = calculateLastElement(page, size);
         predicates.add(criteriaBuilder.between(root.get("id"), firstElement, lastElement));
 
-        criteriaQuery.orderBy(orderByPremiumStatus, criteriaBuilder.desc(path));
         criteriaQuery.groupBy(root.get("id"));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

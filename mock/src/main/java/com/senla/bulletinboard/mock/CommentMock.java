@@ -60,7 +60,7 @@ public class CommentMock {
                 UserRole.USER,
                 PremiumStatus.ACTIVE,
                 AutoSubscribeStatus.ACTIVE,
-                BigDecimal.ZERO),
+                BigDecimal.ZERO, 0.0),
             2L));
         put(2L, new CommentEntity(
             LocalDateTime.parse("2020-09-14T11:30:45"),
@@ -85,7 +85,7 @@ public class CommentMock {
                 UserRole.USER,
                 PremiumStatus.ACTIVE,
                 AutoSubscribeStatus.ACTIVE,
-                BigDecimal.ZERO),
+                BigDecimal.ZERO, 0.0),
             4L));
     }};
 

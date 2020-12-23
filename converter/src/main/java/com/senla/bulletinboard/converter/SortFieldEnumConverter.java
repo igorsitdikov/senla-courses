@@ -12,7 +12,7 @@ public class SortFieldEnumConverter implements Converter<String, SortBulletin> {
         try {
             return SortBulletin.valueOf(s.toUpperCase());
         } catch (Exception e) {
-            return SortBulletin.AVERAGE;
+            return SortBulletin.DEFAULT;
         }
     }
 }
